@@ -83,14 +83,20 @@ extension MainViewController: UISearchResultsUpdating {
 }
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 10
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ParentCell
-
-        
+        if indexPath.row == 3 {
+            cell.isForCategories = true
+        } else {
+            cell.isForCategories = false
+        }
         return cell
     }
     

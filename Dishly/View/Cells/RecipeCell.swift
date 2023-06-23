@@ -105,8 +105,6 @@ class RecipeCell: UICollectionViewCell {
 //            descriptionLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 4)
 //        ])
         
-
-        
         let stack = UIStackView(arrangedSubviews: [starImage1, starImage2, starImage3, starImage4, starImage5])
         stack.axis = .horizontal
         stack.translatesAutoresizingMaskIntoConstraints = false

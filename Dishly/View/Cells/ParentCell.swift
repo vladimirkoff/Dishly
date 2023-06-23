@@ -3,6 +3,14 @@ import UIKit
 class ParentCell: UICollectionViewCell {
     //MARK: - Properties
     
+    var isForCategories: Bool? {
+        didSet {
+            if let isForCategories = isForCategories {
+                isForCategories ? configureCellForCategories() : configureCell()
+            }
+        }
+    }
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel(frame: CGRect(x: 10, y: 10, width: bounds.width - 20, height: 20))
         label.text = "Daily inspiration"
@@ -21,14 +29,21 @@ class ParentCell: UICollectionViewCell {
         return collectionView
     }()
     
+    private lazy var categoryCollectionView: UICollectionView = {
+        let collectionViewLayout = UICollectionViewFlowLayout()
+        collectionViewLayout.scrollDirection = .vertical
+        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: collectionViewLayout)
+        collectionView.backgroundColor = .red
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        return collectionView
+    }()
+    
     //MARK: - Lifecycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(horizontalCollectionView)
-        configureCell()
-        horizontalCollectionView.register(RecipeCell.self, forCellWithReuseIdentifier: "HorizontalCell")
+        backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.9333333333, blue: 0.8784313725, alpha: 1)
     }
     
     required init?(coder: NSCoder) {
@@ -37,8 +52,23 @@ class ParentCell: UICollectionViewCell {
     
     //MARK: - Helpers
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        horizontalCollectionView.isHidden = true
+        categoryCollectionView.isHidden = true
+    }
+    
     func configureCell() {
-        backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.9333333333, blue: 0.8784313725, alpha: 1)
+        horizontalCollectionView.isHidden = false
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(horizontalCollectionView)
+        horizontalCollectionView.register(RecipeCell.self, forCellWithReuseIdentifier: "HorizontalCell")
+    }
+    
+    func configureCellForCategories() {
+        contentView.addSubview(categoryCollectionView)
+        categoryCollectionView.register(CategoryCell2.self, forCellWithReuseIdentifier: "CategoryCell")
+        categoryCollectionView.isHidden = false
     }
 }
 
@@ -48,16 +78,29 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath) as! RecipeCell
-        cell.backgroundColor = .red
-                
-        return cell
+        if collectionView == horizontalCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath) as! RecipeCell
+            cell.backgroundColor = .red
+            return cell
+        } else if collectionView == categoryCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell2
+            cell.backgroundColor = .yellow
+            return cell
+        }
+        return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.bounds.width * 3/4
-        let height = collectionView.bounds.height - 10
-        return CGSize(width: width, height: height)
+        if collectionView == horizontalCollectionView {
+            let width = collectionView.bounds.width * 3/4
+            let height = collectionView.bounds.height - 10
+            return CGSize(width: width, height: height)
+        } else if collectionView == categoryCollectionView {
+            let width = bounds.width / 2.2
+            let height: CGFloat = 80
+            return CGSize(width: width, height: height)
+        }
+        return CGSize.zero
     }
 }
 
@@ -67,6 +110,20 @@ class HorizontalCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .red
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class CategoryCell2: UICollectionViewCell {
+    //MARK: - Lifecycle
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        layer.cornerRadius = 10
+        backgroundColor = .yellow
     }
     
     required init?(coder: NSCoder) {

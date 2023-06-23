@@ -67,7 +67,7 @@ class ParentCell: UICollectionViewCell {
     
     func configureCellForCategories() {
         contentView.addSubview(categoryCollectionView)
-        categoryCollectionView.register(CategoryCell2.self, forCellWithReuseIdentifier: "CategoryCell")
+        categoryCollectionView.register(CategoryCell.self, forCellWithReuseIdentifier: "CategoryCell")
         categoryCollectionView.isHidden = false
     }
 }
@@ -83,11 +83,19 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
             cell.backgroundColor = .red
             return cell
         } else if collectionView == categoryCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell2
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell
             cell.backgroundColor = .yellow
             return cell
         }
         return UICollectionViewCell()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == horizontalCollectionView {
+            print("Select recipe")
+        } else if collectionView == categoryCollectionView {
+            print("Select category")
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -104,29 +112,5 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     }
 }
 
-class HorizontalCell: UICollectionViewCell {
-    //MARK: - Lifecycle
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .red
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
 
-class CategoryCell2: UICollectionViewCell {
-    //MARK: - Lifecycle
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        layer.cornerRadius = 10
-        backgroundColor = .yellow
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
+

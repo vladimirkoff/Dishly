@@ -63,7 +63,7 @@ class MainViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 1000)
+            collectionView.heightAnchor.constraint(equalTo: view.heightAnchor)
         ])
         
         collectionView.register(ParentCell.self, forCellWithReuseIdentifier: "Cell")
@@ -101,6 +101,8 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.width, height: view.frame.height / 2)
+        let cellHeight = (collectionView.bounds.height - collectionView.contentInset.top - collectionView.contentInset.bottom) / 2
+        return CGSize(width: collectionView.bounds.width, height: cellHeight)
     }
+
 }

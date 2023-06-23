@@ -14,10 +14,16 @@ class CategoryCell: UICollectionViewCell {
         return iv
     }()
     
+    private let title: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .black
+        label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.text = "Breakfast"
+        return label
+    }()
+    
    
-    
-  
-    
     //MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,6 +49,11 @@ class CategoryCell: UICollectionViewCell {
             categoryImageView.heightAnchor.constraint(equalToConstant: frame.height)
         ])
         
+        addSubview(title)
+        NSLayoutConstraint.activate([
+            title.leftAnchor.constraint(equalTo: leftAnchor, constant: bounds.width / 10),
+            title.topAnchor.constraint(equalTo: topAnchor, constant: bounds.height / 5)
+        ])
 
         
     }

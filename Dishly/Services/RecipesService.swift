@@ -1,5 +1,5 @@
 //
-//  AuthService.swift
+//  RecipesService.swift
 //  Dishly
 //
 //  Created by Vladimir Kovalev on 22.06.2023.
@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct AuthService {
+struct RecipesService {
     
 }

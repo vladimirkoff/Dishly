@@ -1,63 +1,49 @@
-
 import UIKit
-
-//private let reuseIdentifier = "FoodCell"
-//private let headerReuseIdentifier = "MainHeader"
 
 class MainViewController: UIViewController {
     //MARK: - Properties
     
-//    var categoryModelsArray: [Category]? {
-//        didSet { collectionView.reloadData() }
-//    }
-    
-    lazy private var profileSubview: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
-        return view
+    var user: User
+  
+    private lazy var searchController: UISearchController = {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search"
+        return searchController
     }()
     
-    lazy private var greetLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        let string = configureAttributedString()
-         label.attributedText = string
-         label.textAlignment = .left
-         return label
-     }()
-    
-    private lazy var profileImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.clipsToBounds = true
-        iv.backgroundColor = .black
-        iv.isUserInteractionEnabled = true
-        
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goToProfile))
-        iv.addGestureRecognizer(gestureRecognizer)
-        
-        return iv
+    private lazy var collectionView: UICollectionView = {
+        let collectionViewLayout = UICollectionViewFlowLayout()
+        collectionViewLayout.scrollDirection = .vertical
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
+        collectionView.backgroundColor = .systemPink
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        return collectionView
     }()
+    
     
     //MARK: - Lifecycle
-
+    
+    init(user: User) {
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-  
+        
+        view.backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.9333333333, blue: 0.8784313725, alpha: 1)
         configureUI()
-      
     }
     
     //MARK: - Helpers
     
-    func configureCollectionView() {
-//        collectionView.register(CategoryCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-//        collectionView.register(MainHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
-//        collectionView.backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.9333333333, blue: 0.8784313725, alpha: 1)
-    }
-
     func configureAttributedString() -> NSAttributedString {
         let attributedText = NSMutableAttributedString(string: "Hello, ", attributes: [.font: UIFont.boldSystemFont(ofSize: 16), .foregroundColor: UIColor.white])
         attributedText.append(NSAttributedString(string: "Vladimir\n", attributes: [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.green]))
@@ -65,86 +51,49 @@ class MainViewController: UIViewController {
     }
     
     func configureUI() {
-        view.backgroundColor = .yellow
-        navigationController?.navigationBar.isHidden = true
-//        view.addSubview(profileSubview)
-//        NSLayoutConstraint.activate([
-//            profileSubview.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-//            profileSubview.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            profileSubview.widthAnchor.constraint(equalToConstant: view.frame.width),
-//            profileSubview.heightAnchor.constraint(equalToConstant: 120)
-//        ])
-//
-//        view.addSubview(greetLabel)
-//        NSLayoutConstraint.activate([
-//            greetLabel.bottomAnchor.constraint(equalTo: profileSubview.bottomAnchor, constant: -8),
-//            greetLabel.leftAnchor.constraint(equalTo: profileSubview.leftAnchor, constant: 8)
-//        ])
-//
-//        view.addSubview(profileImageView)
-//        NSLayoutConstraint.activate([
-//            profileImageView.widthAnchor.constraint(equalToConstant: 50),
-//            profileImageView.heightAnchor.constraint(equalToConstant: 50),
-//            profileImageView.bottomAnchor.constraint(equalTo: profileSubview.bottomAnchor, constant: -6),
-//            profileImageView.rightAnchor.constraint(equalTo: profileSubview.rightAnchor, constant: -4)
-//        ])
-//        profileImageView.layer.cornerRadius = 25
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+        let rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "cart"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
+        navigationItem.rightBarButtonItem = rightBarButtonItem
         
+        view.addSubview(collectionView)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.heightAnchor.constraint(equalToConstant: 1000)
+        ])
+        
+        collectionView.register(ParentCell.self, forCellWithReuseIdentifier: "Cell")
     }
     
     //MARK: - Selectors
     
-   @objc func goToProfile() {
-//       let vc = ProfileViewController(nibName: nil, bundle: nil)
-//       navigationController?.pushViewController(vc, animated: true)
+    @objc func rightBarButtonTapped() {
+        // Handle right bar button tap event
     }
 }
 
-//MARK: - UICollectionViewDelegate & UICollectionViewDataSource
+extension MainViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        // Implement your search functionality here
+    }
+}
 
-//extension MainViewController: UICollectionViewDelegateFlowLayout {
-//    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return 4
-//    }
+extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
     
-//    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! CategoryCell
-////        if let categories = categoryModelsArray {
-////            cell.categoryImageView.image = categories[indexPath.row].image
-////            cell.nameLabel.text = categories[indexPath.row].name
-////        }
-//        return cell
-//    }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ParentCell
+
+        
+        return cell
+    }
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        let size = CGSize(width: view.frame.width - 20, height: view.frame.height / 4)
-//        return size
-//    }
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-//        return CGSize(width: view.frame.width, height: 400)
-//    }
-    
-//    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerReuseIdentifier, for: indexPath) as! MainHeader
-//        header.delegate = self
-//        header.points = user.points
-//        return header
-//    }
-////
-//    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-////        let vc = ItemsViewController(collectionViewLayout: UICollectionViewFlowLayout())
-////        navigationController?.pushViewController(vc, animated: true)
-//    }
-    
-
-
-
-
-
-
-
-
-
-
-
-
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: 350)
+    }
+}

@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct Recipe {
+    let title: String
+    let rating: Float
+}

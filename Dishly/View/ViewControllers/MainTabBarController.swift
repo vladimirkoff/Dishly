@@ -41,7 +41,7 @@ class MainTabBarController: UITabBarController {
     
     func configureVC() {
         
-        let mainVC = MainViewController()
+        let mainVC = MainViewController(user: User(name: "Vlad", points: 2, email: "", lastName: "", phone: "", uid: ""))
         let main = templateNavController(image: UIImage(named: "home")!, rootVC: mainVC)
         
         let addVC = AddViewController()
@@ -75,16 +75,19 @@ class MainTabBarController: UITabBarController {
         
         let selectedImage = UIImageView(image: image)
         selectedImage.tintColor = .white
-        
+    
         nav.tabBarItem.image = image
         nav.tabBarItem.selectedImage = image.withTintColor(UIColor.systemRed)
         nav.tabBarController?.tabBar.backgroundColor = .black
-        nav.navigationController?.isNavigationBarHidden = true
         
         return nav
     }
     
     //MARK: - Selectors
+    
+    @objc func rightBarButtonTapped() {
+        print("Cart tapepd")
+    }
     
     @objc func qrCodeButtonPressed() {
 //

@@ -8,5 +8,9 @@
 import UIKit
 
 struct RecipeViewModel {
+    let recipe: Recipe
     
+    func fetchRecipe(with id: String) {
+        
+    }
 }

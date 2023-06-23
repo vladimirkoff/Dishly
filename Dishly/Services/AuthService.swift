@@ -8,5 +8,5 @@
 import Foundation
 
 struct AuthService {
-    
+    // code section to register users and access existin users in Firebase
 }

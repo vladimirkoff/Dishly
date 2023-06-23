@@ -25,11 +25,10 @@ class ParentCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
         contentView.addSubview(titleLabel)
         contentView.addSubview(horizontalCollectionView)
-        
-        horizontalCollectionView.register(HorizontalCell.self, forCellWithReuseIdentifier: "HorizontalCell")
+        configureCell()
+        horizontalCollectionView.register(RecipeCell.self, forCellWithReuseIdentifier: "HorizontalCell")
     }
     
     required init?(coder: NSCoder) {
@@ -39,7 +38,7 @@ class ParentCell: UICollectionViewCell {
     //MARK: - Helpers
     
     func configureCell() {
-        
+        backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.9333333333, blue: 0.8784313725, alpha: 1)
     }
 }
 
@@ -49,17 +48,15 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath) as! RecipeCell
         cell.backgroundColor = .red
-        
-        // Configure the cell as needed
-        
+                
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.bounds.width / 2
-        let height = collectionView.bounds.height
+        let width = collectionView.bounds.width * 3/4
+        let height = collectionView.bounds.height - 10
         return CGSize(width: width, height: height)
     }
 }

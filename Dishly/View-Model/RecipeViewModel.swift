@@ -11,6 +11,6 @@ struct RecipeViewModel {
     let recipe: Recipe
     
     func fetchRecipe(with id: String) {
-        
+        // here we call functions in RecipesServices to get the particular recipe by its id in Firebase
     }
 }

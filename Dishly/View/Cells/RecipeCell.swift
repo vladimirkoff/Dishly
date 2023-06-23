@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ItemCell: UICollectionViewCell {
+class RecipeCell: UICollectionViewCell {
     //MARK: - Properties
     
     private let starImage1: UIImageView = {
@@ -64,6 +64,16 @@ class ItemCell: UICollectionViewCell {
         return iv
     }()
     
+    private lazy var addIngredientsButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.borderColor = UIColor.black.cgColor
+        button.layer.borderWidth = 5
+        button.layer.cornerRadius = 20
+        button.setTitle("Add 11 ingridients", for: .normal)
+        return button
+    }()
+    
     //MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -78,6 +88,9 @@ class ItemCell: UICollectionViewCell {
  
     
     func configureCell() {
+        
+        layer.cornerRadius = 15
+        
         addSubview(itemImageView)
         NSLayoutConstraint.activate([
             itemImageView.leftAnchor.constraint(equalTo: leftAnchor),
@@ -103,14 +116,22 @@ class ItemCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: itemImageView.bottomAnchor, constant: 4),
             stack.leftAnchor.constraint(equalTo: leftAnchor, constant: 4),
-            stack.heightAnchor.constraint(equalToConstant: 15),
-            stack.widthAnchor.constraint(equalToConstant: frame.width / 2)
+            stack.heightAnchor.constraint(equalToConstant: 12),
+            stack.widthAnchor.constraint(equalToConstant: frame.width / 4)
         ])
         
         addSubview(priceLabel)
         NSLayoutConstraint.activate([
             priceLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 4),
             priceLabel.topAnchor.constraint(equalTo: stack.bottomAnchor, constant: 6)
+        ])
+        
+        addSubview(addIngredientsButton)
+        NSLayoutConstraint.activate([
+            addIngredientsButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            addIngredientsButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            addIngredientsButton.widthAnchor.constraint(equalToConstant: bounds.width - 30),
+            addIngredientsButton.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
     

@@ -33,7 +33,7 @@ class MainTabBarController: UITabBarController {
     
     func configureVC() {
         
-        let mainVC = ExploreViewController(user: User(name: "Vladimir", points: 2, email: "", lastName: "", phone: "", uid: ""))
+        let mainVC = ExploreViewController(user: User(email: "", name: "", profileImageUrl: "", uid: "", username: ""))
         let main = templateNavController(image: UIImage(named: "home")!, rootVC: mainVC)
         
         let addVC = AddViewController()

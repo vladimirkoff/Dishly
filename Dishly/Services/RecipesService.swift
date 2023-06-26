@@ -3,7 +3,6 @@ import Foundation
 
 protocol RecipeService {
     func fetchRecipes(completion: @escaping ([Recipe]) -> Void)
-    // Добавьте другие методы, связанные с работой с рецептами, по необходимости
 }
 
 class RemoteRecipeService: RecipeService {

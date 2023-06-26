@@ -136,7 +136,6 @@
 				85C1B6FB2A44862500BEAF2F /* Cells */,
 				85C1B6E62A447CA100BEAF2F /* ViewControllers */,
 				85C1B70C2A45D11100BEAF2F /* ItemsHeader.swift */,
-				85C1B7222A49BA3B00BEAF2F /* CustomTextField.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -190,6 +189,7 @@
 		85C1B6F92A4485BF00BEAF2F /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				85C1B7222A49BA3B00BEAF2F /* CustomTextField.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";

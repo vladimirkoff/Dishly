@@ -9,5 +9,12 @@ import Foundation
 
 struct Recipe {
     let title: String
+    let discription: String
     let rating: Float
+    let author: User
+    let uid: String
+    let time: String
+    let instructions: String
+    let nutritions: [Int]?
 }
+

@@ -1,10 +1,11 @@
 import UIKit
 
-class MainViewController: UIViewController {
+class ExploreViewController: UIViewController {
     //MARK: - Properties
     
     var user: User
-    var recipeViewModel: RecipeViewModel?
+    var recipeViewModel: RecipeViewModel!
+    var userViewModel: UserViewModel!
   
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
@@ -18,7 +19,7 @@ class MainViewController: UIViewController {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        collectionView.backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.9333333333, blue: 0.8784313725, alpha: 1)
+        collectionView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
         collectionView.delegate = self
         collectionView.dataSource = self
         return collectionView
@@ -38,6 +39,7 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureNavBar()
         configureUI()
     }
     
@@ -49,14 +51,23 @@ class MainViewController: UIViewController {
         return attributedText
     }
     
-    func configureUI() {
-        view.backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.9333333333, blue: 0.8784313725, alpha: 1)
+    func configureNavBar() {
         navigationItem.searchController = searchController
         definesPresentationContext = true
+        
+        navigationItem.title = "Search"
+        navigationController?.navigationBar.prefersLargeTitles = true
         
         let rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "cart"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
         navigationItem.rightBarButtonItem = rightBarButtonItem
         
+        let leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "profile"), style: .plain, target: self, action: #selector(leftBarButtonTapped))
+        navigationItem.leftBarButtonItem = leftBarButtonItem
+    }
+    
+    func configureUI() {
+        view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -72,19 +83,27 @@ class MainViewController: UIViewController {
     //MARK: - Selectors
     
     @objc func rightBarButtonTapped() {
-        // Handle right bar button tap event
+        let vc = CartViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func leftBarButtonTapped() {
+        let vc = ProfileViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
-extension MainViewController: UISearchResultsUpdating {
+//MARK: - UISearchResultsUpdating
+
+extension ExploreViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         // Implement your search functionality here
     }
 }
 
-extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    
+//MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
+
+extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 10
@@ -92,6 +111,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ParentCell
+        cell.delegate = self
         if indexPath.row == 3 {
             cell.isForCategories = true
         } else {
@@ -105,4 +125,17 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         return CGSize(width: collectionView.bounds.width, height: cellHeight)
     }
 
+}
+
+//MARK: - ParentCellDelegate
+
+extension ExploreViewController: ParentCellDelegate {
+    func goToCategory() {
+        print("DEBUG: Go to category")
+    }
+    
+    func goToRecipe() {
+        let vc = RecipeViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }

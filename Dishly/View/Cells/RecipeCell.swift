@@ -10,6 +10,15 @@ import UIKit
 class RecipeCell: UICollectionViewCell {
     //MARK: - Properties
     
+    private let saveButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(named: "save"), for: .normal)
+        button.backgroundColor = .yellow
+        button.layer.cornerRadius = 10
+        return button
+    }()
+    
     private let starImage1: UIImageView = {
         let image = UIImage(named: "star")
         let iv = UIImageView(image: image)
@@ -40,14 +49,6 @@ class RecipeCell: UICollectionViewCell {
         return iv
     }()
     
-    private let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
-        label.text = "*****"
-        return label
-    }()
-    
     private let priceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -59,6 +60,7 @@ class RecipeCell: UICollectionViewCell {
     private let itemImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.layer.cornerRadius = 15
         iv.clipsToBounds = true
         iv.backgroundColor = .lightGray
         return iv
@@ -99,12 +101,6 @@ class RecipeCell: UICollectionViewCell {
             itemImageView.topAnchor.constraint(equalTo: topAnchor)
         ])
         
-//        addSubview(descriptionLabel)
-//        NSLayoutConstraint.activate([
-//            descriptionLabel.topAnchor.constraint(equalTo: itemImageView.bottomAnchor, constant: 6),
-//            descriptionLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 4)
-//        ])
-        
         let stack = UIStackView(arrangedSubviews: [starImage1, starImage2, starImage3, starImage4, starImage5])
         stack.axis = .horizontal
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -128,8 +124,14 @@ class RecipeCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             addIngredientsButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             addIngredientsButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
-            addIngredientsButton.widthAnchor.constraint(equalToConstant: bounds.width - 30),
-            addIngredientsButton.heightAnchor.constraint(equalToConstant: 20)
+            addIngredientsButton.widthAnchor.constraint(equalToConstant: bounds.width - 10),
+            addIngredientsButton.heightAnchor.constraint(equalToConstant: bounds.height / 12)
+        ])
+        
+        addSubview(saveButton)
+        NSLayoutConstraint.activate([
+            saveButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            saveButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -8)
         ])
     }
     

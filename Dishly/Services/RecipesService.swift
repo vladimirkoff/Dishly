@@ -1,12 +1,14 @@
-//
-//  RecipesService.swift
-//  Dishly
-//
-//  Created by Vladimir Kovalev on 22.06.2023.
-//
 
 import Foundation
 
-struct RecipesService {
-    // code base to handle recipes
+protocol RecipeService {
+    func fetchRecipes(completion: @escaping ([Recipe]) -> Void)
+    // Добавьте другие методы, связанные с работой с рецептами, по необходимости
+}
+
+class RemoteRecipeService: RecipeService {
+    func fetchRecipes(completion: @escaping ([Recipe]) -> Void) {
+        // Реализация фетчинга рецептов из удаленной базы данных
+        // Вызовите completion с полученными рецептами
+    }
 }

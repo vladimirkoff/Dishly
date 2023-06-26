@@ -8,7 +8,7 @@ class AddViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
+        view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
         configureUI()
     }
     //MARK: - Helpers
@@ -26,3 +26,4 @@ class AddViewController: UIViewController {
         
     }
 }
+

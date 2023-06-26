@@ -25,6 +25,19 @@
 		85C1B7032A458CF200BEAF2F /* TopCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7022A458CF200BEAF2F /* TopCategoryCell.swift */; };
 		85C1B7052A45A7AF00BEAF2F /* RecipeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7042A45A7AF00BEAF2F /* RecipeCell.swift */; };
 		85C1B7072A45B71C00BEAF2F /* ParentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7062A45B71C00BEAF2F /* ParentCell.swift */; };
+		85C1B7092A45CF9700BEAF2F /* ProfileOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7082A45CF9700BEAF2F /* ProfileOptionCell.swift */; };
+		85C1B70B2A45D08E00BEAF2F /* SavedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B70A2A45D08E00BEAF2F /* SavedViewController.swift */; };
+		85C1B70D2A45D11100BEAF2F /* ItemsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B70C2A45D11100BEAF2F /* ItemsHeader.swift */; };
+		85C1B70F2A485A6900BEAF2F /* MealPlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B70E2A485A6900BEAF2F /* MealPlanViewController.swift */; };
+		85C1B7112A485B2300BEAF2F /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7102A485B2300BEAF2F /* CartViewController.swift */; };
+		85C1B7152A48723200BEAF2F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7142A48723200BEAF2F /* UserService.swift */; };
+		85C1B7172A487C1C00BEAF2F /* MealCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7162A487C1C00BEAF2F /* MealCell.swift */; };
+		85C1B7192A4982EF00BEAF2F /* RecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7182A4982EF00BEAF2F /* RecipeViewController.swift */; };
+		85C1B71B2A49893B00BEAF2F /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B71A2A49893B00BEAF2F /* UserViewModel.swift */; };
+		85C1B71D2A49942B00BEAF2F /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B71C2A49942B00BEAF2F /* LogInViewController.swift */; };
+		85C1B71F2A49943300BEAF2F /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B71E2A49943300BEAF2F /* SignUpViewController.swift */; };
+		85C1B7212A49B96600BEAF2F /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7202A49B96600BEAF2F /* AuthViewModel.swift */; };
+		85C1B7232A49BA3B00BEAF2F /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7222A49BA3B00BEAF2F /* CustomTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +61,19 @@
 		85C1B7022A458CF200BEAF2F /* TopCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopCategoryCell.swift; sourceTree = "<group>"; };
 		85C1B7042A45A7AF00BEAF2F /* RecipeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCell.swift; sourceTree = "<group>"; };
 		85C1B7062A45B71C00BEAF2F /* ParentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentCell.swift; sourceTree = "<group>"; };
+		85C1B7082A45CF9700BEAF2F /* ProfileOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileOptionCell.swift; sourceTree = "<group>"; };
+		85C1B70A2A45D08E00BEAF2F /* SavedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedViewController.swift; sourceTree = "<group>"; };
+		85C1B70C2A45D11100BEAF2F /* ItemsHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsHeader.swift; sourceTree = "<group>"; };
+		85C1B70E2A485A6900BEAF2F /* MealPlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlanViewController.swift; sourceTree = "<group>"; };
+		85C1B7102A485B2300BEAF2F /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
+		85C1B7142A48723200BEAF2F /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		85C1B7162A487C1C00BEAF2F /* MealCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCell.swift; sourceTree = "<group>"; };
+		85C1B7182A4982EF00BEAF2F /* RecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewController.swift; sourceTree = "<group>"; };
+		85C1B71A2A49893B00BEAF2F /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
+		85C1B71C2A49942B00BEAF2F /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
+		85C1B71E2A49943300BEAF2F /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		85C1B7202A49B96600BEAF2F /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		85C1B7222A49BA3B00BEAF2F /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +135,8 @@
 			children = (
 				85C1B6FB2A44862500BEAF2F /* Cells */,
 				85C1B6E62A447CA100BEAF2F /* ViewControllers */,
+				85C1B70C2A45D11100BEAF2F /* ItemsHeader.swift */,
+				85C1B7222A49BA3B00BEAF2F /* CustomTextField.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -117,6 +145,8 @@
 			isa = PBXGroup;
 			children = (
 				85C1B6F42A4483D400BEAF2F /* RecipeViewModel.swift */,
+				85C1B71A2A49893B00BEAF2F /* UserViewModel.swift */,
+				85C1B7202A49B96600BEAF2F /* AuthViewModel.swift */,
 			);
 			path = "View-Model";
 			sourceTree = "<group>";
@@ -128,6 +158,12 @@
 				85C1B6EA2A447EA500BEAF2F /* ExploreViewController.swift */,
 				85C1B6EC2A447EAD00BEAF2F /* ProfileViewController.swift */,
 				85C1B6F22A447FC700BEAF2F /* AddViewController.swift */,
+				85C1B70A2A45D08E00BEAF2F /* SavedViewController.swift */,
+				85C1B70E2A485A6900BEAF2F /* MealPlanViewController.swift */,
+				85C1B7102A485B2300BEAF2F /* CartViewController.swift */,
+				85C1B7182A4982EF00BEAF2F /* RecipeViewController.swift */,
+				85C1B71C2A49942B00BEAF2F /* LogInViewController.swift */,
+				85C1B71E2A49943300BEAF2F /* SignUpViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -146,6 +182,7 @@
 			children = (
 				85C1B6F72A4485AE00BEAF2F /* AuthService.swift */,
 				85C1B6FC2A44A00200BEAF2F /* RecipesService.swift */,
+				85C1B7142A48723200BEAF2F /* UserService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -171,6 +208,8 @@
 				85C1B7022A458CF200BEAF2F /* TopCategoryCell.swift */,
 				85C1B7042A45A7AF00BEAF2F /* RecipeCell.swift */,
 				85C1B7062A45B71C00BEAF2F /* ParentCell.swift */,
+				85C1B7082A45CF9700BEAF2F /* ProfileOptionCell.swift */,
+				85C1B7162A487C1C00BEAF2F /* MealCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -246,21 +285,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85C1B7232A49BA3B00BEAF2F /* CustomTextField.swift in Sources */,
 				85C1B6ED2A447EAD00BEAF2F /* ProfileViewController.swift in Sources */,
+				85C1B71B2A49893B00BEAF2F /* UserViewModel.swift in Sources */,
 				85C1B7032A458CF200BEAF2F /* TopCategoryCell.swift in Sources */,
 				85C1B6F52A4483D400BEAF2F /* RecipeViewModel.swift in Sources */,
 				85C1B7052A45A7AF00BEAF2F /* RecipeCell.swift in Sources */,
 				85C1B6EF2A447ED900BEAF2F /* Recipe.swift in Sources */,
 				85C1B6F32A447FC700BEAF2F /* AddViewController.swift in Sources */,
+				85C1B70F2A485A6900BEAF2F /* MealPlanViewController.swift in Sources */,
 				85C1B65B2A39FE5700BEAF2F /* AppDelegate.swift in Sources */,
 				85C1B6F12A447EDD00BEAF2F /* User.swift in Sources */,
 				85C1B6FD2A44A00200BEAF2F /* RecipesService.swift in Sources */,
 				85C1B6EB2A447EA500BEAF2F /* ExploreViewController.swift in Sources */,
 				85C1B6F82A4485AE00BEAF2F /* AuthService.swift in Sources */,
+				85C1B7112A485B2300BEAF2F /* CartViewController.swift in Sources */,
 				85C1B7072A45B71C00BEAF2F /* ParentCell.swift in Sources */,
+				85C1B7152A48723200BEAF2F /* UserService.swift in Sources */,
+				85C1B7092A45CF9700BEAF2F /* ProfileOptionCell.swift in Sources */,
+				85C1B7212A49B96600BEAF2F /* AuthViewModel.swift in Sources */,
+				85C1B7172A487C1C00BEAF2F /* MealCell.swift in Sources */,
+				85C1B70B2A45D08E00BEAF2F /* SavedViewController.swift in Sources */,
+				85C1B7192A4982EF00BEAF2F /* RecipeViewController.swift in Sources */,
 				85C1B6E92A447E9E00BEAF2F /* MainTabBarController.swift in Sources */,
 				85C1B65D2A39FE5700BEAF2F /* SceneDelegate.swift in Sources */,
 				85C1B6FF2A458CBE00BEAF2F /* CategoryCell.swift in Sources */,
+				85C1B71D2A49942B00BEAF2F /* LogInViewController.swift in Sources */,
+				85C1B71F2A49943300BEAF2F /* SignUpViewController.swift in Sources */,
+				85C1B70D2A45D11100BEAF2F /* ItemsHeader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

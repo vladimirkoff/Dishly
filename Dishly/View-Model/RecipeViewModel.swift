@@ -7,10 +7,20 @@
 
 import UIKit
 
+import Foundation
+
 struct RecipeViewModel {
-    let recipe: Recipe
-    
-    func fetchRecipe(with id: String) {
-        // here we call functions in RecipesServices to get the particular recipe by its id in Firebase
+    private let recipeService: RecipeService
+    var recipesUpdated: (([Recipe]) -> Void)?
+
+    init(recipeService: RecipeService) {
+        self.recipeService = recipeService
+    }
+
+    func fetchRecipes(completion: @escaping ([Recipe]) -> Void) {
+        recipeService.fetchRecipes { recipes in
+            completion(recipes)
+        }
     }
 }
+

@@ -28,37 +28,30 @@ class MainTabBarController: UITabBarController {
     //MARK: - Helpers
     
     func checkIfLoggedIn() {
-//        if Auth.auth().currentUser == nil {
-//            DispatchQueue.main.async {
-//                let controller = LoginController()
-//                let nav = UINavigationController(rootViewController: controller)
-//                nav.modalPresentationStyle = .fullScreen
-//                self.present(nav, animated: true, completion: nil)
-//            }
-//        }
     }
 
     
     func configureVC() {
         
-        let mainVC = MainViewController(user: User(name: "Vlad", points: 2, email: "", lastName: "", phone: "", uid: ""))
+        let mainVC = ExploreViewController(user: User(name: "Vladimir", points: 2, email: "", lastName: "", phone: "", uid: ""))
         let main = templateNavController(image: UIImage(named: "home")!, rootVC: mainVC)
         
         let addVC = AddViewController()
         let add = templateNavController(image: UIImage(named: "add")!, rootVC: addVC)
         
-//        let savedVC = SavedViewController(collectionViewLayout: UICollectionViewFlowLayout())
-//        let saved = templateNavController(image: UIImage(named: "save")!, rootVC: savedVC)
+        let savedVC = SavedViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        let saved = templateNavController(image: UIImage(named: "save")!, rootVC: savedVC)
         
-        let profileVC = ProfileViewController()
-        let profile = templateNavController(image: UIImage(named: "profile")!, rootVC: profileVC)
+        let mealVC = MealPlanVC()
+        let plan = templateNavController(image: UIImage(named: "list")!, rootVC: mealVC)
         
         
-        viewControllers = [main,  add, profile]
+        viewControllers = [main,  add, saved, plan]
         
         tabBar.items?[0].title = "Home"
         tabBar.items?[1].title = "Add"
-        tabBar.items?[2].title = "Profile"
+        tabBar.items?[2].title = "Saved"
+        tabBar.items?[3].title = "Meal Plan"
        
         tabBar.tintColor = .black
         
@@ -87,15 +80,6 @@ class MainTabBarController: UITabBarController {
     
     @objc func rightBarButtonTapped() {
         print("Cart tapepd")
-    }
-    
-    @objc func qrCodeButtonPressed() {
-//
-//        let vc = UINavigationController(rootViewController: QRCodeViewController())
-//        vc.modalPresentationStyle = .formSheet
-//
-//
-//        present(vc, animated: true)
     }
     
 }

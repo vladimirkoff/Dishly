@@ -1,7 +1,14 @@
 import UIKit
 
+protocol ParentCellDelegate {
+    func goToRecipe()
+    func goToCategory()
+}
+
 class ParentCell: UICollectionViewCell {
     //MARK: - Properties
+    
+    var delegate: ParentCellDelegate?
     
     var isForCategories: Bool? {
         didSet {
@@ -12,18 +19,18 @@ class ParentCell: UICollectionViewCell {
     }
     
     private lazy var titleLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 10, y: 10, width: bounds.width - 20, height: 20))
+        let label = UILabel(frame: CGRect(x: 10, y: 10, width: bounds.width - 20, height: 30))
         label.text = "Daily inspiration"
-        label.textColor = .black
-        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.textColor = .white
+        label.font = UIFont.boldSystemFont(ofSize: 24)
         return label
     }()
     
     private lazy var horizontalCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .horizontal
-        let collectionView = UICollectionView(frame: CGRect(x: 0, y: titleLabel.frame.maxY + 5, width: bounds.width, height: bounds.height - 40), collectionViewLayout: collectionViewLayout)
-        collectionView.backgroundColor = .purple
+        let collectionView = UICollectionView(frame: CGRect(x: 0, y: titleLabel.frame.maxY, width: bounds.width, height: bounds.height - 40), collectionViewLayout: collectionViewLayout)
+        collectionView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
         collectionView.delegate = self
         collectionView.dataSource = self
         return collectionView
@@ -32,8 +39,8 @@ class ParentCell: UICollectionViewCell {
     private lazy var categoryCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .vertical
-        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: collectionViewLayout)
-        collectionView.backgroundColor = .red
+        let collectionView = UICollectionView(frame: CGRect(x: 0, y: bounds.midY - bounds.midY / 2, width: bounds.width, height: bounds.height - 60), collectionViewLayout: collectionViewLayout)
+        collectionView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
         collectionView.delegate = self
         collectionView.dataSource = self
         return collectionView
@@ -43,7 +50,7 @@ class ParentCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.9333333333, blue: 0.8784313725, alpha: 1)
+        backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
     }
     
     required init?(coder: NSCoder) {
@@ -66,6 +73,7 @@ class ParentCell: UICollectionViewCell {
     }
     
     func configureCellForCategories() {
+        contentView.addSubview(titleLabel)
         contentView.addSubview(categoryCollectionView)
         categoryCollectionView.register(CategoryCell.self, forCellWithReuseIdentifier: "CategoryCell")
         categoryCollectionView.isHidden = false
@@ -74,13 +82,20 @@ class ParentCell: UICollectionViewCell {
 
 extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        switch collectionView {
+        case horizontalCollectionView:
+            return 10
+        case categoryCollectionView:
+            return 6
+        default:
+            return 0
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == horizontalCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath) as! RecipeCell
-            cell.backgroundColor = .red
+            cell.backgroundColor = .white
             return cell
         } else if collectionView == categoryCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell
@@ -92,9 +107,9 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == horizontalCollectionView {
-            print("Select recipe")
-        } else if collectionView == categoryCollectionView {
-            print("Select category")
+            delegate?.goToRecipe()
+        } else {
+            delegate?.goToCategory()
         }
     }
     

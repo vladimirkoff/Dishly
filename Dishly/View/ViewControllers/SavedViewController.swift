@@ -43,6 +43,18 @@ class SavedViewController: UICollectionViewController {
         collectionView.register(ItemsHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
     }
     
+    //MARK: - Selectors
+    
+    @objc func rightBarButtonTapped() {
+        let vc = CartViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func leftBarButtonTapped() {
+        let vc = ProfileViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     //MARK: - UICollectionViewDelegate & UICollectionViewDataSource
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -71,20 +83,14 @@ class SavedViewController: UICollectionViewController {
         }
 }
 
+//MARK: - UICollectionViewDelegateFlowLayout
+
 extension SavedViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let size = CGSize(width: view.frame.width / 2 - 20, height: view.frame.height / 2.6)
         return size
     }
     
-    @objc func rightBarButtonTapped() {
-        let vc = CartViewController()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    @objc func leftBarButtonTapped() {
-        let vc = ProfileViewController()
-        navigationController?.pushViewController(vc, animated: true)
-    }
+
 }
 

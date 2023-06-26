@@ -64,8 +64,7 @@ class SignupController: UIViewController {
         return button
     }()
     
-    
-    
+
     private let alreadyHaveAnAccountButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -75,7 +74,6 @@ class SignupController: UIViewController {
     }()
     
     //MARK: - Lifecycle
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()

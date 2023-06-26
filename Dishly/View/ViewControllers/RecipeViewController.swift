@@ -4,13 +4,51 @@ import UIKit
 
 class RecipeViewController: UIViewController {
     //MARK: - Properties
-
+    
     private let dishImage: UIImageView = {
         let image = UIImage(named: "" )
         let iv = UIImageView(image: image)
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.backgroundColor = .lightGray
         return iv
+    }()
+    
+    private let directionsView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .yellow
+        return view
+    }()
+    
+    private let directionsLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.textColor = .black
+        label.text = "Directions"
+        return label
+    }()
+    
+    let stepByStepButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Step by step mode", for: .normal)
+        button.setImage(UIImage(systemName: "play"), for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        button.setTitleColor(.black, for: .normal)
+        button.tintColor = .black
+        button.contentMode = .center
+        button.semanticContentAttribute = .forceLeftToRight
+        button.contentHorizontalAlignment = .leading
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
+        button.addTarget(self, action: #selector(stepByStepButtonTapped), for: .touchUpInside)
+        
+        button.layer.borderWidth = 2
+        button.layer.borderColor = UIColor.white.cgColor
+        button.layer.cornerRadius = 100
+        
+        
+        return button
     }()
     
     let addToCartButton: UIButton = {
@@ -31,6 +69,16 @@ class RecipeViewController: UIViewController {
         view.backgroundColor = .black
         view.layer.cornerRadius = 10
         return view
+    }()
+    
+    let nutritionLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.textColor = .black
+        label.textAlignment = .center
+        label.text = "Nutrition per serving"
+        return label
     }()
     
     private let discriptionView: UIView = {
@@ -102,21 +150,19 @@ class RecipeViewController: UIViewController {
         return view
     }()
     
-    @objc func addToCartButtonTapped() {
-        
-    }
-
+    
+    
     let scrollView = UIScrollView()
     let contentView = UIView()
-
+    
     //MARK: - Lifecycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.delegate = self
-          collectionView.dataSource = self
+        collectionView.dataSource = self
         view.backgroundColor = .white
-
+        
         setupNavigationBar()
         setupScrollView()
         configureUI()
@@ -134,7 +180,7 @@ class RecipeViewController: UIViewController {
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         return collectionView
     }()
-
+    
     //MARK: - Helpers
     
     func configureNameAndAuthorLabel(name: String, author: String) -> NSAttributedString {
@@ -145,7 +191,7 @@ class RecipeViewController: UIViewController {
         attributedText.append(NSAttributedString(string: "by \(author)", attributes: [.font: UIFont.systemFont(ofSize: 18), .foregroundColor: UIColor.lightGray]))
         return attributedText
     }
-
+    
     private func configureUI() {
         view.addSubview(dishImage)
         NSLayoutConstraint.activate([
@@ -243,13 +289,7 @@ class RecipeViewController: UIViewController {
             collectionView.heightAnchor.constraint(equalToConstant: 50)
         ])
         
-        let directionsView: UIView = {
-            let view = UIView()
-            view.translatesAutoresizingMaskIntoConstraints = false
-            view.backgroundColor = .yellow
-            return view
-        }()
-
+        
         contentView.addSubview(directionsView)
         NSLayoutConstraint.activate([
             directionsView.topAnchor.constraint(equalTo: footerView.bottomAnchor, constant: 16),
@@ -258,92 +298,50 @@ class RecipeViewController: UIViewController {
             directionsView.heightAnchor.constraint(equalToConstant: 600)
         ])
         
-        let directionsLabel: UILabel = {
-            let label = UILabel()
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.font = UIFont.boldSystemFont(ofSize: 24)
-            label.textColor = .black
-            label.text = "Directions"
-            return label
-        }()
-
         directionsView.addSubview(directionsLabel)
         NSLayoutConstraint.activate([
             directionsLabel.topAnchor.constraint(equalTo: directionsView.topAnchor, constant: 16),
             directionsLabel.leadingAnchor.constraint(equalTo: directionsView.leadingAnchor, constant: 16)
         ])
         
-        let stepByStepButton: UIButton = {
-            let button = UIButton(type: .system)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.setTitle("Step by step mode", for: .normal)
-            button.setImage(UIImage(systemName: "play"), for: .normal)
-            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-            button.setTitleColor(.black, for: .normal)
-            button.tintColor = .black
-            button.contentMode = .center
-            button.semanticContentAttribute = .forceLeftToRight
-            button.contentHorizontalAlignment = .leading
-            button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
-            button.addTarget(self, action: #selector(stepByStepButtonTapped), for: .touchUpInside)
-            
-            button.layer.borderWidth = 2
-            button.layer.borderColor = UIColor.white.cgColor
-            button.layer.cornerRadius = 100
-            
-            NSLayoutConstraint.activate([
-                button.widthAnchor.constraint(equalToConstant: view.frame.width - 40),
-                button.heightAnchor.constraint(equalToConstant: 50)
-            ])
-            
-            return button
-        }()
-
+  
+        
         directionsView.addSubview(stepByStepButton)
         NSLayoutConstraint.activate([
             stepByStepButton.topAnchor.constraint(equalTo: directionsLabel.bottomAnchor, constant: 8),
             stepByStepButton.centerXAnchor.constraint(equalTo: directionsView.centerXAnchor),
             stepByStepButton.heightAnchor.constraint(equalToConstant: 40)
         ])
-
+        
+        NSLayoutConstraint.activate([
+            stepByStepButton.widthAnchor.constraint(equalToConstant: view.frame.width - 40),
+            stepByStepButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
     }
     
     
-    let nutritionLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 16)
-        label.textColor = .black
-        label.textAlignment = .center
-        label.text = "Nutrition per serving"
-        return label
-    }()
-
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(leftButtonTapped))
-
+        
         let rightButton1 = UIBarButtonItem(image: UIImage(named: "save"), style: .plain, target: self, action: #selector(rightButton1Tapped))
         navigationItem.rightBarButtonItems = [rightButton1]
     }
     
-    @objc private func stepByStepButtonTapped() {
-        // Handle step by step button tap
-    }
-
-
+    
     private func setupScrollView() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scrollView)
-
+        
         contentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(contentView)
-
+        
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
+            
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
@@ -352,20 +350,31 @@ class RecipeViewController: UIViewController {
             contentView.heightAnchor.constraint(equalToConstant: 4000)
         ])
     }
-
-
+    
+    //MARK: - Selectors
+    
+    @objc func addToCartButtonTapped() {
+        
+    }
+    
     @objc private func leftButtonTapped() {
         // Handle left button tap
     }
-
+    
     @objc private func rightButton1Tapped() {
         // Handle right button 1 tap
     }
-
+    
     @objc private func rightButton2Tapped() {
         // Handle right button 2 tap
     }
+    
+    @objc private func stepByStepButtonTapped() {
+        // Handle step by step button tap
+    }
 }
+
+//MARK: - UITableViewDelegate & UITableViewDataSource
 
 extension RecipeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -385,6 +394,7 @@ extension RecipeViewController: UITableViewDelegate, UITableViewDataSource {
     
 }
 
+//MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
 
 extension RecipeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

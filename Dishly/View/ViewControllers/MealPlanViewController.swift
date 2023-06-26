@@ -1,6 +1,8 @@
 import UIKit
 
 class MealPlanVC: UIViewController {
+    //MARK: - Properties
+    
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
@@ -8,13 +10,17 @@ class MealPlanVC: UIViewController {
         return collectionView
     }()
     
+    //MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigationBar()
+        configureNavBar()
         setupCollectionView()
     }
     
-    private func setupNavigationBar() {
+    //MARK: - Helpers
+    
+    private func configureNavBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "Meal Plan"
         
@@ -39,10 +45,23 @@ class MealPlanVC: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+    
+    //MARK: - Selectors
+    
+    @objc func rightBarButtonTapped() {
+        let vc = CartViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func leftBarButtonTapped() {
+        let vc = ProfileViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
-extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+//MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
 
+extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -77,15 +96,7 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         return CGSize(width: width, height: 300)
     }
     
-    @objc func rightBarButtonTapped() {
-        let vc = CartViewController()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    @objc func leftBarButtonTapped() {
-        let vc = ProfileViewController()
-        navigationController?.pushViewController(vc, animated: true)
-    }
+
 }
 
 

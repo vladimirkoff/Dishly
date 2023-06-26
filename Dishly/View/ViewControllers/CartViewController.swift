@@ -52,7 +52,6 @@ class CartViewController: UIViewController {
     
     private func setupUI() {
 
-        
         view.addSubview(itemCountLabel)
         NSLayoutConstraint.activate([
             itemCountLabel.topAnchor.constraint(equalTo: view.topAnchor),
@@ -68,12 +67,28 @@ class CartViewController: UIViewController {
         ])
     }
     
+    //MARK: - Selectors
+    
     @objc private func leftButtonTapped() {
         // Handle left button tap
     }
     
     @objc private func rightButtonTapped() {
         // Handle right button tap
+    }
+    
+    @objc private func checkmarkButtonTapped(_ sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        
+        guard let cell = sender.superview as? UICollectionViewCell else {
+            return
+        }
+        
+        if sender.isSelected {
+            cell.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
+        } else {
+            cell.backgroundColor = .lightGray
+        }
     }
 }
 
@@ -122,24 +137,6 @@ extension CartViewController: UICollectionViewDataSource {
         
         return cell
     }
-    
-    @objc private func checkmarkButtonTapped(_ sender: UIButton) {
-        sender.isSelected = !sender.isSelected
-        
-        guard let cell = sender.superview as? UICollectionViewCell else {
-            return
-        }
-        
-        if sender.isSelected {
-            cell.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
-        } else {
-            cell.backgroundColor = .lightGray
-        }
-    }
-
-
-
-
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {

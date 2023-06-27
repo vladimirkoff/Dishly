@@ -19,7 +19,7 @@
 		85C1B6F12A447EDD00BEAF2F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B6F02A447EDD00BEAF2F /* User.swift */; };
 		85C1B6F32A447FC700BEAF2F /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B6F22A447FC700BEAF2F /* AddViewController.swift */; };
 		85C1B6F52A4483D400BEAF2F /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B6F42A4483D400BEAF2F /* RecipeViewModel.swift */; };
-		85C1B6F82A4485AE00BEAF2F /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B6F72A4485AE00BEAF2F /* AuthService.swift */; };
+		85C1B6F82A4485AE00BEAF2F /* AuthServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B6F72A4485AE00BEAF2F /* AuthServiceProtocol.swift */; };
 		85C1B6FD2A44A00200BEAF2F /* RecipesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B6FC2A44A00200BEAF2F /* RecipesService.swift */; };
 		85C1B6FF2A458CBE00BEAF2F /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B6FE2A458CBE00BEAF2F /* CategoryCell.swift */; };
 		85C1B7032A458CF200BEAF2F /* TopCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7022A458CF200BEAF2F /* TopCategoryCell.swift */; };
@@ -56,7 +56,7 @@
 		85C1B6F02A447EDD00BEAF2F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		85C1B6F22A447FC700BEAF2F /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		85C1B6F42A4483D400BEAF2F /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
-		85C1B6F72A4485AE00BEAF2F /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		85C1B6F72A4485AE00BEAF2F /* AuthServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServiceProtocol.swift; sourceTree = "<group>"; };
 		85C1B6FC2A44A00200BEAF2F /* RecipesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipesService.swift; sourceTree = "<group>"; };
 		85C1B6FE2A458CBE00BEAF2F /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		85C1B7022A458CF200BEAF2F /* TopCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopCategoryCell.swift; sourceTree = "<group>"; };
@@ -182,7 +182,7 @@
 		85C1B6F62A44858700BEAF2F /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				85C1B6F72A4485AE00BEAF2F /* AuthService.swift */,
+				85C1B6F72A4485AE00BEAF2F /* AuthServiceProtocol.swift */,
 				85C1B6FC2A44A00200BEAF2F /* RecipesService.swift */,
 				85C1B7142A48723200BEAF2F /* UserService.swift */,
 			);
@@ -302,7 +302,7 @@
 				85C1B6F12A447EDD00BEAF2F /* User.swift in Sources */,
 				85C1B6FD2A44A00200BEAF2F /* RecipesService.swift in Sources */,
 				85C1B6EB2A447EA500BEAF2F /* ExploreViewController.swift in Sources */,
-				85C1B6F82A4485AE00BEAF2F /* AuthService.swift in Sources */,
+				85C1B6F82A4485AE00BEAF2F /* AuthServiceProtocol.swift in Sources */,
 				85C1B7112A485B2300BEAF2F /* CartViewController.swift in Sources */,
 				85C1B7072A45B71C00BEAF2F /* ParentCell.swift in Sources */,
 				85C1B7152A48723200BEAF2F /* UserService.swift in Sources */,

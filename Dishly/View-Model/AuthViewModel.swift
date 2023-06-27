@@ -3,9 +3,9 @@
 import Foundation
 
 class AuthenticationViewModel {
-    private let authService: AuthService
+    private let authService: AuthServiceProtocol
 
-    init(authService: AuthService) {
+    init(authService: AuthServiceProtocol) {
         self.authService = authService
     }
 

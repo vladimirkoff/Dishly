@@ -10,9 +10,9 @@ import UIKit
 import Foundation
 
 struct RecipeViewModel {
-    private let recipeService: RecipeService
+    private let recipeService: RecipeServiceProtocol
 
-    init(recipeService: RecipeService) {
+    init(recipeService: RecipeServiceProtocol) {
         self.recipeService = recipeService
     }
 

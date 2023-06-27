@@ -1,6 +1,5 @@
 
 import UIKit
-//import FirebaseAuth
 
 class MainTabBarController: UITabBarController {
     
@@ -59,8 +58,7 @@ class MainTabBarController: UITabBarController {
         tabBar.inputViewController?.hidesBottomBarWhenPushed = false
         
         tabBar.backgroundColor = .white
-        
-        
+    
     }
     
     func templateNavController(image: UIImage, rootVC: UIViewController) -> UINavigationController {

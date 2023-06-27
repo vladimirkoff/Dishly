@@ -6,7 +6,7 @@ class RecipeViewController: UIViewController {
     //MARK: - Properties
     
     var recipeViewModel: RecipeViewModel!
-    var recipeService: RecipeService!
+    var recipeService: RecipeServiceProtocol!
     
     private let dishImage: UIImageView = {
         let image = UIImage(named: "" )
@@ -166,7 +166,7 @@ class RecipeViewController: UIViewController {
         collectionView.dataSource = self
         view.backgroundColor = .white
         
-        recipeService = RemoteRecipeService.shared
+        recipeService = RecipeService.shared
         recipeViewModel = RecipeViewModel(recipeService: recipeService)
         
         setupNavigationBar()

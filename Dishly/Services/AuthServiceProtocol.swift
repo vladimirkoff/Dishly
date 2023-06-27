@@ -7,12 +7,16 @@
 
 import Foundation
 
-protocol AuthService {
+protocol AuthServiceProtocol {
     func login(email: String, password: String, completion: @escaping (Bool) -> Void)
     func register(email: String, password: String, completion: @escaping (Bool) -> Void)
 }
 
-class FirebaseAuthService: AuthService {
+class AuthService: AuthServiceProtocol {
+    
+    static var shared = AuthService()
+    init() {}
+    
     func login(email: String, password: String, completion: @escaping (Bool) -> Void) {
         // Реализация логики аутентификации через Firebase
     }

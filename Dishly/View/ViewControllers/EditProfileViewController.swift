@@ -10,6 +10,8 @@ import UIKit
 class EditProfileViewController: UIViewController {
     //MARK: - Properties
     
+    
+    
     //MARK: - Lifecycle
     
     override func viewDidLoad() {

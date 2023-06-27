@@ -6,7 +6,7 @@ class ExploreViewController: UIViewController {
     var user: User
     
     var recipeViewModel: RecipeViewModel!
-    var recipeService: RecipeService!
+    var recipeService: RecipeServiceProtocol!
     
     var userViewModel: UserViewModel!
     var userService: UserService!
@@ -46,7 +46,7 @@ class ExploreViewController: UIViewController {
         configureNavBar()
         configureUI()
         
-        recipeService = RemoteRecipeService.shared
+        recipeService = RecipeService.shared
         recipeViewModel = RecipeViewModel(recipeService: recipeService)
         
         userService = UserService.shared

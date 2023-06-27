@@ -1,22 +1,14 @@
-//
-//  LoginController.swift
-//  InstagramClone
-//
-//  Created by Vladimir Kovalev on 22.03.2023.
-//
+
 
 import UIKit
 
 class LoginController: UIViewController {
-    func updateForm() {
-//        loginButton.backgroundColor = viewModel.buttonColor
-//        loginButton.titleLabel?.textColor = viewModel.buttonTitleColor
-//        loginButton.isEnabled = viewModel.buttonIsEnabled
-    }
+ 
     
     //MARK: - Proeprties
     
     var authViewModel: AuthenticationViewModel!
+    var authService: AuthService!
 
     private let logo = UIImageView(image: UIImage(named: "Instagram_logo_white"))
     
@@ -64,19 +56,20 @@ class LoginController: UIViewController {
     
     
     //MARK: - Lifecycle
-    
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configureNotificationsObservers()
+        
+        authService = AuthService.shared
+        authViewModel = AuthenticationViewModel(authService: authService)
     }
     
     //MARK: - Helpers
     
     func configureUI() {
-        navigationController?.navigationBar.barStyle = .black 
+        navigationController?.navigationBar.barStyle = .black
         
        
         
@@ -119,7 +112,6 @@ class LoginController: UIViewController {
 //        } else {
 //            viewModel.password = sender.text
 //        }
-        updateForm()
     }
     
     @objc func logIn() {

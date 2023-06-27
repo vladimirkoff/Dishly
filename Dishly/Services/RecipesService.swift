@@ -1,13 +1,13 @@
 
 import Foundation
 
-protocol RecipeService {
+protocol RecipeServiceProtocol {
     func fetchRecipes(completion: @escaping ([Recipe]) -> Void)
 }
 
-class RemoteRecipeService: RecipeService {
+class RecipeService: RecipeServiceProtocol {
     
-    static let shared = RemoteRecipeService()
+    static let shared = RecipeService()
     init() {}
     
     func fetchRecipes(completion: @escaping ([Recipe]) -> Void) {

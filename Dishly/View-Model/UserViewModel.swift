@@ -8,7 +8,12 @@
 import UIKit
 
 struct UserViewModel {
+    
     private let userService: UserService
+    
+    init(userService: UserService) {
+        self.userService = userService
+    }
     
     func fetchUsers(completion: @escaping (User) -> Void) {
         userService.fetchUser { user in

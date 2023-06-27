@@ -4,8 +4,12 @@ class ExploreViewController: UIViewController {
     //MARK: - Properties
     
     var user: User
+    
     var recipeViewModel: RecipeViewModel!
+    var recipeService: RecipeService!
+    
     var userViewModel: UserViewModel!
+    var userService: UserService!
   
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
@@ -41,6 +45,12 @@ class ExploreViewController: UIViewController {
         super.viewDidLoad()
         configureNavBar()
         configureUI()
+        
+        recipeService = RemoteRecipeService.shared
+        recipeViewModel = RecipeViewModel(recipeService: recipeService)
+        
+        userService = UserService.shared
+        userViewModel = UserViewModel(userService: userService)
     }
     
     //MARK: - Helpers
@@ -97,7 +107,6 @@ class ExploreViewController: UIViewController {
 
 extension ExploreViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        // Implement your search functionality here
     }
 }
 

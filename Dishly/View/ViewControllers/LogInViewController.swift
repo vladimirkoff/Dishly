@@ -76,7 +76,7 @@ class LoginController: UIViewController {
     //MARK: - Helpers
     
     func configureUI() {
-        navigationController?.navigationBar.barStyle = .black // makes the top stats white
+        navigationController?.navigationBar.barStyle = .black 
         
        
         

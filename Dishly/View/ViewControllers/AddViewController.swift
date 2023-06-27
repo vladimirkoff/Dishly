@@ -16,7 +16,6 @@ class AddViewController: UIViewController {
     func configureUI() {
         let rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "cart"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
             
-            // Set the right bar button item
             navigationItem.rightBarButtonItem = rightBarButtonItem
     }
     

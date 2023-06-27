@@ -3,6 +3,9 @@ import UIKit
 class ProfileViewController: UIViewController {
     //MARK: - Properties
     
+    var userService: UserService!
+    var userViewModel: UserViewModel!
+    
     private let profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -53,7 +56,8 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        tableView.dataSource = self
+        userService = UserService.shared
+        userViewModel = UserViewModel(userService: userService)
     }
     
     override func viewDidLayoutSubviews() {
@@ -75,6 +79,8 @@ class ProfileViewController: UIViewController {
     }
     
     func configureUI() {
+        tableView.dataSource = self
+
         view.backgroundColor = UIColor(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
         
         tabBarController?.tabBar.isHidden = true

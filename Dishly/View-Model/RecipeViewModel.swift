@@ -11,7 +11,6 @@ import Foundation
 
 struct RecipeViewModel {
     private let recipeService: RecipeService
-    var recipesUpdated: (([Recipe]) -> Void)?
 
     init(recipeService: RecipeService) {
         self.recipeService = recipeService

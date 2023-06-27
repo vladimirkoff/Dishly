@@ -96,7 +96,7 @@ class CartViewController: UIViewController {
 
 extension CartViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10 // Replace with your desired number of items
+        return 10
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -106,7 +106,7 @@ extension CartViewController: UICollectionViewDataSource {
         
         let imageView = UIImageView(frame: CGRect(x: 5, y: (cell.bounds.height - 40) / 2, width: 60, height: 60))
         imageView.layer.cornerRadius = 30
-        imageView.backgroundColor = .red // Replace with your desired image
+        imageView.backgroundColor = .red 
         
         cell.addSubview(imageView)
         

@@ -5,6 +5,9 @@ import UIKit
 class RecipeViewController: UIViewController {
     //MARK: - Properties
     
+    var recipeViewModel: RecipeViewModel!
+    var recipeService: RecipeService!
+    
     private let dishImage: UIImageView = {
         let image = UIImage(named: "" )
         let iv = UIImageView(image: image)
@@ -162,6 +165,9 @@ class RecipeViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         view.backgroundColor = .white
+        
+        recipeService = RemoteRecipeService.shared
+        recipeViewModel = RecipeViewModel(recipeService: recipeService)
         
         setupNavigationBar()
         setupScrollView()

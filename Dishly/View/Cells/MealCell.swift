@@ -1,6 +1,7 @@
 import UIKit
 
 class MealCell: UICollectionViewCell {
+    //MARK: - Properties
     let dayLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 22)
@@ -36,6 +37,8 @@ class MealCell: UICollectionViewCell {
         return collectionView
     }()
     
+    //MARK: - Lifecycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
@@ -45,6 +48,8 @@ class MealCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    //MARK: - Helpers
     
     private func setupSubviews() {
         addSubview(dayLabel)
@@ -56,8 +61,6 @@ class MealCell: UICollectionViewCell {
         horizontalCollectionView.delegate = self
         horizontalCollectionView.register(RecipeCell.self, forCellWithReuseIdentifier: "HorizontalCell")
     }
-
-
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -80,6 +83,8 @@ class MealCell: UICollectionViewCell {
         ])
     }
 }
+
+//MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
 
 extension MealCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

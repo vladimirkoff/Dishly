@@ -1,14 +1,11 @@
-//
-//  ItemCell.swift
-//  prostoKava
-//
-//  Created by Vladimir Kovalev on 10.05.2023.
-//
+
 
 import UIKit
 
 class RecipeCell: UICollectionViewCell {
     //MARK: - Properties
+    
+    private var recipe: Recipe?
     
     private let saveButton: UIButton = {
         let button = UIButton(type: .system)

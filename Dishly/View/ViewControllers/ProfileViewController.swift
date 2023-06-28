@@ -111,7 +111,6 @@ class ProfileViewController: UIViewController {
     
     //MARK: - Selectors
     
-    
 }
 
 extension ProfileViewController: UITableViewDataSource {

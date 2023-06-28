@@ -4,12 +4,7 @@ import UIKit
 class ProfileOptionCell: UITableViewCell {
     //MARK: - Propeties
     
-    var indexPath: Int? {
-        didSet { configureElements(indexPath: indexPath!, isForMenu: isForMenu!) }
-    }
-    
-    var isForMenu: Bool?
-    
+        
     private let accessoryImage: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -79,11 +74,6 @@ class ProfileOptionCell: UITableViewCell {
     }
     
     func configureElements(indexPath: Int, isForMenu: Bool) {
-//        if isForMenu {
-//
-//            optionImage.tintColor = indexPath == 5 ? .red : .lightGray
-//            optionImage.image = menuOptionsImagesArray[indexPath]
-//            label.text = menuOptionsNamesArray[indexPath]
-//        }
+
     }
 }

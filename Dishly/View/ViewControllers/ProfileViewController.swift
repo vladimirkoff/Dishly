@@ -35,6 +35,7 @@ class ProfileViewController: UIViewController {
         
         );
         button.setAttributedTitle(attributedString, for: .normal)
+        button.addTarget(self, action: #selector(goToProfile), for: .touchUpInside)
         return button
     }()
     
@@ -110,6 +111,11 @@ class ProfileViewController: UIViewController {
     }
     
     //MARK: - Selectors
+    
+    @objc func goToProfile() {
+        let vc = EditProfileViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
     
 }
 

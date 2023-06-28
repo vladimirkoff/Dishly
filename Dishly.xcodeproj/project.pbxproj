@@ -38,7 +38,7 @@
 		85C1B71F2A49943300BEAF2F /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B71E2A49943300BEAF2F /* SignUpViewController.swift */; };
 		85C1B7212A49B96600BEAF2F /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7202A49B96600BEAF2F /* AuthViewModel.swift */; };
 		85C1B7232A49BA3B00BEAF2F /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7222A49BA3B00BEAF2F /* CustomTextField.swift */; };
-		85C1B7252A49D91C00BEAF2F /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7242A49D91C00BEAF2F /* EditProfileViewController.swift */; };
+		85C1B7272A4C26AD00BEAF2F /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7262A4C26AD00BEAF2F /* EditProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,7 +75,7 @@
 		85C1B71E2A49943300BEAF2F /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		85C1B7202A49B96600BEAF2F /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		85C1B7222A49BA3B00BEAF2F /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
-		85C1B7242A49D91C00BEAF2F /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
+		85C1B7262A4C26AD00BEAF2F /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,7 +165,7 @@
 				85C1B7182A4982EF00BEAF2F /* RecipeViewController.swift */,
 				85C1B71C2A49942B00BEAF2F /* LogInViewController.swift */,
 				85C1B71E2A49943300BEAF2F /* SignUpViewController.swift */,
-				85C1B7242A49D91C00BEAF2F /* EditProfileViewController.swift */,
+				85C1B7262A4C26AD00BEAF2F /* EditProfileViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -288,7 +288,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				85C1B7252A49D91C00BEAF2F /* EditProfileViewController.swift in Sources */,
 				85C1B7232A49BA3B00BEAF2F /* CustomTextField.swift in Sources */,
 				85C1B6ED2A447EAD00BEAF2F /* ProfileViewController.swift in Sources */,
 				85C1B71B2A49893B00BEAF2F /* UserViewModel.swift in Sources */,
@@ -298,6 +297,7 @@
 				85C1B6EF2A447ED900BEAF2F /* Recipe.swift in Sources */,
 				85C1B6F32A447FC700BEAF2F /* AddViewController.swift in Sources */,
 				85C1B70F2A485A6900BEAF2F /* MealPlanViewController.swift in Sources */,
+				85C1B7272A4C26AD00BEAF2F /* EditProfileViewController.swift in Sources */,
 				85C1B65B2A39FE5700BEAF2F /* AppDelegate.swift in Sources */,
 				85C1B6F12A447EDD00BEAF2F /* User.swift in Sources */,
 				85C1B6FD2A44A00200BEAF2F /* RecipesService.swift in Sources */,

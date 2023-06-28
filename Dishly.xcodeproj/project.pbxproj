@@ -39,6 +39,7 @@
 		85C1B7212A49B96600BEAF2F /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7202A49B96600BEAF2F /* AuthViewModel.swift */; };
 		85C1B7232A49BA3B00BEAF2F /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7222A49BA3B00BEAF2F /* CustomTextField.swift */; };
 		85C1B7272A4C26AD00BEAF2F /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7262A4C26AD00BEAF2F /* EditProfileViewController.swift */; };
+		85C1B7292A4C2B9B00BEAF2F /* ProfileInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7282A4C2B9B00BEAF2F /* ProfileInfoCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,6 +77,7 @@
 		85C1B7202A49B96600BEAF2F /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		85C1B7222A49BA3B00BEAF2F /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		85C1B7262A4C26AD00BEAF2F /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
+		85C1B7282A4C2B9B00BEAF2F /* ProfileInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +215,7 @@
 				85C1B7062A45B71C00BEAF2F /* ParentCell.swift */,
 				85C1B7082A45CF9700BEAF2F /* ProfileOptionCell.swift */,
 				85C1B7162A487C1C00BEAF2F /* MealCell.swift */,
+				85C1B7282A4C2B9B00BEAF2F /* ProfileInfoCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -317,6 +320,7 @@
 				85C1B71D2A49942B00BEAF2F /* LogInViewController.swift in Sources */,
 				85C1B71F2A49943300BEAF2F /* SignUpViewController.swift in Sources */,
 				85C1B70D2A45D11100BEAF2F /* ItemsHeader.swift in Sources */,
+				85C1B7292A4C2B9B00BEAF2F /* ProfileInfoCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

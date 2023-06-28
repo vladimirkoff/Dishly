@@ -21,5 +21,11 @@ struct RecipeViewModel {
             completion(recipes)
         }
     }
+    
+    func fetchRecipe(with id: String) {
+        // recipeService.fetchRecipe(with id: id) {
+        
+   // }
+    }
 }
 

@@ -8,7 +8,7 @@ class EditProfileViewController: UIViewController {
           let tableView = UITableView()
           tableView.translatesAutoresizingMaskIntoConstraints = false
           tableView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
-          tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+          tableView.register(ProfileInfoCell.self, forCellReuseIdentifier: "Cell")
           return tableView
       }()
     
@@ -84,8 +84,8 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ProfileInfoCell
+        cell.backgroundColor = .blue
         
         let separator = UIView(frame: CGRect(x: 16, y: cell.frame.height - 1, width: cell.frame.width - 32, height: 1)) // Add separator view
         separator.backgroundColor = .white

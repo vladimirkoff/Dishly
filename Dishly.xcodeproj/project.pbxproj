@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09B65E491BD62034DE8375C2 /* Pods_Dishly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA1C145446A00BC5402957FC /* Pods_Dishly.framework */; };
 		85C1B65B2A39FE5700BEAF2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B65A2A39FE5700BEAF2F /* AppDelegate.swift */; };
 		85C1B65D2A39FE5700BEAF2F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B65C2A39FE5700BEAF2F /* SceneDelegate.swift */; };
 		85C1B6622A39FE5700BEAF2F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85C1B6602A39FE5700BEAF2F /* Main.storyboard */; };
@@ -42,9 +43,11 @@
 		85C1B7292A4C2B9B00BEAF2F /* ProfileInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7282A4C2B9B00BEAF2F /* ProfileInfoCell.swift */; };
 		85C1B72B2A4D8F4C00BEAF2F /* GreetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B72A2A4D8F4C00BEAF2F /* GreetViewController.swift */; };
 		85C1B72D2A4D969700BEAF2F /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B72C2A4D969700BEAF2F /* UIButton.swift */; };
+		85C1B73B2A4DDF2E00BEAF2F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 85C1B73A2A4DDF2E00BEAF2F /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		84CC89D4F3A988B2F794987D /* Pods-Dishly.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dishly.debug.xcconfig"; path = "Target Support Files/Pods-Dishly/Pods-Dishly.debug.xcconfig"; sourceTree = "<group>"; };
 		85C1B6572A39FE5700BEAF2F /* Dishly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dishly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85C1B65A2A39FE5700BEAF2F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		85C1B65C2A39FE5700BEAF2F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -82,6 +85,9 @@
 		85C1B7282A4C2B9B00BEAF2F /* ProfileInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoCell.swift; sourceTree = "<group>"; };
 		85C1B72A2A4D8F4C00BEAF2F /* GreetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreetViewController.swift; sourceTree = "<group>"; };
 		85C1B72C2A4D969700BEAF2F /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
+		85C1B73A2A4DDF2E00BEAF2F /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		C37B7E4D901A1FF8C3C4D501 /* Pods-Dishly.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dishly.release.xcconfig"; path = "Target Support Files/Pods-Dishly/Pods-Dishly.release.xcconfig"; sourceTree = "<group>"; };
+		CA1C145446A00BC5402957FC /* Pods_Dishly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dishly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09B65E491BD62034DE8375C2 /* Pods_Dishly.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,6 +107,8 @@
 			children = (
 				85C1B6592A39FE5700BEAF2F /* Dishly */,
 				85C1B6582A39FE5700BEAF2F /* Products */,
+				C944DCB2AA2C8D31EDF5EB5C /* Pods */,
+				9248CECA03FD882F7C2C2728 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -122,6 +131,7 @@
 				85C1B6FA2A4485C700BEAF2F /* Extensions */,
 				85C1B6F92A4485BF00BEAF2F /* Utilities */,
 				85C1B6652A39FE5800BEAF2F /* LaunchScreen.storyboard */,
+				85C1B73A2A4DDF2E00BEAF2F /* GoogleService-Info.plist */,
 				85C1B6632A39FE5800BEAF2F /* Assets.xcassets */,
 				85C1B6602A39FE5700BEAF2F /* Main.storyboard */,
 				85C1B6682A39FE5800BEAF2F /* Info.plist */,
@@ -226,6 +236,23 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		9248CECA03FD882F7C2C2728 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CA1C145446A00BC5402957FC /* Pods_Dishly.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C944DCB2AA2C8D31EDF5EB5C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				84CC89D4F3A988B2F794987D /* Pods-Dishly.debug.xcconfig */,
+				C37B7E4D901A1FF8C3C4D501 /* Pods-Dishly.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -233,9 +260,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 85C1B66B2A39FE5800BEAF2F /* Build configuration list for PBXNativeTarget "Dishly" */;
 			buildPhases = (
+				C75EC7E42AD14C4D1450FB0F /* [CP] Check Pods Manifest.lock */,
 				85C1B6532A39FE5700BEAF2F /* Sources */,
 				85C1B6542A39FE5700BEAF2F /* Frameworks */,
 				85C1B6552A39FE5700BEAF2F /* Resources */,
+				96C553C1253EDD2A608082E8 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -285,12 +314,55 @@
 			buildActionMask = 2147483647;
 			files = (
 				85C1B6672A39FE5800BEAF2F /* LaunchScreen.storyboard in Resources */,
+				85C1B73B2A4DDF2E00BEAF2F /* GoogleService-Info.plist in Resources */,
 				85C1B6642A39FE5800BEAF2F /* Assets.xcassets in Resources */,
 				85C1B6622A39FE5700BEAF2F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		96C553C1253EDD2A608082E8 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Dishly/Pods-Dishly-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Dishly/Pods-Dishly-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Dishly/Pods-Dishly-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C75EC7E42AD14C4D1450FB0F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Dishly-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		85C1B6532A39FE5700BEAF2F /* Sources */ = {
@@ -470,6 +542,7 @@
 		};
 		85C1B66C2A39FE5800BEAF2F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 84CC89D4F3A988B2F794987D /* Pods-Dishly.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -498,6 +571,7 @@
 		};
 		85C1B66D2A39FE5800BEAF2F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C37B7E4D901A1FF8C3C4D501 /* Pods-Dishly.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

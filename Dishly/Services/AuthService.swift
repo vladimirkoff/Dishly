@@ -10,7 +10,7 @@ import FirebaseFirestore
 import FirebaseAuth
 
 protocol AuthServiceProtocol {
-    func login(email: String, password: String, completion: @escaping (Bool) -> Void)
+    func login(email: String, password: String, completion: @escaping (Error?) -> Void)
     func register(creds: AuthCreds, completion: @escaping (Error?) -> Void)
 }
 
@@ -19,8 +19,10 @@ class AuthService: AuthServiceProtocol {
     static var shared = AuthService()
     private init() {}
     
-    func login(email: String, password: String, completion: @escaping (Bool) -> Void) {
-        // Реализация логики аутентификации через Firebase
+    func login(email: String, password: String, completion: @escaping (Error?) -> Void) {
+        Auth.auth().signIn(withEmail: email, password: password) { res, err in
+            completion(err)
+        }
     }
 
     func register(creds: AuthCreds, completion: @escaping (Error?) -> Void) {

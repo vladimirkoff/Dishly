@@ -128,7 +128,7 @@ class GreetViewController: UIViewController {
     //MARK: - Selectors
     
     @objc func goToSignin() {
-        let vc = LoginController()
+        let vc = LoginViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
 }

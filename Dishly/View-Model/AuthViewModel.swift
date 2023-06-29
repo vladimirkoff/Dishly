@@ -9,10 +9,10 @@ class AuthenticationViewModel {
         self.authService = authService
     }
 
-    func login(email: String, password: String, completion: @escaping (Bool, Error?) -> Void) {
-//        authService.login(email: email, password: password) { success, error in
-//            completion(success, error)
-//        }
+    func login(email: String, password: String, completion: @escaping (Error?) -> Void) {
+        authService.login(email: email, password: password) { error in
+            completion(error)
+        }
     }
 
     func register(creds: AuthCreds, completion: @escaping (Error?) -> Void) {

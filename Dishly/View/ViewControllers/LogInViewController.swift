@@ -2,7 +2,7 @@
 
 import UIKit
 
-class LoginController: UIViewController {
+class LoginViewController: UIViewController {
  
     
     //MARK: - Proeprties
@@ -49,7 +49,6 @@ class LoginController: UIViewController {
         button.layer.cornerRadius = 5
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        button.isEnabled = false
         button.addTarget(self, action: #selector(logIn), for: .touchUpInside)
         return button
     }()
@@ -118,25 +117,16 @@ class LoginController: UIViewController {
         guard let email = emailField.text else { return }
         guard let password = passwordField.text else { return }
         
-//        Auth.auth().signIn(withEmail: email, password: password) { res, err in
-//            if let error = err {
-//                print("Error logging in - \(error.localizedDescription)")
-//                return
-//            }
-//            self.delegate?.authComplete()
-            
-//
-//            let nav = UINavigationController(rootViewController: MainTabController(scene: self.scene))
-//            nav.navigationBar.isHidden = true
-//            self.window?.rootViewController = nav
-//            self.window?.makeKeyAndVisible()
-//
-            
-//            let nav = UINavigationController(rootViewController: MainTabController())
-//            nav.navigationBar.isHidden = true
-//            self.navigationController?.pushViewController(nav, animated: true)
+        authViewModel.login(email: email, password: password) { error in
+            if let error = error {
+                print("DEBUG: Error signing in - \(error)")
+                return
+            }
+            let vc = MainTabBarController()
+            self.navigationController?.pushViewController(vc, animated: true)
         }
     }
+}
 
 
 

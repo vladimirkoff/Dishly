@@ -7,11 +7,12 @@ class SignupController: UIViewController {
     //MARK: - Properies
     
     var authViewModel: AuthenticationViewModel!
+    var authService: AuthServiceProtocol!
         
     private let plusButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "plus_photo"), for: .normal)
+        button.setImage(UIImage(named: "profile_picture"), for: .normal)
         button.backgroundColor = .red
         button.addTarget(self, action: #selector(chooseImage), for: .touchUpInside)
         button.heightAnchor.constraint(equalToConstant: 140).isActive = true
@@ -54,7 +55,6 @@ class SignupController: UIViewController {
         button.layer.cornerRadius = 5
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        button.isEnabled = false
         button.addTarget(self, action: #selector(registerUser), for: .touchUpInside)
         return button
     }()
@@ -74,6 +74,9 @@ class SignupController: UIViewController {
         super.viewDidLoad()
         configureUI()
         configureNotificationsObservers()
+        
+        authService = AuthService.shared
+        authViewModel = AuthenticationViewModel(authService: authService)
     }
     //MARK: - Helpers
     
@@ -119,13 +122,15 @@ class SignupController: UIViewController {
         guard let fullname = fullnameField.text else { return }
         guard let username = usernameField.text else { return }
         
-        //        let userCreds = AuthCreds(email: email, password: password, fullname: fullname, username: username, profileImage: plusButton.imageView?.image ?? UIImage(named: "profile_selected"))
-        //        AuthService.registerUser(creds: userCreds) { error in
-        //            if let error = error {
-        //                print(error.localizedDescription)
-        //            }
-        //            self.delegate?.authComplete()
-        
+        let userCreds = AuthCreds(email: email, password: password, fullname: fullname, username: username, profileImage: plusButton.imageView?.image ?? UIImage(named: "profile_selected"))
+        authViewModel.register(creds: userCreds) { error in
+            if let error = error {
+                print("DEBUG: Error registering user - \(error.localizedDescription)")
+                return
+            }
+            let vc = MainTabBarController()
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
         
     }
     

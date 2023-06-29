@@ -40,6 +40,8 @@
 		85C1B7232A49BA3B00BEAF2F /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7222A49BA3B00BEAF2F /* CustomTextField.swift */; };
 		85C1B7272A4C26AD00BEAF2F /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7262A4C26AD00BEAF2F /* EditProfileViewController.swift */; };
 		85C1B7292A4C2B9B00BEAF2F /* ProfileInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7282A4C2B9B00BEAF2F /* ProfileInfoCell.swift */; };
+		85C1B72B2A4D8F4C00BEAF2F /* GreetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B72A2A4D8F4C00BEAF2F /* GreetViewController.swift */; };
+		85C1B72D2A4D969700BEAF2F /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B72C2A4D969700BEAF2F /* UIButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +80,8 @@
 		85C1B7222A49BA3B00BEAF2F /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		85C1B7262A4C26AD00BEAF2F /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		85C1B7282A4C2B9B00BEAF2F /* ProfileInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoCell.swift; sourceTree = "<group>"; };
+		85C1B72A2A4D8F4C00BEAF2F /* GreetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreetViewController.swift; sourceTree = "<group>"; };
+		85C1B72C2A4D969700BEAF2F /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +172,7 @@
 				85C1B71C2A49942B00BEAF2F /* LogInViewController.swift */,
 				85C1B71E2A49943300BEAF2F /* SignUpViewController.swift */,
 				85C1B7262A4C26AD00BEAF2F /* EditProfileViewController.swift */,
+				85C1B72A2A4D8F4C00BEAF2F /* GreetViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -202,6 +207,7 @@
 		85C1B6FA2A4485C700BEAF2F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				85C1B72C2A4D969700BEAF2F /* UIButton.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -294,6 +300,7 @@
 				85C1B7232A49BA3B00BEAF2F /* CustomTextField.swift in Sources */,
 				85C1B6ED2A447EAD00BEAF2F /* ProfileViewController.swift in Sources */,
 				85C1B71B2A49893B00BEAF2F /* UserViewModel.swift in Sources */,
+				85C1B72D2A4D969700BEAF2F /* UIButton.swift in Sources */,
 				85C1B7032A458CF200BEAF2F /* TopCategoryCell.swift in Sources */,
 				85C1B6F52A4483D400BEAF2F /* RecipeViewModel.swift in Sources */,
 				85C1B7052A45A7AF00BEAF2F /* RecipeCell.swift in Sources */,
@@ -302,6 +309,7 @@
 				85C1B70F2A485A6900BEAF2F /* MealPlanViewController.swift in Sources */,
 				85C1B7272A4C26AD00BEAF2F /* EditProfileViewController.swift in Sources */,
 				85C1B65B2A39FE5700BEAF2F /* AppDelegate.swift in Sources */,
+				85C1B72B2A4D8F4C00BEAF2F /* GreetViewController.swift in Sources */,
 				85C1B6F12A447EDD00BEAF2F /* User.swift in Sources */,
 				85C1B6FD2A44A00200BEAF2F /* RecipesService.swift in Sources */,
 				85C1B6EB2A447EA500BEAF2F /* ExploreViewController.swift in Sources */,

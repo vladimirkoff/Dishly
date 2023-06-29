@@ -8,7 +8,7 @@ protocol RecipeServiceProtocol {
 class RecipeService: RecipeServiceProtocol {
     
     static let shared = RecipeService()
-    init() {}
+   private init() {}
     
     func fetchRecipes(completion: @escaping ([Recipe]) -> Void) {
         // Реализация фетчинга рецептов из удаленной базы данных

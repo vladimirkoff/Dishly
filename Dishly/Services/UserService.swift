@@ -14,10 +14,12 @@ protocol UserServiceProtocol {
 class UserService: UserServiceProtocol  {
     
     static var shared = UserService()
-    init() {}
+    private init() {}
     
     func fetchUser(completion: @escaping (User) -> Void) {
         
     }
+    
+    
     
 }

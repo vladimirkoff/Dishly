@@ -15,7 +15,7 @@ protocol AuthServiceProtocol {
 class AuthService: AuthServiceProtocol {
     
     static var shared = AuthService()
-    init() {}
+    private init() {}
     
     func login(email: String, password: String, completion: @escaping (Bool) -> Void) {
         // Реализация логики аутентификации через Firebase

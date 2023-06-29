@@ -9,7 +9,7 @@ class ExploreViewController: UIViewController {
     var recipeService: RecipeServiceProtocol!
     
     var userViewModel: UserViewModel!
-    var userService: UserService!
+    var userService: UserServiceProtocol!
   
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)

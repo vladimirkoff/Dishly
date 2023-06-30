@@ -13,7 +13,7 @@ class GreetViewController: UIViewController {
     var authService: AuthServiceProtocol!
     var userService: UserServiceProtocol!
     var recipeService: RecipeServiceProtocol!
-    
+        
     private let backGroundImage: UIImageView = {
         let image = UIImage(named: "dish")
         let iv = UIImageView(image: image)
@@ -32,37 +32,83 @@ class GreetViewController: UIViewController {
         return label
     }()
     
-    private let facebookAuthButton: UIButton = {
+    private lazy var facebookAuthButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.widthAnchor.constraint(equalToConstant: view.bounds.width / 4 + 10).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
         button.backgroundColor = .blue
         button.layer.cornerRadius = 17
+        
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 22)
+        let symbolImage = UIImage(named: "facebook", in: nil, with: symbolConfiguration)?.withTintColor(.black, renderingMode: .alwaysOriginal)
+        button.setImage(symbolImage, for: .normal)
+        
         return button
     }()
     
-//    private let facebookAuthButton: UIButton = {
-//        let button = UIButton(type: .system)
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        button.backgroundColor = .blue
-//        button.layer.cornerRadius = 17
-//        return button
-//    }()
-//
-//    private let facebookAuthButton: UIButton = {
-//        let button = UIButton(type: .system)
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        button.backgroundColor = .blue
-//        button.layer.cornerRadius = 17
-//        return button
-//    }()
+    private lazy var appleAuthButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.widthAnchor.constraint(equalToConstant: view.bounds.width / 4 + 10).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 17
+        
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 22)
+        let symbolImage = UIImage(systemName: "apple.logo", withConfiguration: symbolConfiguration)?.withTintColor(.black, renderingMode: .alwaysOriginal)
+        button.setImage(symbolImage, for: .normal)
+        
+        return button
+    }()
+
+
+
+    private lazy var googleAuthButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.widthAnchor.constraint(equalToConstant: view.bounds.width / 4 + 10).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        button.backgroundColor = .lightGray
+        button.layer.cornerRadius = 17
+        return button
+    }()
     
     private let authWithEmailButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .red
+        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 22)
+        let symbolImage = UIImage(systemName: "envelope", withConfiguration: symbolConfiguration)
+        
+        let attributedText = NSMutableAttributedString()
+        
+        if let symbolImage = symbolImage {
+            let imageAttachment = NSTextAttachment()
+            imageAttachment.image = symbolImage
+            let imageString = NSAttributedString(attachment: imageAttachment)
+            attributedText.append(imageString)
+            
+            let spaceString = NSAttributedString(string: " ")
+            attributedText.append(spaceString)
+        }
+        
+        let titleText = NSAttributedString(string: "SIGN UP WITH EMAIL", attributes: [
+            .font: UIFont.boldSystemFont(ofSize: 22),
+            .foregroundColor: UIColor.black
+        ])
+        attributedText.append(titleText)
+        
+        button.setAttributedTitle(attributedText, for: .normal)
+        button.backgroundColor = .white
         button.layer.cornerRadius = 17
+        
+        button.addTarget(self, action: #selector(goToSignUp), for: .touchUpInside)
+        
         return button
     }()
+
     
     private let alreadyHaveAnAccountButton: UIButton = {
         let button = UIButton(type: .system)
@@ -72,12 +118,15 @@ class GreetViewController: UIViewController {
         return button
     }()
     
-    private let privacyNoticeAndTermsOfUseLabel: UILabel = {
+    private lazy var privacyNoticeAndTermsOfUseLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.widthAnchor.constraint(equalToConstant: view.bounds.width - 20).isActive = true
+        label.numberOfLines = 0
+        label.textAlignment = .center
         label.text = "By using Dishly, you agree to our Privacy Notice and Terms of use"
         label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 32)
+        label.font = UIFont.boldSystemFont(ofSize: 16)
         return label
     }()
         
@@ -86,12 +135,14 @@ class GreetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        
     }
     
     init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
+         self.authService = authService
          self.userService = userService
          self.recipeService = recipeService
-         self.userService = userService
+        
          super.init(nibName: nil, bundle: nil)
      }
     
@@ -117,17 +168,23 @@ class GreetViewController: UIViewController {
             appTitleLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -distance),
         ])
         
-        view.addSubview(facebookAuthButton)
-        NSLayoutConstraint.activate([
-            facebookAuthButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            facebookAuthButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -distance + 40),
-            facebookAuthButton.widthAnchor.constraint(equalToConstant: view.bounds.width / 3),
-            facebookAuthButton.heightAnchor.constraint(equalToConstant: 35)
-        ])
-        
+        let authButtonsStack = UIStackView(arrangedSubviews: [appleAuthButton, facebookAuthButton, googleAuthButton])
+         authButtonsStack.translatesAutoresizingMaskIntoConstraints = false
+         authButtonsStack.axis = .horizontal
+         authButtonsStack.distribution = .equalCentering
+         authButtonsStack.spacing = 12
+         
+         view.addSubview(authButtonsStack)
+         NSLayoutConstraint.activate([
+             authButtonsStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+             authButtonsStack.topAnchor.constraint(equalTo: appTitleLabel.bottomAnchor, constant: 16),
+             authButtonsStack.heightAnchor.constraint(equalToConstant: 40),
+             authButtonsStack.widthAnchor.constraint(equalToConstant: view.bounds.width - 10)
+         ])
+
         view.addSubview(authWithEmailButton)
         NSLayoutConstraint.activate([
-            authWithEmailButton.topAnchor.constraint(equalTo: facebookAuthButton.bottomAnchor, constant: 4),
+            authWithEmailButton.topAnchor.constraint(equalTo: authButtonsStack.bottomAnchor, constant: 12),
             authWithEmailButton.widthAnchor.constraint(equalToConstant: view.bounds.width - 20),
             authWithEmailButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
@@ -135,10 +192,17 @@ class GreetViewController: UIViewController {
         view.addSubview(alreadyHaveAnAccountButton)
         NSLayoutConstraint.activate([
             alreadyHaveAnAccountButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            alreadyHaveAnAccountButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
+            alreadyHaveAnAccountButton.topAnchor.constraint(equalTo: authWithEmailButton.bottomAnchor, constant: 8)
+        ])
+        
+        view.addSubview(privacyNoticeAndTermsOfUseLabel)
+        NSLayoutConstraint.activate([
+            privacyNoticeAndTermsOfUseLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -6),
+            privacyNoticeAndTermsOfUseLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         
     }
+    
     
     //MARK: - Selectors
     
@@ -146,7 +210,17 @@ class GreetViewController: UIViewController {
         guard let authService = authService else { return }
         guard let userService = userService else { return }
         guard let recipeService = recipeService else { return }
+        
         let vc = LoginViewController(authService: authService, userService: userService, recipeService: recipeService)
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func goToSignUp() {
+        let vc = SignupController(authService: authService, userService: userService, recipeService: recipeService)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func facebookAuthPressed() {
+        
     }
 }

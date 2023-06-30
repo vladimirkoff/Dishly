@@ -62,15 +62,6 @@ class SignupController: UIViewController {
         return button
     }()
     
-
-    private let alreadyHaveAnAccountButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        //        button.attributedTitle(first: "Already have an account?  ", second: "Sign in")
-        button.addTarget(self, action: #selector(goToSignin), for: .touchUpInside)
-        return button
-    }()
-    
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -83,7 +74,7 @@ class SignupController: UIViewController {
     init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
          self.userService = userService
          self.recipeService = recipeService
-         self.userService = userService
+         self.authService = authService
          super.init(nibName: nil, bundle: nil)
      }
     
@@ -109,9 +100,6 @@ class SignupController: UIViewController {
         stack.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         stack.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -32).isActive = true
         
-        view.addSubview(alreadyHaveAnAccountButton)
-        alreadyHaveAnAccountButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8).isActive = true
-        alreadyHaveAnAccountButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
     func configureNotificationsObservers() {
@@ -141,16 +129,14 @@ class SignupController: UIViewController {
                 print("DEBUG: Error registering user - \(error.localizedDescription)")
                 return
             }
-            let vc = MainTabBarController()
+            let vc = MainTabBarController(authService: self.authService, userService: self.userService, recipeService: self.recipeService)
             self.navigationController?.pushViewController(vc, animated: true)
         }
         
     }
     
     
-    @objc func goToSignin() {
-        navigationController?.popViewController(animated: true)
-    }
+
     
     @objc func chooseImage() {
         let picker = UIImagePickerController()
@@ -195,11 +181,6 @@ extension SignupController: UIImagePickerControllerDelegate & UINavigationContro
         
         picker.dismiss(animated: true)
     }
-    
-    
-
-
-    
     
 }
 

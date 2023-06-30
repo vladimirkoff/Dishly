@@ -134,7 +134,7 @@ class LoginViewController: UIViewController {
                 print("DEBUG: Error signing in - \(error)")
                 return
             }
-            let vc = MainTabBarController()
+            let vc = MainTabBarController(authService: self.authService, userService: self.userService, recipeService: self.recipeService)
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }

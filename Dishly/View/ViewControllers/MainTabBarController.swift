@@ -5,6 +5,10 @@ class MainTabBarController: UITabBarController {
     
     //MARK: - Properties
     
+    var authService: AuthServiceProtocol!
+    var userService: UserServiceProtocol!
+    var recipeService: RecipeServiceProtocol!
+    
 
     //MARK: - Lifecycle
     
@@ -22,6 +26,18 @@ class MainTabBarController: UITabBarController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         selectedIndex = 0
+    }
+    
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
+         self.authService = authService
+         self.userService = userService
+         self.recipeService = recipeService
+        
+         super.init(nibName: nil, bundle: nil)
+     }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     //MARK: - Helpers

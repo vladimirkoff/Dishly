@@ -8,6 +8,9 @@ class SignupController: UIViewController {
     
     var authViewModel: AuthenticationViewModel!
     var authService: AuthServiceProtocol!
+    
+    var userService: UserServiceProtocol!
+    var recipeService: RecipeServiceProtocol!
         
     private let plusButton: UIButton = {
         let button = UIButton()
@@ -74,10 +77,20 @@ class SignupController: UIViewController {
         super.viewDidLoad()
         configureUI()
         configureNotificationsObservers()
-        
-        authService = AuthService.shared
         authViewModel = AuthenticationViewModel(authService: authService)
     }
+    
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
+         self.userService = userService
+         self.recipeService = recipeService
+         self.userService = userService
+         super.init(nibName: nil, bundle: nil)
+     }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     //MARK: - Helpers
     
     func configureUI() {

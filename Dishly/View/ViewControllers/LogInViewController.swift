@@ -4,11 +4,13 @@ import UIKit
 
 class LoginViewController: UIViewController {
  
-    
     //MARK: - Proeprties
     
     var authViewModel: AuthenticationViewModel!
-    var authService: AuthService!
+    var authService: AuthServiceProtocol!
+    
+    var userService: UserServiceProtocol!
+    var recipeService: RecipeServiceProtocol!
 
     private let logo = UIImageView(image: UIImage(named: "Instagram_logo_white"))
     
@@ -61,8 +63,18 @@ class LoginViewController: UIViewController {
         configureUI()
         configureNotificationsObservers()
         
-        authService = AuthService.shared
         authViewModel = AuthenticationViewModel(authService: authService)
+    }
+    
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
+         self.userService = userService
+         self.recipeService = recipeService
+         self.userService = userService
+         super.init(nibName: nil, bundle: nil)
+     }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     //MARK: - Helpers

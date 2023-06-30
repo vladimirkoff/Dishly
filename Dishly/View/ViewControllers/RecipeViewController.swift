@@ -166,7 +166,6 @@ class RecipeViewController: UIViewController {
         collectionView.dataSource = self
         view.backgroundColor = .white
         
-        recipeService = RecipeService.shared
         recipeViewModel = RecipeViewModel(recipeService: recipeService)
         
         setupNavigationBar()

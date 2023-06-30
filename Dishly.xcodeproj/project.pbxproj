@@ -46,6 +46,7 @@
 		85C1B73B2A4DDF2E00BEAF2F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 85C1B73A2A4DDF2E00BEAF2F /* GoogleService-Info.plist */; };
 		85C1B73E2A4DE09500BEAF2F /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B73D2A4DE09500BEAF2F /* ImageUploader.swift */; };
 		85C1B7402A4DE16700BEAF2F /* AuthCreds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B73F2A4DE16700BEAF2F /* AuthCreds.swift */; };
+		85C1B7422A4F069F00BEAF2F /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7412A4F069F00BEAF2F /* DependencyContainer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,6 +91,7 @@
 		85C1B73A2A4DDF2E00BEAF2F /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		85C1B73D2A4DE09500BEAF2F /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
 		85C1B73F2A4DE16700BEAF2F /* AuthCreds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCreds.swift; sourceTree = "<group>"; };
+		85C1B7412A4F069F00BEAF2F /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
 		C37B7E4D901A1FF8C3C4D501 /* Pods-Dishly.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dishly.release.xcconfig"; path = "Target Support Files/Pods-Dishly/Pods-Dishly.release.xcconfig"; sourceTree = "<group>"; };
 		CA1C145446A00BC5402957FC /* Pods_Dishly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dishly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -246,6 +248,7 @@
 			children = (
 				85C1B73D2A4DE09500BEAF2F /* ImageUploader.swift */,
 				85C1B73F2A4DE16700BEAF2F /* AuthCreds.swift */,
+				85C1B7412A4F069F00BEAF2F /* DependencyContainer.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -404,6 +407,7 @@
 				85C1B6F82A4485AE00BEAF2F /* AuthService.swift in Sources */,
 				85C1B7112A485B2300BEAF2F /* CartViewController.swift in Sources */,
 				85C1B7072A45B71C00BEAF2F /* ParentCell.swift in Sources */,
+				85C1B7422A4F069F00BEAF2F /* DependencyContainer.swift in Sources */,
 				85C1B7152A48723200BEAF2F /* UserService.swift in Sources */,
 				85C1B7092A45CF9700BEAF2F /* ProfileOptionCell.swift in Sources */,
 				85C1B7212A49B96600BEAF2F /* AuthViewModel.swift in Sources */,

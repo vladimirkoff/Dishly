@@ -46,10 +46,8 @@ class ExploreViewController: UIViewController {
         configureNavBar()
         configureUI()
         
-        recipeService = RecipeService.shared
         recipeViewModel = RecipeViewModel(recipeService: recipeService)
         
-        userService = UserService.shared
         userViewModel = UserViewModel(userService: userService)
     }
     

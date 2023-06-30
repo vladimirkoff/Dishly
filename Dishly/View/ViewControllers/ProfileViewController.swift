@@ -57,7 +57,6 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        userService = UserService.shared
         userViewModel = UserViewModel(userService: userService)
     }
     

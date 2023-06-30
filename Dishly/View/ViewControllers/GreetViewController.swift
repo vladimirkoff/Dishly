@@ -10,6 +10,10 @@ import UIKit
 class GreetViewController: UIViewController {
     //MARK: - Properties
     
+    var authService: AuthServiceProtocol!
+    var userService: UserServiceProtocol!
+    var recipeService: RecipeServiceProtocol!
+    
     private let backGroundImage: UIImageView = {
         let image = UIImage(named: "dish")
         let iv = UIImageView(image: image)
@@ -84,6 +88,17 @@ class GreetViewController: UIViewController {
         configureUI()
     }
     
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
+         self.userService = userService
+         self.recipeService = recipeService
+         self.userService = userService
+         super.init(nibName: nil, bundle: nil)
+     }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     //MARK: - Helpers
     
     func configureUI() {
@@ -128,7 +143,10 @@ class GreetViewController: UIViewController {
     //MARK: - Selectors
     
     @objc func goToSignin() {
-        let vc = LoginViewController()
+        guard let authService = authService else { return }
+        guard let userService = userService else { return }
+        guard let recipeService = recipeService else { return }
+        let vc = LoginViewController(authService: authService, userService: userService, recipeService: recipeService)
         navigationController?.pushViewController(vc, animated: true)
     }
 }

@@ -16,9 +16,6 @@ protocol AuthServiceProtocol {
 
 class AuthService: AuthServiceProtocol {
     
-    static var shared = AuthService()
-    private init() {}
-    
     func login(email: String, password: String, completion: @escaping (Error?) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { res, err in
             completion(err)
@@ -41,3 +38,5 @@ class AuthService: AuthServiceProtocol {
         }
     }
 }
+
+

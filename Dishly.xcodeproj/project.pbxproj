@@ -50,6 +50,8 @@
 		85C1B7452A51534900BEAF2F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7442A51534900BEAF2F /* Constants.swift */; };
 		85C1B7482A517F5500BEAF2F /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 85C1B7472A517F5500BEAF2F /* Realm */; };
 		85C1B74A2A517F5500BEAF2F /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 85C1B7492A517F5500BEAF2F /* RealmSwift */; };
+		85C1B74C2A51A1C100BEAF2F /* UserRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B74B2A51A1C100BEAF2F /* UserRealm.swift */; };
+		85C1B74E2A51A23A00BEAF2F /* UserRealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B74D2A51A23A00BEAF2F /* UserRealmService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,6 +98,8 @@
 		85C1B73F2A4DE16700BEAF2F /* AuthCreds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCreds.swift; sourceTree = "<group>"; };
 		85C1B7412A4F069F00BEAF2F /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
 		85C1B7442A51534900BEAF2F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		85C1B74B2A51A1C100BEAF2F /* UserRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRealm.swift; sourceTree = "<group>"; };
+		85C1B74D2A51A23A00BEAF2F /* UserRealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRealmService.swift; sourceTree = "<group>"; };
 		C37B7E4D901A1FF8C3C4D501 /* Pods-Dishly.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dishly.release.xcconfig"; path = "Target Support Files/Pods-Dishly/Pods-Dishly.release.xcconfig"; sourceTree = "<group>"; };
 		CA1C145446A00BC5402957FC /* Pods_Dishly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dishly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -157,6 +161,7 @@
 			children = (
 				85C1B6EE2A447ED900BEAF2F /* Recipe.swift */,
 				85C1B6F02A447EDD00BEAF2F /* User.swift */,
+				85C1B74B2A51A1C100BEAF2F /* UserRealm.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -215,6 +220,7 @@
 				85C1B6F72A4485AE00BEAF2F /* AuthService.swift */,
 				85C1B6FC2A44A00200BEAF2F /* RecipesService.swift */,
 				85C1B7142A48723200BEAF2F /* UserService.swift */,
+				85C1B74D2A51A23A00BEAF2F /* UserRealmService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -402,7 +408,9 @@
 			files = (
 				85C1B7232A49BA3B00BEAF2F /* CustomTextField.swift in Sources */,
 				85C1B6ED2A447EAD00BEAF2F /* ProfileViewController.swift in Sources */,
+				85C1B74E2A51A23A00BEAF2F /* UserRealmService.swift in Sources */,
 				85C1B71B2A49893B00BEAF2F /* UserViewModel.swift in Sources */,
+				85C1B74C2A51A1C100BEAF2F /* UserRealm.swift in Sources */,
 				85C1B7402A4DE16700BEAF2F /* AuthCreds.swift in Sources */,
 				85C1B72D2A4D969700BEAF2F /* UIButton.swift in Sources */,
 				85C1B7032A458CF200BEAF2F /* TopCategoryCell.swift in Sources */,

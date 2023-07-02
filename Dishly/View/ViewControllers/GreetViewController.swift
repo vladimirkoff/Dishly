@@ -259,7 +259,6 @@ class GreetViewController: UIViewController {
         guard let authService = authService else { return }
         guard let userService = userService else { return }
         guard let recipeService = recipeService else { return }
-        
         let vc = LoginViewController(authService: authService, userService: userService, recipeService: recipeService)
         navigationController?.pushViewController(vc, animated: true)
     }

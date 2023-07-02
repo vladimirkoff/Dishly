@@ -146,13 +146,14 @@ class ProfileViewController: UIViewController {
     func handleLogOut() {
         authViewModel.logOut { error, success in
             if let error = error {
-                print("Error")
+                print("Error logging out - \(error.localizedDescription)")
                 return
             }
             let recipeService = RecipeService()
             let vc = GreetViewController(authService: self.authService, userService: self.userService, recipeService: recipeService)
-            vc.modalPresentationStyle = .fullScreen
-            self.present(vc, animated: true)
+            let navVC = UINavigationController(rootViewController: vc)
+            navVC.modalPresentationStyle = .fullScreen
+            self.present(navVC, animated: true)
         }
     }
     
@@ -194,6 +195,18 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! ProfileOptionCell
+        switch indexPath.row {
+        case 0:
+            cell.optionLabel.text = "1"
+        case 1:
+            cell.optionLabel.text = "2"
+        case 2:
+            cell.optionLabel.text = "3"
+        case 3:
+            cell.optionLabel.text = "Log Out"
+        default:
+            print("Default")
+        }
         return cell
     }
     

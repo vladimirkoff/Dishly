@@ -13,14 +13,14 @@ class ProfileOptionCell: UITableViewCell {
         return iv
     }()
     
-    private let optionImage: UIImageView = {
+     var optionImage: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.tintColor = .black
         return iv
     }()
     
-    private let label: UILabel = {
+     var optionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
@@ -28,6 +28,15 @@ class ProfileOptionCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 16)
         return label
     }()
+    
+    let gearSymbolImageView: UIImageView = {
+         let imageView = UIImageView()
+         imageView.translatesAutoresizingMaskIntoConstraints = false
+         let gearImage = UIImage(systemName: "gearshape.fill")
+         imageView.image = gearImage
+         imageView.tintColor = .white
+         return imageView
+     }()
    
     //MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -55,10 +64,10 @@ class ProfileOptionCell: UITableViewCell {
             optionImage.heightAnchor.constraint(equalToConstant: 25)
         ])
         
-        addSubview(label)
+        addSubview(optionLabel)
         NSLayoutConstraint.activate([
-            label.leftAnchor.constraint(equalTo: optionImage.rightAnchor, constant: 8),
-            label.centerYAnchor.constraint(equalTo: centerYAnchor)
+            optionLabel.leftAnchor.constraint(equalTo: optionImage.rightAnchor, constant: 8),
+            optionLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
         
         addSubview(accessoryImage)
@@ -69,6 +78,12 @@ class ProfileOptionCell: UITableViewCell {
             accessoryImage.heightAnchor.constraint(equalToConstant: 16)
         ])
         
-
+        addSubview(gearSymbolImageView)
+        NSLayoutConstraint.activate([
+            gearSymbolImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            gearSymbolImageView.widthAnchor.constraint(equalToConstant: 40),
+            gearSymbolImageView.heightAnchor.constraint(equalToConstant: 40),
+            gearSymbolImageView.rightAnchor.constraint(equalTo: optionLabel.leftAnchor, constant: -8)
+        ])
     }
 }

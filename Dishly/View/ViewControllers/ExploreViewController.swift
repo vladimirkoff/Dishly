@@ -63,16 +63,12 @@ class ExploreViewController: UIViewController {
     
     func configureNavBar() {
         navigationItem.searchController = searchController
+        navigationItem.setHidesBackButton(true, animated: false)
         definesPresentationContext = true
         
         navigationItem.title = "Search"
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        let rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "cart"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
-        navigationItem.rightBarButtonItem = rightBarButtonItem
-        
-        let leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "profile"), style: .plain, target: self, action: #selector(leftBarButtonTapped))
-        navigationItem.leftBarButtonItem = leftBarButtonItem
     }
     
     func configureUI() {
@@ -92,15 +88,6 @@ class ExploreViewController: UIViewController {
     
     //MARK: - Selectors
     
-    @objc func rightBarButtonTapped() {
-        let vc = CartViewController()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    @objc func leftBarButtonTapped() {
-        let vc = ProfileViewController()
-        navigationController?.pushViewController(vc, animated: true)
-    }
 }
 
 //MARK: - UISearchResultsUpdating

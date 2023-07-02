@@ -23,6 +23,11 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureVC()
+        let rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "cart"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
+        navigationItem.rightBarButtonItem = rightBarButtonItem
+        
+        let leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "profile"), style: .plain, target: self, action: #selector(leftBarButtonTapped))
+        navigationItem.leftBarButtonItem = leftBarButtonItem
     }
     
     override func viewDidLayoutSubviews() {
@@ -54,16 +59,16 @@ class MainTabBarController: UITabBarController {
         print(user)
         
         let mainVC = ExploreViewController(user: user, userService: userService, recipeService: recipeService)
-        let main = templateNavController(image: UIImage(named: "home")!, rootVC: mainVC)
+        let main = configureVC(image: UIImage(named: "home")!, vc: mainVC)
         
         let addVC = AddViewController()
-        let add = templateNavController(image: UIImage(named: "add")!, rootVC: addVC)
+        let add = configureVC(image: UIImage(named: "add")!, vc: addVC)
         
         let savedVC = SavedViewController(collectionViewLayout: UICollectionViewFlowLayout())
-        let saved = templateNavController(image: UIImage(named: "save")!, rootVC: savedVC)
+        let saved = configureVC(image: UIImage(named: "save")!, vc: savedVC)
         
         let mealVC = MealPlanVC()
-        let plan = templateNavController(image: UIImage(named: "list")!, rootVC: mealVC)
+        let plan = configureVC(image: UIImage(named: "list")!, vc: mealVC)
         
         
         viewControllers = [main,  add, saved, plan]
@@ -82,23 +87,29 @@ class MainTabBarController: UITabBarController {
     
     }
     
-    func templateNavController(image: UIImage, rootVC: UIViewController) -> UINavigationController {
-        let nav = UINavigationController(rootViewController: rootVC)
+    
+    func configureVC(image: UIImage, vc: UIViewController) -> UIViewController {
         
         let selectedImage = UIImageView(image: image)
         selectedImage.tintColor = .white
     
-        nav.tabBarItem.image = image
-        nav.tabBarItem.selectedImage = image.withTintColor(UIColor.systemRed)
-        nav.tabBarController?.tabBar.backgroundColor = .black
+        vc.tabBarItem.image = image
+        vc.tabBarItem.selectedImage = image.withTintColor(UIColor.systemRed)
+        vc.tabBarController?.tabBar.backgroundColor = .black
         
-        return nav
+        return vc
     }
     
     //MARK: - Selectors
     
     @objc func rightBarButtonTapped() {
-        print("Cart tapepd")
+        let vc = CartViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func leftBarButtonTapped() {
+        let vc = ProfileViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
     
 }

@@ -22,11 +22,6 @@ class SavedViewController: UICollectionViewController {
         navigationController?.navigationBar.isHidden = false
         view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
         
-        let rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "cart"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
-        navigationItem.rightBarButtonItem = rightBarButtonItem
-        
-        let leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "profile"), style: .plain, target: self, action: #selector(leftBarButtonTapped))
-        navigationItem.leftBarButtonItem = leftBarButtonItem
         
         navigationItem.title = "My Saved Recipes"
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -36,18 +31,6 @@ class SavedViewController: UICollectionViewController {
         collectionView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
         collectionView.register(RecipeCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView.register(ItemsHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
-    }
-    
-    //MARK: - Selectors
-    
-    @objc func rightBarButtonTapped() {
-        let vc = CartViewController()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    @objc func leftBarButtonTapped() {
-        let vc = ProfileViewController()
-        navigationController?.pushViewController(vc, animated: true)
     }
     
     //MARK: - UICollectionViewDelegate & UICollectionViewDataSource

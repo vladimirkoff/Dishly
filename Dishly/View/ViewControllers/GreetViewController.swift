@@ -16,6 +16,10 @@ class GreetViewController: UIViewController {
     var recipeService: RecipeServiceProtocol!
     
     var userViewModel: UserViewModel!
+    
+    var userRealmService: UserRealmServiceProtocol!
+    var userRealmViewModel: UserRealmViewModel!
+
         
     private let backGroundImage: UIImageView = {
         let image = UIImage(named: "dish")
@@ -133,6 +137,20 @@ class GreetViewController: UIViewController {
         
     //MARK: - Lifecycle
     
+    func createTestUser() {
+        userRealmService = UserRealmService()
+        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+        userRealmViewModel.createUser(name: "Vova", email: "None", profileImageUrl: "///.com", id: "1iwyfwei7d")
+    }
+    
+    func fetchTestUser() {
+        userRealmService = UserRealmService()
+        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+        userRealmViewModel.getUser(with: "1iwyfwei7d") { user in
+            print(user.uid)
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         checkIfLoggedIn()
@@ -140,6 +158,8 @@ class GreetViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+//        createTestUser()
+        fetchTestUser()
         configureUI()
         userViewModel = UserViewModel(userService: userService)
     }

@@ -52,6 +52,7 @@
 		85C1B74A2A517F5500BEAF2F /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 85C1B7492A517F5500BEAF2F /* RealmSwift */; };
 		85C1B74C2A51A1C100BEAF2F /* UserRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B74B2A51A1C100BEAF2F /* UserRealm.swift */; };
 		85C1B74E2A51A23A00BEAF2F /* UserRealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B74D2A51A23A00BEAF2F /* UserRealmService.swift */; };
+		85C1B7502A51AB2600BEAF2F /* UserRealmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B74F2A51AB2600BEAF2F /* UserRealmViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -100,6 +101,7 @@
 		85C1B7442A51534900BEAF2F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		85C1B74B2A51A1C100BEAF2F /* UserRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRealm.swift; sourceTree = "<group>"; };
 		85C1B74D2A51A23A00BEAF2F /* UserRealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRealmService.swift; sourceTree = "<group>"; };
+		85C1B74F2A51AB2600BEAF2F /* UserRealmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRealmViewModel.swift; sourceTree = "<group>"; };
 		C37B7E4D901A1FF8C3C4D501 /* Pods-Dishly.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dishly.release.xcconfig"; path = "Target Support Files/Pods-Dishly/Pods-Dishly.release.xcconfig"; sourceTree = "<group>"; };
 		CA1C145446A00BC5402957FC /* Pods_Dishly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dishly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -182,6 +184,7 @@
 				85C1B6F42A4483D400BEAF2F /* RecipeViewModel.swift */,
 				85C1B71A2A49893B00BEAF2F /* UserViewModel.swift */,
 				85C1B7202A49B96600BEAF2F /* AuthViewModel.swift */,
+				85C1B74F2A51AB2600BEAF2F /* UserRealmViewModel.swift */,
 			);
 			path = "View-Model";
 			sourceTree = "<group>";
@@ -406,6 +409,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85C1B7502A51AB2600BEAF2F /* UserRealmViewModel.swift in Sources */,
 				85C1B7232A49BA3B00BEAF2F /* CustomTextField.swift in Sources */,
 				85C1B6ED2A447EAD00BEAF2F /* ProfileViewController.swift in Sources */,
 				85C1B74E2A51A23A00BEAF2F /* UserRealmService.swift in Sources */,

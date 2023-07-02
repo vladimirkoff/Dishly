@@ -151,6 +151,17 @@ class GreetViewController: UIViewController {
         }
     }
     
+    func updateUser() {
+        userRealmService = UserRealmService()
+        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+        let user = User(dictionary: ["fullName" : "Sasha",
+                                     "uid" : "1iwyfwei7d"
+                                    ])
+        userRealmViewModel.updateUser(user: user) { success in
+            print(success)
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         checkIfLoggedIn()

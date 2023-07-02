@@ -27,4 +27,10 @@ struct UserRealmViewModel {
             completion(user)
         }
     }
+    
+    func updateUser(user: User, completion: @escaping(Bool) -> ()) {
+        userRealmService.updateUser(user: user) { success in
+            completion(success)
+        }
+    }
 }

@@ -11,6 +11,7 @@ import RealmSwift
 protocol UserRealmServiceProtocol {
     func createUser(name: String, email: String, profileImageUrl: String, id: String, completion: @escaping(Bool) -> ())
     func getUser(with id: String, completion: @escaping(User) -> ())
+    func updateUser(user: User, completion: @escaping(Bool) -> ())
 }
 
 class UserRealmService: UserRealmServiceProtocol {
@@ -48,10 +49,16 @@ class UserRealmService: UserRealmServiceProtocol {
         }
     }
 
-     func updateUser(user: UserRealm, newName: String) {
-         try! realm.write {
-             user.name = newName
-         }
+    func updateUser(user: User, completion: @escaping(Bool) -> ()) {
+        let users = realm.objects(UserRealm.self)
+        for realmUser in users {
+            if realmUser.id == user.uid {
+                try! realm.write {
+                    realmUser.name = user.fullName
+                    completion(true)
+                }
+            }
+        }
      }
 
      func deleteUser(user: UserRealm) {

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class GreetViewController: UIViewController {
     //MARK: - Properties
@@ -13,6 +14,8 @@ class GreetViewController: UIViewController {
     var authService: AuthServiceProtocol!
     var userService: UserServiceProtocol!
     var recipeService: RecipeServiceProtocol!
+    
+    var userViewModel: UserViewModel!
         
     private let backGroundImage: UIImageView = {
         let image = UIImage(named: "dish")
@@ -61,8 +64,6 @@ class GreetViewController: UIViewController {
         
         return button
     }()
-
-
 
     private lazy var googleAuthButton: UIButton = {
         let button = UIButton(type: .system)
@@ -132,10 +133,15 @@ class GreetViewController: UIViewController {
         
     //MARK: - Lifecycle
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkIfLoggedIn()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        
+        userViewModel = UserViewModel(userService: userService)
     }
     
     init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
@@ -151,6 +157,18 @@ class GreetViewController: UIViewController {
     }
     
     //MARK: - Helpers
+    
+    func checkIfLoggedIn() {
+        let currentUser = Auth.auth().currentUser
+        if currentUser != nil {
+            userViewModel.fetchUser { user in
+                DispatchQueue.main.async {
+                    let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService)
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
+        }
+    }
     
     func configureUI() {
         view.addSubview(backGroundImage)

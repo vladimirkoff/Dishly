@@ -163,6 +163,8 @@ class ProfileViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    //MARK: - Alert
+    
     func showLogoutAlert() {
         let alert = UIAlertController(title: "Log Out", message: "Are you sure you want to log out?", preferredStyle: .alert)
         
@@ -170,19 +172,15 @@ class ProfileViewController: UIViewController {
         alert.addAction(cancelAction)
         
         let logoutAction = UIAlertAction(title: "Yes", style: .destructive) { _ in
-            // Perform logout operation
             self.logout()
         }
         alert.addAction(logoutAction)
-        
         present(alert, animated: true, completion: nil)
     }
 
     func logout() {
         handleLogOut()
     }
-
-    
 }
 
 

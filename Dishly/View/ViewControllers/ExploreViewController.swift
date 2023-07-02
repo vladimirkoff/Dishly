@@ -32,8 +32,10 @@ class ExploreViewController: UIViewController {
     
     //MARK: - Lifecycle
     
-    init(user: User) {
+    init(user: User, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
         self.user = user
+        self.userService = userService
+        self.recipeService = recipeService
         super.init(nibName: nil, bundle: nil)
     }
     

@@ -129,8 +129,8 @@ class SignupController: UIViewController {
                 print("DEBUG: Error registering user - \(error.localizedDescription)")
                 return
             }
-            let vc = MainTabBarController(authService: self.authService, userService: self.userService, recipeService: self.recipeService)
-            self.navigationController?.pushViewController(vc, animated: true)
+//            let vc = MainTabBarController(authService: self.authService, userService: self.userService, recipeService: self.recipeService)
+//            self.navigationController?.pushViewController(vc, animated: true)
         }
         
     }

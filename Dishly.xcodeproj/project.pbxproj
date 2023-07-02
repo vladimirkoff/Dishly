@@ -47,6 +47,7 @@
 		85C1B73E2A4DE09500BEAF2F /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B73D2A4DE09500BEAF2F /* ImageUploader.swift */; };
 		85C1B7402A4DE16700BEAF2F /* AuthCreds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B73F2A4DE16700BEAF2F /* AuthCreds.swift */; };
 		85C1B7422A4F069F00BEAF2F /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7412A4F069F00BEAF2F /* DependencyContainer.swift */; };
+		85C1B7452A51534900BEAF2F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7442A51534900BEAF2F /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,6 +93,7 @@
 		85C1B73D2A4DE09500BEAF2F /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
 		85C1B73F2A4DE16700BEAF2F /* AuthCreds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCreds.swift; sourceTree = "<group>"; };
 		85C1B7412A4F069F00BEAF2F /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
+		85C1B7442A51534900BEAF2F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C37B7E4D901A1FF8C3C4D501 /* Pods-Dishly.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dishly.release.xcconfig"; path = "Target Support Files/Pods-Dishly/Pods-Dishly.release.xcconfig"; sourceTree = "<group>"; };
 		CA1C145446A00BC5402957FC /* Pods_Dishly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dishly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -217,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				85C1B7222A49BA3B00BEAF2F /* CustomTextField.swift */,
+				85C1B7442A51534900BEAF2F /* Constants.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -281,7 +284,7 @@
 				85C1B6532A39FE5700BEAF2F /* Sources */,
 				85C1B6542A39FE5700BEAF2F /* Frameworks */,
 				85C1B6552A39FE5700BEAF2F /* Resources */,
-				96C553C1253EDD2A608082E8 /* [CP] Embed Pods Frameworks */,
+				CF4ABEFBF80D07C12B4D5673 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -340,23 +343,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		96C553C1253EDD2A608082E8 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Dishly/Pods-Dishly-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Dishly/Pods-Dishly-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Dishly/Pods-Dishly-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		C75EC7E42AD14C4D1450FB0F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -377,6 +363,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CF4ABEFBF80D07C12B4D5673 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Dishly/Pods-Dishly-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Dishly/Pods-Dishly-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Dishly/Pods-Dishly-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -421,6 +424,7 @@
 				85C1B71F2A49943300BEAF2F /* SignUpViewController.swift in Sources */,
 				85C1B70D2A45D11100BEAF2F /* ItemsHeader.swift in Sources */,
 				85C1B7292A4C2B9B00BEAF2F /* ProfileInfoCell.swift in Sources */,
+				85C1B7452A51534900BEAF2F /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

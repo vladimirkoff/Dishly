@@ -10,6 +10,7 @@ class LoginViewController: UIViewController {
     var authService: AuthServiceProtocol!
     
     var userService: UserServiceProtocol!
+    var userViewModel: UserViewModel!
     var recipeService: RecipeServiceProtocol!
 
     private let logo = UIImageView(image: UIImage(named: "Instagram_logo_white"))
@@ -64,10 +65,11 @@ class LoginViewController: UIViewController {
         configureNotificationsObservers()
         
         authViewModel = AuthenticationViewModel(authService: authService)
+        userViewModel = UserViewModel(userService: userService)
     }
     
     init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
-         self.userService = userService
+         self.authService = authService
          self.recipeService = recipeService
          self.userService = userService
          super.init(nibName: nil, bundle: nil)
@@ -81,9 +83,7 @@ class LoginViewController: UIViewController {
     
     func configureUI() {
         navigationController?.navigationBar.barStyle = .black
-        
-       
-        
+    
         view.addSubview(logo)
         logo.translatesAutoresizingMaskIntoConstraints = false
         logo.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -105,8 +105,8 @@ class LoginViewController: UIViewController {
     }
     
     func configureNotificationsObservers() {
-//        emailField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
-//        passwordField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+        emailField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+        passwordField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
     }
     
     //MARK: - Selectors
@@ -117,12 +117,9 @@ class LoginViewController: UIViewController {
 //        navigationController?.pushViewController(vc, animated: true)
     }
     @objc func textDidChange(sender: UITextField) {
-//        if sender == emailField {
-//            emailField.text = emailField.text?.lowercased()
-//            viewModel.email = sender.text
-//        } else {
-//            viewModel.password = sender.text
-//        }
+        if sender == emailField {
+            emailField.text = emailField.text?.lowercased()
+        } 
     }
     
     @objc func logIn() {
@@ -134,8 +131,10 @@ class LoginViewController: UIViewController {
                 print("DEBUG: Error signing in - \(error)")
                 return
             }
-            let vc = MainTabBarController(authService: self.authService, userService: self.userService, recipeService: self.recipeService)
-            self.navigationController?.pushViewController(vc, animated: true)
+            self.userViewModel.fetchUser { user in
+                let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
         }
     }
 }

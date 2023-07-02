@@ -9,6 +9,8 @@ class MainTabBarController: UITabBarController {
     var userService: UserServiceProtocol!
     var recipeService: RecipeServiceProtocol!
     
+    var user: User!
+    
 
     //MARK: - Lifecycle
     
@@ -28,10 +30,11 @@ class MainTabBarController: UITabBarController {
         selectedIndex = 0
     }
     
-    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
+    init(user: User, authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
          self.authService = authService
          self.userService = userService
          self.recipeService = recipeService
+         self.user = user
         
          super.init(nibName: nil, bundle: nil)
      }
@@ -48,7 +51,9 @@ class MainTabBarController: UITabBarController {
     
     func configureVC() {
         
-        let mainVC = ExploreViewController(user: User(email: "", name: "", profileImageUrl: "", uid: "", username: ""))
+        print(user)
+        
+        let mainVC = ExploreViewController(user: user, userService: userService, recipeService: recipeService)
         let main = templateNavController(image: UIImage(named: "home")!, rootVC: mainVC)
         
         let addVC = AddViewController()

@@ -14,6 +14,7 @@ class AuthenticationViewModel {
             completion(error)
         }
     }
+    
 
     func register(creds: AuthCreds, completion: @escaping (Error?) -> Void) {
         authService.register(creds: creds) { error in

@@ -15,9 +15,9 @@ struct UserViewModel {
         self.userService = userService
     }
     
-    func fetchUsers(completion: @escaping (User) -> Void) {
+    func fetchUser(completion: @escaping(User) -> ()) {
         userService.fetchUser { user in
-            print(user.name)
+            completion(user)
         }
-      }
+    }
 }

@@ -1,15 +1,20 @@
 import UIKit
 
+protocol ProfileInfoCellDelegate {
+    func infoDidChange(text: String)
+}
+
 class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
     
     // MARK: - Properties
     
+    var delegate: ProfileInfoCellDelegate?
+    
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         label.text = "Password"
-        label.backgroundColor = .red
         return label
     }()
     
@@ -21,8 +26,7 @@ class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
     private let textView: UITextView = {
         let textView = UITextView()
         textView.backgroundColor = .clear
-        textView.textColor = .black
-        textView.backgroundColor = .red
+        textView.textColor = .white
         textView.font = UIFont.systemFont(ofSize: 22)
         textView.isScrollEnabled = false
         textView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -35,6 +39,7 @@ class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        textView.delegate = self
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -44,7 +49,7 @@ class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
     // MARK: - Setup
     
     private func setupViews() {
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
         contentView.addSubview(nameLabel)
         contentView.addSubview(textView)
         
@@ -74,34 +79,32 @@ class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
         clearButton.backgroundColor = .systemGray
         clearButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
         clearButton.tintColor = .white
+        
+        clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
     }
-
-
+    
     @objc private func clearButtonTapped() {
         textView.text = ""
-        textViewDidChange(textView) // Notify the delegate (cell) about the text change
+        textViewDidChange(textView)
     }
     
     func textViewDidChange(_ textView: UITextView) {
-           // Adjust the cell's height based on the text view's content size
            let contentSize = textView.contentSize
            let textViewHeight = contentSize.height
            
-           // Update the frame of the text view
            textView.frame.size.height = textViewHeight
            
-           // Update the frame of the clear button
            let clearButtonY = textView.frame.origin.y + textViewHeight - clearButton.frame.size.height
            clearButton.frame.origin.y = clearButtonY
            
-           // Notify the table view about the cell's height change
            if let tableView = superview as? UITableView, let indexPath = tableView.indexPath(for: self) {
                tableView.beginUpdates()
                tableView.endUpdates()
                
-               // Scroll to the cell if needed
                tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
            }
+           
+           delegate?.infoDidChange(text: textView.text)
        }
     
     // MARK: - Configuration
@@ -109,5 +112,15 @@ class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
     func configure(with name: String, text: String) {
         nameLabel.text = name
         textView.text = text
+    }
+    
+    func configureFields(email: String?, password: String?, name: String?) {
+        if let email = email {
+            textView.text = email
+        } else if let password = password {
+            textView.text = password
+        } else if let name = name {
+            textView.text = name
+        }
     }
 }

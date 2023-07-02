@@ -4,18 +4,28 @@ class EditProfileViewController: UIViewController {
     
     //MARK: - Properties
     
-    private let tableView: UITableView = {
-          let tableView = UITableView()
-          tableView.translatesAutoresizingMaskIntoConstraints = false
-          tableView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
-          tableView.register(ProfileInfoCell.self, forCellReuseIdentifier: "Cell")
-          return tableView
-      }()
+    var profileImage: UIImageView!
+    var user: User
     
-    private let profileImageButton: UIButton = {
+    var userService: UserServiceProtocol!
+    var userViewModel: UserViewModel!
+    
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(ProfileInfoCell.self, forCellReuseIdentifier: "Cell")
+        return tableView
+    }()
+    
+    private lazy var profileImageButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "plus_photo"), for: .normal)
+        button.layer.cornerRadius = 70
+        button.clipsToBounds = true
+        button.setImage(profileImage.image, for: .normal)
         button.addTarget(self, action: #selector(chooseImage), for: .touchUpInside)
         button.heightAnchor.constraint(equalToConstant: 140).isActive = true
         button.widthAnchor.constraint(equalToConstant: 140).isActive = true
@@ -25,7 +35,6 @@ class EditProfileViewController: UIViewController {
     private let smallProfileImageButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .red
         button.layer.cornerRadius = 20
         button.addTarget(self, action: #selector(chooseImage), for: .touchUpInside)
         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
@@ -37,15 +46,31 @@ class EditProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
-        view.addSubview(tableView)
+        configureUI()
         setupTableViewConstraints()
-        
-        tableView.delegate = self
-        tableView.dataSource = self
+        userViewModel = UserViewModel(userService: userService)
+    }
+    
+    init(user: User, userService: UserServiceProtocol, profileImage: UIImageView) {
+        self.user = user
+        self.userService = userService
+        self.profileImage = profileImage
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     //MARK: - Helpers
+    
+    func configureUI() {
+        view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        view.addSubview(tableView)
+        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonTapped))
+        doneButton.isEnabled = false
+        navigationItem.rightBarButtonItem = doneButton
+    }
     
     
     private func setupTableViewConstraints() {
@@ -68,10 +93,25 @@ class EditProfileViewController: UIViewController {
     //MARK: - Selectors
     
     @objc func chooseImage() {
+        navigationItem.rightBarButtonItem?.isEnabled = true
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.allowsEditing = true
         present(picker, animated: true)
+    }
+    
+    @objc func doneButtonTapped() {
+        ImageUploader.uploadImage(image: profileImage.image!) { imageURL in
+            let dict = ["fullName": "Vova",
+                        "profileImage": imageURL,
+                        "uid": self.user.uid
+            
+            ]
+            let changedUser = User(dictionary: dict)
+            self.userViewModel.updateUser(with: changedUser) { error in
+                
+            }
+        }
     }
 }
 
@@ -86,6 +126,14 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ProfileInfoCell
         cell.backgroundColor = .blue
+        cell.delegate = self
+        if indexPath.row == 0 {
+            cell.configureFields(email: user.email, password: nil, name: nil)
+        } else if indexPath.row == 1 {
+            cell.configureFields(email: nil, password: user.uid, name: nil)
+        } else {
+            cell.configureFields(email: nil, password: nil, name: user.fullName)
+        }
         
         let separator = UIView(frame: CGRect(x: 16, y: cell.frame.height - 1, width: cell.frame.width - 32, height: 1)) // Add separator view
         separator.backgroundColor = .white
@@ -99,7 +147,7 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        let height: CGFloat = view.bounds.height / 5
+        let height: CGFloat = 140
         return height
     }
     
@@ -107,8 +155,9 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
         let headerView = UIView()
         configureHeader(headerView: headerView )
         headerView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        
         return headerView
-     }
+    }
 }
 
 //MARK: - UIImagePickerControllerDelegate & UINavigationControllerDelegate 
@@ -124,8 +173,17 @@ extension EditProfileViewController: UIImagePickerControllerDelegate & UINavigat
         profileImageButton.layer.borderColor = UIColor.white.cgColor
         profileImageButton.layer.borderWidth = 2
         
+        profileImage.image = selectedImage
         profileImageButton.setImage(selectedImage.withRenderingMode(.alwaysOriginal), for: .normal)
         
         picker.dismiss(animated: true)
+    }
+}
+
+//MARK: - ProfileInfoCellDelegate
+
+extension EditProfileViewController: ProfileInfoCellDelegate {
+    func infoDidChange(text: String) {
+        print(text)
     }
 }

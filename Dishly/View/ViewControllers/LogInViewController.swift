@@ -6,7 +6,7 @@ class LoginViewController: UIViewController {
  
     //MARK: - Proeprties
     
-    var authViewModel: AuthenticationViewModel!
+    var authViewModel: AuthViewModel!
     var authService: AuthServiceProtocol!
     
     var userService: UserServiceProtocol!
@@ -33,12 +33,14 @@ class LoginViewController: UIViewController {
     private let emailField: CustomTextField = {
         let tf = CustomTextField(placeholder: "Email")
         tf.autocorrectionType = .no
+        tf.text = "kovalov280305@gmail.com"
         return tf
     }()
     
     private let passwordField: CustomTextField = {
         let tf = CustomTextField(placeholder: "Password")
         tf.isSecureTextEntry = true
+        tf.text = "123456789"
         tf.autocorrectionType = .no
         return tf
     }()
@@ -64,7 +66,7 @@ class LoginViewController: UIViewController {
         configureUI()
         configureNotificationsObservers()
         
-        authViewModel = AuthenticationViewModel(authService: authService)
+        authViewModel = AuthViewModel(authService: authService)
         userViewModel = UserViewModel(userService: userService)
     }
     
@@ -133,6 +135,7 @@ class LoginViewController: UIViewController {
             }
             self.userViewModel.fetchUser { user in
                 let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService)
+//                print(user)
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }

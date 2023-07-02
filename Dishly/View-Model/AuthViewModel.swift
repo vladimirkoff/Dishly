@@ -2,7 +2,7 @@
 
 import Foundation
 
-class AuthenticationViewModel {
+class AuthViewModel {
     private let authService: AuthServiceProtocol
 
     init(authService: AuthServiceProtocol) {
@@ -15,10 +15,23 @@ class AuthenticationViewModel {
         }
     }
     
-
     func register(creds: AuthCreds, completion: @escaping (Error?) -> Void) {
         authService.register(creds: creds) { error in
             completion(error)
+        }
+    }
+    
+    func changePassword() {
+        
+    }
+    
+    func changeEmail() {
+        
+    }
+    
+    func logOut(completion: @escaping(Error?, Bool) -> ()) {
+        authService.logOut { error, success in
+            completion(error, success)
         }
     }
 }

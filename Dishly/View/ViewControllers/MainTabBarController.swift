@@ -1,5 +1,6 @@
 
 import UIKit
+import SDWebImage
 
 class MainTabBarController: UITabBarController {
     
@@ -10,6 +11,23 @@ class MainTabBarController: UITabBarController {
     var recipeService: RecipeServiceProtocol!
     
     var user: User!
+    
+    private let profileContainerView: UIView = {
+        let profileContainerView = UIView(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
+        return profileContainerView
+    }()
+    
+    private lazy var profileImageView: UIImageView = {
+        let profileImageView = UIImageView(frame: profileContainerView.bounds)
+        profileImageView.isUserInteractionEnabled = true
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(leftBarButtonTapped))
+        profileImageView.addGestureRecognizer(gestureRecognizer)
+        
+        profileImageView.contentMode = .scaleAspectFill
+        profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
+        profileImageView.layer.masksToBounds = true
+        return profileImageView
+    }()
     
 
     //MARK: - Lifecycle
@@ -22,12 +40,8 @@ class MainTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureNavBar()
         configureVC()
-        let rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "cart"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
-        navigationItem.rightBarButtonItem = rightBarButtonItem
-        
-        let leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "profile"), style: .plain, target: self, action: #selector(leftBarButtonTapped))
-        navigationItem.leftBarButtonItem = leftBarButtonItem
     }
     
     override func viewDidLayoutSubviews() {
@@ -40,7 +54,6 @@ class MainTabBarController: UITabBarController {
          self.userService = userService
          self.recipeService = recipeService
          self.user = user
-        
          super.init(nibName: nil, bundle: nil)
      }
     
@@ -55,8 +68,6 @@ class MainTabBarController: UITabBarController {
 
     
     func configureVC() {
-        
-        print(user)
         
         let mainVC = ExploreViewController(user: user, userService: userService, recipeService: recipeService)
         let main = configureVC(image: UIImage(named: "home")!, vc: mainVC)
@@ -84,11 +95,26 @@ class MainTabBarController: UITabBarController {
         tabBar.inputViewController?.hidesBottomBarWhenPushed = false
         
         tabBar.backgroundColor = .white
+        
+        
     
     }
-    
-    
+
     func configureVC(image: UIImage, vc: UIViewController) -> UIViewController {
+        if let exploreViewController = vc as? ExploreViewController {
+               // Create a search bar
+               let searchController = UISearchController(searchResultsController: nil)
+               searchController.searchBar.placeholder = "Search"
+               
+               // Set the search bar as the navigation item
+               exploreViewController.navigationItem.searchController = searchController
+               
+               // Hide the search bar when scrolling
+               exploreViewController.navigationItem.hidesSearchBarWhenScrolling = true
+           } else {
+               // Hide the search bar in other view controllers
+               vc.navigationItem.searchController = nil
+           }
         
         let selectedImage = UIImageView(image: image)
         selectedImage.tintColor = .white
@@ -97,7 +123,36 @@ class MainTabBarController: UITabBarController {
         vc.tabBarItem.selectedImage = image.withTintColor(UIColor.systemRed)
         vc.tabBarController?.tabBar.backgroundColor = .black
         
+        
         return vc
+    }
+    
+    func configureNavBar() {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchBar.placeholder = "Search"
+        
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
+        navigationItem.title = "Search"
+
+        
+        let url = user.profileImage
+        guard let imageUrl = URL(string: user.profileImage) else { return }
+        
+        // Download and set the image using SDWebImage
+        SDWebImageManager.shared.loadImage(with: imageUrl, options: [], progress: nil) { (image, _, _, _, _, _) in
+            DispatchQueue.main.async {
+                self.profileImageView.image = image
+                self.profileContainerView.addSubview(self.profileImageView)
+                let leftBarButton = UIBarButtonItem(customView: self.profileContainerView)
+                self.navigationItem.leftBarButtonItem = leftBarButton
+                
+                let rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "cart"), style: .plain, target: self, action: #selector(self.rightBarButtonTapped))
+                self.navigationItem.rightBarButtonItem = rightBarButtonItem
+            }
+        }
     }
     
     //MARK: - Selectors
@@ -108,7 +163,7 @@ class MainTabBarController: UITabBarController {
     }
     
     @objc func leftBarButtonTapped() {
-        let vc = ProfileViewController()
+        let vc = ProfileViewController(user: user, userService: userService, profileImage: profileImageView, authService: authService)
         navigationController?.pushViewController(vc, animated: true)
     }
     

@@ -24,11 +24,10 @@ class ProfileOptionCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
+        label.text = "Log out"
         label.font = UIFont.systemFont(ofSize: 16)
         return label
     }()
-    
-    
    
     //MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -70,10 +69,6 @@ class ProfileOptionCell: UITableViewCell {
             accessoryImage.heightAnchor.constraint(equalToConstant: 16)
         ])
         
-
-    }
-    
-    func configureElements(indexPath: Int, isForMenu: Bool) {
 
     }
 }

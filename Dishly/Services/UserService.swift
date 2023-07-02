@@ -12,6 +12,7 @@ import FirebaseFirestore
 protocol UserServiceProtocol {
     func fetchUser(with uid: String, completion: @escaping (User) -> Void)
     func fetchUser(completion: @escaping(User) -> ())
+    func updateUser(changedUser: User, completion: @escaping(Error?) -> ())
 }
 
 class UserService: UserServiceProtocol  {
@@ -32,5 +33,16 @@ class UserService: UserServiceProtocol  {
             let user = User(dictionary: dictionary)
             completion(user)
         }
+    }
+    
+   func updateUser(changedUser: User, completion: @escaping(Error?) -> ()) {
+       let userRef = COLLECTION_USERS.document(changedUser.uid)
+       userRef.updateData(["profileImage": changedUser.profileImage]) { error in
+           if let error = error {
+               print("ERROR updating user - \(error.localizedDescription)")
+               return
+           }
+           print("Success")
+       }
     }
 }

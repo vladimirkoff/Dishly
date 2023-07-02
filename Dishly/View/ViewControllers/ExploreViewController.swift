@@ -62,6 +62,7 @@ class ExploreViewController: UIViewController {
     }
     
     func configureNavBar() {
+        
         navigationItem.searchController = searchController
         navigationItem.setHidesBackButton(true, animated: false)
         definesPresentationContext = true

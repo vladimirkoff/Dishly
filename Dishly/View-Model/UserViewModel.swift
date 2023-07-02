@@ -20,4 +20,10 @@ struct UserViewModel {
             completion(user)
         }
     }
+    
+    func updateUser(with user: User, completion: @escaping(Error?) -> ()) {
+        userService.updateUser(changedUser: user) { error in
+            print("Success")
+        }
+    }
 }

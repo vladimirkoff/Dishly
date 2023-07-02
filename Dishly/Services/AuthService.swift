@@ -12,6 +12,7 @@ import FirebaseAuth
 protocol AuthServiceProtocol {
     func login(email: String, password: String, completion: @escaping (Error?) -> Void)
     func register(creds: AuthCreds, completion: @escaping (Error?) -> Void)
+    func logOut(completion: @escaping(Error?, Bool) -> ())
 }
 
 class AuthService: AuthServiceProtocol {
@@ -35,6 +36,16 @@ class AuthService: AuthServiceProtocol {
                 
                 Firestore.firestore().collection("users").document(uid).setData(data, completion: completion)
             }
+        }
+    }
+    
+    func logOut(completion: @escaping(Error?, Bool) -> ()) {
+        do {
+            try Auth.auth().signOut()
+            completion(nil, true)
+        } catch {
+            print("DEBUG: Error logging out - \(error.localizedDescription)")
+            completion(error, false)
         }
     }
 }

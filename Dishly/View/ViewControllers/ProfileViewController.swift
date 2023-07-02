@@ -1,18 +1,27 @@
 import UIKit
 
+private let reuseIdentifier = "ProfileOptionCell"
+
 class ProfileViewController: UIViewController {
     //MARK: - Properties
     
-    var userService: UserService!
+    var userService: UserServiceProtocol!
     var userViewModel: UserViewModel!
     
-    private let profileImageView: UIImageView = {
+    var authService: AuthServiceProtocol!
+    var authViewModel: AuthViewModel!
+    
+    var user: User!
+    
+    var profileImage: UIImageView!
+    
+    private var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.backgroundColor = .lightGray
         iv.layer.cornerRadius = 40
+        iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
-        
         return iv
     }()
     
@@ -39,8 +48,11 @@ class ProfileViewController: UIViewController {
         return button
     }()
     
-    private let tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.isScrollEnabled = false
+        tableView.delegate = self
+        tableView.rowHeight = 50
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .lightGray
         tableView.layer.cornerRadius = 10
@@ -54,10 +66,25 @@ class ProfileViewController: UIViewController {
         tabBarController?.tabBar.isHidden = false
     }
     
+    init(user: User, userService: UserServiceProtocol, profileImage: UIImageView, authService: AuthServiceProtocol) {
+        self.user = user
+        self.userService = userService
+        self.profileImage = profileImage
+        self.authService = authService
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        configureTableView()
+        
         userViewModel = UserViewModel(userService: userService)
+        authViewModel = AuthViewModel(authService: authService)
     }
     
     override func viewDidLayoutSubviews() {
@@ -70,6 +97,7 @@ class ProfileViewController: UIViewController {
     func configureProfileImage() {
         guard let navController = navigationController else { return }
         view.addSubview(profileImageView)
+        profileImageView.image = profileImage.image
         NSLayoutConstraint.activate([
             profileImageView.heightAnchor.constraint(equalToConstant: 80),
             profileImageView.widthAnchor.constraint(equalToConstant: 80),
@@ -85,7 +113,8 @@ class ProfileViewController: UIViewController {
         
         tabBarController?.tabBar.isHidden = true
         
-        navigationItem.title = "Vladimir"
+        navigationItem.title = user.fullName
+        
         navigationController?.navigationBar.prefersLargeTitles = true
         
         view.addSubview(editProfileButton)
@@ -94,13 +123,7 @@ class ProfileViewController: UIViewController {
             editProfileButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16)
         ])
         
-        view.addSubview(tableView)
-        NSLayoutConstraint.activate([
-            tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            tableView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            tableView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40),
-            tableView.heightAnchor.constraint(equalToConstant: 160)
-        ])
+
         
         view.addSubview(versionLabel)
         NSLayoutConstraint.activate([
@@ -109,38 +132,78 @@ class ProfileViewController: UIViewController {
         ])
     }
     
+    func configureTableView() {
+        tableView.register(ProfileOptionCell.self, forCellReuseIdentifier: reuseIdentifier)
+        view.addSubview(tableView)
+        NSLayoutConstraint.activate([
+            tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            tableView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            tableView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40),
+            tableView.heightAnchor.constraint(equalToConstant: 200)
+        ])
+    }
+    
+    func handleLogOut() {
+        authViewModel.logOut { error, success in
+            if let error = error {
+                print("Error")
+                return
+            }
+            let recipeService = RecipeService()
+            let vc = GreetViewController(authService: self.authService, userService: self.userService, recipeService: recipeService)
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true)
+        }
+    }
+    
     //MARK: - Selectors
     
     @objc func goToProfile() {
-        let vc = EditProfileViewController()
+        let vc = EditProfileViewController(user: user, userService: userService, profileImage: profileImageView)
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    func showLogoutAlert() {
+        let alert = UIAlertController(title: "Log Out", message: "Are you sure you want to log out?", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(cancelAction)
+        
+        let logoutAction = UIAlertAction(title: "Yes", style: .destructive) { _ in
+            // Perform logout operation
+            self.logout()
+        }
+        alert.addAction(logoutAction)
+        
+        present(alert, animated: true, completion: nil)
+    }
+
+    func logout() {
+        handleLogOut()
+    }
+
+    
 }
 
-extension ProfileViewController: UITableViewDataSource {
+
+
+//MARK: - UITableViewDataSource
+
+extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 4
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.accessoryType = .checkmark
-        cell.backgroundColor = .lightGray
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "General Settings"
-        
-        cell.contentView.addSubview(label)
-        NSLayoutConstraint.activate([
-            label.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-            label.leftAnchor.constraint(equalTo: cell.contentView.leftAnchor, constant: 30)
-        ])
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! ProfileOptionCell
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 40
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 3 {
+            showLogoutAlert()
+        }
     }
+
 }

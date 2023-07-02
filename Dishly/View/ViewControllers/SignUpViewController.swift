@@ -6,7 +6,7 @@ class SignupController: UIViewController {
     
     //MARK: - Properies
     
-    var authViewModel: AuthenticationViewModel!
+    var authViewModel: AuthViewModel!
     var authService: AuthServiceProtocol!
     
     var userService: UserServiceProtocol!
@@ -68,7 +68,7 @@ class SignupController: UIViewController {
         super.viewDidLoad()
         configureUI()
         configureNotificationsObservers()
-        authViewModel = AuthenticationViewModel(authService: authService)
+        authViewModel = AuthViewModel(authService: authService)
     }
     
     init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {

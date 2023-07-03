@@ -24,5 +24,9 @@ class DependencyContainer {
         return RecipeService()
     }
     
+    func getUserRealmService() -> UserRealmServiceProtocol {
+        return UserRealmService()
+    }
+    
     
 }

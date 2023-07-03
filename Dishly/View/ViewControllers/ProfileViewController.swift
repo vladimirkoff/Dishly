@@ -15,6 +15,8 @@ class ProfileViewController: UIViewController {
     
     var profileImage: UIImageView!
     
+    var userRealmService: UserRealmService!
+    
     private var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -178,7 +180,7 @@ class ProfileViewController: UIViewController {
                 return
             }
             let recipeService = RecipeService()
-            let vc = GreetViewController(authService: self.authService, userService: self.userService, recipeService: recipeService)
+            let vc = GreetViewController(authService: self.authService, userService: self.userService, recipeService: recipeService, userRealmService: self.userRealmService)
             let navVC = UINavigationController(rootViewController: vc)
             navVC.modalPresentationStyle = .fullScreen
             self.present(navVC, animated: true)

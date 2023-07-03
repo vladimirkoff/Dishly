@@ -8,6 +8,8 @@ struct User {
     let uid: String
     let username: String
     
+    let imageData: Data
+    
 //    var isCurrentUser: Bool {
 //        return Auth.auth().currentUser?.uid == uid ? true : false
 //    }
@@ -18,5 +20,6 @@ struct User {
         self.fullName = dictionary["fullName"] as? String ?? ""
         self.uid = dictionary["uid"] as? String ?? ""
         self.email = dictionary["email"] as? String ?? ""
+        self.imageData = dictionary["imageData"] as? Data ?? Data()
     }
 }

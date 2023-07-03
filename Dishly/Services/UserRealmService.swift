@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 
 protocol UserRealmServiceProtocol {
-    func createUser(name: String, email: String, profileImageUrl: String, id: String, completion: @escaping(Bool) -> ())
+    func createUser(name: String, email: String, profileImage: Data, id: String, completion: @escaping(Bool) -> ())
     func getUser(with id: String, completion: @escaping(User) -> ())
     func updateUser(user: User, completion: @escaping(Bool) -> ())
 }
@@ -17,13 +17,13 @@ protocol UserRealmServiceProtocol {
 class UserRealmService: UserRealmServiceProtocol {
      let realm = try! Realm()
 
-    func createUser(name: String, email: String, profileImageUrl: String, id: String, completion: @escaping(Bool) -> ()) {
+    func createUser(name: String, email: String, profileImage: Data, id: String, completion: @escaping(Bool) -> ()) {
          let user = UserRealm()
         
          user.id = id
          user.name = name
          user.email = email
-         user.url = profileImageUrl
+         user.imageData = profileImage
 
          try! realm.write {
              realm.add(user)
@@ -41,8 +41,10 @@ class UserRealmService: UserRealmServiceProtocol {
             if user.id == id {
                 let dict = ["uid" : id,
                             "email": user.email,
-                            "fullName" : user.name
-                ]
+                            "fullName" : user.name,
+        
+                            "imageData" : user.imageData
+                ] as [String : Any]
                 let user = User(dictionary: dict)
                 completion(user)
             }
@@ -61,9 +63,14 @@ class UserRealmService: UserRealmServiceProtocol {
         }
      }
 
-     func deleteUser(user: UserRealm) {
-         try! realm.write {
-             realm.delete(user)
+     func deleteUser(id: String) {
+         let users = realm.objects(UserRealm.self)
+         for user in users {
+             if user.id == id {
+                 try! realm.write {
+                     realm.delete(user)
+                 }
+             }
          }
      }
  }

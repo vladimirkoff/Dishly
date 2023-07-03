@@ -11,6 +11,9 @@ class SignupController: UIViewController {
     
     var userService: UserServiceProtocol!
     var recipeService: RecipeServiceProtocol!
+    
+    var userRealmService: UserRealmServiceProtocol!
+    var userRealmViewModel: UserRealmViewModel!
         
     private let plusButton: UIButton = {
         let button = UIButton()
@@ -71,10 +74,11 @@ class SignupController: UIViewController {
         authViewModel = AuthViewModel(authService: authService)
     }
     
-    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol) {
          self.userService = userService
          self.recipeService = recipeService
          self.authService = authService
+         self.userRealmService = userRealmService
          super.init(nibName: nil, bundle: nil)
      }
     
@@ -109,10 +113,9 @@ class SignupController: UIViewController {
         fullnameField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
     }
     
-    func updateForm() {
-        //        signUpButton.backgroundColor = viewModel.buttonColor
-        //        signUpButton.titleLabel?.textColor = viewModel.buttonTitleColor
-        //        signUpButton.isEnabled = viewModel.buttonIsEnabled
+    func createTestUser(email: String, name: String, uid: String, profileImage: Data) {
+        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+        userRealmViewModel.createUser(name: name, email: email, profileImage: profileImage, id: uid)
     }
     
     //MARK: - Selectors
@@ -129,14 +132,13 @@ class SignupController: UIViewController {
                 print("DEBUG: Error registering user - \(error.localizedDescription)")
                 return
             }
+            let profileImage = self.plusButton.imageView?.image?.pngData()
+            self.createTestUser(email: email, name: fullname, uid: user!.uid, profileImage: profileImage!)
             let vc = MainTabBarController(user: user!, authService: self.authService, userService: self.userService, recipeService: self.recipeService)
             self.navigationController?.pushViewController(vc, animated: true)
         }
         
     }
-    
-    
-
     
     @objc func chooseImage() {
         let picker = UIImagePickerController()
@@ -147,20 +149,11 @@ class SignupController: UIViewController {
     
     
     @objc func textDidChange(sender: UITextField) {
-        //        if sender == emailField {
-        //            emailField.text = emailField.text?.lowercased()
-        //            viewModel.email = sender.text
-        //        } else if sender == passwordField {
-        //            viewModel.password = sender.text
-        //        } else if sender == fullnameField {
-        //            viewModel.fullname = sender.text
-        //        } else {
-        //            usernameField.text = usernameField.text?.lowercased()
-        //            viewModel.username = sender.text
-        //        }
-        
-        updateForm()
-        
+        if sender == emailField {
+            emailField.text = emailField.text?.lowercased()
+        } else if sender == usernameField {
+            usernameField.text = usernameField.text?.lowercased()
+        }
     }
 }
 

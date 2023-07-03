@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import FBSDKLoginKit
 
 class GreetViewController: UIViewController {
     //MARK: - Properties
@@ -136,19 +137,27 @@ class GreetViewController: UIViewController {
     }()
         
     //MARK: - Lifecycle
-    
-    func createTestUser() {
-        userRealmService = UserRealmService()
-        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-        userRealmViewModel.createUser(name: "Vova", email: "None", profileImageUrl: "///.com", id: "1iwyfwei7d")
-    }
+//    
+//    func createTestUser() {
+//        userRealmService = UserRealmService()
+//        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+//        userRealmViewModel.createUser(name: "Vova", email: "None", profileImage: "///.com", id: "1iwyfwei7d")
+//    }
     
     func fetchTestUser() {
         userRealmService = UserRealmService()
         userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-        userRealmViewModel.getUser(with: "1iwyfwei7d") { user in
-            print(user.uid)
+        userRealmViewModel.getUser(with: "KXYZtUbg3vSu0VOTwtjFyNDAhPg1") { user in
+            if let image = UIImage(data: user.imageData) {
+                // Set the image to the UIImageView
+                self.backGroundImage.image = image
+            }
         }
+    }
+    
+    func fetchUsers() {
+        userRealmService = UserRealmService()
+        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
     }
     
     func updateUser() {
@@ -164,6 +173,7 @@ class GreetViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        fetchTestUser()
         checkIfLoggedIn()
     }
     
@@ -175,11 +185,11 @@ class GreetViewController: UIViewController {
         userViewModel = UserViewModel(userService: userService)
     }
     
-    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol) {
          self.authService = authService
          self.userService = userService
          self.recipeService = recipeService
-        
+         self.userRealmService = userRealmService
          super.init(nibName: nil, bundle: nil)
      }
     
@@ -264,7 +274,7 @@ class GreetViewController: UIViewController {
     }
     
     @objc func goToSignUp() {
-        let vc = SignupController(authService: authService, userService: userService, recipeService: recipeService)
+        let vc = SignupController(authService: authService, userService: userService, recipeService: recipeService, userRealmService: userRealmService)
         navigationController?.pushViewController(vc, animated: true)
     }
     

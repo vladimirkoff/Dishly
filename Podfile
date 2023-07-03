@@ -15,7 +15,7 @@ target 'Dishly' do
   pod 'Firebase/Firestore'
   pod 'Firebase/Storage'
   pod 'SDWebImage', '~> 5.0'
- 
+  pod "FacebookLogin"
 
 
 end

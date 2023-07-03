@@ -28,6 +28,7 @@ class MainTabBarController: UITabBarController {
         profileImageView.layer.masksToBounds = true
         return profileImageView
     }()
+
     
 
     //MARK: - Lifecycle

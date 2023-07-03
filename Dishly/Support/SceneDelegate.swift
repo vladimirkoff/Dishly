@@ -13,6 +13,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var authService: AuthServiceProtocol!
     var userService: UserServiceProtocol!
     var recipeService: RecipeServiceProtocol!
+    var userRealmService: UserRealmServiceProtocol!
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
@@ -21,8 +22,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         authService = container.getAuthService()
         userService = container.getUserService()
         recipeService = container.getRecipeService()
+        userRealmService = container.getUserRealmService()
 
-        let greetVC = GreetViewController(authService: authService, userService: userService, recipeService: recipeService)
+        let greetVC = GreetViewController(authService: authService, userService: userService, recipeService: recipeService, userRealmService: userRealmService)
 
         window = UIWindow(windowScene: scene)
         window?.rootViewController = UINavigationController(rootViewController: greetVC)

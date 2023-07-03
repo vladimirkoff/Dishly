@@ -3,4 +3,54 @@
    uuid = "0704684D-5F15-4650-A650-0E17BF9555D7"
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CDD46A11-0303-4C33-85A2-E9DDC99D50A3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Dishly/Services/UserRealmService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "deleteUser(id:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "CDD46A11-0303-4C33-85A2-E9DDC99D50A3 - 8187f84848f87c0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Dishly.UserRealmService.deleteUser(id: Swift.String) -&gt; ()"
+                  moduleName = "Dishly"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/Services/UserRealmService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "71"
+                  endingLineNumber = "71"
+                  offsetFromSymbolStart = "636">
+               </Location>
+               <Location
+                  uuid = "CDD46A11-0303-4C33-85A2-E9DDC99D50A3 - 85b660ea1b00daf4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in Dishly.UserRealmService.deleteUser(id: Swift.String) -&gt; ()"
+                  moduleName = "Dishly"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/Services/UserRealmService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "71"
+                  endingLineNumber = "71"
+                  offsetFromSymbolStart = "40">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

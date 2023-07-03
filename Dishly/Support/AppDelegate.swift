@@ -12,17 +12,38 @@ import RealmSwift
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
+        let config = Realm.Configuration(schemaVersion: 1, migrationBlock: { migration, oldSchemaVersion in
+            if oldSchemaVersion < 1 {
+                migration.enumerateObjects(ofType: UserRealm.className()) { oldObject, newObject in
+                    if let imageUrl = oldObject?["url"] as? String {
+                        // Convert the imageUrl String to Data
+                        let imageData = imageUrl.data(using: .utf8)
+                        
+                        // Set the new imageData property in the new schema
+                        newObject?["imageData"] = imageData
+                    }
+                }
+            }
+        })
+
+        Realm.Configuration.defaultConfiguration = config
+        
         do {
-             let realm = try Realm()
-         } catch {
-             print("Failed to initialize Realm: \(error)")
-         }
+            let realm = try Realm()
+        } catch {
+            print("Failed to initialize Realm: \(error)")
+        }
         return true
     }
+    
+    //    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+    //        let handled = ApplicationDelegate.shared.application(app, open: url, sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String, annotation: options[UIApplication.OpenURLOptionsKey.annotation])
+//        return handled
+//    }
 
     // MARK: UISceneSession Lifecycle
 

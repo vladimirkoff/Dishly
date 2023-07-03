@@ -110,6 +110,7 @@ class EditProfileViewController: UIViewController {
     
     @objc func doneButtonTapped() {
         navigationController?.navigationBar.topItem?.hidesBackButton = true
+
         ImageUploader.uploadImage(image: profileImage.image!) { imageURL in
             let dict = ["fullName": self.changedUser.fullName,
                         "profileImage": imageURL,

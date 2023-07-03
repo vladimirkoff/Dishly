@@ -10,6 +10,8 @@ class MainTabBarController: UITabBarController {
     var userService: UserServiceProtocol!
     var recipeService: RecipeServiceProtocol!
     
+    private let userRealmService: UserRealmServiceProtocol = UserRealmService()
+    
     var user: User!
     
     private let profileContainerView: UIView = {
@@ -157,7 +159,7 @@ class MainTabBarController: UITabBarController {
     }
     
     @objc func leftBarButtonTapped() {
-        let vc = ProfileViewController(user: user, userService: userService, profileImage: profileImageView, authService: authService)
+        let vc = ProfileViewController(user: user, userService: userService, profileImage: profileImageView, authService: authService, userRealmService: userRealmService )
         navigationController?.pushViewController(vc, animated: true)
     }
     

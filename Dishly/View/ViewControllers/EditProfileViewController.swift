@@ -1,4 +1,5 @@
 import UIKit
+import JGProgressHUD
 
 class EditProfileViewController: UIViewController {
     
@@ -7,11 +8,16 @@ class EditProfileViewController: UIViewController {
     var profileImage: UIImageView!
     var user: User
     
+    private let hud = JGProgressHUD(style: .dark)
+    
     var userService: UserServiceProtocol!
     var userViewModel: UserViewModel!
     
     var authService: AuthServiceProtocol!
     var authViewModel: AuthViewModel!
+    
+    var userRealmService: UserRealmServiceProtocol!
+    var userRealmViewModel: UserRealmViewModel!
     
     lazy var changedUser = user
     
@@ -53,16 +59,18 @@ class EditProfileViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         setupTableViewConstraints()
-        userViewModel = UserViewModel(userService: userService)
         
+        userViewModel = UserViewModel(userService: userService)
         authViewModel = AuthViewModel(authService: authService)
+        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
     }
     
-    init(user: User, userService: UserServiceProtocol, authService: AuthServiceProtocol!, profileImage: UIImageView) {
+    init(user: User, userService: UserServiceProtocol, authService: AuthServiceProtocol!, userRealmService: UserRealmServiceProtocol, profileImage: UIImageView) {
         self.user = user
         self.userService = userService
         self.authService = authService
         self.profileImage = profileImage
+        self.userRealmService = userRealmService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -71,6 +79,16 @@ class EditProfileViewController: UIViewController {
     }
     
     //MARK: - Helpers
+    
+    func showLoader(_ show: Bool) {
+        view.endEditing(true )
+        
+        if show {
+            self.hud.show(in: view)
+        } else {
+            self.hud.dismiss()
+        }
+    }
     
     func configureUI() {
         view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
@@ -109,6 +127,7 @@ class EditProfileViewController: UIViewController {
     }
     
     @objc func doneButtonTapped() {
+        showLoader(true)
         navigationController?.navigationBar.topItem?.hidesBackButton = true
 
         ImageUploader.uploadImage(image: profileImage.image!) { imageURL in
@@ -119,10 +138,13 @@ class EditProfileViewController: UIViewController {
                         "uid" : self.user.uid
             
             ]
-            let testUser = User(dictionary: dict)
-            self.userViewModel.updateUser(with: testUser) { error in
+            let updatedUser = User(dictionary: dict)
+            self.userViewModel.updateUser(with: updatedUser) { error in
                 self.authViewModel.changeEmail(to: self.changedUser.email)
-                self.navigationController?.navigationBar.topItem?.hidesBackButton = false
+                self.userRealmViewModel.updateUser(user: updatedUser) { success in
+                    self.showLoader(false)
+                    self.navigationController?.navigationBar.topItem?.hidesBackButton = false
+                }
             }
         }
     }

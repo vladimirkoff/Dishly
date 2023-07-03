@@ -42,7 +42,6 @@ class UserRealmService: UserRealmServiceProtocol {
                 let dict = ["uid" : id,
                             "email": user.email,
                             "fullName" : user.name,
-        
                             "imageData" : user.imageData
                 ] as [String : Any]
                 let user = User(dictionary: dict)
@@ -57,6 +56,8 @@ class UserRealmService: UserRealmServiceProtocol {
             if realmUser.id == user.uid {
                 try! realm.write {
                     realmUser.name = user.fullName
+                    realmUser.email = user.email
+                    realmUser.imageData = user.imageData
                     completion(true)
                 }
             }

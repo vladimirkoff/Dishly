@@ -7,9 +7,11 @@
 
 import UIKit
 import FirebaseAuth
-import FBSDKLoginKit
+import FacebookLogin
 
 class GreetViewController: UIViewController {
+
+    
     //MARK: - Properties
     
     var authService: AuthServiceProtocol!
@@ -40,18 +42,12 @@ class GreetViewController: UIViewController {
         return label
     }()
     
-    private lazy var facebookAuthButton: UIButton = {
-        let button = UIButton(type: .system)
+    private lazy var facebookAuthButton: FBLoginButton = {
+        let button = FBLoginButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.widthAnchor.constraint(equalToConstant: view.bounds.width / 4 + 10).isActive = true
         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        button.backgroundColor = .blue
-        button.layer.cornerRadius = 17
-        
-        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 22)
-        let symbolImage = UIImage(named: "facebook", in: nil, with: symbolConfiguration)?.withTintColor(.black, renderingMode: .alwaysOriginal)
-        button.setImage(symbolImage, for: .normal)
-        
+        button.delegate = self
         return button
     }()
     
@@ -149,27 +145,25 @@ class GreetViewController: UIViewController {
         userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
         userRealmViewModel.getUser(with: "KXYZtUbg3vSu0VOTwtjFyNDAhPg1") { user in
             if let image = UIImage(data: user.imageData) {
-                // Set the image to the UIImageView
                 self.backGroundImage.image = image
             }
         }
     }
-    
-    func fetchUsers() {
-        userRealmService = UserRealmService()
-        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-    }
-    
-    func updateUser() {
-        userRealmService = UserRealmService()
-        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-        let user = User(dictionary: ["fullName" : "Sasha",
-                                     "uid" : "1iwyfwei7d"
-                                    ])
-        userRealmViewModel.updateUser(user: user) { success in
-            print(success)
-        }
-    }
+//    func fetchUsers() {
+//        userRealmService = UserRealmService()
+//        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+//    }
+//
+//    func updateUser() {
+//        userRealmService = UserRealmService()
+//        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+//        let user = User(dictionary: ["fullName" : "Sasha",
+//                                     "uid" : "1iwyfwei7d"
+//                                    ])
+//        userRealmViewModel.updateUser(user: user) { success in
+//            print(success)
+//        }
+//    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -179,10 +173,14 @@ class GreetViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        createTestUser()
-        fetchTestUser()
+        
         configureUI()
         userViewModel = UserViewModel(userService: userService)
+        view.addSubview(facebookAuthButton)
+        NSLayoutConstraint.activate([
+            facebookAuthButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            facebookAuthButton.topAnchor.constraint(equalTo: authWithEmailButton.bottomAnchor, constant: 12)
+        ])
     }
     
     init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol) {
@@ -279,6 +277,33 @@ class GreetViewController: UIViewController {
     }
     
     @objc func facebookAuthPressed() {
+        
+    }
+}
+
+extension GreetViewController: LoginButtonDelegate {
+    func loginButton(_ loginButton: FBLoginButton, didCompleteWith result: LoginManagerLoginResult?, error: Error?) {
+        if let error = error {
+             print("Facebook Login error: \(error.localizedDescription)")
+             return
+         }
+         
+         guard let token = AccessToken.current?.tokenString else {
+             return
+         }
+         
+         let credential = FacebookAuthProvider.credential(withAccessToken: token)
+         Auth.auth().signIn(with: credential) { (authResult, error) in
+             if let error = error {
+                 print("Firebase Auth error: \(error.localizedDescription)")
+                 return
+             }
+             // User successfully signed in with Firebase
+             // ...
+         }
+    }
+    
+    func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
         
     }
 }

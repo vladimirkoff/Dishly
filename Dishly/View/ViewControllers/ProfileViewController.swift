@@ -15,7 +15,7 @@ class ProfileViewController: UIViewController {
     
     var profileImage: UIImageView!
     
-    var userRealmService: UserRealmService!
+    var userRealmService: UserRealmServiceProtocol!
     
     private var profileImageView: UIImageView = {
         let iv = UIImageView()
@@ -43,7 +43,7 @@ class ProfileViewController: UIViewController {
         attributedString.addAttribute(NSAttributedString.Key.underlineStyle,
                                       value: 1, range:
                                         NSRange.init(location: 0, length: attributedString.length)
-        
+                                      
         );
         button.setAttributedTitle(attributedString, for: .normal)
         button.addTarget(self, action: #selector(goToProfile), for: .touchUpInside)
@@ -81,11 +81,12 @@ class ProfileViewController: UIViewController {
         tabBarController?.tabBar.isHidden = false
     }
     
-    init(user: User, userService: UserServiceProtocol, profileImage: UIImageView, authService: AuthServiceProtocol) {
+    init(user: User, userService: UserServiceProtocol, profileImage: UIImageView, authService: AuthServiceProtocol, userRealmService: UserRealmServiceProtocol) {
         self.user = user
         self.userService = userService
         self.profileImage = profileImage
         self.authService = authService
+        self.userRealmService = userRealmService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -97,7 +98,7 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         configureTableView()
         configureUI()
-  
+        
         userViewModel = UserViewModel(userService: userService)
         authViewModel = AuthViewModel(authService: authService)
     }
@@ -123,7 +124,7 @@ class ProfileViewController: UIViewController {
     
     func configureUI() {
         tableView.dataSource = self
-
+        
         view.backgroundColor = UIColor(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
         
         tabBarController?.tabBar.isHidden = true
@@ -138,7 +139,7 @@ class ProfileViewController: UIViewController {
             editProfileButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16)
         ])
         
-
+        
         
         view.addSubview(versionLabel)
         NSLayoutConstraint.activate([
@@ -149,11 +150,11 @@ class ProfileViewController: UIViewController {
         let stackView = UIStackView(arrangedSubviews: [instaSymbol, facebookSymbol, pinterestSymbol, youtubeSymbol, twitterSymbol])
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
-
+        
         // Configure the stack view constraints
         stackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stackView)
-
+        
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 16),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
@@ -190,7 +191,7 @@ class ProfileViewController: UIViewController {
     //MARK: - Selectors
     
     @objc func goToProfile() {
-        let vc = EditProfileViewController(user: user, userService: userService, authService: authService, profileImage: profileImageView)
+        let vc = EditProfileViewController(user: user, userService: userService, authService: authService, userRealmService: userRealmService, profileImage: profileImageView)
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -208,7 +209,7 @@ class ProfileViewController: UIViewController {
         alert.addAction(logoutAction)
         present(alert, animated: true, completion: nil)
     }
-
+    
     func logout() {
         handleLogOut()
     }
@@ -250,5 +251,5 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             showLogoutAlert()
         }
     }
-
+    
 }

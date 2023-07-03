@@ -14,28 +14,13 @@
             filePath = "Dishly/Services/UserRealmService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
             landmarkName = "deleteUser(id:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "CDD46A11-0303-4C33-85A2-E9DDC99D50A3 - 8187f84848f87c0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Dishly.UserRealmService.deleteUser(id: Swift.String) -&gt; ()"
-                  moduleName = "Dishly"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/Services/UserRealmService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "71"
-                  endingLineNumber = "71"
-                  offsetFromSymbolStart = "636">
-               </Location>
-               <Location
-                  uuid = "CDD46A11-0303-4C33-85A2-E9DDC99D50A3 - 85b660ea1b00daf4"
+                  uuid = "CDD46A11-0303-4C33-85A2-E9DDC99D50A3 - 85b660ea1b00da0b"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -45,8 +30,23 @@
                   urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/Services/UserRealmService.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "71"
-                  endingLineNumber = "71"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "68">
+               </Location>
+               <Location
+                  uuid = "CDD46A11-0303-4C33-85A2-E9DDC99D50A3 - 85b660ea1b00da0b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in Dishly.UserRealmService.deleteUser(id: Swift.String) -&gt; ()"
+                  moduleName = "Dishly"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/Services/UserRealmService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
                   offsetFromSymbolStart = "40">
                </Location>
             </Locations>

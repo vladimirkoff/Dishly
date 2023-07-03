@@ -29,11 +29,9 @@ class ProfileOptionCell: UITableViewCell {
         return label
     }()
     
-    let gearSymbolImageView: UIImageView = {
+    let cellSymbol: UIImageView = {
          let imageView = UIImageView()
          imageView.translatesAutoresizingMaskIntoConstraints = false
-         let gearImage = UIImage(systemName: "gearshape.fill")
-         imageView.image = gearImage
          imageView.tintColor = .white
          return imageView
      }()
@@ -78,12 +76,12 @@ class ProfileOptionCell: UITableViewCell {
             accessoryImage.heightAnchor.constraint(equalToConstant: 16)
         ])
         
-        addSubview(gearSymbolImageView)
+        addSubview(cellSymbol)
         NSLayoutConstraint.activate([
-            gearSymbolImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            gearSymbolImageView.widthAnchor.constraint(equalToConstant: 40),
-            gearSymbolImageView.heightAnchor.constraint(equalToConstant: 40),
-            gearSymbolImageView.rightAnchor.constraint(equalTo: optionLabel.leftAnchor, constant: -8)
+            cellSymbol.centerYAnchor.constraint(equalTo: centerYAnchor),
+            cellSymbol.widthAnchor.constraint(equalToConstant: 30),
+            cellSymbol.heightAnchor.constraint(equalToConstant: 30),
+            cellSymbol.rightAnchor.constraint(equalTo: optionLabel.leftAnchor, constant: -4)
         ])
     }
 }

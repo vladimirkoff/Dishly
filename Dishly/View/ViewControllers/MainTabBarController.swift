@@ -22,7 +22,7 @@ class MainTabBarController: UITabBarController {
         profileImageView.isUserInteractionEnabled = true
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(leftBarButtonTapped))
         profileImageView.addGestureRecognizer(gestureRecognizer)
-        
+        profileImageView.backgroundColor = .lightGray
         profileImageView.contentMode = .scaleAspectFill
         profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
         profileImageView.layer.masksToBounds = true
@@ -34,8 +34,9 @@ class MainTabBarController: UITabBarController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationItem.hidesBackButton = true
+        navigationController?.navigationBar.topItem?.hidesBackButton = true
         selectedIndex = 0
-        checkIfLoggedIn()
     }
     
     override func viewDidLoad() {
@@ -62,11 +63,7 @@ class MainTabBarController: UITabBarController {
     }
     
     //MARK: - Helpers
-    
-    func checkIfLoggedIn() {
-    }
 
-    
     func configureVC() {
         
         let mainVC = ExploreViewController(user: user, userService: userService, recipeService: recipeService)
@@ -102,17 +99,13 @@ class MainTabBarController: UITabBarController {
 
     func configureVC(image: UIImage, vc: UIViewController) -> UIViewController {
         if let exploreViewController = vc as? ExploreViewController {
-               // Create a search bar
                let searchController = UISearchController(searchResultsController: nil)
                searchController.searchBar.placeholder = "Search"
                
-               // Set the search bar as the navigation item
                exploreViewController.navigationItem.searchController = searchController
                
-               // Hide the search bar when scrolling
                exploreViewController.navigationItem.hidesSearchBarWhenScrolling = true
            } else {
-               // Hide the search bar in other view controllers
                vc.navigationItem.searchController = nil
            }
         

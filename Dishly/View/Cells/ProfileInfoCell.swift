@@ -2,6 +2,7 @@ import UIKit
 
 protocol ProfileInfoCellDelegate {
     func infoDidChange(text: String, fieldIndex: Int)
+    func disableDoneButton()
 }
 
 class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
@@ -90,22 +91,26 @@ class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-           let contentSize = textView.contentSize
-           let textViewHeight = contentSize.height
-           
-           textView.frame.size.height = textViewHeight
-           
-           let clearButtonY = textView.frame.origin.y + textViewHeight - clearButton.frame.size.height
-           clearButton.frame.origin.y = clearButtonY
-           
-           if let tableView = superview as? UITableView, let indexPath = tableView.indexPath(for: self) {
-               tableView.beginUpdates()
-               tableView.endUpdates()
-               
-               tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
-           }
+        guard !textView.text.isEmpty else {
+            delegate?.disableDoneButton()
+            return
+        }
+        let contentSize = textView.contentSize
+        let textViewHeight = contentSize.height
+        
+        textView.frame.size.height = textViewHeight
+        
+        let clearButtonY = textView.frame.origin.y + textViewHeight - clearButton.frame.size.height
+        clearButton.frame.origin.y = clearButtonY
+        
+        if let tableView = superview as? UITableView, let indexPath = tableView.indexPath(for: self) {
+            tableView.beginUpdates()
+            tableView.endUpdates()
+            
+            tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        }
         delegate?.infoDidChange(text: textView.text, fieldIndex: 0)
-       }
+    }
     
     // MARK: - Configuration
     

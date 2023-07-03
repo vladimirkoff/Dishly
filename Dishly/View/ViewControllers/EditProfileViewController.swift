@@ -109,6 +109,7 @@ class EditProfileViewController: UIViewController {
     }
     
     @objc func doneButtonTapped() {
+        navigationController?.navigationBar.topItem?.hidesBackButton = true
         ImageUploader.uploadImage(image: profileImage.image!) { imageURL in
             let dict = ["fullName": self.changedUser.fullName,
                         "profileImage": imageURL,
@@ -120,6 +121,7 @@ class EditProfileViewController: UIViewController {
             let testUser = User(dictionary: dict)
             self.userViewModel.updateUser(with: testUser) { error in
                 self.authViewModel.changeEmail(to: self.changedUser.email)
+                self.navigationController?.navigationBar.topItem?.hidesBackButton = false
             }
         }
     }
@@ -164,7 +166,6 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
         let headerView = UIView()
         configureHeader(headerView: headerView )
         headerView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
-        
         return headerView
     }
 }
@@ -192,6 +193,10 @@ extension EditProfileViewController: UIImagePickerControllerDelegate & UINavigat
 //MARK: - ProfileInfoCellDelegate
 
 extension EditProfileViewController: ProfileInfoCellDelegate {
+    func disableDoneButton() {
+        navigationItem.rightBarButtonItem?.isEnabled = false
+    }
+    
     func infoDidChange(text: String, fieldIndex: Int) {
         navigationItem.rightBarButtonItem?.isEnabled = true
         var propertiesArray: [String] = []

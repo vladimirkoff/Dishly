@@ -11,7 +11,6 @@ class SignupController: UIViewController {
     
     var userService: UserServiceProtocol!
     var recipeService: RecipeServiceProtocol!
-    
         
     private let plusButton: UIButton = {
         let button = UIButton()
@@ -125,13 +124,13 @@ class SignupController: UIViewController {
         guard let username = usernameField.text else { return }
         
         let userCreds = AuthCreds(email: email, password: password, fullname: fullname, username: username, profileImage: plusButton.imageView?.image ?? UIImage(named: "profile_selected"))
-        authViewModel.register(creds: userCreds) { error in
+        authViewModel.register(creds: userCreds) { error, user in
             if let error = error {
                 print("DEBUG: Error registering user - \(error.localizedDescription)")
                 return
             }
-//            let vc = MainTabBarController(authService: self.authService, userService: self.userService, recipeService: self.recipeService)
-//            self.navigationController?.pushViewController(vc, animated: true)
+            let vc = MainTabBarController(user: user!, authService: self.authService, userService: self.userService, recipeService: self.recipeService)
+            self.navigationController?.pushViewController(vc, animated: true)
         }
         
     }

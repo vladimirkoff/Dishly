@@ -11,7 +11,7 @@ import FirebaseAuth
 
 protocol AuthServiceProtocol {
     func login(email: String, password: String, completion: @escaping (Error?) -> Void)
-    func register(creds: AuthCreds, completion: @escaping (Error?) -> Void)
+    func register(creds: AuthCreds, completion: @escaping (Error?, User?) -> Void)
     func logOut(completion: @escaping(Error?, Bool) -> ())
     func changeEmail(to newEmail: String)
 }
@@ -24,18 +24,25 @@ class AuthService: AuthServiceProtocol {
         }
     }
 
-    func register(creds: AuthCreds, completion: @escaping (Error?) -> Void) {
+    func register(creds: AuthCreds, completion: @escaping (Error?, User?) -> Void) {
         ImageUploader.uploadImage(image: creds.profileImage!) { imageUrl in
             Auth.auth().createUser(withEmail: creds.email, password: creds.password) { res, err in
                 if let error = err {
-                    completion(error)
+                    completion(error, nil)
                     return
                 }
                 guard let uid = res?.user.uid else { return }
                 
-                let data: [String: Any] = ["email": creds.email, "fullName": creds.fullname, "profileImageUrl": imageUrl, "uid": uid, "username": creds.username]
+                let data: [String: Any] = ["email": creds.email, "fullName": creds.fullname, "profileImage": imageUrl, "uid": uid, "username": creds.username]
                 
-                Firestore.firestore().collection("users").document(uid).setData(data, completion: completion)
+                Firestore.firestore().collection("users").document(uid).setData(data) { error in
+                    let user = User(dictionary: data)
+                    if let error = err {
+                        completion(error, nil)
+                        return
+                    }
+                    completion(error, user)
+                }
             }
         }
     }

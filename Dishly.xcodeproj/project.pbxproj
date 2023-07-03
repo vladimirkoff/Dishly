@@ -53,6 +53,7 @@
 		85C1B74C2A51A1C100BEAF2F /* UserRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B74B2A51A1C100BEAF2F /* UserRealm.swift */; };
 		85C1B74E2A51A23A00BEAF2F /* UserRealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B74D2A51A23A00BEAF2F /* UserRealmService.swift */; };
 		85C1B7502A51AB2600BEAF2F /* UserRealmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B74F2A51AB2600BEAF2F /* UserRealmViewModel.swift */; };
+		85C1B7522A52D51E00BEAF2F /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7512A52D51E00BEAF2F /* UIImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -102,6 +103,7 @@
 		85C1B74B2A51A1C100BEAF2F /* UserRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRealm.swift; sourceTree = "<group>"; };
 		85C1B74D2A51A23A00BEAF2F /* UserRealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRealmService.swift; sourceTree = "<group>"; };
 		85C1B74F2A51AB2600BEAF2F /* UserRealmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRealmViewModel.swift; sourceTree = "<group>"; };
+		85C1B7512A52D51E00BEAF2F /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		C37B7E4D901A1FF8C3C4D501 /* Pods-Dishly.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dishly.release.xcconfig"; path = "Target Support Files/Pods-Dishly/Pods-Dishly.release.xcconfig"; sourceTree = "<group>"; };
 		CA1C145446A00BC5402957FC /* Pods_Dishly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dishly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -241,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				85C1B72C2A4D969700BEAF2F /* UIButton.swift */,
+				85C1B7512A52D51E00BEAF2F /* UIImageView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -425,6 +428,7 @@
 				85C1B70F2A485A6900BEAF2F /* MealPlanViewController.swift in Sources */,
 				85C1B7272A4C26AD00BEAF2F /* EditProfileViewController.swift in Sources */,
 				85C1B65B2A39FE5700BEAF2F /* AppDelegate.swift in Sources */,
+				85C1B7522A52D51E00BEAF2F /* UIImageView.swift in Sources */,
 				85C1B72B2A4D8F4C00BEAF2F /* GreetViewController.swift in Sources */,
 				85C1B6F12A447EDD00BEAF2F /* User.swift in Sources */,
 				85C1B73E2A4DE09500BEAF2F /* ImageUploader.swift in Sources */,

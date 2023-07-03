@@ -59,7 +59,20 @@ class ProfileViewController: UIViewController {
         return tableView
     }()
     
+    private let instaSymbol = UIImageView.createSNSymbol(with: "insta")
+    private let facebookSymbol = UIImageView.createSNSymbol(with: "facebook")
+    private let pinterestSymbol = UIImageView.createSNSymbol(with: "pinterest")
+    private let youtubeSymbol = UIImageView.createSNSymbol(with: "youtube")
+    private let twitterSymbol = UIImageView.createSNSymbol(with: "twitter")
+    
     //MARK: - Lifecycle
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        userViewModel.fetchUser { user in
+            self.navigationItem.title = user.fullName
+        }
+    }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -80,9 +93,9 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
         configureTableView()
-        
+        configureUI()
+  
         userViewModel = UserViewModel(userService: userService)
         authViewModel = AuthViewModel(authService: authService)
     }
@@ -129,6 +142,21 @@ class ProfileViewController: UIViewController {
         NSLayoutConstraint.activate([
             versionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             versionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -24)
+        ])
+        
+        let stackView = UIStackView(arrangedSubviews: [instaSymbol, facebookSymbol, pinterestSymbol, youtubeSymbol, twitterSymbol])
+        stackView.axis = .horizontal
+        stackView.distribution = .equalSpacing
+
+        // Configure the stack view constraints
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(stackView)
+
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 16),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
+            stackView.heightAnchor.constraint(equalToConstant: 30)
         ])
     }
     
@@ -201,8 +229,12 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         case 1:
             cell.optionLabel.text = "2"
         case 2:
-            cell.optionLabel.text = "3"
+            let infoImage = UIImage(systemName: "info.bubble.fill")
+            cell.cellSymbol.image = infoImage
+            cell.optionLabel.text = "About Developer"
         case 3:
+            let gearImage = UIImage(systemName: "gearshape.fill")
+            cell.cellSymbol.image = gearImage
             cell.optionLabel.text = "Log Out"
         default:
             print("Default")

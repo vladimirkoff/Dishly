@@ -13,6 +13,7 @@ protocol AuthServiceProtocol {
     func login(email: String, password: String, completion: @escaping (Error?) -> Void)
     func register(creds: AuthCreds, completion: @escaping (Error?) -> Void)
     func logOut(completion: @escaping(Error?, Bool) -> ())
+    func changeEmail(to newEmail: String)
 }
 
 class AuthService: AuthServiceProtocol {
@@ -46,6 +47,19 @@ class AuthService: AuthServiceProtocol {
         } catch {
             print("DEBUG: Error logging out - \(error.localizedDescription)")
             completion(error, false)
+        }
+    }
+    
+    func changeEmail(to newEmail: String) {
+        guard let user = Auth.auth().currentUser else { return }
+        user.updateEmail(to: newEmail) { error in
+            if let error = error {
+                // An error occurred while updating the email
+                print("Error updating email:", error.localizedDescription)
+                return
+            }
+            // Email updated successfully
+            print("Email updated successfully")
         }
     }
 }

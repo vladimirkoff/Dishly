@@ -1,7 +1,7 @@
 import UIKit
 
 protocol ProfileInfoCellDelegate {
-    func infoDidChange(text: String)
+    func infoDidChange(text: String, fieldIndex: Int)
 }
 
 class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
@@ -9,6 +9,7 @@ class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
     // MARK: - Properties
     
     var delegate: ProfileInfoCellDelegate?
+    var fieldIndex: Int!
     
     private let nameLabel: UILabel = {
         let label = UILabel()
@@ -23,7 +24,7 @@ class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
         return button
     }()
     
-    private let textView: UITextView = {
+     let textView: UITextView = {
         let textView = UITextView()
         textView.backgroundColor = .clear
         textView.textColor = .white
@@ -103,8 +104,7 @@ class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
                
                tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
            }
-           
-           delegate?.infoDidChange(text: textView.text)
+        delegate?.infoDidChange(text: textView.text, fieldIndex: 0)
        }
     
     // MARK: - Configuration
@@ -116,11 +116,14 @@ class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
     
     func configureFields(email: String?, password: String?, name: String?) {
         if let email = email {
+            nameLabel.text = "Email"
             textView.text = email
         } else if let password = password {
+            nameLabel.text = "Username"
             textView.text = password
         } else if let name = name {
+            nameLabel.text = "Name"
             textView.text = name
-        }
+        } 
     }
 }

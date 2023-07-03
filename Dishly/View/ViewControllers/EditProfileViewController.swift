@@ -10,6 +10,11 @@ class EditProfileViewController: UIViewController {
     var userService: UserServiceProtocol!
     var userViewModel: UserViewModel!
     
+    var authService: AuthServiceProtocol!
+    var authViewModel: AuthViewModel!
+    
+    lazy var changedUser = user
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -49,11 +54,14 @@ class EditProfileViewController: UIViewController {
         configureUI()
         setupTableViewConstraints()
         userViewModel = UserViewModel(userService: userService)
+        
+        authViewModel = AuthViewModel(authService: authService)
     }
     
-    init(user: User, userService: UserServiceProtocol, profileImage: UIImageView) {
+    init(user: User, userService: UserServiceProtocol, authService: AuthServiceProtocol!, profileImage: UIImageView) {
         self.user = user
         self.userService = userService
+        self.authService = authService
         self.profileImage = profileImage
         super.init(nibName: nil, bundle: nil)
     }
@@ -102,14 +110,16 @@ class EditProfileViewController: UIViewController {
     
     @objc func doneButtonTapped() {
         ImageUploader.uploadImage(image: profileImage.image!) { imageURL in
-            let dict = ["fullName": "Vova",
+            let dict = ["fullName": self.changedUser.fullName,
                         "profileImage": imageURL,
-                        "uid": self.user.uid
+                        "username": self.changedUser.username,
+                        "email" : self.changedUser.email,
+                        "uid" : self.user.uid
             
             ]
-            let changedUser = User(dictionary: dict)
-            self.userViewModel.updateUser(with: changedUser) { error in
-                
+            let testUser = User(dictionary: dict)
+            self.userViewModel.updateUser(with: testUser) { error in
+                self.authViewModel.changeEmail(to: self.changedUser.email)
             }
         }
     }
@@ -120,7 +130,7 @@ class EditProfileViewController: UIViewController {
 extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -128,14 +138,13 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
         cell.backgroundColor = .blue
         cell.delegate = self
         if indexPath.row == 0 {
-            cell.configureFields(email: user.email, password: nil, name: nil)
-        } else if indexPath.row == 1 {
-            cell.configureFields(email: nil, password: user.uid, name: nil)
-        } else {
             cell.configureFields(email: nil, password: nil, name: user.fullName)
+        } else if indexPath.row == 1 {
+            cell.configureFields(email: user.email, password: nil, name: nil)
+        } else {
+            cell.configureFields(email: nil, password: user.username, name: nil)
         }
-        
-        let separator = UIView(frame: CGRect(x: 16, y: cell.frame.height - 1, width: cell.frame.width - 32, height: 1)) // Add separator view
+        let separator = UIView(frame: CGRect(x: 16, y: cell.frame.height - 1, width: cell.frame.width - 32, height: 1))
         separator.backgroundColor = .white
         cell.addSubview(separator)
         
@@ -183,7 +192,19 @@ extension EditProfileViewController: UIImagePickerControllerDelegate & UINavigat
 //MARK: - ProfileInfoCellDelegate
 
 extension EditProfileViewController: ProfileInfoCellDelegate {
-    func infoDidChange(text: String) {
-        print(text)
+    func infoDidChange(text: String, fieldIndex: Int) {
+        navigationItem.rightBarButtonItem?.isEnabled = true
+        var propertiesArray: [String] = []
+        for index in 0...2 {
+            let indexPath = IndexPath(row: index, section: 0)
+            if let cell = tableView.cellForRow(at: indexPath) as? ProfileInfoCell {
+                propertiesArray.append(cell.textView.text)
+            }
+        }
+        let dict = ["fullName" : propertiesArray[0],
+                    "email" : propertiesArray[1],
+                    "username" : propertiesArray[2]
+        ]
+        changedUser = User(dictionary: dict)
     }
 }

@@ -160,7 +160,7 @@ class ProfileViewController: UIViewController {
     //MARK: - Selectors
     
     @objc func goToProfile() {
-        let vc = EditProfileViewController(user: user, userService: userService, profileImage: profileImageView)
+        let vc = EditProfileViewController(user: user, userService: userService, authService: authService, profileImage: profileImageView)
         navigationController?.pushViewController(vc, animated: true)
     }
     

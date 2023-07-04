@@ -22,8 +22,6 @@ class UserService: UserServiceProtocol  {
         
     }
     
-
-    
     func fetchUser(completion: @escaping(User) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         

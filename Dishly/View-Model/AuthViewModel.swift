@@ -21,10 +21,6 @@ class AuthViewModel {
         }
     }
     
-    func changePassword() {
-        
-    }
-    
     func changeEmail(to newEmail: String) {
         authService.changeEmail(to: newEmail)
     }

@@ -13,7 +13,7 @@ import FirebaseCore
 
 
 class GreetViewController: UIViewController {
-
+    
     //MARK: - Properties
     
     private var user: User!
@@ -27,8 +27,8 @@ class GreetViewController: UIViewController {
     
     var userRealmService: UserRealmServiceProtocol!
     var userRealmViewModel: UserRealmViewModel!
-
-        
+    
+    
     private let backGroundImage: UIImageView = {
         let image = UIImage(named: "dish")
         let iv = UIImageView(image: image)
@@ -70,15 +70,14 @@ class GreetViewController: UIViewController {
         
         return button
     }()
-
+    
     private lazy var googleAuthButton: GIDSignInButton = {
         let button = GIDSignInButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.widthAnchor.constraint(equalToConstant: view.bounds.width / 4 + 10).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
-//        button.backgroundColor = .lightGray
         button.layer.cornerRadius = 20
-        button.addTarget(self, action: #selector(googleAuthButtonPressed), for: .touchUpInside) // Add target and action
+        button.addTarget(self, action: #selector(googleAuthButtonPressed), for: .touchUpInside)
         return button
     }()
     
@@ -116,7 +115,7 @@ class GreetViewController: UIViewController {
         
         return button
     }()
-
+    
     
     private let alreadyHaveAnAccountButton: UIButton = {
         let button = UIButton(type: .system)
@@ -137,39 +136,39 @@ class GreetViewController: UIViewController {
         label.font = UIFont.boldSystemFont(ofSize: 16)
         return label
     }()
-        
-    //MARK: - Lifecycle
-//    
-//    func createTestUser() {
-//        userRealmService = UserRealmService()
-//        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-//        userRealmViewModel.createUser(name: "Vova", email: "None", profileImage: "///.com", id: "1iwyfwei7d")
-//    }
     
-//    func fetchTestUser() {
-//        userRealmService = UserRealmService()
-//        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-//        userRealmViewModel.getUser(with: "KXYZtUbg3vSu0VOTwtjFyNDAhPg1") { user in
-//            if let image = UIImage(data: user.imageData) {
-//                self.backGroundImage.image = image
-//            }
-//        }
-//    }
-//    func fetchUsers() {
-//        userRealmService = UserRealmService()
-//        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-//    }
-//
-//    func updateUser() {
-//        userRealmService = UserRealmService()
-//        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-//        let user = User(dictionary: ["fullName" : "Sasha",
-//                                     "uid" : "1iwyfwei7d"
-//                                    ])
-//        userRealmViewModel.updateUser(user: user) { success in
-//            print(success)
-//        }
-//    }
+    //MARK: - Lifecycle
+    //
+    //    func createTestUser() {
+    //        userRealmService = UserRealmService()
+    //        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+    //        userRealmViewModel.createUser(name: "Vova", email: "None", profileImage: "///.com", id: "1iwyfwei7d")
+    //    }
+    
+    //    func fetchTestUser() {
+    //        userRealmService = UserRealmService()
+    //        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+    //        userRealmViewModel.getUser(with: "KXYZtUbg3vSu0VOTwtjFyNDAhPg1") { user in
+    //            if let image = UIImage(data: user.imageData) {
+    //                self.backGroundImage.image = image
+    //            }
+    //        }
+    //    }
+    //    func fetchUsers() {
+    //        userRealmService = UserRealmService()
+    //        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+    //    }
+    //
+    //    func updateUser() {
+    //        userRealmService = UserRealmService()
+    //        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+    //        let user = User(dictionary: ["fullName" : "Sasha",
+    //                                     "uid" : "1iwyfwei7d"
+    //                                    ])
+    //        userRealmViewModel.updateUser(user: user) { success in
+    //            print(success)
+    //        }
+    //    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -180,16 +179,16 @@ class GreetViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         userViewModel = UserViewModel(userService: userService)
-
+        
     }
     
     init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol) {
-         self.authService = authService
-         self.userService = userService
-         self.recipeService = recipeService
-         self.userRealmService = userRealmService
-         super.init(nibName: nil, bundle: nil)
-     }
+        self.authService = authService
+        self.userService = userService
+        self.recipeService = recipeService
+        self.userRealmService = userRealmService
+        super.init(nibName: nil, bundle: nil)
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -208,16 +207,16 @@ class GreetViewController: UIViewController {
             }
         } else {
             if let googleUser = GIDSignIn.sharedInstance.currentUser
-                 {
+            {
                 AuthService().getUser(by: googleUser.profile!.email) { user in
                     DispatchQueue.main.async {
                         let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService)
                         self.navigationController?.pushViewController(vc, animated: true)
                     }
                 }
-              } else {
-                  return
-              }
+            } else {
+                return
+            }
         }
     }
     
@@ -238,19 +237,19 @@ class GreetViewController: UIViewController {
         ])
         
         let authButtonsStack = UIStackView(arrangedSubviews: [appleAuthButton, facebookAuthButton, googleAuthButton])
-         authButtonsStack.translatesAutoresizingMaskIntoConstraints = false
-         authButtonsStack.axis = .horizontal
-         authButtonsStack.distribution = .equalCentering
-         authButtonsStack.spacing = 12
-         
-         view.addSubview(authButtonsStack)
-         NSLayoutConstraint.activate([
-             authButtonsStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-             authButtonsStack.topAnchor.constraint(equalTo: appTitleLabel.bottomAnchor, constant: 16),
-             authButtonsStack.heightAnchor.constraint(equalToConstant: 40),
-             authButtonsStack.widthAnchor.constraint(equalToConstant: view.bounds.width - 10)
-         ])
-
+        authButtonsStack.translatesAutoresizingMaskIntoConstraints = false
+        authButtonsStack.axis = .horizontal
+        authButtonsStack.distribution = .equalCentering
+        authButtonsStack.spacing = 12
+        
+        view.addSubview(authButtonsStack)
+        NSLayoutConstraint.activate([
+            authButtonsStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            authButtonsStack.topAnchor.constraint(equalTo: appTitleLabel.bottomAnchor, constant: 16),
+            authButtonsStack.heightAnchor.constraint(equalToConstant: 40),
+            authButtonsStack.widthAnchor.constraint(equalToConstant: view.bounds.width - 10)
+        ])
+        
         view.addSubview(authWithEmailButton)
         NSLayoutConstraint.activate([
             authWithEmailButton.topAnchor.constraint(equalTo: authButtonsStack.bottomAnchor, constant: 12),
@@ -302,10 +301,6 @@ class GreetViewController: UIViewController {
         let vc = SignupController(authService: authService, userService: userService, recipeService: recipeService, userRealmService: userRealmService)
         navigationController?.pushViewController(vc, animated: true)
     }
-    
-    @objc func facebookAuthPressed() {
-        
-    }
 }
 
 //MARK: - LoginButtonDelegate
@@ -314,29 +309,28 @@ extension GreetViewController: LoginButtonDelegate {
     
     func loginButton(_ loginButton: FBLoginButton, didCompleteWith result: LoginManagerLoginResult?, error: Error?) {
         if let error = error {
-             print("Facebook Login error: \(error.localizedDescription)")
-             return
-         }
-         
-         guard let token = AccessToken.current?.tokenString else {
-             return
-         }
-         
-         let credential = FacebookAuthProvider.credential(withAccessToken: token)
-         Auth.auth().signIn(with: credential) { (authResult, error) in
-             if let error = error {
-                 print("Firebase Auth error: \(error.localizedDescription)")
-                 return
-             }
-
-         }
+            print("Facebook Login error: \(error.localizedDescription)")
+            return
+        }
+        
+        guard let token = AccessToken.current?.tokenString else {
+            return
+        }
+        
+        let credential = FacebookAuthProvider.credential(withAccessToken: token)
+        Auth.auth().signIn(with: credential) { (authResult, error) in
+            if let error = error {
+                print("Firebase Auth error: \(error.localizedDescription)")
+                return
+            }
+            
+        }
     }
     
     func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
         
     }
     
- 
 }
 
 

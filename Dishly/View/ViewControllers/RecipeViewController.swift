@@ -153,8 +153,6 @@ class RecipeViewController: UIViewController {
         return view
     }()
     
-    
-    
     let scrollView = UIScrollView()
     let contentView = UIView()
     

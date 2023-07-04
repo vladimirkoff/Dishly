@@ -22,6 +22,8 @@ protocol AuthServiceProtocol {
 
 class AuthService: AuthServiceProtocol {
     
+    //MARK: - GoogleAuth
+    
     func signInWithGoogle(with vc: UIViewController, completion: @escaping(Error?, User?) -> ()) {
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
         
@@ -34,20 +36,20 @@ class AuthService: AuthServiceProtocol {
             guard let user = result?.user, let idToken = user.idToken?.tokenString else { return }
             let credential = GoogleAuthProvider.credential(withIDToken: idToken,
                                                            accessToken: user.accessToken.tokenString)
+            
             if let email = user.profile?.email, let name = user.profile?.name, let profileImageUrl = user.profile?.imageURL(withDimension: 200) {
                 self.checkIfUserExists(email: email) { doesExist in
+                    let urlString = profileImageUrl.absoluteString
+                    let username = generateRandomUsername()
+                    let uid = UUID().uuidString
                     if !doesExist {
-                        let urlString = profileImageUrl.absoluteString
-                        let username = generateRandomUsername()
-                        self.createUserWithGoogle(name: name, email: email, username: username, profileUrl: urlString, uid: UUID().uuidString) { error, user in
+                        self.createUserWithGoogle(name: name, email: email, username: username, profileUrl: urlString, uid: uid) { error, user in
                             completion(error, user)
                         }
                         return
                     } else {
                         self.getUser(by: email) { user in
-                            let urlString = profileImageUrl.absoluteString
-                            let username = generateRandomUsername()
-                            self.createUserWithGoogle(name: name, email: email, username: username, profileUrl: urlString, uid: UUID().uuidString) { error, user in
+                            self.createUserWithGoogle(name: name, email: email, username: username, profileUrl: urlString, uid: uid) { error, user in
                                 completion(error, user)
                             }
                             return
@@ -71,7 +73,7 @@ class AuthService: AuthServiceProtocol {
     }
     
     func getUser(by email: String, completion: @escaping(User) -> ()) {
-        Firestore.firestore().collection("users").getDocuments { snapshot, error in
+        COLLECTION_USERS.getDocuments { snapshot, error in
             if let users = snapshot?.documents {
                 for user in users {
                     if user.data()["email"] as! String == email {
@@ -86,7 +88,7 @@ class AuthService: AuthServiceProtocol {
     }
     
     func checkIfUserExists(email: String, completion: @escaping(Bool) -> ()) {
-        Firestore.firestore().collection("users").getDocuments { snapshot, error in
+        COLLECTION_USERS.getDocuments { snapshot, error in
             if let users = snapshot?.documents {
                 for user in users {
                     if user.data()["email"] as! String == email {
@@ -109,7 +111,7 @@ class AuthService: AuthServiceProtocol {
     func createUserWithGoogle(name: String, email: String, username: String, profileUrl: String, uid: String, completion: @escaping(Error?, User?) -> ()) {
         let data: [String: Any] = ["email": email, "fullName": name, "profileImage": profileUrl, "uid": uid, "username": username]
         
-        Firestore.firestore().collection("users").document(uid).setData(data) { error in
+        COLLECTION_USERS.document(uid).setData(data) { error in
             let user = User(dictionary: data)
             if let error = error {
                 completion(error, nil)
@@ -118,9 +120,11 @@ class AuthService: AuthServiceProtocol {
             completion(error, user)
         }
     }
+    
+    //MARK: - Email-Password Auth
 
     func register(creds: AuthCreds, completion: @escaping (Error?, User?) -> Void) {
-        ImageUploader.uploadImage(image: creds.profileImage!) { imageUrl in
+        ImageUploader.shared.uploadImage(image: creds.profileImage!) { imageUrl in
             Auth.auth().createUser(withEmail: creds.email, password: creds.password) { res, err in
                 if let error = err {
                     completion(error, nil)
@@ -130,7 +134,7 @@ class AuthService: AuthServiceProtocol {
                 
                 let data: [String: Any] = ["email": creds.email, "fullName": creds.fullname, "profileImage": imageUrl, "uid": uid, "username": creds.username]
                 
-                Firestore.firestore().collection("users").document(uid).setData(data) { error in
+                COLLECTION_USERS.document(uid).setData(data) { error in
                     let user = User(dictionary: data)
                     if let error = err {
                         completion(error, nil)

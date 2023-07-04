@@ -7,7 +7,6 @@
 
 import UIKit
 import FirebaseCore
-import FacebookLogin
 import RealmSwift
 import FacebookCore
 import FirebaseAuth
@@ -16,7 +15,6 @@ import GoogleSignIn
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
  
-
     func application(_ app: UIApplication,
                      open url: URL,
                      options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
@@ -46,8 +44,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("Failed to initialize Realm: \(error)")
         }
-        
-        
         
         return true
     }

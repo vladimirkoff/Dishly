@@ -224,6 +224,7 @@
 		85C1B6F62A44858700BEAF2F /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				85C1B73D2A4DE09500BEAF2F /* ImageUploader.swift */,
 				85C1B6F72A4485AE00BEAF2F /* AuthService.swift */,
 				85C1B6FC2A44A00200BEAF2F /* RecipesService.swift */,
 				85C1B7142A48723200BEAF2F /* UserService.swift */,
@@ -267,7 +268,6 @@
 		85C1B73C2A4DE08000BEAF2F /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				85C1B73D2A4DE09500BEAF2F /* ImageUploader.swift */,
 				85C1B73F2A4DE16700BEAF2F /* AuthCreds.swift */,
 				85C1B7412A4F069F00BEAF2F /* DependencyContainer.swift */,
 				85C1B7552A541AA000BEAF2F /* RandomUsernameGenerator.swift */,

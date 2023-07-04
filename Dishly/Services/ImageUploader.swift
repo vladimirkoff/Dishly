@@ -8,8 +8,12 @@
 import UIKit
 import FirebaseStorage
 
-struct ImageUploader {
-    static func uploadImage(image: UIImage, completion: @escaping(String) -> ()) {
+class ImageUploader {
+    
+    static let shared = ImageUploader()
+    private init() {}
+    
+    func uploadImage(image: UIImage, completion: @escaping(String) -> ()) {
         guard let imageData = image.jpegData(compressionQuality: 0.75) else { return }
         
         let fileName = UUID().uuidString

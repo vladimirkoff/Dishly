@@ -31,8 +31,6 @@ class MainTabBarController: UITabBarController {
         return profileImageView
     }()
 
-    
-
     //MARK: - Lifecycle
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,11 +44,6 @@ class MainTabBarController: UITabBarController {
         super.viewDidLoad()
         configureNavBar()
         configureVC()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        selectedIndex = 0
     }
     
     init(user: User, authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
@@ -80,7 +73,6 @@ class MainTabBarController: UITabBarController {
         
         let mealVC = MealPlanVC()
         let plan = configureVC(image: UIImage(named: "list")!, vc: mealVC)
-        
         
         viewControllers = [main,  add, saved, plan]
         
@@ -133,7 +125,6 @@ class MainTabBarController: UITabBarController {
         navigationItem.largeTitleDisplayMode = .always
         navigationItem.title = "Search"
 
-        
         let url = user.profileImage
         guard let imageUrl = URL(string: user.profileImage) else { return }
         

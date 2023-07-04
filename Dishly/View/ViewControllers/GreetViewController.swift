@@ -281,10 +281,12 @@ class GreetViewController: UIViewController {
                 print("Error authorizing with Google - \(error.localizedDescription)")
                 return
             }
-            if let user = user {
-                self.user = user
-                let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService)
-                self.navigationController?.pushViewController(vc, animated: true)
+            DispatchQueue.main.async {
+                if let user = user {
+                    self.user = user
+                    let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService)
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
             }
         }
     }

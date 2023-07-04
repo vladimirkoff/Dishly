@@ -132,10 +132,12 @@ class SignupController: UIViewController {
                 print("DEBUG: Error registering user - \(error.localizedDescription)")
                 return
             }
-            let profileImage = self.plusButton.imageView?.image?.pngData()
-            self.createTestUser(email: email, name: fullname, uid: user!.uid, profileImage: profileImage!)
-            let vc = MainTabBarController(user: user!, authService: self.authService, userService: self.userService, recipeService: self.recipeService)
-            self.navigationController?.pushViewController(vc, animated: true)
+            DispatchQueue.main.async {
+                let profileImage = self.plusButton.imageView?.image?.pngData()
+                self.createTestUser(email: email, name: fullname, uid: user!.uid, profileImage: profileImage!)
+                let vc = MainTabBarController(user: user!, authService: self.authService, userService: self.userService, recipeService: self.recipeService)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
         }
         
     }

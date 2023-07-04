@@ -136,8 +136,10 @@ class EditProfileViewController: UIViewController {
             self.userViewModel.updateUser(with: updatedUser) { error in
                 self.authViewModel.changeEmail(to: self.changedUser.email)
                 self.userRealmViewModel.updateUser(user: updatedUser) { success in
-                    self.showLoader(false)
-                    self.navigationController?.navigationBar.topItem?.hidesBackButton = false
+                    DispatchQueue.main.async {
+                        self.showLoader(false)
+                        self.navigationController?.navigationBar.topItem?.hidesBackButton = false
+                    }
                 }
             }
         }

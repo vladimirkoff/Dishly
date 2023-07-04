@@ -12,8 +12,8 @@ class DependencyContainer {
     
     private init() {}
     
-    func getAuthService() -> AuthServiceProtocol {
-        return AuthService()
+    func getAuthService(userService: UserServiceProtocol) -> AuthServiceProtocol {
+        return AuthService(userService: userService)
     }
     
     func getUserService() -> UserServiceProtocol {
@@ -28,5 +28,8 @@ class DependencyContainer {
         return UserRealmService()
     }
     
+    func getGoogleAuthService(userService: UserServiceProtocol) -> GoogleAuthServiceProtocol {
+        return GoogleAuthService(userService: userService)
+    }
     
 }

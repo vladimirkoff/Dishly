@@ -31,13 +31,5 @@ class AuthViewModel {
         }
     }
     
-    func signInWithGoogle(with vc: UIViewController, completion: @escaping(Error?, User?) -> ()) {
-        authService.signInWithGoogle(with: vc) { error, user in
-            completion(error, user)
-        }
-    }
-    
-    func logOutWithGoogle() {
-        authService.logoutWithGoogle()
-    }
+
 }

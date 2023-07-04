@@ -15,25 +15,25 @@ protocol UserRealmServiceProtocol {
 }
 
 class UserRealmService: UserRealmServiceProtocol {
-     let realm = try! Realm()
-
+    let realm = try! Realm()
+    
     func createUser(name: String, email: String, profileImage: Data, id: String, completion: @escaping(Bool) -> ()) {
-         let user = UserRealm()
+        let user = UserRealm()
         
-         user.id = id
-         user.name = name
-         user.email = email
-         user.imageData = profileImage
-
-         try! realm.write {
-             realm.add(user)
-             completion(true)
-         }
-     }
-
-     func getUsers() -> Results<UserRealm> {
-         return realm.objects(UserRealm.self)
-     }
+        user.id = id
+        user.name = name
+        user.email = email
+        user.imageData = profileImage
+        
+        try! realm.write {
+            realm.add(user)
+            completion(true)
+        }
+    }
+    
+    func getUsers() -> Results<UserRealm> {
+        return realm.objects(UserRealm.self)
+    }
     
     func getUser(with id: String, completion: @escaping(User) -> ())  {
         let users = realm.objects(UserRealm.self)
@@ -49,7 +49,7 @@ class UserRealmService: UserRealmServiceProtocol {
             }
         }
     }
-
+    
     func updateUser(user: User, completion: @escaping(Bool) -> ()) {
         let users = realm.objects(UserRealm.self)
         for realmUser in users {
@@ -62,23 +62,23 @@ class UserRealmService: UserRealmServiceProtocol {
                 }
             }
         }
-     }
-
-     func deleteUser(id: String) {
-         let users = realm.objects(UserRealm.self)
-         for user in users {
-             if user.id == id {
-                 try! realm.write {
-                     realm.delete(user)
-                 }
-             }
-         }
-     }
- }
-
-
+    }
+    
+    func deleteUser(id: String) {
+        let users = realm.objects(UserRealm.self)
+        for user in users {
+            if user.id == id {
+                try! realm.write {
+                    realm.delete(user)
+                }
+            }
+        }
+    }
+}
 
 
 
 
- 
+
+
+

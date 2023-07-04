@@ -28,6 +28,9 @@ class GreetViewController: UIViewController {
     var userRealmService: UserRealmServiceProtocol!
     var userRealmViewModel: UserRealmViewModel!
     
+    var googleAuthService: GoogleAuthServiceProtocol!
+    var googleAuthViewModel: GoogleAuthViewModel!
+    
     
     private let backGroundImage: UIImageView = {
         let image = UIImage(named: "dish")
@@ -182,11 +185,12 @@ class GreetViewController: UIViewController {
         
     }
     
-    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol) {
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol, googleAuthService: GoogleAuthServiceProtocol) {
         self.authService = authService
         self.userService = userService
         self.recipeService = recipeService
         self.userRealmService = userRealmService
+        self.googleAuthService = googleAuthService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -208,7 +212,7 @@ class GreetViewController: UIViewController {
         } else {
             if let googleUser = GIDSignIn.sharedInstance.currentUser
             {
-                AuthService().getUser(by: googleUser.profile!.email) { user in
+                userService.getUser(by: googleUser.profile!.email) { user in
                     DispatchQueue.main.async {
                         let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService)
                         self.navigationController?.pushViewController(vc, animated: true)
@@ -275,8 +279,8 @@ class GreetViewController: UIViewController {
     //MARK: - Selectors
     
     @objc func googleAuthButtonPressed() {
-        authViewModel = AuthViewModel(authService: authService)
-        authViewModel.signInWithGoogle(with: self) { error, user in
+        googleAuthViewModel = GoogleAuthViewModel(googleAuthService: googleAuthService)
+        googleAuthViewModel.signInWithGoogle(with: self) { error, user in
             if let error = error {
                 print("Error authorizing with Google - \(error.localizedDescription)")
                 return

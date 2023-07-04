@@ -55,6 +55,8 @@
 		85C1B7502A51AB2600BEAF2F /* UserRealmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B74F2A51AB2600BEAF2F /* UserRealmViewModel.swift */; };
 		85C1B7522A52D51E00BEAF2F /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7512A52D51E00BEAF2F /* UIImageView.swift */; };
 		85C1B7562A541AA000BEAF2F /* RandomUsernameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7552A541AA000BEAF2F /* RandomUsernameGenerator.swift */; };
+		85C1B7582A5481BC00BEAF2F /* GoogleAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7572A5481BC00BEAF2F /* GoogleAuthService.swift */; };
+		85C1B75A2A54825600BEAF2F /* GoogleAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7592A54825600BEAF2F /* GoogleAuthViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -106,6 +108,8 @@
 		85C1B74F2A51AB2600BEAF2F /* UserRealmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRealmViewModel.swift; sourceTree = "<group>"; };
 		85C1B7512A52D51E00BEAF2F /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		85C1B7552A541AA000BEAF2F /* RandomUsernameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomUsernameGenerator.swift; sourceTree = "<group>"; };
+		85C1B7572A5481BC00BEAF2F /* GoogleAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthService.swift; sourceTree = "<group>"; };
+		85C1B7592A54825600BEAF2F /* GoogleAuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthViewModel.swift; sourceTree = "<group>"; };
 		C37B7E4D901A1FF8C3C4D501 /* Pods-Dishly.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dishly.release.xcconfig"; path = "Target Support Files/Pods-Dishly/Pods-Dishly.release.xcconfig"; sourceTree = "<group>"; };
 		CA1C145446A00BC5402957FC /* Pods_Dishly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dishly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -189,6 +193,7 @@
 				85C1B71A2A49893B00BEAF2F /* UserViewModel.swift */,
 				85C1B7202A49B96600BEAF2F /* AuthViewModel.swift */,
 				85C1B74F2A51AB2600BEAF2F /* UserRealmViewModel.swift */,
+				85C1B7592A54825600BEAF2F /* GoogleAuthViewModel.swift */,
 			);
 			path = "View-Model";
 			sourceTree = "<group>";
@@ -229,6 +234,7 @@
 				85C1B6FC2A44A00200BEAF2F /* RecipesService.swift */,
 				85C1B7142A48723200BEAF2F /* UserService.swift */,
 				85C1B74D2A51A23A00BEAF2F /* UserRealmService.swift */,
+				85C1B7572A5481BC00BEAF2F /* GoogleAuthService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -421,6 +427,7 @@
 				85C1B74E2A51A23A00BEAF2F /* UserRealmService.swift in Sources */,
 				85C1B71B2A49893B00BEAF2F /* UserViewModel.swift in Sources */,
 				85C1B74C2A51A1C100BEAF2F /* UserRealm.swift in Sources */,
+				85C1B75A2A54825600BEAF2F /* GoogleAuthViewModel.swift in Sources */,
 				85C1B7402A4DE16700BEAF2F /* AuthCreds.swift in Sources */,
 				85C1B72D2A4D969700BEAF2F /* UIButton.swift in Sources */,
 				85C1B7032A458CF200BEAF2F /* TopCategoryCell.swift in Sources */,
@@ -447,6 +454,7 @@
 				85C1B7172A487C1C00BEAF2F /* MealCell.swift in Sources */,
 				85C1B70B2A45D08E00BEAF2F /* SavedViewController.swift in Sources */,
 				85C1B7192A4982EF00BEAF2F /* RecipeViewController.swift in Sources */,
+				85C1B7582A5481BC00BEAF2F /* GoogleAuthService.swift in Sources */,
 				85C1B6E92A447E9E00BEAF2F /* MainTabBarController.swift in Sources */,
 				85C1B65D2A39FE5700BEAF2F /* SceneDelegate.swift in Sources */,
 				85C1B7562A541AA000BEAF2F /* RandomUsernameGenerator.swift in Sources */,

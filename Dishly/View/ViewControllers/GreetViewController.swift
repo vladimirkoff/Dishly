@@ -8,17 +8,22 @@
 import UIKit
 import FirebaseAuth
 import FacebookLogin
+import GoogleSignIn
+import FirebaseCore
+
 
 class GreetViewController: UIViewController {
 
-    
     //MARK: - Properties
+    
+    private var user: User!
     
     var authService: AuthServiceProtocol!
     var userService: UserServiceProtocol!
     var recipeService: RecipeServiceProtocol!
     
     var userViewModel: UserViewModel!
+    var authViewModel: AuthViewModel!
     
     var userRealmService: UserRealmServiceProtocol!
     var userRealmViewModel: UserRealmViewModel!
@@ -66,13 +71,14 @@ class GreetViewController: UIViewController {
         return button
     }()
 
-    private lazy var googleAuthButton: UIButton = {
-        let button = UIButton(type: .system)
+    private lazy var googleAuthButton: GIDSignInButton = {
+        let button = GIDSignInButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.widthAnchor.constraint(equalToConstant: view.bounds.width / 4 + 10).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        button.backgroundColor = .lightGray
-        button.layer.cornerRadius = 17
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+//        button.backgroundColor = .lightGray
+        button.layer.cornerRadius = 20
+        button.addTarget(self, action: #selector(googleAuthButtonPressed), for: .touchUpInside) // Add target and action
         return button
     }()
     
@@ -140,15 +146,15 @@ class GreetViewController: UIViewController {
 //        userRealmViewModel.createUser(name: "Vova", email: "None", profileImage: "///.com", id: "1iwyfwei7d")
 //    }
     
-    func fetchTestUser() {
-        userRealmService = UserRealmService()
-        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-        userRealmViewModel.getUser(with: "KXYZtUbg3vSu0VOTwtjFyNDAhPg1") { user in
-            if let image = UIImage(data: user.imageData) {
-                self.backGroundImage.image = image
-            }
-        }
-    }
+//    func fetchTestUser() {
+//        userRealmService = UserRealmService()
+//        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+//        userRealmViewModel.getUser(with: "KXYZtUbg3vSu0VOTwtjFyNDAhPg1") { user in
+//            if let image = UIImage(data: user.imageData) {
+//                self.backGroundImage.image = image
+//            }
+//        }
+//    }
 //    func fetchUsers() {
 //        userRealmService = UserRealmService()
 //        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
@@ -167,20 +173,14 @@ class GreetViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        fetchTestUser()
         checkIfLoggedIn()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureUI()
         userViewModel = UserViewModel(userService: userService)
-        view.addSubview(facebookAuthButton)
-        NSLayoutConstraint.activate([
-            facebookAuthButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            facebookAuthButton.topAnchor.constraint(equalTo: authWithEmailButton.bottomAnchor, constant: 12)
-        ])
+
     }
     
     init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol) {
@@ -206,6 +206,18 @@ class GreetViewController: UIViewController {
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
             }
+        } else {
+            if let googleUser = GIDSignIn.sharedInstance.currentUser
+                 {
+                AuthService().getUser(by: googleUser.profile!.email) { user in
+                    DispatchQueue.main.async {
+                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService)
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }
+                }
+              } else {
+                  return
+              }
         }
     }
     
@@ -263,6 +275,21 @@ class GreetViewController: UIViewController {
     
     //MARK: - Selectors
     
+    @objc func googleAuthButtonPressed() {
+        authViewModel = AuthViewModel(authService: authService)
+        authViewModel.signInWithGoogle(with: self) { error, user in
+            if let error = error {
+                print("Error authorizing with Google - \(error.localizedDescription)")
+                return
+            }
+            if let user = user {
+                self.user = user
+                let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
+    }
+    
     @objc func goToSignin() {
         guard let authService = authService else { return }
         guard let userService = userService else { return }
@@ -281,7 +308,10 @@ class GreetViewController: UIViewController {
     }
 }
 
+//MARK: - LoginButtonDelegate
+
 extension GreetViewController: LoginButtonDelegate {
+    
     func loginButton(_ loginButton: FBLoginButton, didCompleteWith result: LoginManagerLoginResult?, error: Error?) {
         if let error = error {
              print("Facebook Login error: \(error.localizedDescription)")
@@ -305,4 +335,15 @@ extension GreetViewController: LoginButtonDelegate {
     func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
         
     }
+    
+ 
 }
+
+
+
+
+
+
+
+
+

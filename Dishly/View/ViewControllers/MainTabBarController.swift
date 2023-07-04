@@ -137,7 +137,6 @@ class MainTabBarController: UITabBarController {
         let url = user.profileImage
         guard let imageUrl = URL(string: user.profileImage) else { return }
         
-        // Download and set the image using SDWebImage
         SDWebImageManager.shared.loadImage(with: imageUrl, options: [], progress: nil) { (image, _, _, _, _, _) in
             DispatchQueue.main.async {
                 self.profileImageView.image = image

@@ -17,6 +17,7 @@ target 'Dishly' do
   pod 'SDWebImage', '~> 5.0'
   pod "FacebookLogin"
   pod 'JGProgressHUD'
+  pod 'GoogleSignIn'
 
 
 end

@@ -11,17 +11,22 @@ import FacebookLogin
 import RealmSwift
 import FacebookCore
 import FirebaseAuth
+import GoogleSignIn
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
  
 
-    
+    func application(_ app: UIApplication,
+                     open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+      return GIDSignIn.sharedInstance.handle(url)
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
-
+        
         let config = Realm.Configuration(schemaVersion: 1, migrationBlock: { migration, oldSchemaVersion in
             if oldSchemaVersion < 1 {
                 migration.enumerateObjects(ofType: UserRealm.className()) { oldObject, newObject in
@@ -41,6 +46,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("Failed to initialize Realm: \(error)")
         }
+        
+        
         
         return true
     }

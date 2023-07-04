@@ -13,12 +13,16 @@ protocol UserServiceProtocol {
     func fetchUser(with uid: String, completion: @escaping (User) -> Void)
     func fetchUser(completion: @escaping(User) -> ())
     func updateUser(changedUser: User, completion: @escaping(Error?) -> ())
+ 
 }
 
 class UserService: UserServiceProtocol  {
+    
     func fetchUser(with uid: String, completion: @escaping (User) -> Void) {
         
     }
+    
+
     
     func fetchUser(completion: @escaping(User) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
@@ -29,7 +33,6 @@ class UserService: UserServiceProtocol  {
                 return
             }
             guard let dictionary = snapshot?.data() else { return }
-            print(dictionary)
             let user = User(dictionary: dictionary)
             completion(user)
         }

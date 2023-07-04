@@ -131,7 +131,6 @@ class EditProfileViewController: UIViewController {
                         "username": self.changedUser.username,
                         "email" : self.changedUser.email,
                         "uid" : self.user.uid
-            
             ]
             let updatedUser = User(dictionary: dict)
             self.userViewModel.updateUser(with: updatedUser) { error in
@@ -194,7 +193,6 @@ extension EditProfileViewController: UIImagePickerControllerDelegate & UINavigat
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         guard let selectedImage = info[.editedImage] as? UIImage else { return }
-        
         
         profileImageButton.layer.cornerRadius = profileImageButton.frame.width / 2
         profileImageButton.layer.masksToBounds = true

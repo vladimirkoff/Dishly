@@ -177,7 +177,12 @@ class ProfileViewController: UIViewController {
     func handleLogOut() {
         authViewModel.logOut { error, success in
             if let error = error {
-                print("Error logging out - \(error.localizedDescription)")
+                self.authViewModel.logOutWithGoogle()
+                let recipeService = RecipeService()
+                let vc = GreetViewController(authService: self.authService, userService: self.userService, recipeService: recipeService, userRealmService: self.userRealmService)
+                let navVC = UINavigationController(rootViewController: vc)
+                navVC.modalPresentationStyle = .fullScreen
+                self.present(navVC, animated: true)
                 return
             }
             let recipeService = RecipeService()

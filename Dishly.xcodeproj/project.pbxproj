@@ -54,6 +54,7 @@
 		85C1B74E2A51A23A00BEAF2F /* UserRealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B74D2A51A23A00BEAF2F /* UserRealmService.swift */; };
 		85C1B7502A51AB2600BEAF2F /* UserRealmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B74F2A51AB2600BEAF2F /* UserRealmViewModel.swift */; };
 		85C1B7522A52D51E00BEAF2F /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7512A52D51E00BEAF2F /* UIImageView.swift */; };
+		85C1B7562A541AA000BEAF2F /* RandomUsernameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B7552A541AA000BEAF2F /* RandomUsernameGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +105,7 @@
 		85C1B74D2A51A23A00BEAF2F /* UserRealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRealmService.swift; sourceTree = "<group>"; };
 		85C1B74F2A51AB2600BEAF2F /* UserRealmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRealmViewModel.swift; sourceTree = "<group>"; };
 		85C1B7512A52D51E00BEAF2F /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
+		85C1B7552A541AA000BEAF2F /* RandomUsernameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomUsernameGenerator.swift; sourceTree = "<group>"; };
 		C37B7E4D901A1FF8C3C4D501 /* Pods-Dishly.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dishly.release.xcconfig"; path = "Target Support Files/Pods-Dishly/Pods-Dishly.release.xcconfig"; sourceTree = "<group>"; };
 		CA1C145446A00BC5402957FC /* Pods_Dishly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dishly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -268,6 +270,7 @@
 				85C1B73D2A4DE09500BEAF2F /* ImageUploader.swift */,
 				85C1B73F2A4DE16700BEAF2F /* AuthCreds.swift */,
 				85C1B7412A4F069F00BEAF2F /* DependencyContainer.swift */,
+				85C1B7552A541AA000BEAF2F /* RandomUsernameGenerator.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -446,6 +449,7 @@
 				85C1B7192A4982EF00BEAF2F /* RecipeViewController.swift in Sources */,
 				85C1B6E92A447E9E00BEAF2F /* MainTabBarController.swift in Sources */,
 				85C1B65D2A39FE5700BEAF2F /* SceneDelegate.swift in Sources */,
+				85C1B7562A541AA000BEAF2F /* RandomUsernameGenerator.swift in Sources */,
 				85C1B6FF2A458CBE00BEAF2F /* CategoryCell.swift in Sources */,
 				85C1B71D2A49942B00BEAF2F /* LogInViewController.swift in Sources */,
 				85C1B71F2A49943300BEAF2F /* SignUpViewController.swift in Sources */,

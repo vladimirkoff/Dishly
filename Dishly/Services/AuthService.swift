@@ -125,24 +125,32 @@ class AuthService: AuthServiceProtocol {
 
     func register(creds: AuthCreds, completion: @escaping (Error?, User?) -> Void) {
         ImageUploader.shared.uploadImage(image: creds.profileImage!) { imageUrl in
-            Auth.auth().createUser(withEmail: creds.email, password: creds.password) { res, err in
-                if let error = err {
-                    completion(error, nil)
+            self.checkIfUserExists(email: creds.email) { doesExist in
+                if !doesExist {
+                    Auth.auth().createUser(withEmail: creds.email, password: creds.password) { res, err in
+                        if let error = err {
+                            completion(error, nil)
+                            return
+                        }
+                        guard let uid = res?.user.uid else { return }
+                        
+                        let data: [String: Any] = ["email": creds.email, "fullName": creds.fullname, "profileImage": imageUrl, "uid": uid, "username": creds.username]
+                        
+                        COLLECTION_USERS.document(uid).setData(data) { error in
+                            let user = User(dictionary: data)
+                            if let error = err {
+                                completion(error, nil)
+                                return
+                            }
+                            completion(error, user)
+                        }
+                    }
+                } else {
+                    completion(nil, nil)
                     return
                 }
-                guard let uid = res?.user.uid else { return }
-                
-                let data: [String: Any] = ["email": creds.email, "fullName": creds.fullname, "profileImage": imageUrl, "uid": uid, "username": creds.username]
-                
-                COLLECTION_USERS.document(uid).setData(data) { error in
-                    let user = User(dictionary: data)
-                    if let error = err {
-                        completion(error, nil)
-                        return
-                    }
-                    completion(error, user)
-                }
             }
+           
         }
     }
     

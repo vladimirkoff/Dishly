@@ -11,7 +11,6 @@ class SavedViewController: UICollectionViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureUI()
         configureCollectionView()
     }

@@ -298,8 +298,7 @@ extension GreetViewController: LoginButtonDelegate {
                  print("Firebase Auth error: \(error.localizedDescription)")
                  return
              }
-             // User successfully signed in with Firebase
-             // ...
+
          }
     }
     

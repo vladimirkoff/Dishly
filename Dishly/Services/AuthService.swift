@@ -61,11 +61,9 @@ class AuthService: AuthServiceProtocol {
         guard let user = Auth.auth().currentUser else { return }
         user.updateEmail(to: newEmail) { error in
             if let error = error {
-                // An error occurred while updating the email
                 print("Error updating email:", error.localizedDescription)
                 return
             }
-            // Email updated successfully
             print("Email updated successfully")
         }
     }

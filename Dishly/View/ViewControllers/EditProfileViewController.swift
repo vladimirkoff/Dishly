@@ -82,12 +82,7 @@ class EditProfileViewController: UIViewController {
     
     func showLoader(_ show: Bool) {
         view.endEditing(true )
-        
-        if show {
-            self.hud.show(in: view)
-        } else {
-            self.hud.dismiss()
-        }
+        show ? hud.show(in: view) : hud.dismiss()
     }
     
     func configureUI() {

@@ -15,21 +15,6 @@ class LoginViewController: UIViewController {
 
     private let logo = UIImageView(image: UIImage(named: "Instagram_logo_white"))
     
-    private let dontHaveAndAccountButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-//        button.attributedTitle(first: "Don't have an account?  ", second: "Sign up")
-        button.addTarget(self, action: #selector(goToSignup), for: .touchUpInside)
-        return button
-    }()
-    
-    private let forgottenPasswordButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-//        button.attributedTitle(first: "Forgotten the password? ", second: "Restore your password")
-        return button
-    }()
-    
     private let emailField: CustomTextField = {
         let tf = CustomTextField(placeholder: "Email")
         tf.autocorrectionType = .no
@@ -91,11 +76,7 @@ class LoginViewController: UIViewController {
         logo.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         logo.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
-        view.addSubview(dontHaveAndAccountButton)
-        dontHaveAndAccountButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8).isActive = true
-        dontHaveAndAccountButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        
-        let stack = UIStackView(arrangedSubviews: [emailField, passwordField, loginButton, forgottenPasswordButton])
+        let stack = UIStackView(arrangedSubviews: [emailField, passwordField, loginButton])
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
         stack.spacing = 20
@@ -113,11 +94,6 @@ class LoginViewController: UIViewController {
     
     //MARK: - Selectors
     
-    @objc func goToSignup() {
-//        let vc = SignupController(scene: self.scene)
-//        vc.delegate = delegate
-//        navigationController?.pushViewController(vc, animated: true)
-    }
     @objc func textDidChange(sender: UITextField) {
         if sender == emailField {
             emailField.text = emailField.text?.lowercased()

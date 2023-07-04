@@ -359,23 +359,18 @@ class RecipeViewController: UIViewController {
     //MARK: - Selectors
     
     @objc func addToCartButtonTapped() {
-        
     }
     
     @objc private func leftButtonTapped() {
-        // Handle left button tap
     }
     
     @objc private func rightButton1Tapped() {
-        // Handle right button 1 tap
     }
     
     @objc private func rightButton2Tapped() {
-        // Handle right button 2 tap
     }
     
     @objc private func stepByStepButtonTapped() {
-        // Handle step by step button tap
     }
 }
 

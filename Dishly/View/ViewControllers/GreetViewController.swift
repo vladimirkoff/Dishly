@@ -182,6 +182,7 @@ class GreetViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         userViewModel = UserViewModel(userService: userService)
+        googleAuthViewModel = GoogleAuthViewModel(googleAuthService: googleAuthService)
         
     }
     
@@ -202,24 +203,20 @@ class GreetViewController: UIViewController {
     
     func checkIfLoggedIn() {
         let currentUser = Auth.auth().currentUser
-        if currentUser != nil {
-            userViewModel.fetchUser { user in
-                DispatchQueue.main.async {
+        if let currentUser = currentUser {
+            let providerID = currentUser.providerData.first?.providerID
+            if providerID == GoogleAuthProviderID {
+                googleAuthViewModel.checkIfUserLoggedIn { user in
                     let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService)
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
-            }
-        } else {
-            if let googleUser = GIDSignIn.sharedInstance.currentUser
-            {
-                userService.getUser(by: googleUser.profile!.email) { user in
+            } else {
+                authViewModel.checkIfUserExists { user in
                     DispatchQueue.main.async {
                         let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService)
                         self.navigationController?.pushViewController(vc, animated: true)
                     }
                 }
-            } else {
-                return
             }
         }
     }

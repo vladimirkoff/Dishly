@@ -20,7 +20,11 @@ class GoogleAuthViewModel {
         }
     }
     
-    func logOutWithGoogle() {
-        googleAuthService.logoutWithGoogle()
+    func checkIfUserLoggedIn(completion: @escaping(User) -> ()) {
+        googleAuthService.checkIfUserLoggedIn { user, bool in
+            if bool {
+                completion(user!)
+            }
+        }
     }
 }

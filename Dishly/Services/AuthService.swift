@@ -16,6 +16,7 @@ protocol AuthServiceProtocol {
     func register(creds: AuthCreds, completion: @escaping (Error?, User?) -> Void)
     func logOut(completion: @escaping(Error?, Bool) -> ())
     func changeEmail(to newEmail: String)
+    func checkIfUserLoggedIn(completion: @escaping(User?, Bool) -> ())
 }
 
 class AuthService: AuthServiceProtocol {
@@ -25,15 +26,25 @@ class AuthService: AuthServiceProtocol {
     init(userService: UserServiceProtocol) {
         self.userService = userService
     }
-
+    
     func login(email: String, password: String, completion: @escaping (Error?) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { res, err in
             completion(err)
         }
     }
     
-    //MARK: - Email-Password Auth
-
+    func checkIfUserLoggedIn(completion: @escaping(User?, Bool) -> ()) {
+        let currentUser = Auth.auth().currentUser
+        
+        if let _ = currentUser {
+            userService.fetchUser { user in
+                completion(user, true)
+            }
+        } else {
+            completion(nil, false)
+        }
+    }
+    
     func register(creds: AuthCreds, completion: @escaping (Error?, User?) -> Void) {
         ImageUploader.shared.uploadImage(image: creds.profileImage!) { imageUrl in
             self.userService.checkIfUserExists(email: creds.email) { doesExist in
@@ -53,7 +64,7 @@ class AuthService: AuthServiceProtocol {
                     return
                 }
             }
-           
+            
         }
     }
     

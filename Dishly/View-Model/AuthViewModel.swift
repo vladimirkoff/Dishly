@@ -31,5 +31,13 @@ class AuthViewModel {
         }
     }
     
+    func checkIfUserExists(completion: @escaping(User) -> ()) {
+        authService.checkIfUserLoggedIn { user, bool in
+            if bool {
+                completion(user!)
+            }
+        }
+    }
+    
 
 }

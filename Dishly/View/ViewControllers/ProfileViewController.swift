@@ -173,26 +173,16 @@ class ProfileViewController: UIViewController {
         ])
     }
     
+   
+    
     func handleLogOut() {
         authViewModel.logOut { error, success in
-            if let error = error {
-                //                DispatchQueue.main.async {
-                //                    self.authViewModel.logOutWithGoogle()
-                //                    let recipeService = RecipeService()
-                //                    let vc = GreetViewController(authService: self.authService, userService: self.userService, recipeService: recipeService, userRealmService: self.userRealmService)
-                //                    let navVC = UINavigationController(rootViewController: vc)
-                //                    navVC.modalPresentationStyle = .fullScreen
-                //                    self.present(navVC, animated: true)
-                //                }
-                //                return
-                //            }
-                DispatchQueue.main.async {
-                    let recipeService = RecipeService()
-                    let vc = GreetViewController(authService: self.authService, userService: self.userService, recipeService: recipeService, userRealmService: self.userRealmService, googleAuthService: GoogleAuthService(userService: self.userService))
-                    let navVC = UINavigationController(rootViewController: vc)
-                    navVC.modalPresentationStyle = .fullScreen
-                    self.present(navVC, animated: true)
-                }
+            DispatchQueue.main.async {
+                let recipeService = RecipeService()
+                let vc = GreetViewController(authService: self.authService, userService: self.userService, recipeService: recipeService, userRealmService: self.userRealmService, googleAuthService: GoogleAuthService(userService: self.userService))
+                let navVC = UINavigationController(rootViewController: vc)
+                navVC.modalPresentationStyle = .fullScreen
+                self.present(navVC, animated: true)
             }
         }
     }

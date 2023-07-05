@@ -47,17 +47,15 @@ class GoogleAuthService: GoogleAuthServiceProtocol {
                     self.userService.checkIfUserExists(email: email) { doesExist in
                         let urlString = profileImageUrl.absoluteString
                         let username = generateRandomUsername()
-                        let uid = UUID().uuidString
+                        let uid = res?.user.uid
                         if !doesExist {
-                            self.userService.createUser(name: name, email: email, username: username, profileUrl: urlString, uid: uid) { error, user in
+                            self.userService.createUser(name: name, email: email, username: username, profileUrl: urlString, uid: uid!) { error, user in
                                 completion(error, user)
                             }
                             return
                         } else {
                             self.userService.getUser(by: email) { user in
-                                self.userService.createUser(name: name, email: email, username: username, profileUrl: urlString, uid: uid) { error, user in
-                                    completion(error, user)
-                                }
+                                completion(error, user)
                                 return
                             }
                         }

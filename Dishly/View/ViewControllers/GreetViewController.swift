@@ -10,6 +10,7 @@ import FirebaseAuth
 import FacebookLogin
 import GoogleSignIn
 import FirebaseCore
+import JGProgressHUD
 
 
 class GreetViewController: UIViewController {
@@ -30,6 +31,9 @@ class GreetViewController: UIViewController {
     
     var googleAuthService: GoogleAuthServiceProtocol!
     var googleAuthViewModel: GoogleAuthViewModel!
+    
+    private let hud = JGProgressHUD(style: .dark)
+
     
     
     private let backGroundImage: UIImageView = {
@@ -201,14 +205,21 @@ class GreetViewController: UIViewController {
     
     //MARK: - Helpers
     
+    func showLoader(_ show: Bool) {
+        view.endEditing(true )
+        show ? hud.show(in: view) : hud.dismiss()
+    }
+    
     func checkIfLoggedIn() {
         let currentUser = Auth.auth().currentUser
         if let currentUser = currentUser {
             let providerID = currentUser.providerData.first?.providerID
             if providerID == GoogleAuthProviderID {
                 googleAuthViewModel.checkIfUserLoggedIn { user in
-                    let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService)
-                    self.navigationController?.pushViewController(vc, animated: true)
+                    DispatchQueue.main.async {
+                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService)
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }
                 }
             } else {
                 authViewModel.checkIfUserExists { user in
@@ -278,11 +289,13 @@ class GreetViewController: UIViewController {
     @objc func googleAuthButtonPressed() {
         googleAuthViewModel = GoogleAuthViewModel(googleAuthService: googleAuthService)
         googleAuthViewModel.signInWithGoogle(with: self) { error, user in
+            self.showLoader(true)
             if let error = error {
                 print("Error authorizing with Google - \(error.localizedDescription)")
                 return
             }
             DispatchQueue.main.async {
+                self.showLoader(false)
                 if let user = user {
                     self.user = user
                     let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService)

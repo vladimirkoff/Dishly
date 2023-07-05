@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		09B65E491BD62034DE8375C2 /* Pods_Dishly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA1C145446A00BC5402957FC /* Pods_Dishly.framework */; };
+		853EEB342A55798400DDB93F /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853EEB332A55798400DDB93F /* TestView.swift */; };
+		853EEB362A557C1900DDB93F /* AddRecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853EEB352A557C1900DDB93F /* AddRecipeViewController.swift */; };
 		85C1B65B2A39FE5700BEAF2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B65A2A39FE5700BEAF2F /* AppDelegate.swift */; };
 		85C1B65D2A39FE5700BEAF2F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B65C2A39FE5700BEAF2F /* SceneDelegate.swift */; };
 		85C1B6622A39FE5700BEAF2F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85C1B6602A39FE5700BEAF2F /* Main.storyboard */; };
@@ -18,7 +20,7 @@
 		85C1B6ED2A447EAD00BEAF2F /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B6EC2A447EAD00BEAF2F /* ProfileViewController.swift */; };
 		85C1B6EF2A447ED900BEAF2F /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B6EE2A447ED900BEAF2F /* Recipe.swift */; };
 		85C1B6F12A447EDD00BEAF2F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B6F02A447EDD00BEAF2F /* User.swift */; };
-		85C1B6F32A447FC700BEAF2F /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B6F22A447FC700BEAF2F /* AddViewController.swift */; };
+		85C1B6F32A447FC700BEAF2F /* BridgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B6F22A447FC700BEAF2F /* BridgeViewController.swift */; };
 		85C1B6F52A4483D400BEAF2F /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B6F42A4483D400BEAF2F /* RecipeViewModel.swift */; };
 		85C1B6F82A4485AE00BEAF2F /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B6F72A4485AE00BEAF2F /* AuthService.swift */; };
 		85C1B6FD2A44A00200BEAF2F /* RecipesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B6FC2A44A00200BEAF2F /* RecipesService.swift */; };
@@ -61,6 +63,8 @@
 
 /* Begin PBXFileReference section */
 		84CC89D4F3A988B2F794987D /* Pods-Dishly.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dishly.debug.xcconfig"; path = "Target Support Files/Pods-Dishly/Pods-Dishly.debug.xcconfig"; sourceTree = "<group>"; };
+		853EEB332A55798400DDB93F /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
+		853EEB352A557C1900DDB93F /* AddRecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRecipeViewController.swift; sourceTree = "<group>"; };
 		85C1B6572A39FE5700BEAF2F /* Dishly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dishly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85C1B65A2A39FE5700BEAF2F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		85C1B65C2A39FE5700BEAF2F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -73,7 +77,7 @@
 		85C1B6EC2A447EAD00BEAF2F /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		85C1B6EE2A447ED900BEAF2F /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 		85C1B6F02A447EDD00BEAF2F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		85C1B6F22A447FC700BEAF2F /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
+		85C1B6F22A447FC700BEAF2F /* BridgeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeViewController.swift; sourceTree = "<group>"; };
 		85C1B6F42A4483D400BEAF2F /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
 		85C1B6F72A4485AE00BEAF2F /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		85C1B6FC2A44A00200BEAF2F /* RecipesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipesService.swift; sourceTree = "<group>"; };
@@ -182,6 +186,7 @@
 				85C1B6FB2A44862500BEAF2F /* Cells */,
 				85C1B6E62A447CA100BEAF2F /* ViewControllers */,
 				85C1B70C2A45D11100BEAF2F /* ItemsHeader.swift */,
+				853EEB332A55798400DDB93F /* TestView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -204,7 +209,7 @@
 				85C1B6E82A447E9E00BEAF2F /* MainTabBarController.swift */,
 				85C1B6EA2A447EA500BEAF2F /* ExploreViewController.swift */,
 				85C1B6EC2A447EAD00BEAF2F /* ProfileViewController.swift */,
-				85C1B6F22A447FC700BEAF2F /* AddViewController.swift */,
+				85C1B6F22A447FC700BEAF2F /* BridgeViewController.swift */,
 				85C1B70A2A45D08E00BEAF2F /* SavedViewController.swift */,
 				85C1B70E2A485A6900BEAF2F /* MealPlanViewController.swift */,
 				85C1B7102A485B2300BEAF2F /* CartViewController.swift */,
@@ -213,6 +218,7 @@
 				85C1B71E2A49943300BEAF2F /* SignUpViewController.swift */,
 				85C1B7262A4C26AD00BEAF2F /* EditProfileViewController.swift */,
 				85C1B72A2A4D8F4C00BEAF2F /* GreetViewController.swift */,
+				853EEB352A557C1900DDB93F /* AddRecipeViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -434,17 +440,19 @@
 				85C1B6F52A4483D400BEAF2F /* RecipeViewModel.swift in Sources */,
 				85C1B7052A45A7AF00BEAF2F /* RecipeCell.swift in Sources */,
 				85C1B6EF2A447ED900BEAF2F /* Recipe.swift in Sources */,
-				85C1B6F32A447FC700BEAF2F /* AddViewController.swift in Sources */,
+				85C1B6F32A447FC700BEAF2F /* BridgeViewController.swift in Sources */,
 				85C1B70F2A485A6900BEAF2F /* MealPlanViewController.swift in Sources */,
 				85C1B7272A4C26AD00BEAF2F /* EditProfileViewController.swift in Sources */,
 				85C1B65B2A39FE5700BEAF2F /* AppDelegate.swift in Sources */,
 				85C1B7522A52D51E00BEAF2F /* UIImageView.swift in Sources */,
 				85C1B72B2A4D8F4C00BEAF2F /* GreetViewController.swift in Sources */,
 				85C1B6F12A447EDD00BEAF2F /* User.swift in Sources */,
+				853EEB362A557C1900DDB93F /* AddRecipeViewController.swift in Sources */,
 				85C1B73E2A4DE09500BEAF2F /* ImageUploader.swift in Sources */,
 				85C1B6FD2A44A00200BEAF2F /* RecipesService.swift in Sources */,
 				85C1B6EB2A447EA500BEAF2F /* ExploreViewController.swift in Sources */,
 				85C1B6F82A4485AE00BEAF2F /* AuthService.swift in Sources */,
+				853EEB342A55798400DDB93F /* TestView.swift in Sources */,
 				85C1B7112A485B2300BEAF2F /* CartViewController.swift in Sources */,
 				85C1B7072A45B71C00BEAF2F /* ParentCell.swift in Sources */,
 				85C1B7422A4F069F00BEAF2F /* DependencyContainer.swift in Sources */,

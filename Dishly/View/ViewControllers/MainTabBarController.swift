@@ -65,7 +65,7 @@ class MainTabBarController: UITabBarController {
         let mainVC = ExploreViewController(user: user, userService: userService, recipeService: recipeService)
         let main = configureVC(image: UIImage(named: "home")!, vc: mainVC)
         
-        let addVC = AddViewController()
+        let addVC = BridgeViewController()
         let add = configureVC(image: UIImage(named: "add")!, vc: addVC)
         
         let savedVC = SavedViewController(collectionViewLayout: UICollectionViewFlowLayout())

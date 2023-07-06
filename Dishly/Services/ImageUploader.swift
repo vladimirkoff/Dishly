@@ -8,16 +8,25 @@
 import UIKit
 import FirebaseStorage
 
+
+
 class ImageUploader {
     
     static let shared = ImageUploader()
     private init() {}
     
-    func uploadImage(image: UIImage, completion: @escaping(String) -> ()) {
+    func uploadImage(image: UIImage, forRecipe: Bool, completion: @escaping(String) -> ()) {
         guard let imageData = image.jpegData(compressionQuality: 0.75) else { return }
-        
         let fileName = UUID().uuidString
-        let ref = Storage.storage().reference(withPath: "/profile_images/\(fileName)")
+
+        var path = ""
+        if forRecipe {
+            path = "/recipes_images/\(fileName)"
+        } else {
+            path = "/profile_images/\(fileName)"
+        }
+        
+        let ref = Storage.storage().reference(withPath: path)
         ref.putData(imageData, metadata: nil) { metadata, err in
             if let error = err {
                 print("DEBUG: failed to upload image - \(error.localizedDescription)")

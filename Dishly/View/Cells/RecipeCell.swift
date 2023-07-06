@@ -1,11 +1,22 @@
 
 
 import UIKit
+import SDWebImage
+
+protocol RecipeCellDelegate {
+    func addGroceries(groceries: [Ingredient])
+}
 
 class RecipeCell: UICollectionViewCell {
     //MARK: - Properties
     
-    private var recipe: Recipe?
+    var delegate: RecipeCellDelegate?
+    
+    var recipeViewModel: RecipeViewModel? {
+        didSet {
+            configure()
+        }
+    }
     
     private let saveButton: UIButton = {
         let button = UIButton(type: .system)
@@ -16,37 +27,37 @@ class RecipeCell: UICollectionViewCell {
         return button
     }()
     
-    private let starImage1: UIImageView = {
+    private var starImage1: UIImageView = {
         let image = UIImage(named: "star")
         let iv = UIImageView(image: image)
         return iv
     }()
     
-    private let starImage2: UIImageView = {
+    private var starImage2: UIImageView = {
         let image = UIImage(named: "star")
         let iv = UIImageView(image: image)
         return iv
     }()
     
-    private let starImage3: UIImageView = {
+    private var starImage3: UIImageView = {
         let image = UIImage(named: "star.filled")
         let iv = UIImageView(image: image)
         return iv
     }()
     
-    private let starImage4: UIImageView = {
+    private var starImage4: UIImageView = {
         let image = UIImage(named: "star.half.filled")
         let iv = UIImageView(image: image)
         return iv
     }()
     
-    private let starImage5: UIImageView = {
+    private var starImage5: UIImageView = {
         let image = UIImage(named: "star")
         let iv = UIImageView(image: image)
         return iv
     }()
     
-    private let priceLabel: UILabel = {
+     var priceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
@@ -54,7 +65,7 @@ class RecipeCell: UICollectionViewCell {
         return label
     }()
     
-    private let itemImageView: UIImageView = {
+     var itemImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.layer.cornerRadius = 15
@@ -70,6 +81,7 @@ class RecipeCell: UICollectionViewCell {
         button.layer.borderWidth = 5
         button.layer.cornerRadius = 20
         button.setTitle("Add 11 ingridients", for: .normal)
+        button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -130,6 +142,40 @@ class RecipeCell: UICollectionViewCell {
             saveButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             saveButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -8)
         ])
+    }
+    
+    func configureRatingImages(rating: Float, imageViews: [UIImageView]) {
+        let filledStarImage = UIImage(systemName: "star.fill")
+        let halfFilledStarImage = UIImage(systemName: "star.lefthalf.fill")
+        let emptyStarImage = UIImage(systemName: "star")
+
+        let filledCount = Int(rating)
+        let hasHalfStar = rating - Float(filledCount) >= 0.5
+
+        for (index, imageView) in imageViews.enumerated() {
+            if index < filledCount {
+                imageView.image = filledStarImage
+            } else if index == filledCount && hasHalfStar {
+                imageView.image = halfFilledStarImage
+            } else {
+                imageView.image = emptyStarImage
+            }
+        }
+    }
+    
+    func configure() {
+        guard let recipe = recipeViewModel else { return }
+        
+        itemImageView.sd_setImage(with: URL(string: recipe.recipe.recipeImageUrl!)!)
+        priceLabel.text = recipe.recipeName
+        addIngredientsButton.setTitle("Add \(recipe.recipe.ingredients.count) ingredients", for: .normal)
+        configureRatingImages(rating: 3.5, imageViews: [starImage1, starImage2, starImage3, starImage4, starImage5 ])
+    }
+    
+    //MARK: - Selectors
+    
+    @objc func addButtonTapped() {
+        delegate?.addGroceries(groceries: recipeViewModel!.ingredients)
     }
     
 }

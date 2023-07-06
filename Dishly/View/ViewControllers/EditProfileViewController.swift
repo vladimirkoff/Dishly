@@ -125,7 +125,7 @@ class EditProfileViewController: UIViewController {
         showLoader(true)
         navigationController?.navigationBar.topItem?.hidesBackButton = true
 
-        ImageUploader.shared.uploadImage(image: profileImage.image!) { imageURL in
+        ImageUploader.shared.uploadImage(image: profileImage.image!, forRecipe: false) { imageURL in
             let dict = ["fullName": self.changedUser.fullName,
                         "profileImage": imageURL,
                         "username": self.changedUser.username,

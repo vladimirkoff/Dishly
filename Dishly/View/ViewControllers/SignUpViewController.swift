@@ -26,27 +26,27 @@ class SignupController: UIViewController {
         return button
     }()
     
-    private let emailField: CustomTextField = {
-        let tf = CustomTextField(placeholder: "Email")
+    private let emailField: AuthCustomTextField = {
+        let tf = AuthCustomTextField(placeholder: "Email")
         tf.autocorrectionType = .no
         return tf
     }()
-    
-    private let passwordField: CustomTextField = {
-        let tf = CustomTextField(placeholder: "Password")
+
+    private let passwordField: AuthCustomTextField = {
+        let tf = AuthCustomTextField(placeholder: "Password")
         tf.isSecureTextEntry = true
         tf.autocorrectionType = .no
         return tf
     }()
-    
-    private let usernameField: CustomTextField = {
-        let tf = CustomTextField(placeholder: "Username")
+
+    private let usernameField: AuthCustomTextField = {
+        let tf = AuthCustomTextField(placeholder: "Username")
         tf.autocorrectionType = .no
         return tf
     }()
-    
-    private let fullnameField: CustomTextField = {
-        let tf = CustomTextField(placeholder: "Fullname")
+
+    private let fullnameField: AuthCustomTextField = {
+        let tf = AuthCustomTextField(placeholder: "Fullname")
         tf.autocorrectionType = .no
         return tf
     }()
@@ -98,7 +98,7 @@ class SignupController: UIViewController {
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
         stack.spacing = 20
-        
+
         view.addSubview(stack)
         stack.topAnchor.constraint(equalTo: plusButton.bottomAnchor, constant: 15).isActive = true
         stack.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -125,7 +125,7 @@ class SignupController: UIViewController {
         guard let password = passwordField.text else { return }
         guard let fullname = fullnameField.text else { return }
         guard let username = usernameField.text else { return }
-        
+
         let userCreds = AuthCreds(email: email, password: password, fullname: fullname, username: username, profileImage: plusButton.imageView?.image ?? UIImage(named: "profile_selected"))
         authViewModel.register(creds: userCreds) { error, user in
             if let error = error {

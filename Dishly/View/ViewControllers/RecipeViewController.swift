@@ -5,8 +5,10 @@ import UIKit
 class RecipeViewController: UIViewController {
     //MARK: - Properties
     
-    var recipeViewModel: RecipeViewModel!
-    var recipeService: RecipeServiceProtocol!
+    private  var recipeViewModel: RecipeViewModel!
+    private  var recipeService: RecipeServiceProtocol!
+    
+    private var user: User!
     
     private let dishImage: UIImageView = {
         let image = UIImage(named: "" )
@@ -130,10 +132,12 @@ class RecipeViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.estimatedRowHeight = 30 // Предполагаемая высота ячейки (можно задать другое значение)
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.rowHeight = 30
+//        tableView.rowHeight = 30
         return tableView
     }()
     
@@ -153,24 +157,6 @@ class RecipeViewController: UIViewController {
         return view
     }()
     
-    let scrollView = UIScrollView()
-    let contentView = UIView()
-    
-    //MARK: - Lifecycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        view.backgroundColor = .white
-        
-        recipeViewModel = RecipeViewModel(recipeService: recipeService)
-        
-        setupNavigationBar()
-        setupScrollView()
-        configureUI()
-    }
-    
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -184,6 +170,36 @@ class RecipeViewController: UIViewController {
         return collectionView
     }()
     
+    let scrollView = UIScrollView()
+    let contentView = UIView()
+    
+    //MARK: - Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        view.backgroundColor = .white
+        
+//        recipeViewModel = RecipeViewModel(recipeService: recipeService)
+        
+        setupNavigationBar()
+        setupScrollView()
+        configureUI()
+        configure()
+    }
+    
+    init(user: User, recipe: RecipeViewModel) {
+         self.recipeViewModel = recipe
+         self.user = user
+         super.init(nibName: nil, bundle: nil)
+     }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    
     //MARK: - Helpers
     
     func configureNameAndAuthorLabel(name: String, author: String) -> NSAttributedString {
@@ -193,6 +209,12 @@ class RecipeViewController: UIViewController {
         attributedText.append(NSAttributedString(string: "\n", attributes: [.font: UIFont.boldSystemFont(ofSize: 14), .foregroundColor: UIColor.white]))
         attributedText.append(NSAttributedString(string: "by \(author)", attributes: [.font: UIFont.systemFont(ofSize: 18), .foregroundColor: UIColor.lightGray]))
         return attributedText
+    }
+    
+    func configure() {
+        dishImage.sd_setImage(with: URL(string: recipeViewModel.recipe.recipeImageUrl!)!)
+        nameAndAuthorLabel.attributedText = configureNameAndAuthorLabel(name: recipeViewModel.recipeName!, author: "Vladimir")
+        timeLabel.text = "\(recipeViewModel.recipe.cookTime!) min"
     }
     
     private func configureUI() {
@@ -325,7 +347,7 @@ class RecipeViewController: UIViewController {
     
     
     private func setupNavigationBar() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(leftButtonTapped))
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(leftButtonTapped))
         
         let rightButton1 = UIBarButtonItem(image: UIImage(named: "save"), style: .plain, target: self, action: #selector(rightButton1Tapped))
         navigationItem.rightBarButtonItems = [rightButton1]
@@ -376,12 +398,13 @@ class RecipeViewController: UIViewController {
 
 extension RecipeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 15
+        print(recipeViewModel.ingredients)
+        return recipeViewModel.ingredients.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.textLabel?.text = "Cell \(indexPath.row + 1)"
+        cell.textLabel?.text = recipeViewModel.ingredients[indexPath.row].name!
         return cell
     }
     

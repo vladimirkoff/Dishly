@@ -10,7 +10,15 @@ class MainTabBarController: UITabBarController {
     var userService: UserServiceProtocol!
     var recipeService: RecipeServiceProtocol!
     
+    var recipesViewModel: RecipesViewModel!
+    
     private let userRealmService: UserRealmServiceProtocol = UserRealmService()
+    
+    private var recipes: [RecipeViewModel]? {
+        didSet {
+            
+        }
+    }
     
     var user: User!
     
@@ -43,7 +51,8 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureNavBar()
-        configureVC()
+        recipesViewModel = RecipesViewModel(recipeService: recipeService)
+        fecthRecipes()
     }
     
     init(user: User, authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
@@ -59,13 +68,29 @@ class MainTabBarController: UITabBarController {
     }
     
     //MARK: - Helpers
+    
+    func fecthRecipes() {
+        recipesViewModel.fetchRecipes { recipes in
+            DispatchQueue.main.async {
+                self.recipes = recipes
+                self.configureVC()
+            }
+        }
+//        recipesViewModel.fetchRecipesWith(category: Recipe.Category(rawValue: "Bread")!) { recipes in
+//            DispatchQueue.main.async {
+//                self.recipes = recipes
+//                self.configureVC()
+//            }
+//        }
+    }
 
     func configureVC() {
+        self.delegate = self
         
-        let mainVC = ExploreViewController(user: user, userService: userService, recipeService: recipeService)
+        let mainVC = ExploreViewController(user: user, recipes: recipes!, userService: userService, recipeService: recipeService)
         let main = configureVC(image: UIImage(named: "home")!, vc: mainVC)
         
-        let addVC = BridgeViewController()
+        let addVC = UIViewController()
         let add = configureVC(image: UIImage(named: "add")!, vc: addVC)
         
         let savedVC = SavedViewController(collectionViewLayout: UICollectionViewFlowLayout())
@@ -153,6 +178,27 @@ class MainTabBarController: UITabBarController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
+  
 }
 
+//MARK: - UITabBarControllerDelegate
 
+extension MainTabBarController: UITabBarControllerDelegate {
+    
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        
+        guard let selectedIndex = tabBarController.viewControllers?.firstIndex(of: viewController) else {
+            return true
+        }
+        if selectedIndex == 1 {
+            let vc = AddRecipeViewController.instantiateFromStoryboard()
+            vc.recipeService = recipeService
+            vc.user = user
+            let nav = UINavigationController(rootViewController: vc)
+            navigationController?.modalPresentationStyle = .fullScreen
+            navigationController?.present(nav, animated: true)
+            return false
+        }
+        return true
+    }
+}

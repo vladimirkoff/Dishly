@@ -10,6 +10,8 @@ class ExploreViewController: UIViewController {
     
     var userViewModel: UserViewModel!
     var userService: UserServiceProtocol!
+    
+    var recipes: [RecipeViewModel]
   
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
@@ -32,10 +34,11 @@ class ExploreViewController: UIViewController {
     
     //MARK: - Lifecycle
     
-    init(user: User, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
+    init(user: User, recipes: [RecipeViewModel], userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
         self.user = user
         self.userService = userService
         self.recipeService = recipeService
+        self.recipes = recipes
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -48,7 +51,7 @@ class ExploreViewController: UIViewController {
         configureNavBar()
         configureUI()
         
-        recipeViewModel = RecipeViewModel(recipeService: recipeService)
+//        recipeViewModel = RecipeViewModel(recipeService: recipeService)
         
         userViewModel = UserViewModel(userService: userService)
     }
@@ -109,6 +112,8 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ParentCell
         cell.delegate = self
+        cell.numOfRecipes = recipes.count
+        cell.recipes = recipes
         if indexPath.row == 3 {
             cell.isForCategories = true
         } else {
@@ -127,12 +132,14 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
 //MARK: - ParentCellDelegate
 
 extension ExploreViewController: ParentCellDelegate {
+    func goToRecipe(with recipe: RecipeViewModel) {
+        let vc = RecipeViewController(user: user, recipe: recipe)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     func goToCategory() {
         print("DEBUG: Go to category")
     }
-    
-    func goToRecipe() {
-        let vc = RecipeViewController()
-        navigationController?.pushViewController(vc, animated: true)
-    }
 }
+
+

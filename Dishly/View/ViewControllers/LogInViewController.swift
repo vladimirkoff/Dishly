@@ -15,15 +15,15 @@ class LoginViewController: UIViewController {
 
     private let logo = UIImageView(image: UIImage(named: "Instagram_logo_white"))
     
-    private let emailField: CustomTextField = {
-        let tf = CustomTextField(placeholder: "Email")
+    private let emailField: AuthCustomTextField = {
+        let tf = AuthCustomTextField(placeholder: "Email")
         tf.autocorrectionType = .no
         tf.text = "kovalov280305@gmail.com"
         return tf
     }()
-    
-    private let passwordField: CustomTextField = {
-        let tf = CustomTextField(placeholder: "Password")
+
+    private let passwordField: AuthCustomTextField = {
+        let tf = AuthCustomTextField(placeholder: "Password")
         tf.isSecureTextEntry = true
         tf.text = "123456789"
         tf.autocorrectionType = .no
@@ -80,7 +80,7 @@ class LoginViewController: UIViewController {
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
         stack.spacing = 20
-        
+
         view.addSubview(stack)
         stack.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 32).isActive = true
         stack.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 32).isActive = true
@@ -95,28 +95,28 @@ class LoginViewController: UIViewController {
     //MARK: - Selectors
     
     @objc func textDidChange(sender: UITextField) {
-        if sender == emailField {
-            emailField.text = emailField.text?.lowercased()
-        } 
+//        if sender == emailField {
+//            emailField.text = emailField.text?.lowercased()
+//        }
     }
     
     @objc func logIn() {
-        guard let email = emailField.text else { return }
-        guard let password = passwordField.text else { return }
-        
-        authViewModel.login(email: email, password: password) { error in
-            if let error = error {
-                print("DEBUG: Error signing in - \(error)")
-                return
-            }
-            self.userViewModel.fetchUser { user in
-                DispatchQueue.main.async {
-                    let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                }
- 
-            }
-        }
+//        guard let email = emailField.text else { return }
+//        guard let password = passwordField.text else { return }
+//
+//        authViewModel.login(email: email, password: password) { error in
+//            if let error = error {
+//                print("DEBUG: Error signing in - \(error)")
+//                return
+//            }
+//            self.userViewModel.fetchUser { user in
+//                DispatchQueue.main.async {
+//                    let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService)
+//                    self.navigationController?.pushViewController(vc, animated: true)
+//                }
+//
+//            }
+//        }
     }
 }
 

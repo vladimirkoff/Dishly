@@ -1,14 +1,19 @@
 import UIKit
+import SDWebImage
 
 protocol ParentCellDelegate {
-    func goToRecipe()
+    func goToRecipe(with recipe: RecipeViewModel)
     func goToCategory()
 }
 
 class ParentCell: UICollectionViewCell {
     //MARK: - Properties
     
+    var numOfRecipes: Int!
+    
     var delegate: ParentCellDelegate?
+    
+    var recipes: [RecipeViewModel]!
     
     var isForCategories: Bool? {
         didSet {
@@ -84,7 +89,7 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView {
         case horizontalCollectionView:
-            return 10
+            return numOfRecipes
         case categoryCollectionView:
             return 6
         default:
@@ -95,6 +100,8 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == horizontalCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath) as! RecipeCell
+            cell.delegate = self
+            cell.recipeViewModel = recipes[indexPath.row]
             cell.backgroundColor = .white
             return cell
         } else if collectionView == categoryCollectionView {
@@ -107,7 +114,7 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == horizontalCollectionView {
-            delegate?.goToRecipe()
+            delegate?.goToRecipe(with: recipes[indexPath.row])
         } else {
             delegate?.goToCategory()
         }
@@ -127,5 +134,9 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     }
 }
 
-
+extension ParentCell: RecipeCellDelegate {
+    func addGroceries(groceries: [Ingredient]) {
+        myGroceries = groceries
+    }
+}
 

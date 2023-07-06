@@ -46,7 +46,7 @@ class AuthService: AuthServiceProtocol {
     }
     
     func register(creds: AuthCreds, completion: @escaping (Error?, User?) -> Void) {
-        ImageUploader.shared.uploadImage(image: creds.profileImage!) { imageUrl in
+        ImageUploader.shared.uploadImage(image: creds.profileImage!, forRecipe: false) { imageUrl in
             self.userService.checkIfUserExists(email: creds.email) { doesExist in
                 if !doesExist {
                     Auth.auth().createUser(withEmail: creds.email, password: creds.password) { res, err in

@@ -153,6 +153,7 @@
 		85C1B6592A39FE5700BEAF2F /* Dishly */ = {
 			isa = PBXGroup;
 			children = (
+				85FE6B8B2A566A1500E6417D /* Storyboard */,
 				85C1B73C2A4DE08000BEAF2F /* Helpers */,
 				85C1B6E72A447CAB00BEAF2F /* Support */,
 				85C1B6F62A44858700BEAF2F /* Services */,
@@ -164,7 +165,6 @@
 				85C1B6652A39FE5800BEAF2F /* LaunchScreen.storyboard */,
 				85C1B73A2A4DDF2E00BEAF2F /* GoogleService-Info.plist */,
 				85C1B6632A39FE5800BEAF2F /* Assets.xcassets */,
-				85C1B6602A39FE5700BEAF2F /* Main.storyboard */,
 				85C1B6682A39FE5800BEAF2F /* Info.plist */,
 			);
 			path = Dishly;
@@ -285,6 +285,14 @@
 				85C1B7552A541AA000BEAF2F /* RandomUsernameGenerator.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		85FE6B8B2A566A1500E6417D /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				85C1B6602A39FE5700BEAF2F /* Main.storyboard */,
+			);
+			path = Storyboard;
 			sourceTree = "<group>";
 		};
 		9248CECA03FD882F7C2C2728 /* Frameworks */ = {

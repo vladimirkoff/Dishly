@@ -125,7 +125,7 @@ class RecipeService: RecipeServiceProtocol {
                     let numOfRatings = recipe.data()["numOfRatings"] as? [Int] ?? []
                     let category = recipe.data()["category"] as? String ?? ""
                     let recipeImageUrl = recipe.data()["recipeImageUrl"] as? String ?? ""
-                    let recipeModel = Recipe(ownerId: ownerId, id: id, name: name, serve: serve, cookTime: cookTime,  category: Recipe.Category(rawValue: "Bread")!, ingredients: ingredientsArray, instructions: [], recipeImageUrl: recipeImageUrl)
+                    let recipeModel = Recipe(ownerId: ownerId, id: id, name: name, serve: serve, cookTime: cookTime,  category: Recipe.Category(rawValue: "Bread")!, ingredients: ingredientsArray, instructions: [], recipeImageUrl: recipeImageUrl, ratingList: numOfRatings, rating: rating)
                     recipesArray.append(recipeModel)
                 }
                 completion(recipesArray)

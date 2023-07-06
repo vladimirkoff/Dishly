@@ -5,6 +5,7 @@ import SDWebImage
 
 protocol RecipeCellDelegate {
     func addGroceries(groceries: [Ingredient])
+    func saveRecipe(recipe: RecipeViewModel)
 }
 
 class RecipeCell: UICollectionViewCell {
@@ -24,6 +25,7 @@ class RecipeCell: UICollectionViewCell {
         button.setImage(UIImage(named: "save"), for: .normal)
         button.backgroundColor = .yellow
         button.layer.cornerRadius = 10
+        button.addTarget(self, action: #selector(saveRecipe), for: .touchUpInside)
         return button
     }()
     
@@ -176,6 +178,10 @@ class RecipeCell: UICollectionViewCell {
     
     @objc func addButtonTapped() {
         delegate?.addGroceries(groceries: recipeViewModel!.ingredients)
+    }
+    
+    @objc func saveRecipe() {
+        delegate?.saveRecipe(recipe: recipeViewModel!)
     }
     
 }

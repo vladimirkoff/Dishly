@@ -11,8 +11,8 @@ class ParentCell: UICollectionViewCell {
     
     var numOfRecipes: Int!
     
+    var recipeViewModel: RecipeViewModel!
     var delegate: ParentCellDelegate?
-    
     var recipes: [RecipeViewModel]!
     
     var isForCategories: Bool? {
@@ -137,6 +137,13 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
 extension ParentCell: RecipeCellDelegate {
     func addGroceries(groceries: [Ingredient]) {
         myGroceries = groceries
+    }
+    
+    func saveRecipe(recipe: RecipeViewModel) {
+//        recipeViewModel
+//        recipeService.saveRecipeToCollection(collection: "favorites", recipe: recipe) { error in
+//            print("SUCCESS")
+//        }
     }
 }
 

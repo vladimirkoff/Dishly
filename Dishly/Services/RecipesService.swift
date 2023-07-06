@@ -1,21 +1,39 @@
 
 import UIKit
+import FirebaseAuth
 
 protocol RecipeServiceProtocol {
     func fetchRecipes(completion: @escaping ([Recipe]) -> Void)
     func createRecipe(recipe: RecipeViewModel, image: UIImage, completion: @escaping(Error?) -> ())
     func updateRating(for recipe: RecipeViewModel, newRating: Int, completion: @escaping(Error?) -> ())
     func fecthRecipesWith(category: Recipe.Category, completion: @escaping ([Recipe]) -> Void)
+    func saveRecipeToCollection(collection: String, recipe: RecipeViewModel, completion: @escaping(Error?) -> ())
 }
 
 class RecipeService: RecipeServiceProtocol {
     
     func updateRating(for recipe: RecipeViewModel, newRating: Int , completion: @escaping(Error?) -> ()) {
-//        let updatedRating = recipe.recipe.rating! / recipe.recipe.ratingList!.count
-//        let data = ["rating" : updatedRating]
-//        COLLECTION_RECIPES.document(recipe.recipe.id!).updateData(data) { error in
-//            completion(error)
-//        }
+    }
+    
+    func saveRecipeToCollection(collection: String, recipe: RecipeViewModel, completion: @escaping(Error?) -> ()) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        var instructions: [String] = []
+        var ingredients: [String] = []
+
+        for instruction in recipe.instructions {
+            if let instr = instruction.text {
+                instructions.append(instr)
+            }
+        }
+        for ingredient in recipe.ingredients {
+            if let ingr = ingredient.name {
+                ingredients.append(ingr)
+            }
+        }
+        
+        let data: [String: Any] = ["name": recipe.recipeName!, "cookTime": recipe.recipe.cookTime!, "recipeImageUrl": recipe.recipe.recipeImageUrl!, "id": recipe.recipe.id!, "ownerId": recipe.recipe.ownerId!, "instructions": instructions, "ingredients": ingredients, "category": recipe.category, "rating": 0, "numOfRatings": 0]
+        
+        COLLECTION_USERS.document(uid).collection(collection).addDocument(data: data)
     }
     
     func fecthRecipesWith(category: Recipe.Category, completion: @escaping ([Recipe]) -> Void) {
@@ -41,12 +59,12 @@ class RecipeService: RecipeServiceProtocol {
                             ingredientsArray.append(ingredientModel)
                         }
                         
-                        let instructions = recipe.data()["instructions"] as? [String] ?? []
-                        let rating = recipe.data()["rating"] as? Int ?? 0
-                        let numOfRatings = recipe.data()["numOfRatings"] as? [Int] ?? []
-                        let category = recipe.data()["category"] as? String ?? ""
-                        let recipeImageUrl = recipe.data()["recipeImageUrl"] as? String ?? ""
-                        let recipeModel = Recipe(ownerId: ownerId, id: id, name: name, serve: serve, cookTime: cookTime,  category: Recipe.Category(rawValue: "Bread")!, ingredients: ingredientsArray, instructions: [], recipeImageUrl: recipeImageUrl)
+                        var instructions = recipe.data()["instructions"] as? [String] ?? []
+                        var rating = recipe.data()["rating"] as? Int ?? 0
+                        var numOfRatings = recipe.data()["numOfRatings"] as? [Int] ?? []
+                        var category = recipe.data()["category"] as? String ?? ""
+                        var recipeImageUrl = recipe.data()["recipeImageUrl"] as? String ?? ""
+                        var recipeModel = Recipe(ownerId: ownerId, id: id, name: name, serve: serve, cookTime: cookTime,  category: Recipe.Category(rawValue: "Bread")!, ingredients: ingredientsArray, instructions: [], recipeImageUrl: recipeImageUrl)
                         recipesArray.append(recipeModel)
                     }
                 }

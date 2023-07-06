@@ -111,6 +111,7 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ParentCell
+        
         cell.delegate = self
         cell.numOfRecipes = recipes.count
         cell.recipes = recipes
@@ -132,6 +133,8 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
 //MARK: - ParentCellDelegate
 
 extension ExploreViewController: ParentCellDelegate {
+
+    
     func goToRecipe(with recipe: RecipeViewModel) {
         let vc = RecipeViewController(user: user, recipe: recipe)
         navigationController?.pushViewController(vc, animated: true)

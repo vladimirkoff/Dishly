@@ -43,6 +43,32 @@ struct Recipe: Codable {
         case fingerfood = "Finger Food"
         case drink = "Drink"
     }
+    
+    enum Portion: String, Codable, CaseIterable {
+        case tube
+        case tbsp
+        case bag
+        case bar
+        case block
+        case box
+        case bottle
+        case can
+        case carton
+        case cup
+        case glass
+        case liter
+        case gallon
+        case gram
+        case kg
+        case loaf
+        case mililiter
+        case piece
+        case scoop
+        case slice
+        case tsp
+        case toTaste
+        case jar
+    }
 }
 
 struct Ingredient: Codable {

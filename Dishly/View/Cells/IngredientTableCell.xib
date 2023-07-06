@@ -31,11 +31,18 @@
                                         </constraints>
                                     </imageView>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" placeholder="Ingredient" textAlignment="center" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="J8k-5h-ezR">
-                                        <rect key="frame" x="35" y="18.666666666666664" width="393" height="22.666666666666664"/>
+                                        <rect key="frame" x="35" y="18.666666666666664" width="358" height="22.666666666666664"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="18"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="meal" highlighted="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9eT-5L-H26">
+                                        <rect key="frame" x="403" y="17.666666666666664" width="25" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="9eT-5L-H26" secondAttribute="height" multiplier="1:1" id="6Of-ZO-ur5"/>
+                                            <constraint firstAttribute="height" constant="25" id="iZY-SH-tvT"/>
+                                        </constraints>
+                                    </imageView>
                                     <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bgk-3N-bSD">
                                         <rect key="frame" x="438" y="17.333333333333336" width="45" height="25.666666666666664"/>
                                         <constraints>
@@ -50,6 +57,11 @@
                                         </connections>
                                     </button>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="9eT-5L-H26" firstAttribute="width" secondItem="9eT-5L-H26" secondAttribute="height" multiplier="1:1" id="3Br-ds-9OU"/>
+                                    <constraint firstItem="9eT-5L-H26" firstAttribute="centerY" secondItem="s0b-fu-mIY" secondAttribute="centerY" id="7Kx-wE-WeY"/>
+                                    <constraint firstItem="Bgk-3N-bSD" firstAttribute="leading" secondItem="9eT-5L-H26" secondAttribute="trailing" constant="10" id="dGN-iM-w08"/>
+                                </constraints>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" name="veryLight Gray"/>
@@ -100,12 +112,14 @@
             <connections>
                 <outlet property="deleteButton" destination="Bgk-3N-bSD" id="7ct-Gr-7LV"/>
                 <outlet property="item" destination="J8k-5h-ezR" id="vCv-2R-3Dx"/>
+                <outlet property="mealPortionButton" destination="9eT-5L-H26" id="lrI-Ea-TA2"/>
             </connections>
             <point key="canvasLocation" x="224" y="37"/>
         </tableViewCell>
     </objects>
     <resources>
         <image name="ingredient" width="50" height="50"/>
+        <image name="meal" width="512" height="512"/>
         <image name="minus.circle.fill" catalog="system" width="128" height="123"/>
         <namedColor name="Red">
             <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>

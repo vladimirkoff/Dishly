@@ -20,8 +20,11 @@ class AddRecipeViewController: UIViewController, Storyboardable {
     @IBOutlet private weak var cookTimeField: UITextField!
     
     private var selectedCategory: Recipe.Category?
-    private var pickerView = UIPickerView()
+    private var categoryPickerView = UIPickerView()
+    private var portionPickerView = UIPickerView()
     private var toolBar = UIToolbar()
+    
+    private var portion: Recipe.Portion?
     
     var recipeService: RecipeServiceProtocol!
     var user: User!
@@ -182,6 +185,11 @@ extension AddRecipeViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: - TableCell Delegate
 
 extension AddRecipeViewController: IngredientCellDelegate {
+    
+    func choosePortion() {
+        
+    }
+    
     func updateCell(itemName: String?, cell: IngredientTableCell) {
         let row = cell.tag
         ingredients[row].name = itemName
@@ -226,17 +234,30 @@ extension AddRecipeViewController: UIPickerViewDelegate, UIPickerViewDataSource 
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return Recipe.Category.allCases.count
+        if pickerView == categoryPickerView {
+            return Recipe.Category.allCases.count
+        } else {
+            return Recipe.Portion.allCases.count
+        }
+        
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return Recipe.Category.allCases[row].rawValue
+        if pickerView == categoryPickerView {
+            return Recipe.Category.allCases[row].rawValue
+        } else {
+            return "\(Recipe.Category.allCases[row])"
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedCategory = Recipe.Category.allCases[row]
-        let buttonTitle = selectedCategory?.rawValue
-        categoryButton.setTitle(buttonTitle, for: .normal)
+        if pickerView == categoryPickerView {
+            selectedCategory = Recipe.Category.allCases[row]
+            let buttonTitle = selectedCategory?.rawValue
+            categoryButton.setTitle(buttonTitle, for: .normal)
+        } else {
+            portion = Recipe.Portion.allCases[row]
+        }
     }
     
     @IBAction func categoryButtonClicked(_ sender: Any) {
@@ -245,11 +266,11 @@ extension AddRecipeViewController: UIPickerViewDelegate, UIPickerViewDataSource 
     
     func configurePickerView() {
         
-        pickerView.delegate = self
-        pickerView.dataSource = self
-        pickerView.contentMode = .top
-        pickerView.frame = CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 200)
-        pickerView.backgroundColor = UIColor.systemBackground
+        categoryPickerView.delegate = self
+        categoryPickerView.dataSource = self
+        categoryPickerView.contentMode = .top
+        categoryPickerView.frame = CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 200)
+        categoryPickerView.backgroundColor = UIColor.systemBackground
         
         toolBar = UIToolbar.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 50))
         toolBar.barStyle = .default
@@ -263,13 +284,13 @@ extension AddRecipeViewController: UIPickerViewDelegate, UIPickerViewDataSource 
         toolBar.sizeToFit()
         
         UIView.transition(with: self.view, duration: 0.5, options: [.transitionCrossDissolve] , animations: {
-            self.view.addSubview(self.pickerView)
+            self.view.addSubview(self.categoryPickerView)
             self.view.addSubview(self.toolBar)
         })
     }
     
     @objc func doneButtonTapped() {
-        pickerView.removeFromSuperview()
+        categoryPickerView.removeFromSuperview()
         toolBar.removeFromSuperview()
     }
 }

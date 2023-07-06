@@ -346,7 +346,7 @@ class RecipeViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: ingridientsLabel.bottomAnchor),
             tableView.widthAnchor.constraint(equalToConstant: view.frame.width),
             tableView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            tableView.heightAnchor.constraint(equalToConstant: CGFloat(30 * recipeViewModel.ingredients.count))
+            tableView.heightAnchor.constraint(equalToConstant: CGFloat(70 * recipeViewModel.ingredients.count))
         ])
         
         contentView.addSubview(footerView)
@@ -447,6 +447,7 @@ class RecipeViewController: UIViewController {
     //MARK: - Selectors
     
     @objc func addToCartButtonTapped() {
+        myGroceries += recipeViewModel.ingredients
     }
     
  
@@ -475,7 +476,6 @@ extension RecipeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
-    
     
 }
 

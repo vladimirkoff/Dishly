@@ -23,7 +23,6 @@ class MealPlanVC: UIViewController {
     private func configureNavBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "Meal Plan"
-        
     }
     
     private func setupCollectionView() {

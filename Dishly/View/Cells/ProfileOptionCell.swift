@@ -4,7 +4,6 @@ import UIKit
 class ProfileOptionCell: UITableViewCell {
     //MARK: - Propeties
     
-        
     private let accessoryImage: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false

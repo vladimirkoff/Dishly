@@ -77,13 +77,14 @@ class RecipeCell: UICollectionViewCell {
     private lazy var addIngredientsButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.borderColor = UIColor.black.cgColor
-        button.layer.borderWidth = 5
-        button.layer.cornerRadius = 20
+        button.backgroundColor = .blue
+        button.layer.cornerRadius = 10
         button.setTitle("Add 11 ingridients", for: .normal)
+        button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         return button
     }()
+
     
     //MARK: - Lifecycle
     override init(frame: CGRect) {

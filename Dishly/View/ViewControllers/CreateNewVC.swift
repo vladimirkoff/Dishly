@@ -2,6 +2,10 @@
 
 import UIKit
 
+protocol AddRecipeViewControllerProtocol {
+    func setPortion(portion: PortionModel)
+}
+
 class AddRecipeViewController: UIViewController, Storyboardable {
     
     //MARK: - Properties
@@ -24,10 +28,12 @@ class AddRecipeViewController: UIViewController, Storyboardable {
     private var portionPickerView = UIPickerView()
     private var toolBar = UIToolbar()
     
-    private var portion: Recipe.Portion?
+    private var portion: PortionModel?
     
     var recipeService: RecipeServiceProtocol!
     var user: User!
+    
+    var delegate: AddRecipeViewControllerProtocol?
     
     private var ingredients = [Ingredient]() {
         didSet {
@@ -61,6 +67,7 @@ class AddRecipeViewController: UIViewController, Storyboardable {
         guard let title = recipeNameField.text else { return }
         guard let time = cookTimeField.text else { return }
         guard let serve = serveField.text else { return }
+        
         let ingredients = self.ingredients
         
         if var recipeViewModel = recipeViewModel {
@@ -164,7 +171,7 @@ extension AddRecipeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: IngredientTableCell.identifier, for: indexPath) as? IngredientTableCell else { fatalError("Could not Load")}
-        
+        self.delegate = cell
         cell.tag = indexPath.row
         cell.delegate = self
         cell.configure(ingredient: ingredients[indexPath.row])
@@ -186,13 +193,20 @@ extension AddRecipeViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension AddRecipeViewController: IngredientCellDelegate {
     
-    func choosePortion() {
-        
+    func portionButtonTapped(cell: IngredientTableCell) {
+        configurePortionPickerView()
+       
+    }
+
+    @objc func hidePickerView() {
+        portionPickerView.removeFromSuperview()
     }
     
-    func updateCell(itemName: String?, cell: IngredientTableCell) {
+    func updateCell(itemName: String?, portion: PortionModel, cell: IngredientTableCell) {
         let row = cell.tag
-        ingredients[row].name = itemName
+        print(row)
+        let test = Ingredient(name: itemName, volume: portion.volume, portion: portion.name)
+        ingredients[row] = test
     }
     
     func deleteCell(cell: IngredientTableCell) {
@@ -230,23 +244,38 @@ extension AddRecipeViewController: UIImagePickerControllerDelegate, UINavigation
 extension AddRecipeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
+        if pickerView == portionPickerView {
+            return 2
+        } else {
+            return 1
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if pickerView == categoryPickerView {
             return Recipe.Category.allCases.count
         } else {
-            return Recipe.Portion.allCases.count
+            if component == 0 {
+                return 10
+            } else {
+                return Recipe.Portion.allCases.count
+            }
         }
-        
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if pickerView == categoryPickerView {
             return Recipe.Category.allCases[row].rawValue
         } else {
-            return "\(Recipe.Category.allCases[row])"
+            if component == 0 {
+                if row <= portionsMesures.count {
+                    return "\(portionsMesures[row])"
+                } else {
+                    return ""
+                }
+            } else {
+                return "\(Recipe.Portion.allCases[row])"
+            }
         }
     }
     
@@ -256,7 +285,9 @@ extension AddRecipeViewController: UIPickerViewDelegate, UIPickerViewDataSource 
             let buttonTitle = selectedCategory?.rawValue
             categoryButton.setTitle(buttonTitle, for: .normal)
         } else {
-            portion = Recipe.Portion.allCases[row]
+            let volumeRow = pickerView.selectedRow(inComponent: 0)
+            let portionRow = pickerView.selectedRow(inComponent: 1)
+            portion = PortionModel(name: "\(Recipe.Portion.allCases[portionRow])", volume: portionsMesures[volumeRow])
         }
     }
     
@@ -265,7 +296,6 @@ extension AddRecipeViewController: UIPickerViewDelegate, UIPickerViewDataSource 
     }
     
     func configurePickerView() {
-        
         categoryPickerView.delegate = self
         categoryPickerView.dataSource = self
         categoryPickerView.contentMode = .top
@@ -289,9 +319,50 @@ extension AddRecipeViewController: UIPickerViewDelegate, UIPickerViewDataSource 
         })
     }
     
+    func configurePortionPickerView() {
+        
+        portionPickerView.delegate = self
+        portionPickerView.dataSource = self
+        portionPickerView.contentMode = .top
+        portionPickerView.frame = CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 200)
+        portionPickerView.backgroundColor = UIColor.systemBackground
+        
+        toolBar = UIToolbar.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 50))
+        toolBar.barStyle = .default
+        
+        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        let barButton = UIBarButtonItem(image: UIImage(systemName: "checkmark.circle.fill"),
+                                        style: .done, target: self, action: #selector(doneButto2nTapped))
+        
+        spacer.width = UIScreen.main.bounds.size.width - barButton.width
+        toolBar.items = [spacer, barButton]
+        toolBar.sizeToFit()
+        
+        UIView.transition(with: self.view, duration: 0.5, options: [.transitionCrossDissolve] , animations: {
+            self.view.addSubview(self.portionPickerView)
+            self.view.addSubview(self.toolBar)
+        })
+    }
+    
     @objc func doneButtonTapped() {
         categoryPickerView.removeFromSuperview()
         toolBar.removeFromSuperview()
+    }
+    
+    @objc func doneButto2nTapped() {
+        portionPickerView.removeFromSuperview()
+        toolBar.removeFromSuperview()
+        
+        if let portion = portion {
+            delegate?.setPortion(portion: portion)
+        } else {
+            let volumeRow = portionPickerView.selectedRow(inComponent: 0)
+            let portionRow = portionPickerView.selectedRow(inComponent: 1)
+            
+            portion = PortionModel(name: "\(Recipe.Portion.allCases[portionRow])", volume: portionsMesures[volumeRow])
+            delegate?.setPortion(portion: portion!)
+        }
+        
     }
 }
 

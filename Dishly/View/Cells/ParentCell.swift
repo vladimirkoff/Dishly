@@ -135,6 +135,7 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
 }
 
 extension ParentCell: RecipeCellDelegate {
+    
     func addGroceries(groceries: [Ingredient]) {
         myGroceries = groceries
     }

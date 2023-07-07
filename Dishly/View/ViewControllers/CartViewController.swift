@@ -6,7 +6,11 @@ class CartViewController: UIViewController {
     
     private var isClearTapped = false
     
-    var ingredients: [Ingredient]?
+    var ingredients: [Ingredient]? {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
     private let itemCountLabel: UILabel = {
         let label = UILabel()
@@ -83,8 +87,9 @@ extension CartViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientTableCell", for: indexPath) as! IngredientTableCell
-            cell.item.text = myGroceries[indexPath.row].name!
-        
+        cell.item.isUserInteractionEnabled = false
+        cell.deleteButton.isHidden = true
+        cell.configure(ingredient: myGroceries[indexPath.row])
         return cell
     }
 }

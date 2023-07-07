@@ -3,6 +3,7 @@ import UIKit
 
 protocol PrepareCellDelegate: AnyObject {
     func updateCell(textView: String?, cell: PrepareTableCell)
+
 }
 
 class PrepareTableCell: UITableViewCell {

@@ -75,8 +75,10 @@ class RecipeService: RecipeServiceProtocol {
     
     func createRecipe(recipe: RecipeViewModel, image: UIImage, completion: @escaping(Error?) -> ()) {
         ImageUploader.shared.uploadImage(image: image, forRecipe: true) { recipeImageUrl in
+            
             var instructions: [String] = []
-            var ingredients: [String] = []
+            
+            var ingredients: [String : [String : Float]] = [:]
 
             for instruction in recipe.instructions {
                 if let instr = instruction.text {
@@ -84,9 +86,7 @@ class RecipeService: RecipeServiceProtocol {
                 }
             }
             for ingredient in recipe.ingredients {
-                if let ingr = ingredient.name {
-                    ingredients.append(ingr)
-                }
+                ingredients[ingredient.name!] = [ingredient.portion! : ingredient.volume!]
             }
             
             let data: [String: Any] = ["name": recipe.recipeName!, "cookTime": recipe.recipe.cookTime!, "recipeImageUrl": recipeImageUrl, "id": recipe.recipe.id!, "ownerId": recipe.recipe.ownerId!, "instructions": instructions, "ingredients": ingredients, "category": recipe.category, "rating": 0, "numOfRatings": 0]
@@ -113,11 +113,15 @@ class RecipeService: RecipeServiceProtocol {
                     let name = recipe.data()["name"] as? String ?? ""
                     let cookTime = recipe.data()["cookTime"] as? String ?? ""
                     let ownerId = recipe.data()["ownerId"] as? String ?? ""
-                    let ingredients = recipe.data()["ingredients"] as? [String] ?? []
+                    
+                    let ingredients = recipe.data()["ingredients"] as? [String : [String : Float]] ?? [:]
                     var ingredientsArray: [Ingredient] = []
-                    for ingredient in ingredients {
-                        let ingredientModel = Ingredient(name: ingredient)
-                        ingredientsArray.append(ingredientModel)
+                    
+                    for (ingredient, portion) in ingredients {
+                        for (name, volume) in portion {
+                            let ingredientModel = Ingredient(name: ingredient, volume: volume, portion: name )
+                            ingredientsArray.append(ingredientModel)
+                        }
                     }
                     
                     let instructions = recipe.data()["instructions"] as? [String] ?? []

@@ -8,6 +8,7 @@ struct Recipe: Codable {
     var serve: String?
     var cookTime: String?
     var category: Category
+    
     var ingredients: [Ingredient]
     var instructions: [Instruction]
     var recipeImageUrl: String?
@@ -71,8 +72,15 @@ struct Recipe: Codable {
     }
 }
 
+struct PortionModel {
+    var name: String
+    var volume: Float
+}
+
 struct Ingredient: Codable {
     var name: String?
+    var volume: Float?
+    var portion: String? 
 }
 
 struct Instruction: Codable {

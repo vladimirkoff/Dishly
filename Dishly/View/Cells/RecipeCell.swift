@@ -14,9 +14,7 @@ class RecipeCell: UICollectionViewCell {
     var delegate: RecipeCellDelegate?
     
     var recipeViewModel: RecipeViewModel? {
-        didSet {
-            configure()
-        }
+        didSet { configure() }
     }
     
     private let saveButton: UIButton = {

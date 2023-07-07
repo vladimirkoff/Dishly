@@ -7,7 +7,7 @@ protocol RecipeServiceProtocol {
     func createRecipe(recipe: RecipeViewModel, image: UIImage, completion: @escaping(Error?) -> ())
     func updateRating(for recipe: RecipeViewModel, newRating: Int, completion: @escaping(Error?) -> ())
     func fecthRecipesWith(category: Recipe.Category, completion: @escaping ([Recipe]) -> Void)
-    func saveRecipeToCollection(collection: String, recipe: RecipeViewModel, completion: @escaping(Error?) -> ())
+    func saveRecipeToCollection(collection: Collection, recipe: RecipeViewModel, completion: @escaping(Error?) -> ())
 }
 
 class RecipeService: RecipeServiceProtocol {
@@ -15,7 +15,7 @@ class RecipeService: RecipeServiceProtocol {
     func updateRating(for recipe: RecipeViewModel, newRating: Int , completion: @escaping(Error?) -> ()) {
     }
     
-    func saveRecipeToCollection(collection: String, recipe: RecipeViewModel, completion: @escaping(Error?) -> ()) {
+    func saveRecipeToCollection(collection: Collection, recipe: RecipeViewModel, completion: @escaping(Error?) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         var instructions: [String] = []
         var ingredients: [String] = []
@@ -33,7 +33,9 @@ class RecipeService: RecipeServiceProtocol {
         
         let data: [String: Any] = ["name": recipe.recipeName!, "cookTime": recipe.recipe.cookTime!, "recipeImageUrl": recipe.recipe.recipeImageUrl!, "id": recipe.recipe.id!, "ownerId": recipe.recipe.ownerId!, "instructions": instructions, "ingredients": ingredients, "category": recipe.category, "rating": 0, "numOfRatings": 0]
         
-        COLLECTION_USERS.document(uid).collection(collection).addDocument(data: data)
+        let collectionData: [String : Any] = ["name" : collection.name, "id" : collection.id, "imageUrl" : collection.imageUrl]
+        
+        COLLECTION_USERS.document(uid).collection("collections").addDocument(data: collectionData).collection(collection.name).addDocument(data: data)
     }
     
     func fecthRecipesWith(category: Recipe.Category, completion: @escaping ([Recipe]) -> Void) {
@@ -98,7 +100,7 @@ class RecipeService: RecipeServiceProtocol {
         }
         
     }
-    
+        
     func fetchRecipes(completion: @escaping ([Recipe]) -> Void) {
         COLLECTION_RECIPES.getDocuments { snapshot, error in
             if let error = error {

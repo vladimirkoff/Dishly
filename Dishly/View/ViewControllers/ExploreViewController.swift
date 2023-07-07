@@ -3,6 +3,39 @@ import UIKit
 class ExploreViewController: UIViewController {
     //MARK: - Properties
     
+    private let window = UIApplication.shared.windows.last!
+
+    lazy private var backgroundView: UIView = {
+
+         let view = UIView(frame: window.bounds)
+         view.backgroundColor = UIColor.black
+         view.alpha = 0.5
+         
+         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissView))
+         view.addGestureRecognizer(gestureRecognizer)
+         
+         return view
+     }()
+    
+    lazy private var windowView: CollectionsPopupView = {
+         let view = CollectionsPopupView(frame: CGRect(x: view.frame.minX, y: view.frame.maxY, width: view.frame.width, height: 300))
+        view.backgroundColor = .white
+         view.layer.cornerRadius = 10
+         
+         return view
+     }()
+    
+    @objc func dismissView() {
+        backgroundView.removeFromSuperview()
+        
+        
+        UIView.animate(withDuration: 1) {
+            self.windowView.removeFromSuperview()
+            
+            self.windowView.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY, width: self.view.frame.width, height: 300)
+        }
+    }
+    
     var user: User
     
     var recipeViewModel: RecipeViewModel!
@@ -142,6 +175,18 @@ extension ExploreViewController: ParentCellDelegate {
     
     func goToCategory() {
         print("DEBUG: Go to category")
+    }
+    
+    func popUp(recipe: RecipeViewModel) {
+        windowView.recipe = recipe
+        self.window.addSubview(self.backgroundView)
+        self.window.addSubview(self.windowView)
+
+        
+        UIView.animate(withDuration: 0.6) {
+            self.windowView.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY - 300, width: self.view.bounds.width, height: 300)
+        }
+        
     }
 }
 

@@ -5,14 +5,35 @@ import UIKit
 private let reuseIdentifier = "ItemCell"
 private let headerReuseIdentifier = "ItemsHeader"
 
+protocol SavedVCProtocol {
+    func reload(collections: [Collection])
+}
+
 class SavedViewController: UICollectionViewController {
     //MARK: - Properties
+    
+    private var collections: [Collection]? {
+        didSet {
+            delegate?.reload(collections: collections!)
+        }
+    }
+    
+    var delegate: SavedVCProtocol?
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configureCollectionView()
+        fetchCollections()
+    }
+    
+    func fetchCollections() {
+        CollectionService.shared.fetchCollections { collections in
+            DispatchQueue.main.async {
+                self.collections = collections
+            }
+        }
     }
     
     //MARK: - Helpers
@@ -52,6 +73,7 @@ class SavedViewController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerReuseIdentifier, for: indexPath) as! ItemsHeader
+        self.delegate = header
         return header
     }
     

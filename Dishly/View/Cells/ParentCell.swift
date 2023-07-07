@@ -4,6 +4,7 @@ import SDWebImage
 protocol ParentCellDelegate {
     func goToRecipe(with recipe: RecipeViewModel)
     func goToCategory()
+    func popUp(recipe: RecipeViewModel)
 }
 
 class ParentCell: UICollectionViewCell {
@@ -141,10 +142,11 @@ extension ParentCell: RecipeCellDelegate {
     }
     
     func saveRecipe(recipe: RecipeViewModel) {
-//        recipeViewModel
-//        recipeService.saveRecipeToCollection(collection: "favorites", recipe: recipe) { error in
+//        let collection = Collection(name: "favorites", imageUrl: "", id: "dfwefs")
+//        RecipeService().saveRecipeToCollection(collection: collection , recipe: recipe) { error in
 //            print("SUCCESS")
 //        }
+        delegate?.popUp(recipe: recipe)
     }
 }
 

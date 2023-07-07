@@ -6,17 +6,15 @@ class SignupController: UIViewController {
     
     //MARK: - Properies
     
-    var authViewModel: AuthViewModel!
-    var authService: AuthServiceProtocol!
-    var collectionService: CollectionServiceProtocol!
-    
-    var googleService: GoogleAuthServiceProtocol!
-    
-    var userService: UserServiceProtocol!
-    var recipeService: RecipeServiceProtocol!
-    
-    var userRealmService: UserRealmServiceProtocol!
-    var userRealmViewModel: UserRealmViewModel!
+    private var authService: AuthServiceProtocol!
+    private var collectionService: CollectionServiceProtocol!
+    private var userService: UserServiceProtocol!
+    private var googleService: GoogleAuthServiceProtocol!
+    private var userRealmService: UserRealmServiceProtocol!
+
+    private var authViewModel: AuthViewModel!
+    private var recipeService: RecipeServiceProtocol!
+    private var userRealmViewModel: UserRealmViewModel!
     
     private let plusButton: UIButton = {
         let button = UIButton()

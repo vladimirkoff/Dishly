@@ -2,6 +2,7 @@ import UIKit
 
 class MealCell: UICollectionViewCell {
     //MARK: - Properties
+    
     let dayLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 22)

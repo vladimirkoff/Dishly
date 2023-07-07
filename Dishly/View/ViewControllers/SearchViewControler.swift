@@ -35,19 +35,13 @@ class RecipeSearchViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
-        // Подключение к базе данных FirebaseFirestore
        
-        
-        // Получение ссылки на коллекцию "recipes"
-        
-        // Настройка поискового контроллера
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Поиск рецептов"
         navigationItem.searchController = searchController
         definesPresentationContext = true
         
-        // Добавление кнопки "Cancel" в Navigation bar
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButtonTapped))
         
         view.addSubview(tableView)
@@ -65,25 +59,23 @@ class RecipeSearchViewController: UIViewController, UITextFieldDelegate {
 
     
     @objc func cancelButtonTapped() {
-        // Обработка нажатия кнопки "Cancel"
-        // Сброс поисковой строки и результатов поиска
+    
      
     }
     
-    // Метод для выполнения запроса к базе данных по названию рецепта
     func searchRecipes(with searchText: String) {
    
     }
     
-    // Методы делегата и источника данных таблицы (UITableView)
-    // ...
+   
     
     @objc func  rightBarButtonTapped() {
     }
     
 }
 
-// Расширение для поддержки обновления результатов поиска
+//MARK: - UISearchResultsUpdating
+
 extension RecipeSearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text else {
@@ -139,12 +131,6 @@ extension RecipeSearchViewController: UITableViewDelegate, UITableViewDataSource
             }
         }
     }
-    
-    
-    
-
-    
-    
 }
 
 

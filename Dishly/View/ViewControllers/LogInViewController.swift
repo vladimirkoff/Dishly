@@ -6,12 +6,14 @@ class LoginViewController: UIViewController {
  
     //MARK: - Proeprties
     
-    var authViewModel: AuthViewModel!
-    var authService: AuthServiceProtocol!
+    private let authService: AuthServiceProtocol!
+    private let userService: UserServiceProtocol!
+    private let recipeService: RecipeServiceProtocol!
+    private let googleService: GoogleAuthServiceProtocol!
+    private let collectionService: CollectionServiceProtocol!
     
-    var userService: UserServiceProtocol!
-    var userViewModel: UserViewModel!
-    var recipeService: RecipeServiceProtocol!
+    private var authViewModel: AuthViewModel!
+    private var userViewModel: UserViewModel!
 
     private let logo = UIImageView(image: UIImage(named: "Instagram_logo_white"))
     
@@ -55,10 +57,12 @@ class LoginViewController: UIViewController {
         userViewModel = UserViewModel(userService: userService)
     }
     
-    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol) {
          self.authService = authService
          self.recipeService = recipeService
          self.userService = userService
+        self.googleService = googleService
+        self.collectionService = collectionService
          super.init(nibName: nil, bundle: nil)
      }
     
@@ -95,28 +99,28 @@ class LoginViewController: UIViewController {
     //MARK: - Selectors
     
     @objc func textDidChange(sender: UITextField) {
-//        if sender == emailField {
-//            emailField.text = emailField.text?.lowercased()
-//        }
+        if sender == emailField {
+            emailField.text = emailField.text?.lowercased()
+        }
     }
     
     @objc func logIn() {
-//        guard let email = emailField.text else { return }
-//        guard let password = passwordField.text else { return }
-//
-//        authViewModel.login(email: email, password: password) { error in
-//            if let error = error {
-//                print("DEBUG: Error signing in - \(error)")
-//                return
-//            }
-//            self.userViewModel.fetchUser { user in
-//                DispatchQueue.main.async {
-//                    let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService)
-//                    self.navigationController?.pushViewController(vc, animated: true)
-//                }
-//
-//            }
-//        }
+        guard let email = emailField.text else { return }
+        guard let password = passwordField.text else { return }
+
+        authViewModel.login(email: email, password: password) { error in
+            if let error = error {
+                print("DEBUG: Error signing in - \(error)")
+                return
+            }
+            self.userViewModel.fetchUser { user in
+                DispatchQueue.main.async {
+                    let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleService)
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+
+            }
+        }
     }
 }
 

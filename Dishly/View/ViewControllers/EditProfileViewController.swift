@@ -5,19 +5,19 @@ class EditProfileViewController: UIViewController {
     
     //MARK: - Properties
     
-    var profileImage: UIImageView!
-    var user: User
+    private var profileImage: UIImageView!
+    
+    private var user: User
     
     private let hud = JGProgressHUD(style: .dark)
     
-    var userService: UserServiceProtocol!
-    var userViewModel: UserViewModel!
+    private var userService: UserServiceProtocol!
+    private var authService: AuthServiceProtocol!
+    private var userRealmService: UserRealmServiceProtocol!
     
-    var authService: AuthServiceProtocol!
-    var authViewModel: AuthViewModel!
-    
-    var userRealmService: UserRealmServiceProtocol!
-    var userRealmViewModel: UserRealmViewModel!
+    private var userViewModel: UserViewModel!
+    private var authViewModel: AuthViewModel!
+    private var userRealmViewModel: UserRealmViewModel!
     
     lazy var changedUser = user
     
@@ -124,7 +124,7 @@ class EditProfileViewController: UIViewController {
     @objc func doneButtonTapped() {
         showLoader(true)
         navigationController?.navigationBar.topItem?.hidesBackButton = true
-
+        
         ImageUploader.shared.uploadImage(image: profileImage.image!, forRecipe: false) { imageURL in
             let dict = ["fullName": self.changedUser.fullName,
                         "profileImage": imageURL,

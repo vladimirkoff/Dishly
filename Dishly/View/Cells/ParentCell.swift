@@ -86,6 +86,8 @@ class ParentCell: UICollectionViewCell {
     }
 }
 
+//MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
+
 extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView {
@@ -134,6 +136,8 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         return CGSize.zero
     }
 }
+
+//MARK: - RecipeCellDelegate
 
 extension ParentCell: RecipeCellDelegate {
     

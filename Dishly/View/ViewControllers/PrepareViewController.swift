@@ -3,7 +3,7 @@
 import UIKit
 
 class PrepareViewController: UIViewController, Storyboardable {
-
+    
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var saveButton: UIButton!
@@ -20,12 +20,12 @@ class PrepareViewController: UIViewController, Storyboardable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        hideKeyboard()
+        //        hideKeyboard()
         updateUI()
         configureTableView()
     }
     
-//MARK: - Functions
+    //MARK: - Functions
     
     func updateUI() {
         guard let instructions = recipeViewModel?.instructions else {return}
@@ -33,30 +33,16 @@ class PrepareViewController: UIViewController, Storyboardable {
     }
     
     func saveRecipe() {
-                
         recipeViewModel?.createRecipe(image: recipeImage, completion: { error in
             if let error = error {
-                print("Error creating recipe")
+                print("Error creating recipe - \(error.localizedDescription)")
                 return
             }
-            print("SUCCESS")
+            print("DEBUG: Recipe created successfully")
         })
-        
-//        guard let foodImage = delegate?.foodImageToPass,
-//              let uid = recipeViewModel?.recipe.id else {return}
-//
-//        let oldUrl = self.recipeViewModel?.recipe.foodImageUrl ?? ""
-//
-//        if foodImage.isSame(with: oldUrl) { self.recipeViewModel?.updateRecipe() }
-//        else {
-//            storage.imageUpload(to: .foodImages, id: uid , image: foodImage.image!) { [weak self] imageUrl in
-//                self?.recipeViewModel?.recipe.foodImageUrl = imageUrl
-//                self?.recipeViewModel?.updateRecipe()
-//            }
-//        }
     }
-
-//MARK: - Button Taps
+    
+    //MARK: - Button Taps
     
     @IBAction func addButtonClicked(_ sender: Any) {
         let newInstruction = Instruction()
@@ -67,21 +53,11 @@ class PrepareViewController: UIViewController, Storyboardable {
     }
     
     @IBAction func saveButtonClicked(_ sender: Any) {
-        
         saveRecipe()
-//        if checkFieldValid {
-//            let alertVC = CustomAlertVC(action: nil, message: "Do you want to save your recipe?",
-//                                        image: UIImage(systemName: "rectangle.and.pencil.and.ellipsis"))
-//            alertVC.delegate = self
-//            present(alertVC, animated: true)
-//        }
-        
-        print(recipeViewModel)
-        
     }
     
     var checkFieldValid: Bool {
-
+        
         guard !instructions.isEmpty else {
             presentAlert(title: "Can not continue", message: "Please enter an instruction", completion: nil);
             return false
@@ -95,14 +71,6 @@ class PrepareViewController: UIViewController, Storyboardable {
     }
 }
 
-//extension PrepareVC: CustomAlertVCDelegate {
-//
-//    func OkTapped(action: String?) {
-//        saveRecipe()
-//        dismiss(animated: true)
-//    }
-//}
-
 //MARK: - TableViewDelegates
 
 extension PrepareViewController: UITableViewDelegate, UITableViewDataSource {
@@ -114,9 +82,7 @@ extension PrepareViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PrepareTableCell.identifier, for: indexPath) as? PrepareTableCell else {fatalError("Could not Load")}
-        
         cell.tag = indexPath.row
         cell.configure(instruction: instructions[indexPath.row])
         cell.delegate = self
@@ -128,7 +94,6 @@ extension PrepareViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        
         if editingStyle == .delete {
             instructions.remove(at: indexPath.row)
             scrollView.layoutIfNeeded()

@@ -69,6 +69,7 @@ struct Recipe: Codable {
         case tsp
         case toTaste
         case jar
+        case item
     }
 }
 

@@ -82,12 +82,6 @@ class MainTabBarController: UITabBarController {
                 self.configureVC()
             }
         }
-        //        recipesViewModel.fetchRecipesWith(category: Recipe.Category(rawValue: "Bread")!) { recipes in
-        //            DispatchQueue.main.async {
-        //                self.recipes = recipes
-        //                self.configureVC()
-        //            }
-        //        }
     }
     
     func configureVC() {
@@ -119,8 +113,6 @@ class MainTabBarController: UITabBarController {
         
         tabBar.backgroundColor = .white
         
-        
-        
     }
     
     func configureVC(image: UIImage, vc: UIViewController) -> UIViewController {
@@ -148,7 +140,6 @@ class MainTabBarController: UITabBarController {
         vc.tabBarItem.selectedImage = image.withTintColor(UIColor.systemRed)
         vc.tabBarController?.tabBar.backgroundColor = .black
         
-        
         return vc
     }
     
@@ -162,7 +153,6 @@ class MainTabBarController: UITabBarController {
         navigationItem.largeTitleDisplayMode = .always
         navigationItem.title = "Search"
         
-        let url = user.profileImage
         guard let imageUrl = URL(string: user.profileImage) else { return }
         
         SDWebImageManager.shared.loadImage(with: imageUrl, options: [], progress: nil) { (image, _, _, _, _, _) in
@@ -189,7 +179,6 @@ class MainTabBarController: UITabBarController {
         let vc = ProfileViewController(user: user, userService: userService, profileImage: profileImageView, authService: authService, userRealmService: userRealmService, googleService: googleService, collectionService: collectionService )
         navigationController?.pushViewController(vc, animated: true)
     }
-    
     
 }
 

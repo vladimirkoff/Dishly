@@ -61,6 +61,55 @@ class AddRecipeViewController: UIViewController, Storyboardable {
     
     //MARK: - Helpers
     
+    func configurePickerView() {
+        categoryPickerView.delegate = self
+        categoryPickerView.dataSource = self
+        categoryPickerView.contentMode = .top
+        categoryPickerView.frame = CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 200)
+        categoryPickerView.backgroundColor = UIColor.systemBackground
+        
+        toolBar = UIToolbar.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 50))
+        toolBar.barStyle = .default
+        
+        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        let barButton = UIBarButtonItem(image: UIImage(systemName: "checkmark.circle.fill"),
+                                        style: .done, target: self, action: #selector(doneButtonTapped))
+        
+        spacer.width = UIScreen.main.bounds.size.width - barButton.width
+        toolBar.items = [spacer, barButton]
+        toolBar.sizeToFit()
+        
+        UIView.transition(with: self.view, duration: 0.5, options: [.transitionCrossDissolve] , animations: {
+            self.view.addSubview(self.categoryPickerView)
+            self.view.addSubview(self.toolBar)
+        })
+    }
+    
+    func configurePortionPickerView() {
+        
+        portionPickerView.delegate = self
+        portionPickerView.dataSource = self
+        portionPickerView.contentMode = .top
+        portionPickerView.frame = CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 200)
+        portionPickerView.backgroundColor = UIColor.systemBackground
+        
+        toolBar = UIToolbar.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 50))
+        toolBar.barStyle = .default
+        
+        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        let barButton = UIBarButtonItem(image: UIImage(systemName: "checkmark.circle.fill"),
+                                        style: .done, target: self, action: #selector(doneButto2nTapped))
+        
+        spacer.width = UIScreen.main.bounds.size.width - barButton.width
+        toolBar.items = [spacer, barButton]
+        toolBar.sizeToFit()
+        
+        UIView.transition(with: self.view, duration: 0.5, options: [.transitionCrossDissolve] , animations: {
+            self.view.addSubview(self.portionPickerView)
+            self.view.addSubview(self.toolBar)
+        })
+    }
+    
     
     func configureViewModel() {
         guard let selectedCategory = selectedCategory else {return}
@@ -127,7 +176,11 @@ class AddRecipeViewController: UIViewController, Storyboardable {
         
     }
     
-    //MARK: - Selectors
+    //MARK: - Actions
+    
+    @IBAction func categoryButtonClicked(_ sender: Any) {
+        configurePickerView()
+    }
     
     @IBAction func addButtonClicked(_ sender: Any) {
         let newIngredient = Ingredient()
@@ -149,6 +202,39 @@ class AddRecipeViewController: UIViewController, Storyboardable {
     
     @objc func close() {
         self.dismiss(animated: true)
+    }
+    
+    @objc func doneButtonTapped() {
+        categoryPickerView.removeFromSuperview()
+        toolBar.removeFromSuperview()
+    }
+    
+    @objc func doneButto2nTapped() {
+        portionPickerView.removeFromSuperview()
+        toolBar.removeFromSuperview()
+        
+        if let portion = portion {
+            delegate?.setPortion(portion: portion)
+        } else {
+            let volumeRow = portionPickerView.selectedRow(inComponent: 0)
+            let portionRow = portionPickerView.selectedRow(inComponent: 1)
+            
+            portion = PortionModel(name: "\(Recipe.Portion.allCases[portionRow])", volume: portionsMesures[volumeRow])
+            delegate?.setPortion(portion: portion!)
+        }
+        
+    }
+    
+    @objc func hidePickerView() {
+        portionPickerView.removeFromSuperview()
+    }
+    
+    @objc func imageTapped() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        present(imagePicker, animated: true, completion: nil)
     }
     
 }
@@ -197,10 +283,6 @@ extension AddRecipeViewController: IngredientCellDelegate {
         configurePortionPickerView()
        
     }
-
-    @objc func hidePickerView() {
-        portionPickerView.removeFromSuperview()
-    }
     
     func updateCell(itemName: String?, portion: PortionModel, cell: IngredientTableCell) {
         let row = cell.tag
@@ -224,15 +306,7 @@ extension AddRecipeViewController: UIImagePickerControllerDelegate, UINavigation
         foodImage.addGestureRecognizer(gesture)
         foodImage.isUserInteractionEnabled = true
     }
-    
-    @objc func imageTapped() {
-        let imagePicker = UIImagePickerController()
-        imagePicker.sourceType = .photoLibrary
-        imagePicker.delegate = self
-        imagePicker.allowsEditing = true
-        present(imagePicker, animated: true, completion: nil)
-    }
-    
+
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         foodImage.image = info[.originalImage] as? UIImage
         self.dismiss(animated: true, completion: nil)
@@ -290,80 +364,7 @@ extension AddRecipeViewController: UIPickerViewDelegate, UIPickerViewDataSource 
             portion = PortionModel(name: "\(Recipe.Portion.allCases[portionRow])", volume: portionsMesures[volumeRow])
         }
     }
-    
-    @IBAction func categoryButtonClicked(_ sender: Any) {
-        configurePickerView()
-    }
-    
-    func configurePickerView() {
-        categoryPickerView.delegate = self
-        categoryPickerView.dataSource = self
-        categoryPickerView.contentMode = .top
-        categoryPickerView.frame = CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 200)
-        categoryPickerView.backgroundColor = UIColor.systemBackground
-        
-        toolBar = UIToolbar.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 50))
-        toolBar.barStyle = .default
-        
-        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        let barButton = UIBarButtonItem(image: UIImage(systemName: "checkmark.circle.fill"),
-                                        style: .done, target: self, action: #selector(doneButtonTapped))
-        
-        spacer.width = UIScreen.main.bounds.size.width - barButton.width
-        toolBar.items = [spacer, barButton]
-        toolBar.sizeToFit()
-        
-        UIView.transition(with: self.view, duration: 0.5, options: [.transitionCrossDissolve] , animations: {
-            self.view.addSubview(self.categoryPickerView)
-            self.view.addSubview(self.toolBar)
-        })
-    }
-    
-    func configurePortionPickerView() {
-        
-        portionPickerView.delegate = self
-        portionPickerView.dataSource = self
-        portionPickerView.contentMode = .top
-        portionPickerView.frame = CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 200)
-        portionPickerView.backgroundColor = UIColor.systemBackground
-        
-        toolBar = UIToolbar.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 50))
-        toolBar.barStyle = .default
-        
-        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        let barButton = UIBarButtonItem(image: UIImage(systemName: "checkmark.circle.fill"),
-                                        style: .done, target: self, action: #selector(doneButto2nTapped))
-        
-        spacer.width = UIScreen.main.bounds.size.width - barButton.width
-        toolBar.items = [spacer, barButton]
-        toolBar.sizeToFit()
-        
-        UIView.transition(with: self.view, duration: 0.5, options: [.transitionCrossDissolve] , animations: {
-            self.view.addSubview(self.portionPickerView)
-            self.view.addSubview(self.toolBar)
-        })
-    }
-    
-    @objc func doneButtonTapped() {
-        categoryPickerView.removeFromSuperview()
-        toolBar.removeFromSuperview()
-    }
-    
-    @objc func doneButto2nTapped() {
-        portionPickerView.removeFromSuperview()
-        toolBar.removeFromSuperview()
-        
-        if let portion = portion {
-            delegate?.setPortion(portion: portion)
-        } else {
-            let volumeRow = portionPickerView.selectedRow(inComponent: 0)
-            let portionRow = portionPickerView.selectedRow(inComponent: 1)
-            
-            portion = PortionModel(name: "\(Recipe.Portion.allCases[portionRow])", volume: portionsMesures[volumeRow])
-            delegate?.setPortion(portion: portion!)
-        }
-        
-    }
+
 }
 
 // MARK: - TextField Delegate

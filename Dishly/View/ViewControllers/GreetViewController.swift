@@ -33,8 +33,6 @@ class GreetViewController: UIViewController {
     
     private let hud = JGProgressHUD(style: .dark)
 
-    
-    
     private let backGroundImage: UIImageView = {
         let image = UIImage(named: "dish")
         let iv = UIImageView(image: image)
@@ -283,7 +281,6 @@ class GreetViewController: UIViewController {
         
     }
     
-    
     //MARK: - Selectors
     
     @objc func googleAuthButtonPressed() {
@@ -309,7 +306,7 @@ class GreetViewController: UIViewController {
         guard let authService = authService else { return }
         guard let userService = userService else { return }
         guard let recipeService = recipeService else { return }
-        let vc = LoginViewController(authService: authService, userService: userService, recipeService: recipeService)
+        let vc = LoginViewController(authService: authService, userService: userService, recipeService: recipeService, googleService: googleAuthService, collectionService: collectionService)
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -344,7 +341,7 @@ extension GreetViewController: LoginButtonDelegate {
     }
     
     func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
-        
+        print("DEBUG: login with facebook")
     }
     
 }

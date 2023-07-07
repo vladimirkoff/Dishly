@@ -18,6 +18,7 @@ class IngredientTableCell: UITableViewCell {
     private var portionModel: PortionModel?
     
     static let identifier = "IngredientTableCell"
+    
     weak var delegate: IngredientCellDelegate?
     
     private let protionLabel: UILabel = {
@@ -84,6 +85,8 @@ extension IngredientTableCell: UITextFieldDelegate {
         delegate?.portionButtonTapped(cell: self)
     }
 }
+
+//MARK: - AddRecipeViewControllerProtocol
 
 extension IngredientTableCell: AddRecipeViewControllerProtocol {
     func setPortion(portion: PortionModel) {

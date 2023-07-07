@@ -85,6 +85,8 @@ class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
         clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
     }
     
+    //MARK: - Selectors
+    
     @objc private func clearButtonTapped() {
         textView.text = ""
         textViewDidChange(textView)

@@ -81,19 +81,19 @@ class UserService: UserServiceProtocol  {
         }
     }
     
-   func updateUser(changedUser: User, completion: @escaping(Error?) -> ()) {
-       let userRef = COLLECTION_USERS.document(changedUser.uid)
-       userRef.updateData(["profileImage" : changedUser.profileImage,
-                           "email" : changedUser.email,
-                           "username" : changedUser.username,
-                           "fullName" : changedUser.fullName
-                          ]) { error in
-           if let error = error {
-               print("ERROR updating user - \(error.localizedDescription)")
-               return
-           }
-           print("Success")
-           completion(error)
-       }
+    func updateUser(changedUser: User, completion: @escaping(Error?) -> ()) {
+        let userRef = COLLECTION_USERS.document(changedUser.uid)
+        userRef.updateData(["profileImage" : changedUser.profileImage,
+                            "email" : changedUser.email,
+                            "username" : changedUser.username,
+                            "fullName" : changedUser.fullName
+                           ]) { error in
+            if let error = error {
+                print("ERROR updating user - \(error.localizedDescription)")
+                return
+            }
+            print("Success")
+            completion(error)
+        }
     }
 }

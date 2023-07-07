@@ -17,10 +17,14 @@ class CollectionViewModel {
         self.collection = collection
     }
     
-    func fecthCollections(completion: @escaping([Collection]) -> ()) {
+    func fetchCollections(completion: @escaping([Collection]) -> ()) {
         collectionService.fetchCollections { collections in
             completion(collections)
         }
     }
-
+    
+    func createCollection() {
+        
+    }
+    
 }

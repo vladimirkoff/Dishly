@@ -8,13 +8,16 @@ class SignupController: UIViewController {
     
     var authViewModel: AuthViewModel!
     var authService: AuthServiceProtocol!
+    var collectionService: CollectionServiceProtocol!
+    
+    var googleService: GoogleAuthServiceProtocol!
     
     var userService: UserServiceProtocol!
     var recipeService: RecipeServiceProtocol!
     
     var userRealmService: UserRealmServiceProtocol!
     var userRealmViewModel: UserRealmViewModel!
-        
+    
     private let plusButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -31,20 +34,20 @@ class SignupController: UIViewController {
         tf.autocorrectionType = .no
         return tf
     }()
-
+    
     private let passwordField: AuthCustomTextField = {
         let tf = AuthCustomTextField(placeholder: "Password")
         tf.isSecureTextEntry = true
         tf.autocorrectionType = .no
         return tf
     }()
-
+    
     private let usernameField: AuthCustomTextField = {
         let tf = AuthCustomTextField(placeholder: "Username")
         tf.autocorrectionType = .no
         return tf
     }()
-
+    
     private let fullnameField: AuthCustomTextField = {
         let tf = AuthCustomTextField(placeholder: "Fullname")
         tf.autocorrectionType = .no
@@ -74,13 +77,15 @@ class SignupController: UIViewController {
         authViewModel = AuthViewModel(authService: authService)
     }
     
-    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol) {
-         self.userService = userService
-         self.recipeService = recipeService
-         self.authService = authService
-         self.userRealmService = userRealmService
-         super.init(nibName: nil, bundle: nil)
-     }
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol, collectionService: CollectionServiceProtocol, googleService: GoogleAuthServiceProtocol) {
+        self.userService = userService
+        self.recipeService = recipeService
+        self.authService = authService
+        self.userRealmService = userRealmService
+        self.collectionService = collectionService
+        self.googleService = googleService
+        super.init(nibName: nil, bundle: nil)
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -98,7 +103,7 @@ class SignupController: UIViewController {
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
         stack.spacing = 20
-
+        
         view.addSubview(stack)
         stack.topAnchor.constraint(equalTo: plusButton.bottomAnchor, constant: 15).isActive = true
         stack.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -125,7 +130,7 @@ class SignupController: UIViewController {
         guard let password = passwordField.text else { return }
         guard let fullname = fullnameField.text else { return }
         guard let username = usernameField.text else { return }
-
+        
         let userCreds = AuthCreds(email: email, password: password, fullname: fullname, username: username, profileImage: plusButton.imageView?.image ?? UIImage(named: "profile_selected"))
         authViewModel.register(creds: userCreds) { error, user in
             if let error = error {
@@ -135,7 +140,7 @@ class SignupController: UIViewController {
             DispatchQueue.main.async {
                 let profileImage = self.plusButton.imageView?.image?.pngData()
                 self.createTestUser(email: email, name: fullname, uid: user!.uid, profileImage: profileImage!)
-                let vc = MainTabBarController(user: user!, authService: self.authService, userService: self.userService, recipeService: self.recipeService)
+                let vc = MainTabBarController(user: user!, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleService)
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }

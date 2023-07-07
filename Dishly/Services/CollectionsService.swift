@@ -13,7 +13,7 @@ protocol CollectionServiceProtocol {
     func fetchCollections(completion: @escaping([Collection]) -> ())
     func fetchRecipesWith(collection: Collection, completion: @escaping([RecipeViewModel]) -> ())
 }
- 
+
 class CollectionService: CollectionServiceProtocol {
     
     func fetchCollections(completion: @escaping([Collection]) -> ()) {

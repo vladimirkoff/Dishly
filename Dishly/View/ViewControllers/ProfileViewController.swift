@@ -8,8 +8,12 @@ class ProfileViewController: UIViewController {
     var userService: UserServiceProtocol!
     var userViewModel: UserViewModel!
     
+    var collectionService: CollectionServiceProtocol!
+    
     var authService: AuthServiceProtocol!
     var authViewModel: AuthViewModel!
+    
+    var googleService: GoogleAuthServiceProtocol!
     
     var user: User!
     
@@ -81,12 +85,14 @@ class ProfileViewController: UIViewController {
         tabBarController?.tabBar.isHidden = false
     }
     
-    init(user: User, userService: UserServiceProtocol, profileImage: UIImageView, authService: AuthServiceProtocol, userRealmService: UserRealmServiceProtocol) {
+    init(user: User, userService: UserServiceProtocol, profileImage: UIImageView, authService: AuthServiceProtocol, userRealmService: UserRealmServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol) {
         self.user = user
         self.userService = userService
         self.profileImage = profileImage
         self.authService = authService
         self.userRealmService = userRealmService
+        self.googleService = googleService
+        self.collectionService = collectionService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -179,7 +185,7 @@ class ProfileViewController: UIViewController {
         authViewModel.logOut { error, success in
             DispatchQueue.main.async {
                 let recipeService = RecipeService()
-                let vc = GreetViewController(authService: self.authService, userService: self.userService, recipeService: recipeService, userRealmService: self.userRealmService, googleAuthService: GoogleAuthService(userService: self.userService))
+                let vc = GreetViewController(authService: self.authService, userService: self.userService, recipeService: recipeService, userRealmService: self.userRealmService, googleAuthService: self.googleService, collectionService: self.collectionService)
                 let navVC = UINavigationController(rootViewController: vc)
                 navVC.modalPresentationStyle = .fullScreen
                 self.present(navVC, animated: true)

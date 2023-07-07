@@ -10,8 +10,12 @@ class ExploreViewController: UIViewController {
     var recipeService: RecipeServiceProtocol!
     var userService: UserServiceProtocol!
     
+    var collectionService: CollectionServiceProtocol!
+    
     var userViewModel: UserViewModel!
     var recipeViewModel: RecipeViewModel!
+    
+    var collectionViewModel: CollectionViewModel!
     
     var recipes: [RecipeViewModel]
     
@@ -28,6 +32,10 @@ class ExploreViewController: UIViewController {
     
     lazy private var windowView: CollectionsPopupView = {
         let view = CollectionsPopupView(frame: CGRect(x: view.frame.minX, y: view.frame.maxY, width: view.frame.width, height: 300))
+        
+        collectionViewModel = CollectionViewModel(collectionService: collectionService, collection: nil)
+        view.collectionViewModel = collectionViewModel
+        
         view.backgroundColor = .white
         view.layer.cornerRadius = 10
         
@@ -54,11 +62,12 @@ class ExploreViewController: UIViewController {
     
     //MARK: - Lifecycle
     
-    init(user: User, recipes: [RecipeViewModel], userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
+    init(user: User, recipes: [RecipeViewModel], userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, collectionService: CollectionServiceProtocol) {
         self.user = user
         self.userService = userService
         self.recipeService = recipeService
         self.recipes = recipes
+        self.collectionService = collectionService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -185,4 +194,21 @@ extension ExploreViewController: ParentCellDelegate {
     }
 }
 
+//MARK: - CollectionsPopupViewDelegate
 
+extension ExploreViewController: CollectionsPopupViewDelegate {
+    
+    func fetchCollections() {
+        
+    }
+    
+    func createCollection() {
+        
+    }
+    
+    func saveToCollection() {
+        
+    }
+    
+    
+}

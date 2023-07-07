@@ -18,7 +18,9 @@ class SavedViewController: UICollectionViewController {
         }
     }
     
-    private var recipes: [Recipe]? {
+    private var collectionService: CollectionServiceProtocol!
+    
+    private var recipes: [RecipeViewModel]? {
         didSet {
             collectionView.reloadData()
         }
@@ -27,6 +29,16 @@ class SavedViewController: UICollectionViewController {
     var delegate: SavedVCProtocol?
     
     //MARK: - Lifecycle
+    
+    init(collectionService: CollectionServiceProtocol) {
+        self.collectionService = collectionService
+        super.init(collectionViewLayout: UICollectionViewFlowLayout())
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -35,7 +47,7 @@ class SavedViewController: UICollectionViewController {
     }
     
     func fetchCollections() {
-        CollectionService.shared.fetchCollections { collections in
+        collectionService.fetchCollections { collections in
             DispatchQueue.main.async {
                 self.collections = collections
             }
@@ -64,7 +76,7 @@ class SavedViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! RecipeCell
         if let recipes = recipes {
-            cell.recipeViewModel = RecipeViewModel(recipe: recipes[indexPath.row], recipeService: RecipeService())
+            cell.recipeViewModel = recipes[indexPath.row]
         }
         cell.layer.cornerRadius = 10
         cell.backgroundColor = .white
@@ -109,7 +121,7 @@ extension SavedViewController: UICollectionViewDelegateFlowLayout {
 
 extension SavedViewController: ItemsHeaderDelegate {
     func fecthRecipes(with collection: Collection) {
-        CollectionService.shared.fetchRecipesWith(collection: collection) { recipes in
+        collectionService.fetchRecipesWith(collection: collection) { recipes in
             self.recipes = recipes
         }
     }

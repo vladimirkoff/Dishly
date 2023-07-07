@@ -217,14 +217,14 @@ class GreetViewController: UIViewController {
             if providerID == GoogleAuthProviderID {
                 googleAuthViewModel.checkIfUserLoggedIn { user in
                     DispatchQueue.main.async { [self] in
-                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: collectionService)
+                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: collectionService, googleService: self.googleAuthService)
                         self.navigationController?.pushViewController(vc, animated: true)
                     }
                 }
             } else {
                 authViewModel.checkIfUserExists { user in
                     DispatchQueue.main.async {
-                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService)
+                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleAuthService)
                         self.navigationController?.pushViewController(vc, animated: true)
                     }
                 }
@@ -298,7 +298,7 @@ class GreetViewController: UIViewController {
                 self.showLoader(false)
                 if let user = user {
                     self.user = user
-                    let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService)
+                    let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleAuthService)
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
             }
@@ -314,7 +314,7 @@ class GreetViewController: UIViewController {
     }
     
     @objc func goToSignUp() {
-        let vc = SignupController(authService: authService, userService: userService, recipeService: recipeService, userRealmService: userRealmService)
+        let vc = SignupController(authService: authService, userService: userService, recipeService: recipeService, userRealmService: userRealmService, collectionService: collectionService, googleService: googleAuthService)
         navigationController?.pushViewController(vc, animated: true)
     }
 }

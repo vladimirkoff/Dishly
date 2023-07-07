@@ -12,7 +12,7 @@ protocol GoogleAuthServiceProtocol {
 }
 
 class GoogleAuthService: GoogleAuthServiceProtocol {
-
+    
     private let userService: UserServiceProtocol
     
     init(userService: UserServiceProtocol) {

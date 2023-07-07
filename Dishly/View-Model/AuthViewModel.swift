@@ -4,11 +4,11 @@ import UIKit
 
 class AuthViewModel {
     private let authService: AuthServiceProtocol
-
+    
     init(authService: AuthServiceProtocol) {
         self.authService = authService
     }
-
+    
     func login(email: String, password: String, completion: @escaping (Error?) -> Void) {
         authService.login(email: email, password: password) { error in
             completion(error)
@@ -39,5 +39,5 @@ class AuthViewModel {
         }
     }
     
-
+    
 }

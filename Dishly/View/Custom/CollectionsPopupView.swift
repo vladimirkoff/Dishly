@@ -1,11 +1,21 @@
 import UIKit
 
+protocol CollectionsPopupViewDelegate {
+    func fetchCollections()
+    func createCollection()
+    func saveToCollection()
+}
+
 class CollectionsPopupView: UIView {
     //MARK: - Properties
     
     private var collectionView: UICollectionView!
     
     var recipe: RecipeViewModel?
+    
+    var delegate: CollectionsPopupViewDelegate?
+    
+    var collectionViewModel: CollectionViewModel?
     
     private var collections: [Collection]? {
         didSet {
@@ -39,26 +49,21 @@ class CollectionsPopupView: UIView {
     //MARK: - Helpers
     
     func configureView() {
-        // Create a UICollectionViewFlowLayout
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         
-        // Create the UICollectionView instance with the desired frame and layout
         let frame = CGRect(x: bounds.minX, y: bounds.maxY + 200, width: bounds.width, height: 200)
         collectionView = UICollectionView(frame: frame, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-
         
-        // Register cell classes if needed
+        
         collectionView.register(CollectionCell.self, forCellWithReuseIdentifier: "CollectionCell")
         
-        // Set the collection view's data source and delegate
         collectionView.dataSource = self
         collectionView.delegate = self
         
-        // Add the collection view as a subview
         addSubview(collectionView)
         
         NSLayoutConstraint.activate([
@@ -85,12 +90,14 @@ extension CollectionsPopupView: UICollectionViewDataSource {
             return collectionsNum + 1
         } else {
             return 0
-        }    }
+        }
+        
+    }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         // Dequeue and configure the collection view cell
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionCell", for: indexPath) as! CollectionCell
-     
+        
         if let collections = collections {
             
             if indexPath.row == collections.count  {
@@ -104,38 +111,29 @@ extension CollectionsPopupView: UICollectionViewDataSource {
     }
     
     func showCollectionNameAlert() {
-        // Create an alert controller
         let alertController = UIAlertController(title: "Enter collection name", message: nil, preferredStyle: .alert)
-
-        // Add a search text field to the alert controller
+        
         alertController.addTextField { textField in
             textField.placeholder = "Collection Name"
         }
-
-        // Create the "Cancel" action
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-
-        // Create the "OK" action
+        
         let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-            // Handle the OK button action
             if let collectionName = alertController.textFields?.first?.text {
                 print("Entered collection name: \(collectionName)")
-                
                 let collection = Collection(name: collectionName, imageUrl: "", id: UUID().uuidString)
                 RecipeService().saveRecipeToCollection(collection: collection, recipe: nil) { error in
                     print("SUCCESS")
                     self.collections!.append(collection)
                     self.collectionView!.reloadData()
                 }
-                
             }
         }
-
-        // Add the actions to the alert controller
+        
         alertController.addAction(cancelAction)
         alertController.addAction(okAction)
-
-        // Present the alert controller
+        
         if let topViewController = UIApplication.shared.keyWindow?.rootViewController {
             topViewController.present(alertController, animated: true, completion: nil)
         }
@@ -144,9 +142,7 @@ extension CollectionsPopupView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let collection = collectionView.cellForItem(at: indexPath) as! CollectionCell
         if indexPath.row == collections!.count {
-            
             showCollectionNameAlert()
-            
         } else {
             saveToCollection(collection: collection.collection! )
         }
@@ -159,12 +155,12 @@ extension CollectionsPopupView: UICollectionViewDataSource {
     }
     
     func fetchCollections() {
-        
-        CollectionService.shared.fetchCollections { collections in
+        guard let collectionViewModel = collectionViewModel else { return }
+        collectionViewModel.fetchCollections(completion: { collections in
             DispatchQueue.main.async {
                 self.collections = collections
             }
-        }
+        })
     }
 }
 
@@ -172,17 +168,14 @@ extension CollectionsPopupView: UICollectionViewDataSource {
 
 extension CollectionsPopupView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        // Specify the size of the collection view items
         return CGSize(width: 100, height: 160)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        // Specify the minimum interitem spacing between collection view items
         return 5
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        // Specify the section insets for the collection view
         return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
     }
 }

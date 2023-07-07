@@ -9,7 +9,7 @@ import UIKit
 
 class GoogleAuthViewModel {
     private let googleAuthService: GoogleAuthServiceProtocol
-
+    
     init(googleAuthService: GoogleAuthServiceProtocol) {
         self.googleAuthService = googleAuthService
     }

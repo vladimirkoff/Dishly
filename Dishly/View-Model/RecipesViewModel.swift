@@ -16,23 +16,13 @@ class RecipesViewModel {
     
     func fetchRecipes(completion: @escaping([RecipeViewModel]) -> ()) {
         recipeService.fetchRecipes { recipes in
-            var recipeViewModelArray: [RecipeViewModel] = []
-            for recipe in recipes {
-                let recipeViewModel = RecipeViewModel(recipe: recipe, recipeService: self.recipeService)
-                recipeViewModelArray.append(recipeViewModel)
-            }
-            completion(recipeViewModelArray)
+            completion(recipes)
         }
     }
     
     func fetchRecipesWith(category: Recipe.Category, completion: @escaping([RecipeViewModel]) -> ()) {
         recipeService.fecthRecipesWith(category: category) { recipes in
-            var recipeViewModelArray: [RecipeViewModel] = []
-            for recipe in recipes {
-                let recipeViewModel = RecipeViewModel(recipe: recipe, recipeService: self.recipeService)
-                recipeViewModelArray.append(recipeViewModel)
-            }
-            completion(recipeViewModelArray)
+            completion(recipes)
         }
     }
 }

@@ -29,7 +29,7 @@ class RecipeSearchViewController: UIViewController, UITextFieldDelegate {
         return tableView
     }()
     
-    
+    //MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,6 +98,8 @@ extension RecipeSearchViewController: UISearchResultsUpdating {
     
 
 }
+
+//MARK: - UITableViewDelegate & UITableViewDataSource
 
 extension RecipeSearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

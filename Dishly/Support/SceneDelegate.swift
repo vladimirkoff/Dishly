@@ -15,19 +15,30 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var recipeService: RecipeServiceProtocol!
     var userRealmService: UserRealmServiceProtocol!
     var googleAuthService: GoogleAuthServiceProtocol!
+    var collectionService: CollectionServiceProtocol!
+    
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
 
         let container = DependencyContainer.shared
+        
         userService = container.getUserService()
         authService = container.getAuthService(userService: userService)
         recipeService = container.getRecipeService()
         userRealmService = container.getUserRealmService()
         googleAuthService = container.getGoogleAuthService(userService: userService)
+        collectionService = container.getCollectionService()
+        
 
-        let greetVC = GreetViewController(authService: authService, userService: userService, recipeService: recipeService, userRealmService: userRealmService, googleAuthService: googleAuthService)
-
+        let greetVC = GreetViewController(authService: authService,
+                                          userService: userService,
+                                          recipeService: recipeService,
+                                          userRealmService: userRealmService,
+                                          googleAuthService: googleAuthService,
+                                          collectionService: collectionService
+        )
+        
         window = UIWindow(windowScene: scene)
         window?.rootViewController = UINavigationController(rootViewController: greetVC)
         window?.makeKeyAndVisible()

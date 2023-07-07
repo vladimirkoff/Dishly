@@ -4,48 +4,36 @@ class ExploreViewController: UIViewController {
     //MARK: - Properties
     
     private let window = UIApplication.shared.windows.last!
-
-    lazy private var backgroundView: UIView = {
-
-         let view = UIView(frame: window.bounds)
-         view.backgroundColor = UIColor.black
-         view.alpha = 0.5
-         
-         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissView))
-         view.addGestureRecognizer(gestureRecognizer)
-         
-         return view
-     }()
-    
-    lazy private var windowView: CollectionsPopupView = {
-         let view = CollectionsPopupView(frame: CGRect(x: view.frame.minX, y: view.frame.maxY, width: view.frame.width, height: 300))
-        view.backgroundColor = .white
-         view.layer.cornerRadius = 10
-         
-         return view
-     }()
-    
-    @objc func dismissView() {
-        backgroundView.removeFromSuperview()
-        
-        
-        UIView.animate(withDuration: 1) {
-            self.windowView.removeFromSuperview()
-            
-            self.windowView.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY, width: self.view.frame.width, height: 300)
-        }
-    }
     
     var user: User
     
-    var recipeViewModel: RecipeViewModel!
     var recipeService: RecipeServiceProtocol!
-    
-    var userViewModel: UserViewModel!
     var userService: UserServiceProtocol!
     
+    var userViewModel: UserViewModel!
+    var recipeViewModel: RecipeViewModel!
+    
     var recipes: [RecipeViewModel]
-  
+    
+    lazy private var backgroundView: UIView = {
+        let view = UIView(frame: window.bounds)
+        view.backgroundColor = UIColor.black
+        view.alpha = 0.5
+        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissView))
+        view.addGestureRecognizer(gestureRecognizer)
+        
+        return view
+    }()
+    
+    lazy private var windowView: CollectionsPopupView = {
+        let view = CollectionsPopupView(frame: CGRect(x: view.frame.minX, y: view.frame.maxY, width: view.frame.width, height: 300))
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 10
+        
+        return view
+    }()
+    
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
@@ -63,7 +51,6 @@ class ExploreViewController: UIViewController {
         collectionView.dataSource = self
         return collectionView
     }()
-    
     
     //MARK: - Lifecycle
     
@@ -84,8 +71,6 @@ class ExploreViewController: UIViewController {
         configureNavBar()
         configureUI()
         
-//        recipeViewModel = RecipeViewModel(recipeService: recipeService)
-        
         userViewModel = UserViewModel(userService: userService)
     }
     
@@ -98,7 +83,6 @@ class ExploreViewController: UIViewController {
     }
     
     func configureNavBar() {
-        
         navigationItem.searchController = searchController
         navigationItem.setHidesBackButton(true, animated: false)
         definesPresentationContext = true
@@ -110,7 +94,7 @@ class ExploreViewController: UIViewController {
     
     func configureUI() {
         view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
-
+        
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -125,12 +109,23 @@ class ExploreViewController: UIViewController {
     
     //MARK: - Selectors
     
+    @objc func dismissView() {
+        backgroundView.removeFromSuperview()
+        
+        UIView.animate(withDuration: 1) {
+            self.windowView.removeFromSuperview()
+            
+            self.windowView.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY, width: self.view.frame.width, height: 300)
+        }
+    }
+    
 }
 
 //MARK: - UISearchResultsUpdating
 
 extension ExploreViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
+        
     }
 }
 
@@ -160,13 +155,13 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
         let cellHeight = (collectionView.bounds.height - collectionView.contentInset.top - collectionView.contentInset.bottom) / 2
         return CGSize(width: collectionView.bounds.width, height: cellHeight)
     }
-
+    
 }
 
 //MARK: - ParentCellDelegate
 
 extension ExploreViewController: ParentCellDelegate {
-
+    
     
     func goToRecipe(with recipe: RecipeViewModel) {
         let vc = RecipeViewController(user: user, recipe: recipe)
@@ -181,7 +176,7 @@ extension ExploreViewController: ParentCellDelegate {
         windowView.recipe = recipe
         self.window.addSubview(self.backgroundView)
         self.window.addSubview(self.windowView)
-
+        
         
         UIView.animate(withDuration: 0.6) {
             self.windowView.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY - 300, width: self.view.bounds.width, height: 300)

@@ -10,6 +10,8 @@ class MainTabBarController: UITabBarController {
     var userService: UserServiceProtocol!
     var recipeService: RecipeServiceProtocol!
     
+    private var collectionService: CollectionServiceProtocol!
+    
     var recipesViewModel: RecipesViewModel!
     
     private let userRealmService: UserRealmServiceProtocol = UserRealmService()
@@ -55,11 +57,12 @@ class MainTabBarController: UITabBarController {
         fecthRecipes()
     }
     
-    init(user: User, authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol) {
+    init(user: User, authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, collectionService: CollectionServiceProtocol) {
          self.authService = authService
          self.userService = userService
          self.recipeService = recipeService
          self.user = user
+        self.collectionService = collectionService
          super.init(nibName: nil, bundle: nil)
      }
     
@@ -123,10 +126,16 @@ class MainTabBarController: UITabBarController {
                searchController.searchBar.placeholder = "Search"
                
                exploreViewController.navigationItem.searchController = searchController
+            
+            exploreViewController.navigationItem.searchController?.searchBar.showsCancelButton = true
                
                exploreViewController.navigationItem.hidesSearchBarWhenScrolling = true
            } else {
                vc.navigationItem.searchController = nil
+               vc.navigationItem.searchController?.searchBar.isHidden = true
+               vc.navigationItem.searchController?.searchBar.isEnabled = false
+               vc.navigationItem.searchController?.searchBar.isTranslucent = true
+
            }
         
         let selectedImage = UIImageView(image: image)

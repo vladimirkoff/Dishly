@@ -19,18 +19,17 @@ class GreetViewController: UIViewController {
     
     private var user: User!
     
-    var authService: AuthServiceProtocol!
-    var userService: UserServiceProtocol!
-    var recipeService: RecipeServiceProtocol!
+    private var authService: AuthServiceProtocol!
+    private var userService: UserServiceProtocol!
+    private var recipeService: RecipeServiceProtocol!
+    private var collectionService: CollectionServiceProtocol!
+    private var userRealmService: UserRealmServiceProtocol!
+    private var googleAuthService: GoogleAuthServiceProtocol!
     
-    var userViewModel: UserViewModel!
-    var authViewModel: AuthViewModel!
-    
-    var userRealmService: UserRealmServiceProtocol!
-    var userRealmViewModel: UserRealmViewModel!
-    
-    var googleAuthService: GoogleAuthServiceProtocol!
-    var googleAuthViewModel: GoogleAuthViewModel!
+    private var userViewModel: UserViewModel!
+    private var authViewModel: AuthViewModel!
+    private var userRealmViewModel: UserRealmViewModel!
+    private var googleAuthViewModel: GoogleAuthViewModel!
     
     private let hud = JGProgressHUD(style: .dark)
 
@@ -190,12 +189,13 @@ class GreetViewController: UIViewController {
         
     }
     
-    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol, googleAuthService: GoogleAuthServiceProtocol) {
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol, googleAuthService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol) {
         self.authService = authService
         self.userService = userService
         self.recipeService = recipeService
         self.userRealmService = userRealmService
         self.googleAuthService = googleAuthService
+        self.collectionService = collectionService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -216,15 +216,15 @@ class GreetViewController: UIViewController {
             let providerID = currentUser.providerData.first?.providerID
             if providerID == GoogleAuthProviderID {
                 googleAuthViewModel.checkIfUserLoggedIn { user in
-                    DispatchQueue.main.async {
-                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService)
+                    DispatchQueue.main.async { [self] in
+                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: collectionService)
                         self.navigationController?.pushViewController(vc, animated: true)
                     }
                 }
             } else {
                 authViewModel.checkIfUserExists { user in
                     DispatchQueue.main.async {
-                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService)
+                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService)
                         self.navigationController?.pushViewController(vc, animated: true)
                     }
                 }
@@ -298,7 +298,7 @@ class GreetViewController: UIViewController {
                 self.showLoader(false)
                 if let user = user {
                     self.user = user
-                    let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService)
+                    let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService)
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
             }

@@ -18,6 +18,12 @@ class SavedViewController: UICollectionViewController {
         }
     }
     
+    private var recipes: [Recipe]? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+    
     var delegate: SavedVCProtocol?
     
     //MARK: - Lifecycle
@@ -57,14 +63,21 @@ class SavedViewController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! RecipeCell
+        if let recipes = recipes {
+            cell.recipeViewModel = RecipeViewModel(recipe: recipes[indexPath.row], recipeService: RecipeService())
+        }
         cell.layer.cornerRadius = 10
         cell.backgroundColor = .white
         cell.clipsToBounds = true
         return cell
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return recipes?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -74,6 +87,7 @@ class SavedViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerReuseIdentifier, for: indexPath) as! ItemsHeader
         self.delegate = header
+        header.delegate = self
         return header
     }
     
@@ -93,3 +107,12 @@ extension SavedViewController: UICollectionViewDelegateFlowLayout {
 
 }
 
+extension SavedViewController: ItemsHeaderDelegate {
+    func fecthRecipes(with collection: Collection) {
+        CollectionService.shared.fetchRecipesWith(collection: collection) { recipes in
+            self.recipes = recipes
+        }
+    }
+    
+    
+}

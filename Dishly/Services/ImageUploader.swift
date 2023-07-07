@@ -8,8 +8,6 @@
 import UIKit
 import FirebaseStorage
 
-
-
 class ImageUploader {
     
     static let shared = ImageUploader()

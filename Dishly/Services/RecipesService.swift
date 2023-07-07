@@ -7,7 +7,7 @@ protocol RecipeServiceProtocol {
     func createRecipe(recipe: RecipeViewModel, image: UIImage, completion: @escaping(Error?) -> ())
     func updateRating(for recipe: RecipeViewModel, newRating: Int, completion: @escaping(Error?) -> ())
     func fecthRecipesWith(category: Recipe.Category, completion: @escaping ([Recipe]) -> Void)
-    func saveRecipeToCollection(collection: Collection, recipe: RecipeViewModel, completion: @escaping(Error?) -> ())
+    func saveRecipeToCollection(collection: Collection, recipe: RecipeViewModel?, completion: @escaping(Error?) -> ())
 }
 
 class RecipeService: RecipeServiceProtocol {
@@ -15,27 +15,44 @@ class RecipeService: RecipeServiceProtocol {
     func updateRating(for recipe: RecipeViewModel, newRating: Int , completion: @escaping(Error?) -> ()) {
     }
     
-    func saveRecipeToCollection(collection: Collection, recipe: RecipeViewModel, completion: @escaping(Error?) -> ()) {
+    func saveRecipeToCollection(collection: Collection, recipe: RecipeViewModel?, completion: @escaping(Error?) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        var instructions: [String] = []
-        var ingredients: [String] = []
 
-        for instruction in recipe.instructions {
-            if let instr = instruction.text {
-                instructions.append(instr)
-            }
-        }
-        for ingredient in recipe.ingredients {
-            if let ingr = ingredient.name {
-                ingredients.append(ingr)
-            }
-        }
-        
-        let data: [String: Any] = ["name": recipe.recipeName!, "cookTime": recipe.recipe.cookTime!, "recipeImageUrl": recipe.recipe.recipeImageUrl!, "id": recipe.recipe.id!, "ownerId": recipe.recipe.ownerId!, "instructions": instructions, "ingredients": ingredients, "category": recipe.category, "rating": 0, "numOfRatings": 0]
         
         let collectionData: [String : Any] = ["name" : collection.name, "id" : collection.id, "imageUrl" : collection.imageUrl]
         
-        COLLECTION_USERS.document(uid).collection("collections").addDocument(data: collectionData).collection(collection.name).addDocument(data: data)
+        if let recipe = recipe {
+     
+            
+            var instructions: [String] = []
+            var ingredients: [String] = []
+
+            for instruction in recipe.instructions {
+                if let instr = instruction.text {
+                    instructions.append(instr)
+                }
+            }
+            for ingredient in recipe.ingredients {
+                if let ingr = ingredient.name {
+                    ingredients.append(ingr)
+                }
+            }
+            
+            let data: [String: Any] = ["name": recipe.recipeName!, "cookTime": recipe.recipe.cookTime!, "recipeImageUrl": recipe.recipe.recipeImageUrl!, "id": recipe.recipe.id!, "ownerId": recipe.recipe.ownerId!, "instructions": instructions, "ingredients": ingredients, "category": recipe.category, "rating": 0, "numOfRatings": 0]
+            
+            COLLECTION_USERS.document(uid).collection("collections").document(collection.id).collection(collection.name).document(recipe.recipe.id!).setData(data)
+        } else {
+            
+            COLLECTION_USERS.document(uid).collection("collections").document(collection.id).setData(collectionData)
+            
+            completion(nil)
+        }
+        
+        
+
+        
+        
+    
     }
     
     func fecthRecipesWith(category: Recipe.Category, completion: @escaping ([Recipe]) -> Void) {

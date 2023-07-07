@@ -20,6 +20,10 @@
 		853F3B312A57F19300D53EB8 /* CollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B302A57F19300D53EB8 /* CollectionCell.swift */; };
 		853F3B332A57F4E500D53EB8 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B322A57F4E500D53EB8 /* Collection.swift */; };
 		853F3B372A58086B00D53EB8 /* CollectionsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B362A58086B00D53EB8 /* CollectionsService.swift */; };
+		853F3B392A580E2B00D53EB8 /* CollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B382A580E2B00D53EB8 /* CollectionViewModel.swift */; };
+		853F3B3B2A58569F00D53EB8 /* SearchViewControler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B3A2A58569F00D53EB8 /* SearchViewControler.swift */; };
+		853F3B3D2A585FEC00D53EB8 /* SearchTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B3C2A585FEC00D53EB8 /* SearchTableCell.swift */; };
+		853F3B3F2A5864E400D53EB8 /* ConfigureRecipes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B3E2A5864E400D53EB8 /* ConfigureRecipes.swift */; };
 		85C1B65B2A39FE5700BEAF2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B65A2A39FE5700BEAF2F /* AppDelegate.swift */; };
 		85C1B65D2A39FE5700BEAF2F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B65C2A39FE5700BEAF2F /* SceneDelegate.swift */; };
 		85C1B6622A39FE5700BEAF2F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85C1B6602A39FE5700BEAF2F /* Main.storyboard */; };
@@ -87,6 +91,10 @@
 		853F3B302A57F19300D53EB8 /* CollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCell.swift; sourceTree = "<group>"; };
 		853F3B322A57F4E500D53EB8 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		853F3B362A58086B00D53EB8 /* CollectionsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsService.swift; sourceTree = "<group>"; };
+		853F3B382A580E2B00D53EB8 /* CollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewModel.swift; sourceTree = "<group>"; };
+		853F3B3A2A58569F00D53EB8 /* SearchViewControler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewControler.swift; sourceTree = "<group>"; };
+		853F3B3C2A585FEC00D53EB8 /* SearchTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableCell.swift; sourceTree = "<group>"; };
+		853F3B3E2A5864E400D53EB8 /* ConfigureRecipes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureRecipes.swift; sourceTree = "<group>"; };
 		85C1B6572A39FE5700BEAF2F /* Dishly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dishly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85C1B65A2A39FE5700BEAF2F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		85C1B65C2A39FE5700BEAF2F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -243,6 +251,7 @@
 				85C1B74F2A51AB2600BEAF2F /* UserRealmViewModel.swift */,
 				85C1B7592A54825600BEAF2F /* GoogleAuthViewModel.swift */,
 				853F3B2A2A56A6A900D53EB8 /* RecipesViewModel.swift */,
+				853F3B382A580E2B00D53EB8 /* CollectionViewModel.swift */,
 			);
 			path = "View-Model";
 			sourceTree = "<group>";
@@ -263,6 +272,7 @@
 				85C1B72A2A4D8F4C00BEAF2F /* GreetViewController.swift */,
 				85FE6B902A56715400E6417D /* CreateNewVC.swift */,
 				853F3B242A567C2E00D53EB8 /* PrepareViewController.swift */,
+				853F3B3A2A58569F00D53EB8 /* SearchViewControler.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -324,6 +334,7 @@
 				853F3B262A567C7400D53EB8 /* PrepareTableCell.swift */,
 				853F3B282A567C9000D53EB8 /* PrepareTableCell.xib */,
 				853F3B302A57F19300D53EB8 /* CollectionCell.swift */,
+				853F3B3C2A585FEC00D53EB8 /* SearchTableCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -335,6 +346,7 @@
 				85C1B7412A4F069F00BEAF2F /* DependencyContainer.swift */,
 				85C1B7552A541AA000BEAF2F /* RandomUsernameGenerator.swift */,
 				85FE6B8E2A566C4600E6417D /* Storyboardable.swift */,
+				853F3B3E2A5864E400D53EB8 /* ConfigureRecipes.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -504,6 +516,7 @@
 				853F3B2D2A56D98400D53EB8 /* MyGroceries.swift in Sources */,
 				85C1B7052A45A7AF00BEAF2F /* RecipeCell.swift in Sources */,
 				85C1B6EF2A447ED900BEAF2F /* Recipe.swift in Sources */,
+				853F3B3F2A5864E400D53EB8 /* ConfigureRecipes.swift in Sources */,
 				85FE6B952A56719800E6417D /* UIViewController.swift in Sources */,
 				85C1B70F2A485A6900BEAF2F /* MealPlanViewController.swift in Sources */,
 				853F3B2B2A56A6A900D53EB8 /* RecipesViewModel.swift in Sources */,
@@ -523,6 +536,7 @@
 				85FE6B912A56715400E6417D /* CreateNewVC.swift in Sources */,
 				853EEB342A55798400DDB93F /* CollectionsPopupView.swift in Sources */,
 				85C1B7112A485B2300BEAF2F /* CartViewController.swift in Sources */,
+				853F3B3B2A58569F00D53EB8 /* SearchViewControler.swift in Sources */,
 				85C1B7072A45B71C00BEAF2F /* ParentCell.swift in Sources */,
 				85C1B7422A4F069F00BEAF2F /* DependencyContainer.swift in Sources */,
 				85C1B7152A48723200BEAF2F /* UserService.swift in Sources */,
@@ -533,6 +547,7 @@
 				85C1B70B2A45D08E00BEAF2F /* SavedViewController.swift in Sources */,
 				85C1B7192A4982EF00BEAF2F /* RecipeViewController.swift in Sources */,
 				85C1B7582A5481BC00BEAF2F /* GoogleAuthService.swift in Sources */,
+				853F3B392A580E2B00D53EB8 /* CollectionViewModel.swift in Sources */,
 				853F3B212A56774500D53EB8 /* CustomTableView.swift in Sources */,
 				85C1B6E92A447E9E00BEAF2F /* MainTabBarController.swift in Sources */,
 				85C1B65D2A39FE5700BEAF2F /* SceneDelegate.swift in Sources */,
@@ -543,6 +558,7 @@
 				853F3B332A57F4E500D53EB8 /* Collection.swift in Sources */,
 				85C1B70D2A45D11100BEAF2F /* ItemsHeader.swift in Sources */,
 				85C1B7292A4C2B9B00BEAF2F /* ProfileInfoCell.swift in Sources */,
+				853F3B3D2A585FEC00D53EB8 /* SearchTableCell.swift in Sources */,
 				85C1B7452A51534900BEAF2F /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

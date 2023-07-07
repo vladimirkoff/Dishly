@@ -32,4 +32,8 @@ class DependencyContainer {
         return GoogleAuthService(userService: userService)
     }
     
+    func getCollectionService() -> CollectionServiceProtocol {
+        return CollectionService()
+    }
+    
 }

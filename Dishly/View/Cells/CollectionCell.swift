@@ -6,21 +6,21 @@
 //
 
 import UIKit
+import SDWebImage
 
 class CollectionCell: UICollectionViewCell {
     //MARK: - Properties
     
     var collection: Collection? {
-        didSet {
-            configure()
-        }
+        didSet { configure() }
     }
     
-    private let collectionImageView: UIImageView = {
+     var collectionImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.backgroundColor = .lightGray
         iv.layer.cornerRadius = 35
+        iv.clipsToBounds = true
         iv.heightAnchor.constraint(equalToConstant: 70).isActive = true
         iv.widthAnchor.constraint(equalToConstant: 70).isActive = true
         return iv
@@ -36,6 +36,14 @@ class CollectionCell: UICollectionViewCell {
     
     func configure() {
         collectionNameLabel.text = collection!.name
+        
+        if collection!.imageUrl == "" {
+            collectionImageView.image = UIImage(named: "foodPlaceholder")
+        } else {
+            if let url = URL(string: collection!.imageUrl) {
+                collectionImageView.sd_setImage(with: url)
+            }
+        }
     }
     
     //MARK: - Lifecycle

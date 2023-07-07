@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol ItemsHeaderDelegate {
+    func fecthRecipes(with collection: Collection)
+}
+
 class ItemsHeader: UICollectionReusableView {
     //MARK: - Properties
     
@@ -15,6 +19,8 @@ class ItemsHeader: UICollectionReusableView {
     private var collectionView: UICollectionView?
     
     private var numberOfItems = 8
+    
+    var delegate: ItemsHeaderDelegate?
 
     
     //MARK: - Lifecycle
@@ -52,8 +58,11 @@ class ItemsHeader: UICollectionReusableView {
 
 extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collections?.count ?? 0
-        
+        if let collectionsNum = collections?.count {
+            return collectionsNum + 1
+        } else {
+            return 0
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -61,18 +70,64 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
         cell.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
         
         if let collections = collections {
-            cell.collection = collections[indexPath.row]
+            if indexPath.row == collections.count  {
+                cell.collectionImageView.image = UIImage(systemName: "plus")
+            } else {
+                cell.collection = collections[indexPath.row]
+            }
         }
-
-        if indexPath.row == numberOfItems - 1 {
-            cell.backgroundColor = .white
-        }
+        
         return cell
     }
     
+    func showCollectionNameAlert() {
+        // Create an alert controller
+        let alertController = UIAlertController(title: "Enter collection name", message: nil, preferredStyle: .alert)
+
+        // Add a search text field to the alert controller
+        alertController.addTextField { textField in
+            textField.placeholder = "Collection Name"
+        }
+
+        // Create the "Cancel" action
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+
+        // Create the "OK" action
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+            // Handle the OK button action
+            if let collectionName = alertController.textFields?.first?.text {
+                print("Entered collection name: \(collectionName)")
+                
+                let collection = Collection(name: collectionName, imageUrl: "", id: UUID().uuidString)
+                RecipeService().saveRecipeToCollection(collection: collection, recipe: nil) { error in
+                    print("SUCCESS")
+                    self.collections!.append(collection)
+                    self.collectionView!.reloadData()
+                }
+                
+            }
+        }
+
+        // Add the actions to the alert controller
+        alertController.addAction(cancelAction)
+        alertController.addAction(okAction)
+
+        // Present the alert controller
+        if let topViewController = UIApplication.shared.keyWindow?.rootViewController {
+            topViewController.present(alertController, animated: true, completion: nil)
+        }
+    }
+
+    
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row == numberOfItems - 1 {
-            print("Add collection")
+        if indexPath.row == collections!.count {
+            
+            showCollectionNameAlert()
+            
+        } else {
+            delegate?.fecthRecipes(with: collections![indexPath.row])
+            
         }
     }
 

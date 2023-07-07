@@ -10,12 +10,11 @@ import FirebaseFirestore
 import FirebaseAuth
 
 protocol CollectionServiceProtocol {
-    
+    func fetchCollections(completion: @escaping([Collection]) -> ())
+    func fetchRecipesWith(collection: Collection, completion: @escaping([RecipeViewModel]) -> ())
 }
  
 class CollectionService: CollectionServiceProtocol {
-    static let shared = CollectionService()
-    private init() {}
     
     func fetchCollections(completion: @escaping([Collection]) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
@@ -32,6 +31,21 @@ class CollectionService: CollectionServiceProtocol {
                     collectionsArray.append(collectionModel)
                 }
                 completion(collectionsArray)
+            }
+        }
+    }
+    
+    func fetchRecipesWith(collection: Collection, completion: @escaping([RecipeViewModel]) -> ()) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        var recipesArray: [RecipeViewModel] = []
+        
+        COLLECTION_USERS.document(uid).collection("collections").document(collection.id).collection(collection.name).getDocuments { snapshot, error in
+            if let recipes = snapshot?.documents {
+                for recipe in recipes {
+                    let recipeViewModel = setRecipesConfiguration(recipe: recipe)
+                    recipesArray.append(recipeViewModel)
+                }
+                completion(recipesArray)
             }
         }
     }

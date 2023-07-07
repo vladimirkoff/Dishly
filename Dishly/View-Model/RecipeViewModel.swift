@@ -11,7 +11,7 @@ import Foundation
 
 struct RecipeViewModel {
     //MARK: - Properties
-    private let recipeService: RecipeServiceProtocol
+    private let recipeService: RecipeServiceProtocol?
     
     var recipe: Recipe
     
@@ -22,7 +22,7 @@ struct RecipeViewModel {
     
     //MARK: - Init
     
-    init(recipe: Recipe, recipeService: RecipeServiceProtocol) {
+    init(recipe: Recipe, recipeService: RecipeServiceProtocol?) {
         self.recipe = recipe
         self.recipeService = recipeService
     }
@@ -30,12 +30,14 @@ struct RecipeViewModel {
     //MARK: - Methods
     
     func createRecipe(image: UIImage, completion: @escaping(Error?) -> ()) {
+        guard let recipeService = recipeService else { return }
         recipeService.createRecipe(recipe: self, image: image) { error in
             completion(error)
         }
     }
 
     func fetchRecipes(completion: @escaping ([Recipe]) -> Void) {
+        guard let recipeService = recipeService else { return }
         recipeService.fetchRecipes { recipes in
             completion(recipes)
         }

@@ -7,6 +7,16 @@ class CollectionsPopupView: UIView {
     
     var recipe: RecipeViewModel?
     
+    private var collections: [Collection]? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+    
+    override func didMoveToSuperview() {
+        fetchCollections()
+    }
+    
     private let popupLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -16,6 +26,7 @@ class CollectionsPopupView: UIView {
     }()
     
     //MARK: - Lifecycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
@@ -70,25 +81,89 @@ class CollectionsPopupView: UIView {
 
 extension CollectionsPopupView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
-    }
+        if let collectionsNum = collections?.count {
+            return collectionsNum + 1
+        } else {
+            return 0
+        }    }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         // Dequeue and configure the collection view cell
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionCell", for: indexPath) as! CollectionCell
-        cell.collection = Collection(name: "Breakfasts", imageUrl: "someUrl", id: "wfjkebeiuwgviwb")
+     
+        if let collections = collections {
+            
+            if indexPath.row == collections.count  {
+                cell.collectionImageView.image = UIImage(systemName: "plus")
+            } else {
+                cell.collection = collections[indexPath.row]
+            }
+        }
         cell.backgroundColor = .red
         return cell
     }
     
+    func showCollectionNameAlert() {
+        // Create an alert controller
+        let alertController = UIAlertController(title: "Enter collection name", message: nil, preferredStyle: .alert)
+
+        // Add a search text field to the alert controller
+        alertController.addTextField { textField in
+            textField.placeholder = "Collection Name"
+        }
+
+        // Create the "Cancel" action
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+
+        // Create the "OK" action
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+            // Handle the OK button action
+            if let collectionName = alertController.textFields?.first?.text {
+                print("Entered collection name: \(collectionName)")
+                
+                let collection = Collection(name: collectionName, imageUrl: "", id: UUID().uuidString)
+                RecipeService().saveRecipeToCollection(collection: collection, recipe: nil) { error in
+                    print("SUCCESS")
+                    self.collections!.append(collection)
+                    self.collectionView!.reloadData()
+                }
+                
+            }
+        }
+
+        // Add the actions to the alert controller
+        alertController.addAction(cancelAction)
+        alertController.addAction(okAction)
+
+        // Present the alert controller
+        if let topViewController = UIApplication.shared.keyWindow?.rootViewController {
+            topViewController.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let collection = collectionView.cellForItem(at: indexPath) as! CollectionCell
-        saveToCollection(collection: collection.collection! )
+        if indexPath.row == collections!.count {
+            
+            showCollectionNameAlert()
+            
+        } else {
+            saveToCollection(collection: collection.collection! )
+        }
     }
     
     func saveToCollection(collection: Collection) {
         RecipeService().saveRecipeToCollection(collection: collection, recipe: recipe!) { error in
             print("SAVED")
+        }
+    }
+    
+    func fetchCollections() {
+        
+        CollectionService.shared.fetchCollections { collections in
+            DispatchQueue.main.async {
+                self.collections = collections
+            }
         }
     }
 }

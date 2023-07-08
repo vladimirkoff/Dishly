@@ -30,8 +30,4 @@ class CollectionViewModel {
         }
     }
     
-    func createCollection() {
-        
-    }
-    
 }

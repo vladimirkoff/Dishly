@@ -42,9 +42,5 @@ struct RecipeViewModel {
             completion(recipes)
         }
     }
-    
-    func fetchRecipe(with id: String) {
-        
-    }
 }
 

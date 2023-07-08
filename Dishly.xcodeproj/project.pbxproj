@@ -166,6 +166,45 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		852666F22A596CF1005BFCFC /* TabBarController */ = {
+			isa = PBXGroup;
+			children = (
+				85C1B6E82A447E9E00BEAF2F /* MainTabBarController.swift */,
+				85C1B6EA2A447EA500BEAF2F /* ExploreViewController.swift */,
+				85C1B70A2A45D08E00BEAF2F /* SavedViewController.swift */,
+				85C1B70E2A485A6900BEAF2F /* MealPlanViewController.swift */,
+			);
+			path = TabBarController;
+			sourceTree = "<group>";
+		};
+		852666F32A596D1A005BFCFC /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				85C1B6EC2A447EAD00BEAF2F /* ProfileViewController.swift */,
+				85C1B7262A4C26AD00BEAF2F /* EditProfileViewController.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		852666F42A596D31005BFCFC /* CreateRecipe */ = {
+			isa = PBXGroup;
+			children = (
+				85FE6B902A56715400E6417D /* CreateNewVC.swift */,
+				853F3B242A567C2E00D53EB8 /* PrepareViewController.swift */,
+			);
+			path = CreateRecipe;
+			sourceTree = "<group>";
+		};
+		852666F52A596D44005BFCFC /* Greet&Auth */ = {
+			isa = PBXGroup;
+			children = (
+				85C1B72A2A4D8F4C00BEAF2F /* GreetViewController.swift */,
+				85C1B71C2A49942B00BEAF2F /* LogInViewController.swift */,
+				85C1B71E2A49943300BEAF2F /* SignUpViewController.swift */,
+			);
+			path = "Greet&Auth";
+			sourceTree = "<group>";
+		};
 		853F3B222A5678A400D53EB8 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
@@ -261,19 +300,12 @@
 		85C1B6E62A447CA100BEAF2F /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				85C1B6E82A447E9E00BEAF2F /* MainTabBarController.swift */,
-				85C1B6EA2A447EA500BEAF2F /* ExploreViewController.swift */,
-				85C1B6EC2A447EAD00BEAF2F /* ProfileViewController.swift */,
+				852666F52A596D44005BFCFC /* Greet&Auth */,
+				852666F22A596CF1005BFCFC /* TabBarController */,
+				852666F42A596D31005BFCFC /* CreateRecipe */,
+				852666F32A596D1A005BFCFC /* Profile */,
 				85C1B7182A4982EF00BEAF2F /* RecipeViewController.swift */,
-				85C1B70A2A45D08E00BEAF2F /* SavedViewController.swift */,
-				85C1B70E2A485A6900BEAF2F /* MealPlanViewController.swift */,
 				85C1B7102A485B2300BEAF2F /* CartViewController.swift */,
-				85C1B71C2A49942B00BEAF2F /* LogInViewController.swift */,
-				85C1B71E2A49943300BEAF2F /* SignUpViewController.swift */,
-				85C1B7262A4C26AD00BEAF2F /* EditProfileViewController.swift */,
-				85C1B72A2A4D8F4C00BEAF2F /* GreetViewController.swift */,
-				85FE6B902A56715400E6417D /* CreateNewVC.swift */,
-				853F3B242A567C2E00D53EB8 /* PrepareViewController.swift */,
 				853F3B3A2A58569F00D53EB8 /* SearchViewControler.swift */,
 			);
 			path = ViewControllers;

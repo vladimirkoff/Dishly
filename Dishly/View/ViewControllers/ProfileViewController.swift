@@ -15,7 +15,7 @@ class ProfileViewController: UIViewController {
     
     var googleService: GoogleAuthServiceProtocol!
     
-    var user: User!
+    var user: UserViewModel!
     
     var profileImage: UIImageView!
     
@@ -76,7 +76,7 @@ class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         userViewModel.fetchUser { user in
-            self.navigationItem.title = user.fullName
+            self.navigationItem.title = user.user!.fullName
         }
     }
     
@@ -85,7 +85,7 @@ class ProfileViewController: UIViewController {
         tabBarController?.tabBar.isHidden = false
     }
     
-    init(user: User, userService: UserServiceProtocol, profileImage: UIImageView, authService: AuthServiceProtocol, userRealmService: UserRealmServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol) {
+    init(user: UserViewModel, userService: UserServiceProtocol, profileImage: UIImageView, authService: AuthServiceProtocol, userRealmService: UserRealmServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol) {
         self.user = user
         self.userService = userService
         self.profileImage = profileImage
@@ -105,7 +105,7 @@ class ProfileViewController: UIViewController {
         configureTableView()
         configureUI()
         
-        userViewModel = UserViewModel(userService: userService)
+        userViewModel = UserViewModel(user: nil, userService: userService)
         authViewModel = AuthViewModel(authService: authService)
     }
     
@@ -135,7 +135,7 @@ class ProfileViewController: UIViewController {
         
         tabBarController?.tabBar.isHidden = true
         
-        navigationItem.title = user.fullName
+        navigationItem.title = user.user!.fullName
         
         navigationController?.navigationBar.prefersLargeTitles = true
         

@@ -109,7 +109,7 @@ extension RecipeSearchViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? SearchTableCell {
-            let vc = RecipeViewController(user: User(dictionary: [:]) , recipe: cell.recipe! )
+            let vc = RecipeViewController(user: UserViewModel(user: User(dictionary: [:]), userService: nil)  , recipe: cell.recipe! )
             navigationController?.pushViewController(vc, animated: true)
         }
     }

@@ -7,8 +7,8 @@ import FirebaseCore
 import GoogleSignIn
 
 protocol GoogleAuthServiceProtocol {
-    func signInWithGoogle(with vc: UIViewController, completion: @escaping(Error?, User?) -> ())
-    func checkIfUserLoggedIn(completion: @escaping(User?, Bool) -> ())
+    func signInWithGoogle(with vc: UIViewController, completion: @escaping(Error?, UserViewModel?) -> ())
+    func checkIfUserLoggedIn(completion: @escaping(UserViewModel?, Bool) -> ())
 }
 
 class GoogleAuthService: GoogleAuthServiceProtocol {
@@ -19,7 +19,7 @@ class GoogleAuthService: GoogleAuthServiceProtocol {
         self.userService = userService
     }
     
-    func checkIfUserLoggedIn(completion: @escaping (User?, Bool) -> ()) {
+    func checkIfUserLoggedIn(completion: @escaping (UserViewModel?, Bool) -> ()) {
         if let email = Auth.auth().currentUser?.email {
             userService.getUser(by: email) { user in
                 completion(user, true)
@@ -30,7 +30,7 @@ class GoogleAuthService: GoogleAuthServiceProtocol {
     }
     
     
-    func signInWithGoogle(with vc: UIViewController, completion: @escaping (Error?, User?) -> ()) {
+    func signInWithGoogle(with vc: UIViewController, completion: @escaping (Error?, UserViewModel?) -> ()) {
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
         
         let config = GIDConfiguration(clientID: clientID)

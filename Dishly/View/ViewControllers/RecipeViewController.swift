@@ -20,7 +20,7 @@ class RecipeViewController: UIViewController {
     
     private  var recipeService: RecipeServiceProtocol!
     
-    private var user: User!
+    private var user: UserViewModel!
     
     private let dishImage: UIImageView = {
         let image = UIImage(named: "" )
@@ -310,7 +310,7 @@ class RecipeViewController: UIViewController {
         configure()
     }
     
-    init(user: User, recipe: RecipeViewModel) {
+    init(user: UserViewModel, recipe: RecipeViewModel) {
          self.recipeViewModel = recipe
          self.user = user
          super.init(nibName: nil, bundle: nil)
@@ -341,9 +341,9 @@ class RecipeViewController: UIViewController {
         configureRatingImages(rating: Float(recipeViewModel.recipe.rating!), imageViews: [starImage1, starImage2, starImage3, starImage4, starImage5 ])
         categoryLabel.text = recipeViewModel.category
         serveLabel.text = recipeViewModel.recipe.serve
-        usernameLabel.text = user.username
+        usernameLabel.text = user.user!.username
         
-        if let url = URL(string: user.profileImage) {
+        if let url = URL(string: user.user!.profileImage) {
             profileImage.sd_setImage(with: url)
         }
         
@@ -679,7 +679,7 @@ class RecipeViewController: UIViewController {
         let updatedRating = currentRating / currentRatingNum
         
         var ratings = recipeViewModel.recipe.ratingList!
-        ratings.append(Rating(uid: user.uid, rating: Float(rating)))
+        ratings.append(Rating(uid: user.user!.uid, rating: Float(rating)))
         
         var test: [[String : Any]] = [[:]]
         

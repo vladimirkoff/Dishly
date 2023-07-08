@@ -15,7 +15,7 @@ class AuthViewModel {
         }
     }
     
-    func register(creds: AuthCreds, completion: @escaping (Error?, User?) -> Void) {
+    func register(creds: AuthCreds, completion: @escaping (Error?, UserViewModel?) -> Void) {
         authService.register(creds: creds) { error, user in
             completion(error, user)
         }
@@ -31,7 +31,7 @@ class AuthViewModel {
         }
     }
     
-    func checkIfUserExists(completion: @escaping(User) -> ()) {
+    func checkIfUserExists(completion: @escaping(UserViewModel) -> ()) {
         authService.checkIfUserLoggedIn { user, bool in
             if bool {
                 completion(user!)

@@ -9,20 +9,23 @@ import UIKit
 
 struct UserViewModel {
     
-    private let userService: UserServiceProtocol
+    private let userService: UserServiceProtocol?
     
-    init(userService: UserServiceProtocol) {
+    var user: User?
+    
+    init(user: User?, userService: UserServiceProtocol?) {
         self.userService = userService
+        self.user = user
     }
     
-    func fetchUser(completion: @escaping(User) -> ()) {
-        userService.fetchUser { user in
+    func fetchUser(completion: @escaping(UserViewModel) -> ()) {
+        userService!.fetchUser { user in
             completion(user)
         }
     }
     
-    func updateUser(with user: User, completion: @escaping(Error?) -> ()) {
-        userService.updateUser(changedUser: user) { error in
+    func updateUser(with user: UserViewModel, completion: @escaping(Error?) -> ()) {
+        userService!.updateUser(changedUser: user) { error in
             completion(error)
         }
     }

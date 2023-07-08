@@ -54,7 +54,7 @@ class LoginViewController: UIViewController {
         configureNotificationsObservers()
         
         authViewModel = AuthViewModel(authService: authService)
-        userViewModel = UserViewModel(userService: userService)
+        userViewModel = UserViewModel(user: nil, userService: userService)
     }
     
     init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol) {

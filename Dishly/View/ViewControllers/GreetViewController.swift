@@ -17,7 +17,7 @@ class GreetViewController: UIViewController {
     
     //MARK: - Properties
     
-    private var user: User!
+    private var user: UserViewModel!
     
     private var authService: AuthServiceProtocol!
     private var userService: UserServiceProtocol!
@@ -182,7 +182,7 @@ class GreetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        userViewModel = UserViewModel(userService: userService)
+        userViewModel = UserViewModel(user: nil, userService: userService)
         googleAuthViewModel = GoogleAuthViewModel(googleAuthService: googleAuthService)
         
     }

@@ -14,13 +14,13 @@ class GoogleAuthViewModel {
         self.googleAuthService = googleAuthService
     }
     
-    func signInWithGoogle(with vc: UIViewController, completion: @escaping(Error?, User?) -> ()) {
+    func signInWithGoogle(with vc: UIViewController, completion: @escaping(Error?, UserViewModel?) -> ()) {
         googleAuthService.signInWithGoogle(with: vc) { error, user in
             completion(error, user)
         }
     }
     
-    func checkIfUserLoggedIn(completion: @escaping(User) -> ()) {
+    func checkIfUserLoggedIn(completion: @escaping(UserViewModel) -> ()) {
         googleAuthService.checkIfUserLoggedIn { user, bool in
             if bool {
                 completion(user!)

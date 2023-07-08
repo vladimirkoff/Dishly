@@ -7,7 +7,7 @@ class EditProfileViewController: UIViewController {
     
     private var profileImage: UIImageView!
     
-    private var user: User
+    private var user: UserViewModel
     
     private let hud = JGProgressHUD(style: .dark)
     
@@ -60,12 +60,12 @@ class EditProfileViewController: UIViewController {
         configureUI()
         setupTableViewConstraints()
         
-        userViewModel = UserViewModel(userService: userService)
+        userViewModel = UserViewModel(user: nil, userService: userService)
         authViewModel = AuthViewModel(authService: authService)
         userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
     }
     
-    init(user: User, userService: UserServiceProtocol, authService: AuthServiceProtocol!, userRealmService: UserRealmServiceProtocol, profileImage: UIImageView) {
+    init(user: UserViewModel, userService: UserServiceProtocol, authService: AuthServiceProtocol!, userRealmService: UserRealmServiceProtocol, profileImage: UIImageView) {
         self.user = user
         self.userService = userService
         self.authService = authService
@@ -126,15 +126,16 @@ class EditProfileViewController: UIViewController {
         navigationController?.navigationBar.topItem?.hidesBackButton = true
         
         ImageUploader.shared.uploadImage(image: profileImage.image!, forRecipe: false) { imageURL in
-            let dict = ["fullName": self.changedUser.fullName,
+            let dict = ["fullName": self.changedUser.user!.fullName,
                         "profileImage": imageURL,
-                        "username": self.changedUser.username,
-                        "email" : self.changedUser.email,
-                        "uid" : self.user.uid
+                        "username": self.changedUser.user!.username,
+                        "email" : self.changedUser.user!.email,
+                        "uid" : self.user.user!.uid
             ]
             let updatedUser = User(dictionary: dict)
-            self.userViewModel.updateUser(with: updatedUser) { error in
-                self.authViewModel.changeEmail(to: self.changedUser.email)
+            let updatedUserViewModel = UserViewModel(user: updatedUser, userService: nil)
+            self.userViewModel.updateUser(with: updatedUserViewModel) { error in
+                self.authViewModel.changeEmail(to: self.changedUser.user!.email)
                 self.userRealmViewModel.updateUser(user: updatedUser) { success in
                     DispatchQueue.main.async {
                         self.showLoader(false)
@@ -159,11 +160,11 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
         cell.backgroundColor = .blue
         cell.delegate = self
         if indexPath.row == 0 {
-            cell.configureFields(email: nil, password: nil, name: user.fullName)
+            cell.configureFields(email: nil, password: nil, name: user.user!.fullName)
         } else if indexPath.row == 1 {
-            cell.configureFields(email: user.email, password: nil, name: nil)
+            cell.configureFields(email: user.user!.email, password: nil, name: nil)
         } else {
-            cell.configureFields(email: nil, password: user.username, name: nil)
+            cell.configureFields(email: nil, password: user.user!.username, name: nil)
         }
         let separator = UIView(frame: CGRect(x: 16, y: cell.frame.height - 1, width: cell.frame.width - 32, height: 1))
         separator.backgroundColor = .white
@@ -228,6 +229,6 @@ extension EditProfileViewController: ProfileInfoCellDelegate {
                     "email" : propertiesArray[1],
                     "username" : propertiesArray[2]
         ]
-        changedUser = User(dictionary: dict)
+        changedUser = UserViewModel(user: User(dictionary: dict), userService: nil) 
     }
 }

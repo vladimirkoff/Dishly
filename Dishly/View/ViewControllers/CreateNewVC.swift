@@ -31,7 +31,7 @@ class AddRecipeViewController: UIViewController, Storyboardable {
     private var portion: PortionModel?
     
     var recipeService: RecipeServiceProtocol!
-    var user: User!
+    var user: UserViewModel!
     
     var delegate: AddRecipeViewControllerProtocol?
     
@@ -127,7 +127,7 @@ class AddRecipeViewController: UIViewController, Storyboardable {
             recipeViewModel.recipe.category = selectedCategory
             recipeViewModel.recipe.serve = serve
         } else {
-            let recipe = Recipe(ownerId: user.uid,
+            let recipe = Recipe(ownerId: user.user!.uid,
                                 id: UUID().uuidString,
                                 name: self.recipeNameField.text,
                                 serve: self.serveField.text,

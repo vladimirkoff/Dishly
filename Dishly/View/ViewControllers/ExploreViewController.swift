@@ -5,7 +5,7 @@ class ExploreViewController: UIViewController {
     
     private let window = UIApplication.shared.windows.last!
     
-    var user: User
+    var user: UserViewModel
     
     var recipeService: RecipeServiceProtocol!
     var userService: UserServiceProtocol!
@@ -62,7 +62,7 @@ class ExploreViewController: UIViewController {
     
     //MARK: - Lifecycle
     
-    init(user: User, recipes: [RecipeViewModel], userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, collectionService: CollectionServiceProtocol) {
+    init(user: UserViewModel, recipes: [RecipeViewModel], userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, collectionService: CollectionServiceProtocol) {
         self.user = user
         self.userService = userService
         self.recipeService = recipeService
@@ -80,7 +80,7 @@ class ExploreViewController: UIViewController {
         configureNavBar()
         configureUI()
         
-        userViewModel = UserViewModel(userService: userService)
+        userViewModel = UserViewModel(user: nil, userService: userService)
     }
     
     //MARK: - Helpers

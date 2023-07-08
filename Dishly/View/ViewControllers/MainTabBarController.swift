@@ -24,7 +24,7 @@ class MainTabBarController: UITabBarController {
         }
     }
     
-    var user: User!
+    var user: UserViewModel!
     
     private let profileContainerView: UIView = {
         let profileContainerView = UIView(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
@@ -59,7 +59,7 @@ class MainTabBarController: UITabBarController {
         fecthRecipes()
     }
     
-    init(user: User, authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, collectionService: CollectionServiceProtocol, googleService: GoogleAuthServiceProtocol) {
+    init(user: UserViewModel, authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, collectionService: CollectionServiceProtocol, googleService: GoogleAuthServiceProtocol) {
         self.authService = authService
         self.userService = userService
         self.recipeService = recipeService
@@ -87,7 +87,7 @@ class MainTabBarController: UITabBarController {
     func configureVC() {
         self.delegate = self
         
-        let mainVC = ExploreViewController(user: user, recipes: recipes!, userService: userService, recipeService: recipeService, collectionService: collectionService)
+        let mainVC = ExploreViewController(user: user!, recipes: recipes!, userService: userService, recipeService: recipeService, collectionService: collectionService)
         let main = configureVC(image: UIImage(named: "home")!, vc: mainVC)
         
         let addVC = UIViewController()
@@ -153,7 +153,7 @@ class MainTabBarController: UITabBarController {
         navigationItem.largeTitleDisplayMode = .always
         navigationItem.title = "Search"
         
-        guard let imageUrl = URL(string: user.profileImage) else { return }
+        guard let imageUrl = URL(string: user.user!.profileImage) else { return }
         
         SDWebImageManager.shared.loadImage(with: imageUrl, options: [], progress: nil) { (image, _, _, _, _, _) in
             DispatchQueue.main.async {

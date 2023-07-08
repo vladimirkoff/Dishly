@@ -137,7 +137,7 @@ class SignupController: UIViewController {
             }
             DispatchQueue.main.async {
                 let profileImage = self.plusButton.imageView?.image?.pngData()
-                self.createTestUser(email: email, name: fullname, uid: user!.uid, profileImage: profileImage!)
+                self.createTestUser(email: email, name: fullname, uid: user!.user!.uid, profileImage: profileImage!)
                 let vc = MainTabBarController(user: user!, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleService)
                 self.navigationController?.pushViewController(vc, animated: true)
             }

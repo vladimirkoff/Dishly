@@ -13,10 +13,10 @@ import GoogleSignIn
 
 protocol AuthServiceProtocol {
     func login(email: String, password: String, completion: @escaping (Error?) -> Void)
-    func register(creds: AuthCreds, completion: @escaping (Error?, User?) -> Void)
+    func register(creds: AuthCreds, completion: @escaping (Error?, UserViewModel?) -> Void)
     func logOut(completion: @escaping(Error?, Bool) -> ())
     func changeEmail(to newEmail: String)
-    func checkIfUserLoggedIn(completion: @escaping(User?, Bool) -> ())
+    func checkIfUserLoggedIn(completion: @escaping(UserViewModel?, Bool) -> ())
 }
 
 class AuthService: AuthServiceProtocol {
@@ -33,7 +33,7 @@ class AuthService: AuthServiceProtocol {
         }
     }
     
-    func checkIfUserLoggedIn(completion: @escaping(User?, Bool) -> ()) {
+    func checkIfUserLoggedIn(completion: @escaping(UserViewModel?, Bool) -> ()) {
         let currentUser = Auth.auth().currentUser
         
         if let _ = currentUser {
@@ -45,7 +45,7 @@ class AuthService: AuthServiceProtocol {
         }
     }
     
-    func register(creds: AuthCreds, completion: @escaping (Error?, User?) -> Void) {
+    func register(creds: AuthCreds, completion: @escaping (Error?, UserViewModel?) -> Void) {
         ImageUploader.shared.uploadImage(image: creds.profileImage!, forRecipe: false) { imageUrl in
             self.userService.checkIfUserExists(email: creds.email) { doesExist in
                 if !doesExist {

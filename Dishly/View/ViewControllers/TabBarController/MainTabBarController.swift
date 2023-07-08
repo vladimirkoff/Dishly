@@ -193,7 +193,6 @@ extension MainTabBarController: UITabBarControllerDelegate {
         }
         if selectedIndex == 1 {
             let vc = AddRecipeViewController.instantiateFromStoryboard()
-            vc.recipeService = recipeService
             vc.user = user
             let nav = UINavigationController(rootViewController: vc)
             navigationController?.modalPresentationStyle = .fullScreen

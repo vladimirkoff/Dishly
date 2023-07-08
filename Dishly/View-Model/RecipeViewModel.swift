@@ -15,11 +15,6 @@ struct RecipeViewModel {
     
     var recipe: Recipe
     
-    var recipeName: String? { return recipe.name }
-    var category: String { return self.recipe.category.rawValue }
-    var ingredients: [Ingredient] { return recipe.ingredients }
-    var instructions: [Instruction] { return recipe.instructions }
-    
     //MARK: - Init
     
     init(recipe: Recipe, recipeService: RecipeServiceProtocol?) {
@@ -41,6 +36,20 @@ struct RecipeViewModel {
         recipeService.fetchRecipes { recipes in
             completion(recipes)
         }
+    }
+    
+    func updateRecipe(with data: [String : Any], recipe: String, completion: @escaping(Error?) -> ()) {
+        guard let recipeService = recipeService else { return }
+        recipeService.updateRating(with: data, recipe: recipe, completion: { error in
+            completion(error)
+        })
+    }
+    
+    func fetchRecipesFor(category: String, completion: @escaping([RecipeViewModel]) -> ()) {
+        guard let recipeService = recipeService else { return }
+        recipeService.fetchRecipesFor(category: category, completion: { recipes in
+            completion(recipes)
+        })
     }
 }
 

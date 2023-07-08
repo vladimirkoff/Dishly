@@ -2,6 +2,8 @@
 
 import UIKit
 
+private let tableCellReuseId = "IngredientTableCell"
+
 class RecipeViewController: UIViewController {
     //MARK: - Properties
     
@@ -12,6 +14,7 @@ class RecipeViewController: UIViewController {
     }
     
     let starSize: CGFloat = 50.0
+    
     var rating: Int = 0 {
         didSet {
             updateStarColors()
@@ -22,50 +25,15 @@ class RecipeViewController: UIViewController {
     
     private var user: UserViewModel!
     
+    let scrollView = UIScrollView()
+    let contentView = UIView()
+    
     private let dishImage: UIImageView = {
         let image = UIImage(named: "" )
         let iv = UIImageView(image: image)
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.backgroundColor = .lightGray
         return iv
-    }()
-    
-    private let directionsView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .yellow
-        return view
-    }()
-    
-    private let directionsLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 24)
-        label.textColor = .black
-        label.text = "Directions"
-        return label
-    }()
-    
-    let stepByStepButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Step by step mode", for: .normal)
-        button.setImage(UIImage(systemName: "play"), for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        button.setTitleColor(.black, for: .normal)
-        button.tintColor = .black
-        button.contentMode = .center
-        button.semanticContentAttribute = .forceLeftToRight
-        button.contentHorizontalAlignment = .leading
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
-        button.addTarget(self, action: #selector(stepByStepButtonTapped), for: .touchUpInside)
-        
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.white.cgColor
-        button.layer.cornerRadius = 100
-        
-        
-        return button
     }()
     
     let addToCartButton: UIButton = {
@@ -96,15 +64,7 @@ class RecipeViewController: UIViewController {
         return view
     }()
     
-    let nutritionLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 16)
-        label.textColor = .black
-        label.textAlignment = .center
-        label.text = "Nutrition per serving"
-        return label
-    }()
+    private let starsImages = UIImageView.generateStars()
     
     private let discriptionView: UIView = {
         let view = UIView()
@@ -156,7 +116,7 @@ class RecipeViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
-        tableView.register(UINib(nibName: "IngredientTableCell", bundle: nil), forCellReuseIdentifier: "IngredientCell")
+        tableView.register(UINib(nibName: "IngredientTableCell", bundle: nil), forCellReuseIdentifier: tableCellReuseId)
         tableView.delegate = self
         return tableView
     }()
@@ -175,52 +135,6 @@ class RecipeViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .lightGray
         return view
-    }()
-    
-//    let collectionView: UICollectionView = {
-//        let layout = UICollectionViewFlowLayout()
-//        layout.scrollDirection = .horizontal
-//        layout.minimumLineSpacing = 0
-//
-//        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-//        collectionView.translatesAutoresizingMaskIntoConstraints = false
-//        collectionView.backgroundColor = .white
-//        collectionView.showsHorizontalScrollIndicator = false
-//        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-//        return collectionView
-//    }()
-    
-    let scrollView = UIScrollView()
-    let contentView = UIView()
-    
-    private var starImage1: UIImageView = {
-        let image = UIImage(named: "star")
-        let iv = UIImageView(image: image)
-        return iv
-    }()
-    
-    private var starImage2: UIImageView = {
-        let image = UIImage(named: "star")
-        let iv = UIImageView(image: image)
-        return iv
-    }()
-    
-    private var starImage3: UIImageView = {
-        let image = UIImage(named: "star.filled")
-        let iv = UIImageView(image: image)
-        return iv
-    }()
-    
-    private var starImage4: UIImageView = {
-        let image = UIImage(named: "star.half.filled")
-        let iv = UIImageView(image: image)
-        return iv
-    }()
-    
-    private var starImage5: UIImageView = {
-        let image = UIImage(named: "star")
-        let iv = UIImageView(image: image)
-        return iv
     }()
     
     let ratingLabel: UILabel = {
@@ -280,7 +194,7 @@ class RecipeViewController: UIViewController {
         label.textColor = .black
         label.text = "Dinners"
         label.textColor = .white
-
+        
         return label
     }()
     
@@ -298,11 +212,7 @@ class RecipeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        collectionView.delegate = self
-//        collectionView.dataSource = self
         view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
-        
-//        recipeViewModel = RecipeViewModel(recipeService: recipeService)
         
         setupNavigationBar()
         setupScrollView()
@@ -311,15 +221,15 @@ class RecipeViewController: UIViewController {
     }
     
     init(user: UserViewModel, recipe: RecipeViewModel) {
-         self.recipeViewModel = recipe
-         self.user = user
-         super.init(nibName: nil, bundle: nil)
-     }
+        self.recipeViewModel = recipe
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     
     //MARK: - Helpers
     
@@ -334,12 +244,12 @@ class RecipeViewController: UIViewController {
     
     func configure() {
         dishImage.sd_setImage(with: URL(string: recipeViewModel.recipe.recipeImageUrl!)!)
-        nameAndAuthorLabel.attributedText = configureNameAndAuthorLabel(name: recipeViewModel.recipeName!, author: "Vladimir")
+        nameAndAuthorLabel.attributedText = configureNameAndAuthorLabel(name: recipeViewModel.recipe.name!, author: "Vladimir")
         timeLabel.text = "\(recipeViewModel.recipe.cookTime!) min"
         ratingLabel.text = "\(recipeViewModel.recipe.rating!)"
         ratingsCount.text = "\(recipeViewModel.recipe.ratingList!.count - 1) ratings"
-        configureRatingImages(rating: Float(recipeViewModel.recipe.rating!), imageViews: [starImage1, starImage2, starImage3, starImage4, starImage5 ])
-        categoryLabel.text = recipeViewModel.category
+        configureRatingImages(rating: Float(recipeViewModel.recipe.rating!), imageViews: starsImages)
+        categoryLabel.text = recipeViewModel.recipe.category.rawValue
         serveLabel.text = recipeViewModel.recipe.serve
         usernameLabel.text = user.user!.username
         
@@ -353,10 +263,10 @@ class RecipeViewController: UIViewController {
         let filledStarImage = UIImage(systemName: "star.fill")
         let halfFilledStarImage = UIImage(systemName: "star.lefthalf.fill")
         let emptyStarImage = UIImage(systemName: "star")
-
+        
         let filledCount = Int(rating)
         let hasHalfStar = rating - Float(filledCount) >= 0.5
-
+        
         for (index, imageView) in imageViews.enumerated() {
             if index < filledCount {
                 imageView.image = filledStarImage
@@ -369,9 +279,9 @@ class RecipeViewController: UIViewController {
     }
     
     private func configureUI() {
-        view.addSubview(dishImage)
+        contentView.addSubview(dishImage)
         NSLayoutConstraint.activate([
-            dishImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
+            dishImage.topAnchor.constraint(equalTo: contentView.topAnchor),
             dishImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             dishImage.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             dishImage.rightAnchor.constraint(equalTo: contentView.rightAnchor),
@@ -431,7 +341,7 @@ class RecipeViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: ingridientsLabel.bottomAnchor),
             tableView.widthAnchor.constraint(equalToConstant: view.frame.width),
             tableView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            tableView.heightAnchor.constraint(equalToConstant: CGFloat(70 * recipeViewModel.ingredients.count))
+            tableView.heightAnchor.constraint(equalToConstant: CGFloat(70 * recipeViewModel.recipe.ingredients.count))
         ])
         
         contentView.addSubview(footerView)
@@ -450,36 +360,7 @@ class RecipeViewController: UIViewController {
             addToCartButton.heightAnchor.constraint(equalToConstant: 40)
         ])
         
-        
-        contentView.addSubview(directionsView)
-        NSLayoutConstraint.activate([
-            directionsView.topAnchor.constraint(equalTo: footerView.bottomAnchor, constant: 16),
-            directionsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            directionsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            directionsView.heightAnchor.constraint(equalToConstant: 600)
-        ])
-        
-        directionsView.addSubview(directionsLabel)
-        NSLayoutConstraint.activate([
-            directionsLabel.topAnchor.constraint(equalTo: directionsView.topAnchor, constant: 16),
-            directionsLabel.leadingAnchor.constraint(equalTo: directionsView.leadingAnchor, constant: 16)
-        ])
-        
-  
-        
-        directionsView.addSubview(stepByStepButton)
-        NSLayoutConstraint.activate([
-            stepByStepButton.topAnchor.constraint(equalTo: directionsLabel.bottomAnchor, constant: 8),
-            stepByStepButton.centerXAnchor.constraint(equalTo: directionsView.centerXAnchor),
-            stepByStepButton.widthAnchor.constraint(equalToConstant: view.frame.width - 40),
-            stepByStepButton.heightAnchor.constraint(equalToConstant: 50)
-        ])
-        
-        NSLayoutConstraint.activate([
-
-        ])
-        
-        let stack = UIStackView(arrangedSubviews: [ratingLabel, starImage1, starImage2, starImage3, starImage4, starImage5])
+        let stack = UIStackView(arrangedSubviews: starsImages)
         stack.axis = .horizontal
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.distribution = .fillEqually
@@ -512,7 +393,7 @@ class RecipeViewController: UIViewController {
         
         if let heightConstant = heightAnchor.retrieveCGFloat(from: profileView) {
             profileImage.layer.cornerRadius = (heightConstant - 10) / 2
-
+            
             NSLayoutConstraint.activate([
                 profileImage.centerYAnchor.constraint(equalTo: profileView.centerYAnchor),
                 profileImage.leftAnchor.constraint(equalTo: profileView.leftAnchor, constant: 6),
@@ -520,7 +401,7 @@ class RecipeViewController: UIViewController {
                 profileImage.widthAnchor.constraint(equalToConstant: heightConstant - 10)
             ])
         }
-
+        
         
         profileView.addSubview(usernameLabel)
         NSLayoutConstraint.activate([
@@ -551,21 +432,6 @@ class RecipeViewController: UIViewController {
             serveLabel.centerXAnchor.constraint(equalTo: serveImageView.centerXAnchor),
             serveLabel.topAnchor.constraint(equalTo: serveImageView.bottomAnchor, constant: 2)
         ])
-        
-//        let starImages = UIImageView.generateStars()
-//
-//        let starsStack = UIStackView(arrangedSubviews: starImages)
-//        starsStack.axis = .horizontal
-//        starsStack.translatesAutoresizingMaskIntoConstraints = false
-//        starsStack.distribution = .fillEqually
-//
-//        footerView.addSubview(starsStack)
-//        NSLayoutConstraint.activate([
-//            starsStack.centerXAnchor.constraint(equalTo: footerView.centerXAnchor),
-//            starsStack.topAnchor.constraint(equalTo: addToCartButton.bottomAnchor, constant: 12),
-//            starsStack.widthAnchor.constraint(equalToConstant: view.bounds.width / 2),
-//            starsStack.heightAnchor.constraint(equalToConstant:  40)
-//        ])
         
         let starsStack = UIStackView()
         starsStack.axis = .horizontal
@@ -608,20 +474,6 @@ class RecipeViewController: UIViewController {
         }
     }
     
-//    func setRating(rating: Float) {
-//        var currentRating = recipeViewModel.recipe.rating!
-//        var currentRatingNum = Float(recipeViewModel.recipe.ratingList!.count)
-//
-//        currentRating += rating
-//        currentRatingNum += 1
-//
-//        let updatedRating = currentRatingNum / currentRating
-//
-//        recipeService.updateRating(for: recipeViewModel, newRating: updatedRating) { error in
-//            print("DEBUG: rating updated")
-//        }
-//    }
-
     private func setupNavigationBar() {
         let rightButton1 = UIBarButtonItem(image: UIImage(named: "save"), style: .plain, target: self, action: #selector(rightButton1Tapped))
         navigationItem.rightBarButtonItems = [rightButton1]
@@ -653,15 +505,15 @@ class RecipeViewController: UIViewController {
     //MARK: - Selectors
     
     @objc func addToCartButtonTapped() {
-        myGroceries += recipeViewModel.ingredients
+        myGroceries += recipeViewModel.recipe.ingredients
     }
     
- 
+    
     @objc private func rightButton1Tapped() {
         
     }
     
-  
+    
     @objc private func stepByStepButtonTapped() {
         
     }
@@ -669,21 +521,30 @@ class RecipeViewController: UIViewController {
     @objc private func starButtonTapped(_ sender: UIButton) {
         
         self.rating = sender.tag
-
+        
         var currentRating = recipeViewModel.recipe.rating!
-        var currentRatingNum = Float(recipeViewModel.recipe.ratingList!.count)
+        var currentRatingNum = Float(recipeViewModel.recipe.ratingList!.count - 1)
         
         currentRating += Float(rating)
         currentRatingNum += 1
         
         let updatedRating = currentRating / currentRatingNum
         
+        
         var ratings = recipeViewModel.recipe.ratingList!
+        
+        print("Рейтинги - \(ratings)")
+
         ratings.append(Rating(uid: user.user!.uid, rating: Float(rating)))
         
-        var test: [[String : Any]] = [[:]]
+        recipeViewModel.recipe.ratingList = ratings
+        
+        var test: [[String : Any]] = []
+        
+    
         
         for new in ratings {
+            print(new)
             let id = new.uid
             let rat = new.rating
             
@@ -694,14 +555,17 @@ class RecipeViewController: UIViewController {
             test.append(testt)
         }
         
+        print("test - \(test)")
+        
+        recipeViewModel.recipe.rating = updatedRating
+        
         let updatedData: [String : Any] = ["rating" : updatedRating,
                                            "numOfRatings" : test
         ]
         
-        RecipeService().updateRating(with: updatedData, for: recipeViewModel.recipe.id!) { error in
+        recipeViewModel.updateRecipe(with: updatedData, recipe: recipeViewModel.recipe.id!) { error in
             print("DEBUG: rating updated")
         }
-        
     }
 }
 
@@ -709,13 +573,14 @@ class RecipeViewController: UIViewController {
 
 extension RecipeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recipeViewModel.ingredients.count
+        return recipeViewModel.recipe.ingredients.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientCell", for: indexPath) as! IngredientTableCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: tableCellReuseId, for: indexPath) as! IngredientTableCell
         cell.item.isUserInteractionEnabled = false
-        if let ingredients = recipeViewModel?.ingredients {
+        
+        if let ingredients = recipeViewModel?.recipe.ingredients {
             cell.configure(ingredient: ingredients[indexPath.row])
         }
         return cell

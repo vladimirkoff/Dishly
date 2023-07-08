@@ -28,9 +28,12 @@ class AddRecipeViewController: UIViewController, Storyboardable {
     private var portionPickerView = UIPickerView()
     private var toolBar = UIToolbar()
     
+    private var newImage: UIImage?
+    
     private var portion: PortionModel?
     
     var recipeService: RecipeServiceProtocol!
+    
     var user: UserViewModel!
     
     var delegate: AddRecipeViewControllerProtocol?
@@ -52,7 +55,6 @@ class AddRecipeViewController: UIViewController, Storyboardable {
         scrollView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
         let closeButton = UIBarButtonItem(image: #imageLiteral(resourceName: "xmark"), style: .plain, target: self, action: #selector(close))
         navigationItem.rightBarButtonItem = closeButton
-        //        hideKeyboard()
         configureTableView()
         configureImagePicker()
         serveField.delegate = self
@@ -137,7 +139,7 @@ class AddRecipeViewController: UIViewController, Storyboardable {
                                 instructions: [],
                                 ratingList: []
             )
-            self.recipeViewModel = RecipeViewModel(recipe: recipe, recipeService: recipeService)
+            self.recipeViewModel = RecipeViewModel(recipe: recipe, recipeService: RecipeService())
         }
     }
     
@@ -196,7 +198,7 @@ class AddRecipeViewController: UIViewController, Storyboardable {
             configureViewModel()
             let vc = PrepareViewController.instantiateFromStoryboard()
             vc.recipeViewModel = recipeViewModel
-            vc.recipeImage = foodImage.image
+            vc.recipeImage = newImage
             navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -287,7 +289,6 @@ extension AddRecipeViewController: IngredientCellDelegate {
     
     func updateCell(itemName: String?, portion: PortionModel, cell: IngredientTableCell) {
         let row = cell.tag
-        print(row)
         let test = Ingredient(name: itemName, volume: portion.volume, portion: portion.name)
         ingredients[row] = test
     }
@@ -309,7 +310,10 @@ extension AddRecipeViewController: UIImagePickerControllerDelegate, UINavigation
     }
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        foodImage.image = info[.originalImage] as? UIImage
+        guard let selectedImage = info[.editedImage] as? UIImage else { return }
+
+        foodImage.image = selectedImage
+        self.newImage = selectedImage
         self.dismiss(animated: true, completion: nil)
     }
 }

@@ -1,9 +1,4 @@
-//
-//  GoogleAuthViewModel.swift
-//  Dishly
-//
-//  Created by Vladimir Kovalev on 04.07.2023.
-//
+
 
 import UIKit
 

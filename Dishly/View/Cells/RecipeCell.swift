@@ -168,7 +168,7 @@ class RecipeCell: UICollectionViewCell {
         guard let recipe = recipeViewModel else { return }
         
         itemImageView.sd_setImage(with: URL(string: recipe.recipe.recipeImageUrl!)!)
-        priceLabel.text = recipe.recipeName
+        priceLabel.text = recipe.recipe.name
         addIngredientsButton.setTitle("Add \(recipe.recipe.ingredients.count) ingredients", for: .normal)
         configureRatingImages(rating: 3.5, imageViews: [starImage1, starImage2, starImage3, starImage4, starImage5 ])
     }
@@ -176,7 +176,7 @@ class RecipeCell: UICollectionViewCell {
     //MARK: - Selectors
     
     @objc func addButtonTapped() {
-        delegate?.addGroceries(groceries: recipeViewModel!.ingredients)
+        delegate?.addGroceries(groceries: recipeViewModel!.recipe.ingredients)
     }
     
     @objc func saveRecipe() {

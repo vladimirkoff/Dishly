@@ -40,6 +40,7 @@ func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
     
     
     let category = recipe.data()["category"] as? String ?? ""
+    
     let recipeImageUrl = recipe.data()["recipeImageUrl"] as? String ?? ""
     
     var testArray: [Rating] = []
@@ -59,7 +60,7 @@ func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
                              name: name,
                              serve: serve,
                              cookTime: cookTime,
-                             category: Recipe.Category(rawValue: "Bread")!,
+                             category: Recipe.Category(rawValue: category)!,
                              ingredients: ingredientsArray,
                              instructions: [],
                              recipeImageUrl: recipeImageUrl,
@@ -67,7 +68,7 @@ func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
                              rating: test,
                              isRated: isRated
     )
-    let recipeViewModel = RecipeViewModel(recipe: recipeModel, recipeService: nil)
+    let recipeViewModel = RecipeViewModel(recipe: recipeModel, recipeService: RecipeService())
     return recipeViewModel
     
 }

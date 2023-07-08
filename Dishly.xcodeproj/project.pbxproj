@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		09B65E491BD62034DE8375C2 /* Pods_Dishly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA1C145446A00BC5402957FC /* Pods_Dishly.framework */; };
 		852666EF2A59188D005BFCFC /* NSLayoutDimension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852666EE2A59188D005BFCFC /* NSLayoutDimension.swift */; };
+		852666F72A59917A005BFCFC /* RecipesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852666F62A59917A005BFCFC /* RecipesViewController.swift */; };
 		853EEB342A55798400DDB93F /* CollectionsPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853EEB332A55798400DDB93F /* CollectionsPopupView.swift */; };
 		853F3B1D2A5672DE00D53EB8 /* IngredientTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 853F3B1C2A5672DE00D53EB8 /* IngredientTableCell.xib */; };
 		853F3B1F2A5676FA00D53EB8 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B1E2A5676FA00D53EB8 /* CustomButton.swift */; };
@@ -81,6 +82,7 @@
 /* Begin PBXFileReference section */
 		84CC89D4F3A988B2F794987D /* Pods-Dishly.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dishly.debug.xcconfig"; path = "Target Support Files/Pods-Dishly/Pods-Dishly.debug.xcconfig"; sourceTree = "<group>"; };
 		852666EE2A59188D005BFCFC /* NSLayoutDimension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutDimension.swift; sourceTree = "<group>"; };
+		852666F62A59917A005BFCFC /* RecipesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipesViewController.swift; sourceTree = "<group>"; };
 		853EEB332A55798400DDB93F /* CollectionsPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsPopupView.swift; sourceTree = "<group>"; };
 		853F3B1C2A5672DE00D53EB8 /* IngredientTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IngredientTableCell.xib; sourceTree = "<group>"; };
 		853F3B1E2A5676FA00D53EB8 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 				85C1B7182A4982EF00BEAF2F /* RecipeViewController.swift */,
 				85C1B7102A485B2300BEAF2F /* CartViewController.swift */,
 				853F3B3A2A58569F00D53EB8 /* SearchViewControler.swift */,
+				852666F62A59917A005BFCFC /* RecipesViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -582,6 +585,7 @@
 				85C1B7172A487C1C00BEAF2F /* MealCell.swift in Sources */,
 				85C1B70B2A45D08E00BEAF2F /* SavedViewController.swift in Sources */,
 				85C1B7192A4982EF00BEAF2F /* RecipeViewController.swift in Sources */,
+				852666F72A59917A005BFCFC /* RecipesViewController.swift in Sources */,
 				85C1B7582A5481BC00BEAF2F /* GoogleAuthService.swift in Sources */,
 				853F3B392A580E2B00D53EB8 /* CollectionViewModel.swift in Sources */,
 				853F3B212A56774500D53EB8 /* CustomTableView.swift in Sources */,

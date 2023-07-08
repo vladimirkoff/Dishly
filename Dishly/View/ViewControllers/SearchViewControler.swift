@@ -98,7 +98,7 @@ extension RecipeSearchViewController: UITableViewDelegate, UITableViewDataSource
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! SearchTableCell
         if let recipes = recipes {
             cell.recipe = recipes[indexPath.row]
-            cell.searchVariantLabel.text = recipes[indexPath.row].recipeName
+            cell.searchVariantLabel.text = recipes[indexPath.row].recipe.name
         }
         return cell
     }

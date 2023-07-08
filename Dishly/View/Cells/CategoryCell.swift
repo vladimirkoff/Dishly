@@ -14,7 +14,7 @@ class CategoryCell: UICollectionViewCell {
         return iv
     }()
 
-    private let title: UILabel = {
+     let title: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
@@ -42,13 +42,13 @@ class CategoryCell: UICollectionViewCell {
         layer.cornerRadius = 10
         clipsToBounds = true
 
-        addSubview(categoryImageView)
-        NSLayoutConstraint.activate([
-            categoryImageView.leftAnchor.constraint(equalTo: leftAnchor),
-            categoryImageView.rightAnchor.constraint(equalTo: rightAnchor),
-            categoryImageView.topAnchor.constraint(equalTo: topAnchor),
-            categoryImageView.heightAnchor.constraint(equalToConstant: frame.height)
-        ])
+//        addSubview(categoryImageView)
+//        NSLayoutConstraint.activate([
+//            categoryImageView.leftAnchor.constraint(equalTo: leftAnchor),
+//            categoryImageView.rightAnchor.constraint(equalTo: rightAnchor),
+//            categoryImageView.topAnchor.constraint(equalTo: topAnchor),
+//            categoryImageView.heightAnchor.constraint(equalToConstant: frame.height)
+//        ])
 
         addSubview(title)
         NSLayoutConstraint.activate([

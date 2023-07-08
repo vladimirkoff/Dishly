@@ -9,6 +9,7 @@ class PrepareViewController: UIViewController, Storyboardable {
     @IBOutlet private weak var saveButton: UIButton!
     
     var recipeViewModel: RecipeViewModel?
+    
     var recipeImage: UIImage!
     
     private var instructions = [Instruction]() {
@@ -20,7 +21,6 @@ class PrepareViewController: UIViewController, Storyboardable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        hideKeyboard()
         updateUI()
         configureTableView()
     }
@@ -28,7 +28,7 @@ class PrepareViewController: UIViewController, Storyboardable {
     //MARK: - Functions
     
     func updateUI() {
-        guard let instructions = recipeViewModel?.instructions else {return}
+        guard let instructions = recipeViewModel?.recipe.instructions else {return}
         self.instructions = instructions
     }
     

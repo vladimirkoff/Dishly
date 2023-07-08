@@ -3,7 +3,7 @@ import SDWebImage
 
 protocol ParentCellDelegate {
     func goToRecipe(with recipe: RecipeViewModel)
-    func goToCategory()
+    func goToCategory(category: String)
     func popUp(recipe: RecipeViewModel)
 }
 
@@ -12,8 +12,11 @@ class ParentCell: UICollectionViewCell {
     
     var numOfRecipes: Int!
     
+    private let categories = ["Breakfast", "Lunch", "Dinner", "Dessert", "Drinks", "Appetizer"]
+    
     var recipeViewModel: RecipeViewModel!
     var delegate: ParentCellDelegate?
+    
     var recipes: [RecipeViewModel]?
     
     var isForCategories: Bool? {
@@ -84,6 +87,19 @@ class ParentCell: UICollectionViewCell {
         categoryCollectionView.register(CategoryCell.self, forCellWithReuseIdentifier: "CategoryCell")
         categoryCollectionView.isHidden = false
     }
+    
+    func configure(index: Int) {
+        switch index {
+        case 0:
+            titleLabel.text = "Daily inspiration"
+        case 1:
+            titleLabel.text = "By meal"
+        case 2:
+            titleLabel.text = "By country"
+        default:
+            titleLabel.text = "Error"
+        }
+    }
 }
 
 //MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
@@ -112,6 +128,7 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         } else if collectionView == categoryCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell
             cell.backgroundColor = .yellow
+            cell.title.text = categories[indexPath.row]
             return cell
         }
         return UICollectionViewCell()
@@ -121,7 +138,9 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         if collectionView == horizontalCollectionView {
             delegate?.goToRecipe(with: recipes![indexPath.row])
         } else {
-            delegate?.goToCategory()
+            if let cell = collectionView.cellForItem(at: indexPath) as? CategoryCell {
+                delegate?.goToCategory(category: cell.title.text!)
+            }
         }
     }
     

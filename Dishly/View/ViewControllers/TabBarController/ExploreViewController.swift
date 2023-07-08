@@ -17,7 +17,7 @@ class ExploreViewController: UIViewController {
     
     var collectionViewModel: CollectionViewModel!
     
-    var recipes: [RecipeViewModel]
+    var recipes: [RecipeViewModel] 
     
     lazy private var backgroundView: UIView = {
         let view = UIView(frame: window.bounds)
@@ -81,6 +81,11 @@ class ExploreViewController: UIViewController {
         configureUI()
         
         userViewModel = UserViewModel(user: nil, userService: userService)
+        
+        
+        recipeViewModel = RecipeViewModel(recipe: Recipe(category: Recipe.Category(rawValue: "Main Course")!, ingredients: [], instructions: []), recipeService: recipeService)
+        
+        
     }
     
     //MARK: - Helpers
@@ -143,18 +148,19 @@ extension ExploreViewController: UISearchResultsUpdating {
 extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return 3
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ParentCell
         cell.delegate = self
         cell.numOfRecipes = 0
+        cell.configure(index: indexPath.row)
         if indexPath.row == 0 {
             cell.numOfRecipes = recipes.count
             cell.recipes = recipes
         }
-        if indexPath.row == 3 {
+        if indexPath.row == 1 {
             cell.isForCategories = true
         } else {
             cell.isForCategories = false
@@ -179,8 +185,13 @@ extension ExploreViewController: ParentCellDelegate {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func goToCategory() {
-        print("DEBUG: Go to category")
+    func goToCategory(category: String) {
+        recipeViewModel.fetchRecipesFor(category: category) { recipes in
+            DispatchQueue.main.async {
+                let vc = RecipesViewController(recipes: recipes, userService: self.userService)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
     }
     
     func popUp(recipe: RecipeViewModel) {

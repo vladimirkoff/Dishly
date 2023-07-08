@@ -19,13 +19,22 @@ struct UserViewModel {
     }
     
     func fetchUser(completion: @escaping(UserViewModel) -> ()) {
-        userService!.fetchUser { user in
+        guard let userService = userService else { return }
+        userService.fetchUser { user in
+            completion(user)
+        }
+    }
+    
+    func fetchUser(with id: String, completion: @escaping(UserViewModel) -> ()) {
+        guard let userService = userService else { return }
+        userService.fetchUser(with: id) { user in
             completion(user)
         }
     }
     
     func updateUser(with user: UserViewModel, completion: @escaping(Error?) -> ()) {
-        userService!.updateUser(changedUser: user) { error in
+        guard let userService = userService else { return }
+        userService.updateUser(changedUser: user) { error in
             completion(error)
         }
     }

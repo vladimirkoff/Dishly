@@ -23,18 +23,18 @@ class CollectionService: CollectionServiceProtocol {
         ]
         
         if let recipe = recipe {
-            let instructions = recipe.instructions.compactMap { $0.text }
-            let ingredients = recipe.ingredients.compactMap { $0.name }
+            let instructions = recipe.recipe.instructions.compactMap { $0.text }
+            let ingredients = recipe.recipe.ingredients.compactMap { $0.name }
             
             let data: [String: Any] = [
-                "name": recipe.recipeName ?? "",
+                "name": recipe.recipe.name ?? "",
                 "cookTime": recipe.recipe.cookTime ?? "",
                 "recipeImageUrl": recipe.recipe.recipeImageUrl ?? "",
                 "id": recipe.recipe.id ?? "",
                 "ownerId": recipe.recipe.ownerId ?? "",
                 "instructions": instructions,
                 "ingredients": ingredients,
-                "category": recipe.category,
+                "category": recipe.recipe.category.rawValue,
                 "rating": 0,
                 "numOfRatings": 0,
                 "serve": recipe.recipe.serve ?? ""

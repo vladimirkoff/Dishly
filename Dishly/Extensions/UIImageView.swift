@@ -20,3 +20,24 @@ extension UIImageView {
     }
 }
 
+extension UIImageView {
+   static func generateStars() -> [UIImageView] {
+       var starImageViews = [UIImageView]()
+           
+           for _ in 0..<5 {
+               let starImageView: UIImageView = {
+                   let image = UIImage(systemName: "star")
+                   let imageView = UIImageView(image: image)
+                   imageView.translatesAutoresizingMaskIntoConstraints = false
+                   imageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
+                   imageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+                   return imageView
+               }()
+               
+               starImageViews.append(starImageView)
+           }
+           
+           return starImageViews
+    }
+}
+

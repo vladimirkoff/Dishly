@@ -1,7 +1,7 @@
 
 import Foundation
 
-struct Recipe: Codable {
+struct Recipe {
     var ownerId: String?
     var id: String?
     var name: String?
@@ -12,9 +12,11 @@ struct Recipe: Codable {
     var ingredients: [Ingredient]
     var instructions: [Instruction]
     var recipeImageUrl: String?
-    var ratingList: [Int]?
-    var rating: Int?
-        
+    var ratingList: [Rating]?
+    var rating: Float?
+    
+    var isRated: Bool?
+    
     enum Category: String, Codable, CaseIterable {
         case mainCourse = "Main Course"
         case sideDish = "Side Dish"
@@ -86,6 +88,11 @@ struct Ingredient: Codable {
 
 struct Instruction: Codable {
     var text: String?
+}
+
+struct Rating {
+    var uid: String
+    var rating: Float
 }
 
 

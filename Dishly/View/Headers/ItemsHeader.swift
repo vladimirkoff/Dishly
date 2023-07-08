@@ -9,6 +9,7 @@ import UIKit
 
 protocol ItemsHeaderDelegate {
     func fecthRecipes(with collection: Collection)
+    func createCollection(collection: Collection, completion: @escaping(Error?) -> ())
 }
 
 class ItemsHeader: UICollectionReusableView {
@@ -81,25 +82,20 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func showCollectionNameAlert() {
-        // Create an alert controller
         let alertController = UIAlertController(title: "Enter collection name", message: nil, preferredStyle: .alert)
 
-        // Add a search text field to the alert controller
         alertController.addTextField { textField in
             textField.placeholder = "Collection Name"
         }
 
-        // Create the "Cancel" action
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 
-        // Create the "OK" action
         let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-            // Handle the OK button action
             if let collectionName = alertController.textFields?.first?.text {
                 print("Entered collection name: \(collectionName)")
                 
                 let collection = Collection(name: collectionName, imageUrl: "", id: UUID().uuidString)
-                RecipeService().saveRecipeToCollection(collection: collection, recipe: nil) { error in
+                self.delegate?.createCollection(collection: collection) { error in
                     print("SUCCESS")
                     self.collections!.append(collection)
                     self.collectionView!.reloadData()
@@ -108,11 +104,9 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
             }
         }
 
-        // Add the actions to the alert controller
         alertController.addAction(cancelAction)
         alertController.addAction(okAction)
 
-        // Present the alert controller
         if let topViewController = UIApplication.shared.keyWindow?.rootViewController {
             topViewController.present(alertController, animated: true, completion: nil)
         }

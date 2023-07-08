@@ -5,7 +5,19 @@ import UIKit
 class RecipeViewController: UIViewController {
     //MARK: - Properties
     
-    private  var recipeViewModel: RecipeViewModel!
+    private  var recipeViewModel: RecipeViewModel! {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
+    let starSize: CGFloat = 50.0
+    var rating: Int = 0 {
+        didSet {
+            updateStarColors()
+        }
+    }
+    
     private  var recipeService: RecipeServiceProtocol!
     
     private var user: User!
@@ -76,6 +88,14 @@ class RecipeViewController: UIViewController {
         return view
     }()
     
+    private lazy var profileView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .gray
+        view.layer.cornerRadius = 10
+        return view
+    }()
+    
     let nutritionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -89,7 +109,7 @@ class RecipeViewController: UIViewController {
     private let discriptionView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .red
+        view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
         return view
     }()
     
@@ -136,6 +156,7 @@ class RecipeViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
+        tableView.register(UINib(nibName: "IngredientTableCell", bundle: nil), forCellReuseIdentifier: "IngredientCell")
         tableView.delegate = self
         return tableView
     }()
@@ -217,6 +238,62 @@ class RecipeViewController: UIViewController {
         return label
     }()
     
+    private let profileImage: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.backgroundColor = .red
+        iv.clipsToBounds = true
+        return iv
+    }()
+    
+    private let usernameLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 26)
+        label.textColor = .black
+        label.text = "@fdmvs"
+        return label
+    }()
+    
+    private let categoryImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.image = UIImage(named: "recipeBook")
+        iv.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        iv.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        return iv
+    }()
+    
+    private let serveImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.image = UIImage(named: "serve")
+        iv.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        iv.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        return iv
+    }()
+    
+    private let categoryLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.textColor = .black
+        label.text = "Dinners"
+        label.textColor = .white
+
+        return label
+    }()
+    
+    private let serveLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.textColor = .black
+        label.text = "4 serve"
+        label.textColor = .white
+        return label
+    }()
+    
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -260,8 +337,16 @@ class RecipeViewController: UIViewController {
         nameAndAuthorLabel.attributedText = configureNameAndAuthorLabel(name: recipeViewModel.recipeName!, author: "Vladimir")
         timeLabel.text = "\(recipeViewModel.recipe.cookTime!) min"
         ratingLabel.text = "\(recipeViewModel.recipe.rating!)"
-        ratingsCount.text = "\(recipeViewModel.recipe.ratingList!.count)"
+        ratingsCount.text = "\(recipeViewModel.recipe.ratingList!.count - 1) ratings"
         configureRatingImages(rating: Float(recipeViewModel.recipe.rating!), imageViews: [starImage1, starImage2, starImage3, starImage4, starImage5 ])
+        categoryLabel.text = recipeViewModel.category
+        serveLabel.text = recipeViewModel.recipe.serve
+        usernameLabel.text = user.username
+        
+        if let url = URL(string: user.profileImage) {
+            profileImage.sd_setImage(with: url)
+        }
+        
     }
     
     func configureRatingImages(rating: Float, imageViews: [UIImageView]) {
@@ -402,7 +487,7 @@ class RecipeViewController: UIViewController {
         view.addSubview(stack)
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: discriptionView.topAnchor, constant: 4),
-            stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stack.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             stack.heightAnchor.constraint(equalToConstant: 40),
             stack.widthAnchor.constraint(equalToConstant: view.frame.width / 2)
         ])
@@ -413,9 +498,130 @@ class RecipeViewController: UIViewController {
             ratingsCount.centerXAnchor.constraint(equalTo: stack.centerXAnchor)
         ])
         
+        view.addSubview(profileView)
+        NSLayoutConstraint.activate([
+            profileView.bottomAnchor.constraint(equalTo: totalTimeView.topAnchor, constant: -16),
+            profileView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            profileView.heightAnchor.constraint(equalToConstant: 100),
+            profileView.widthAnchor.constraint(equalToConstant: view.bounds.width - 20)
+        ])
+        
+        profileView.addSubview(profileImage)
+        
+        let heightAnchor = profileView.heightAnchor
+        
+        if let heightConstant = heightAnchor.retrieveCGFloat(from: profileView) {
+            profileImage.layer.cornerRadius = (heightConstant - 10) / 2
+
+            NSLayoutConstraint.activate([
+                profileImage.centerYAnchor.constraint(equalTo: profileView.centerYAnchor),
+                profileImage.leftAnchor.constraint(equalTo: profileView.leftAnchor, constant: 6),
+                profileImage.heightAnchor.constraint(equalToConstant: heightConstant - 10),
+                profileImage.widthAnchor.constraint(equalToConstant: heightConstant - 10)
+            ])
+        }
+
+        
+        profileView.addSubview(usernameLabel)
+        NSLayoutConstraint.activate([
+            usernameLabel.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor),
+            usernameLabel.leftAnchor.constraint(equalTo: profileImage.rightAnchor, constant: 4)
+        ])
+        
+        view.addSubview(categoryImageView)
+        NSLayoutConstraint.activate([
+            categoryImageView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: -(view.bounds.width / 4)),
+            categoryImageView.topAnchor.constraint(equalTo: ratingsCount.bottomAnchor, constant: 5)
+        ])
+        
+        view.addSubview(serveImageView)
+        NSLayoutConstraint.activate([
+            serveImageView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: (view.bounds.width / 4)),
+            serveImageView.topAnchor.constraint(equalTo: ratingsCount.bottomAnchor, constant: 5)
+        ])
+        
+        view.addSubview(categoryLabel)
+        NSLayoutConstraint.activate([
+            categoryLabel.centerXAnchor.constraint(equalTo: categoryImageView.centerXAnchor),
+            categoryLabel.topAnchor.constraint(equalTo: categoryImageView.bottomAnchor, constant: 2)
+        ])
+        
+        view.addSubview(serveLabel)
+        NSLayoutConstraint.activate([
+            serveLabel.centerXAnchor.constraint(equalTo: serveImageView.centerXAnchor),
+            serveLabel.topAnchor.constraint(equalTo: serveImageView.bottomAnchor, constant: 2)
+        ])
+        
+//        let starImages = UIImageView.generateStars()
+//
+//        let starsStack = UIStackView(arrangedSubviews: starImages)
+//        starsStack.axis = .horizontal
+//        starsStack.translatesAutoresizingMaskIntoConstraints = false
+//        starsStack.distribution = .fillEqually
+//
+//        footerView.addSubview(starsStack)
+//        NSLayoutConstraint.activate([
+//            starsStack.centerXAnchor.constraint(equalTo: footerView.centerXAnchor),
+//            starsStack.topAnchor.constraint(equalTo: addToCartButton.bottomAnchor, constant: 12),
+//            starsStack.widthAnchor.constraint(equalToConstant: view.bounds.width / 2),
+//            starsStack.heightAnchor.constraint(equalToConstant:  40)
+//        ])
+        
+        let starsStack = UIStackView()
+        starsStack.axis = .horizontal
+        starsStack.translatesAutoresizingMaskIntoConstraints = false
+        starsStack.distribution = .fillEqually
+        view.addSubview(starsStack)
+        
+        NSLayoutConstraint.activate([
+            starsStack.centerXAnchor.constraint(equalTo: footerView.centerXAnchor),
+            starsStack.topAnchor.constraint(equalTo: addToCartButton.bottomAnchor, constant: 12),
+            starsStack.widthAnchor.constraint(equalToConstant: view.bounds.width / 2),
+            starsStack.heightAnchor.constraint(equalToConstant:  40)
+        ])
+        
+        for i in 1...5 {
+            let starButton = UIButton(type: .custom)
+            
+            starButton.setImage(UIImage(systemName: "star"), for: .normal)
+            starButton.setImage(UIImage(systemName: "star.fill"), for: .selected)
+            
+            starButton.tag = i
+            starButton.tintColor = .yellow
+            starButton.addTarget(self, action: #selector(starButtonTapped(_:)), for: .touchUpInside)
+            starButton.translatesAutoresizingMaskIntoConstraints = false
+            
+            starButton.widthAnchor.constraint(equalToConstant: starSize).isActive = true
+            starButton.heightAnchor.constraint(equalToConstant: starSize).isActive = true
+            
+            
+            starsStack.addArrangedSubview(starButton)
+        }
+        
     }
     
+    private func updateStarColors() {
+        for i in 1...5 {
+            if let starButton = view.viewWithTag(i) as? UIButton {
+                starButton.isSelected = i <= rating
+            }
+        }
+    }
     
+//    func setRating(rating: Float) {
+//        var currentRating = recipeViewModel.recipe.rating!
+//        var currentRatingNum = Float(recipeViewModel.recipe.ratingList!.count)
+//
+//        currentRating += rating
+//        currentRatingNum += 1
+//
+//        let updatedRating = currentRatingNum / currentRating
+//
+//        recipeService.updateRating(for: recipeViewModel, newRating: updatedRating) { error in
+//            print("DEBUG: rating updated")
+//        }
+//    }
+
     private func setupNavigationBar() {
         let rightButton1 = UIBarButtonItem(image: UIImage(named: "save"), style: .plain, target: self, action: #selector(rightButton1Tapped))
         navigationItem.rightBarButtonItems = [rightButton1]
@@ -452,10 +658,50 @@ class RecipeViewController: UIViewController {
     
  
     @objc private func rightButton1Tapped() {
+        
     }
     
   
     @objc private func stepByStepButtonTapped() {
+        
+    }
+    
+    @objc private func starButtonTapped(_ sender: UIButton) {
+        
+        self.rating = sender.tag
+
+        var currentRating = recipeViewModel.recipe.rating!
+        var currentRatingNum = Float(recipeViewModel.recipe.ratingList!.count)
+        
+        currentRating += Float(rating)
+        currentRatingNum += 1
+        
+        let updatedRating = currentRating / currentRatingNum
+        
+        var ratings = recipeViewModel.recipe.ratingList!
+        ratings.append(Rating(uid: user.uid, rating: Float(rating)))
+        
+        var test: [[String : Any]] = [[:]]
+        
+        for new in ratings {
+            let id = new.uid
+            let rat = new.rating
+            
+            let testt = ["uid" : id,
+                         "rating" : rat
+            ] as [String : Any]
+            
+            test.append(testt)
+        }
+        
+        let updatedData: [String : Any] = ["rating" : updatedRating,
+                                           "numOfRatings" : test
+        ]
+        
+        RecipeService().updateRating(with: updatedData, for: recipeViewModel.recipe.id!) { error in
+            print("DEBUG: rating updated")
+        }
+        
     }
 }
 
@@ -463,13 +709,15 @@ class RecipeViewController: UIViewController {
 
 extension RecipeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(recipeViewModel.ingredients)
         return recipeViewModel.ingredients.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.textLabel?.text = recipeViewModel.ingredients[indexPath.row].name!
+        let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientCell", for: indexPath) as! IngredientTableCell
+        cell.item.isUserInteractionEnabled = false
+        if let ingredients = recipeViewModel?.ingredients {
+            cell.configure(ingredient: ingredients[indexPath.row])
+        }
         return cell
     }
     

@@ -7,8 +7,10 @@
 
 import Foundation
 import FirebaseFirestore
+import FirebaseAuth
 
 func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
+    let uid = Auth.auth().currentUser!.uid
     
     let serve = recipe.data()["serve"] as? String ?? ""
     let id = recipe.data()["id"] as? String ?? ""
@@ -16,6 +18,8 @@ func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
     let cookTime = recipe.data()["cookTime"] as? String ?? ""
     let ownerId = recipe.data()["ownerId"] as? String ?? ""
     let ingredients = recipe.data()["ingredients"] as? [String : [String : Float]] ?? [:]
+    
+    let test = recipe.data()["rating"] as? Float ?? 0.0
     
     var ingredientsArray: [Ingredient] = []
     
@@ -28,10 +32,27 @@ func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
         }
     }
     
-    let rating = recipe.data()["rating"] as? Int ?? 0
-    let numOfRatings = recipe.data()["numOfRatings"] as? [Int] ?? []
+    var isRated = false
+    
+    
+    let numOfRatings = recipe.data()["numOfRatings"] as? [[String: Any]] ?? [[:]]
+    
+    
+    
     let category = recipe.data()["category"] as? String ?? ""
     let recipeImageUrl = recipe.data()["recipeImageUrl"] as? String ?? ""
+    
+    var testArray: [Rating] = []
+    
+    for rate in numOfRatings {
+        if rate["uid"] as? String ?? "" == uid {
+            isRated = true
+        }
+        let uid = rate["uid"] as? String ?? ""
+        let ratingNum = rate["rating"] as? Float ?? 0.0
+        let rating = Rating(uid: uid, rating: ratingNum)
+        testArray.append(rating)
+    }
     
     let recipeModel = Recipe(ownerId: ownerId,
                              id: id,
@@ -42,8 +63,9 @@ func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
                              ingredients: ingredientsArray,
                              instructions: [],
                              recipeImageUrl: recipeImageUrl,
-                             ratingList: numOfRatings,
-                             rating: rating)
+                             ratingList: testArray,
+                             rating: test, isRated: isRated
+    )
     let recipeViewModel = RecipeViewModel(recipe: recipeModel, recipeService: nil)
     return recipeViewModel
     

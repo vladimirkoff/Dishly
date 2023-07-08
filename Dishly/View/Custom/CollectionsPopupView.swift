@@ -123,7 +123,7 @@ extension CollectionsPopupView: UICollectionViewDataSource {
             if let collectionName = alertController.textFields?.first?.text {
                 print("Entered collection name: \(collectionName)")
                 let collection = Collection(name: collectionName, imageUrl: "", id: UUID().uuidString)
-                RecipeService().saveRecipeToCollection(collection: collection, recipe: nil) { error in
+                self.collectionViewModel?.saveToCollection(collection: collection) { error in
                     print("SUCCESS")
                     self.collections!.append(collection)
                     self.collectionView!.reloadData()
@@ -144,13 +144,7 @@ extension CollectionsPopupView: UICollectionViewDataSource {
         if indexPath.row == collections!.count {
             showCollectionNameAlert()
         } else {
-            saveToCollection(collection: collection.collection! )
-        }
-    }
-    
-    func saveToCollection(collection: Collection) {
-        RecipeService().saveRecipeToCollection(collection: collection, recipe: recipe!) { error in
-            print("SAVED")
+//            saveToCollection(collection: collection.collection! )
         }
     }
     

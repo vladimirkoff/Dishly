@@ -19,6 +19,7 @@ class SavedViewController: UICollectionViewController {
     }
     
     private var collectionService: CollectionServiceProtocol!
+    private var collectionViewModel: CollectionViewModel!
     
     private var recipes: [RecipeViewModel]? {
         didSet {
@@ -44,6 +45,8 @@ class SavedViewController: UICollectionViewController {
         configureUI()
         configureCollectionView()
         fetchCollections()
+        
+        collectionViewModel = CollectionViewModel(collectionService: collectionService, collection: nil)
     }
     
     func fetchCollections() {
@@ -120,9 +123,16 @@ extension SavedViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension SavedViewController: ItemsHeaderDelegate {
+    
     func fecthRecipes(with collection: Collection) {
         collectionService.fetchRecipesWith(collection: collection) { recipes in
             self.recipes = recipes
+        }
+    }
+    
+    func createCollection(collection: Collection, completion: @escaping (Error?) -> ()) {
+        collectionViewModel.saveToCollection(collection: collection) { error in
+            completion(error)
         }
     }
     

@@ -125,6 +125,7 @@ class AddRecipeViewController: UIViewController, Storyboardable {
             recipeViewModel.recipe.cookTime = time
             recipeViewModel.recipe.ingredients = ingredients
             recipeViewModel.recipe.category = selectedCategory
+            recipeViewModel.recipe.serve = serve
         } else {
             let recipe = Recipe(ownerId: user.uid,
                                 id: UUID().uuidString,

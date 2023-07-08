@@ -23,6 +23,13 @@ class CollectionViewModel {
         }
     }
     
+    
+    func saveToCollection(collection: Collection, completion: @escaping(Error?) -> ()) {
+        collectionService.saveRecipeToCollection(collection: collection, recipe: collection.recipe) { error in
+            completion(error)
+        }
+    }
+    
     func createCollection() {
         
     }

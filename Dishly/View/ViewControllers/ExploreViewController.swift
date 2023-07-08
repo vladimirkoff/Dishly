@@ -148,10 +148,12 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ParentCell
-        
         cell.delegate = self
-        cell.numOfRecipes = recipes.count
-        cell.recipes = recipes
+        cell.numOfRecipes = 0
+        if indexPath.row == 0 {
+            cell.numOfRecipes = recipes.count
+            cell.recipes = recipes
+        }
         if indexPath.row == 3 {
             cell.isForCategories = true
         } else {

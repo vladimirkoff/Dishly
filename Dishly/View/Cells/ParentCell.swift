@@ -14,7 +14,7 @@ class ParentCell: UICollectionViewCell {
     
     var recipeViewModel: RecipeViewModel!
     var delegate: ParentCellDelegate?
-    var recipes: [RecipeViewModel]!
+    var recipes: [RecipeViewModel]?
     
     var isForCategories: Bool? {
         didSet {
@@ -104,7 +104,9 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         if collectionView == horizontalCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath) as! RecipeCell
             cell.delegate = self
-            cell.recipeViewModel = recipes[indexPath.row]
+            if let recipes = recipes {
+                cell.recipeViewModel = recipes[indexPath.row]
+            }
             cell.backgroundColor = .white
             return cell
         } else if collectionView == categoryCollectionView {
@@ -117,7 +119,7 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == horizontalCollectionView {
-            delegate?.goToRecipe(with: recipes[indexPath.row])
+            delegate?.goToRecipe(with: recipes![indexPath.row])
         } else {
             delegate?.goToCategory()
         }
@@ -146,10 +148,6 @@ extension ParentCell: RecipeCellDelegate {
     }
     
     func saveRecipe(recipe: RecipeViewModel) {
-//        let collection = Collection(name: "favorites", imageUrl: "", id: "dfwefs")
-//        RecipeService().saveRecipeToCollection(collection: collection , recipe: recipe) { error in
-//            print("SUCCESS")
-//        }
         delegate?.popUp(recipe: recipe)
     }
 }

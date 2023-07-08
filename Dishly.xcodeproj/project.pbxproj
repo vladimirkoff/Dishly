@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		09B65E491BD62034DE8375C2 /* Pods_Dishly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA1C145446A00BC5402957FC /* Pods_Dishly.framework */; };
+		852666EF2A59188D005BFCFC /* NSLayoutDimension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852666EE2A59188D005BFCFC /* NSLayoutDimension.swift */; };
 		853EEB342A55798400DDB93F /* CollectionsPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853EEB332A55798400DDB93F /* CollectionsPopupView.swift */; };
 		853F3B1D2A5672DE00D53EB8 /* IngredientTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 853F3B1C2A5672DE00D53EB8 /* IngredientTableCell.xib */; };
 		853F3B1F2A5676FA00D53EB8 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B1E2A5676FA00D53EB8 /* CustomButton.swift */; };
@@ -79,6 +80,7 @@
 
 /* Begin PBXFileReference section */
 		84CC89D4F3A988B2F794987D /* Pods-Dishly.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dishly.debug.xcconfig"; path = "Target Support Files/Pods-Dishly/Pods-Dishly.debug.xcconfig"; sourceTree = "<group>"; };
+		852666EE2A59188D005BFCFC /* NSLayoutDimension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutDimension.swift; sourceTree = "<group>"; };
 		853EEB332A55798400DDB93F /* CollectionsPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsPopupView.swift; sourceTree = "<group>"; };
 		853F3B1C2A5672DE00D53EB8 /* IngredientTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IngredientTableCell.xib; sourceTree = "<group>"; };
 		853F3B1E2A5676FA00D53EB8 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
@@ -313,6 +315,7 @@
 		85C1B6FA2A4485C700BEAF2F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				852666EE2A59188D005BFCFC /* NSLayoutDimension.swift */,
 				85C1B72C2A4D969700BEAF2F /* UIButton.swift */,
 				85C1B7512A52D51E00BEAF2F /* UIImageView.swift */,
 				85FE6B942A56719800E6417D /* UIViewController.swift */,
@@ -542,6 +545,7 @@
 				85C1B7152A48723200BEAF2F /* UserService.swift in Sources */,
 				85C1B7092A45CF9700BEAF2F /* ProfileOptionCell.swift in Sources */,
 				85C1B7212A49B96600BEAF2F /* AuthViewModel.swift in Sources */,
+				852666EF2A59188D005BFCFC /* NSLayoutDimension.swift in Sources */,
 				853F3B272A567C7400D53EB8 /* PrepareTableCell.swift in Sources */,
 				85C1B7172A487C1C00BEAF2F /* MealCell.swift in Sources */,
 				85C1B70B2A45D08E00BEAF2F /* SavedViewController.swift in Sources */,

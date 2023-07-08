@@ -64,7 +64,8 @@ func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
                              instructions: [],
                              recipeImageUrl: recipeImageUrl,
                              ratingList: testArray,
-                             rating: test, isRated: isRated
+                             rating: test,
+                             isRated: isRated
     )
     let recipeViewModel = RecipeViewModel(recipe: recipeModel, recipeService: nil)
     return recipeViewModel

@@ -1,33 +1,34 @@
-//
-//  UserRealmService.swift
-//  Dishly
-//
-//  Created by Vladimir Kovalev on 02.07.2023.
-//
-
 import Foundation
 import RealmSwift
 
 protocol UserRealmServiceProtocol {
-    func createUser(name: String, email: String, profileImage: Data, id: String, completion: @escaping(Bool) -> ())
-    func getUser(with id: String, completion: @escaping(User) -> ())
-    func updateUser(user: User, completion: @escaping(Bool) -> ())
+    func createUser(name: String, email: String, profileImage: Data, id: String, completion: @escaping (Bool) -> Void)
+    func getUser(with id: String, completion: @escaping (User) -> Void)
+    func updateUser(user: User, completion: @escaping (Bool) -> Void)
+    func deleteUser(id: String)
 }
 
 class UserRealmService: UserRealmServiceProtocol {
-    let realm = try! Realm()
+    private let realm: Realm
     
-    func createUser(name: String, email: String, profileImage: Data, id: String, completion: @escaping(Bool) -> ()) {
+    init(realm: Realm = try! Realm()) {
+        self.realm = realm
+    }
+    
+    func createUser(name: String, email: String, profileImage: Data, id: String, completion: @escaping (Bool) -> Void) {
         let user = UserRealm()
-        
         user.id = id
         user.name = name
         user.email = email
         user.imageData = profileImage
         
-        try! realm.write {
-            realm.add(user)
-            completion(true)
+        do {
+            try realm.write {
+                realm.add(user)
+                completion(true)
+            }
+        } catch {
+            completion(false)
         }
     }
     
@@ -35,50 +36,46 @@ class UserRealmService: UserRealmServiceProtocol {
         return realm.objects(UserRealm.self)
     }
     
-    func getUser(with id: String, completion: @escaping(User) -> ())  {
-        let users = realm.objects(UserRealm.self)
-        for user in users {
-            if user.id == id {
-                let dict = ["uid" : id,
-                            "email": user.email,
-                            "fullName" : user.name,
-                            "imageData" : user.imageData
-                ] as [String : Any]
-                let user = User(dictionary: dict)
-                completion(user)
-            }
+    func getUser(with id: String, completion: @escaping (User) -> Void) {
+        let users = realm.objects(UserRealm.self).filter("id == %@", id)
+        if let user = users.first {
+            let dict: [String: Any] = [
+                "uid": id,
+                "email": user.email,
+                "fullName": user.name,
+                "imageData": user.imageData
+            ]
+            let user = User(dictionary: dict)
+            completion(user)
         }
     }
     
-    func updateUser(user: User, completion: @escaping(Bool) -> ()) {
-        let users = realm.objects(UserRealm.self)
-        for realmUser in users {
-            if realmUser.id == user.uid {
-                try! realm.write {
+    func updateUser(user: User, completion: @escaping (Bool) -> Void) {
+        let users = realm.objects(UserRealm.self).filter("id == %@", user.uid)
+        if let realmUser = users.first {
+            do {
+                try realm.write {
                     realmUser.name = user.fullName
                     realmUser.email = user.email
                     realmUser.imageData = user.imageData
                     completion(true)
                 }
+            } catch {
+                completion(false)
             }
         }
     }
     
     func deleteUser(id: String) {
-        let users = realm.objects(UserRealm.self)
-        for user in users {
-            if user.id == id {
-                try! realm.write {
+        let users = realm.objects(UserRealm.self).filter("id == %@", id)
+        if let user = users.first {
+            do {
+                try realm.write {
                     realm.delete(user)
                 }
+            } catch {
+                print("Error deleting user: \(error.localizedDescription)")
             }
         }
     }
 }
-
-
-
-
-
-
-

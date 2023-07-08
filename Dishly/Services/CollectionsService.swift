@@ -39,7 +39,18 @@ class CollectionService: CollectionServiceProtocol {
                     }
                 }
                 
-                let data: [String: Any] = ["name": recipe.recipeName!, "cookTime": recipe.recipe.cookTime!, "recipeImageUrl": recipe.recipe.recipeImageUrl!, "id": recipe.recipe.id!, "ownerId": recipe.recipe.ownerId!, "instructions": instructions, "ingredients": ingredients, "category": recipe.category, "rating": 0, "numOfRatings": 0, "serve" : recipe.recipe.serve!]
+                let data: [String: Any] = ["name": recipe.recipeName!,
+                                           "cookTime": recipe.recipe.cookTime!,
+                                           "recipeImageUrl": recipe.recipe.recipeImageUrl!,
+                                           "id": recipe.recipe.id!,
+                                           "ownerId": recipe.recipe.ownerId!,
+                                           "instructions": instructions,
+                                           "ingredients": ingredients,
+                                           "category": recipe.category,
+                                           "rating": 0,
+                                           "numOfRatings": 0,
+                                           "serve" : recipe.recipe.serve!
+                ]
                 
                 COLLECTION_USERS.document(uid).collection("collections").document(collection.id).collection(collection.name).document(recipe.recipe.id!).setData(data)
             } else {

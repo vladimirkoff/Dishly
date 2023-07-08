@@ -1,36 +1,24 @@
-//
-//  ImageUploader.swift
-//  Dishly
-//
-//  Created by Vladimir Kovalev on 29.06.2023.
-//
-
 import UIKit
 import FirebaseStorage
 
 class ImageUploader {
-    
     static let shared = ImageUploader()
     private init() {}
     
-    func uploadImage(image: UIImage, forRecipe: Bool, completion: @escaping(String) -> ()) {
+    func uploadImage(image: UIImage, isForRecipe: Bool, completion: @escaping (String) -> Void) {
         guard let imageData = image.jpegData(compressionQuality: 0.75) else { return }
         let fileName = UUID().uuidString
-
-        var path = ""
-        if forRecipe {
-            path = "/recipes_images/\(fileName)"
-        } else {
-            path = "/profile_images/\(fileName)"
-        }
         
-        let ref = Storage.storage().reference(withPath: path)
-        ref.putData(imageData, metadata: nil) { metadata, err in
-            if let error = err {
-                print("DEBUG: failed to upload image - \(error.localizedDescription)")
+        let path = isForRecipe ? "/recipes_images/\(fileName)" : "/profile_images/\(fileName)"
+        
+        let storageRef = Storage.storage().reference(withPath: path)
+        storageRef.putData(imageData, metadata: nil) { metadata, error in
+            if let error = error {
+                print("DEBUG: Failed to upload image - \(error.localizedDescription)")
                 return
             }
-            ref.downloadURL { url, err in
+            
+            storageRef.downloadURL { url, error in
                 guard let imageUrl = url?.absoluteString else { return }
                 completion(imageUrl)
             }

@@ -21,7 +21,7 @@ class RecipesViewModel {
     }
     
     func fetchRecipesWith(category: Recipe.Category, completion: @escaping([RecipeViewModel]) -> ()) {
-        recipeService.fecthRecipesWith(category: category) { recipes in
+        recipeService.fetchRecipesWith(category: category) { recipes in
             completion(recipes)
         }
     }

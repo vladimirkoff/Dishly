@@ -41,7 +41,7 @@ class SearchTableCell: UITableViewCell {
     //MARK: - Helpers
     
     func configureCell() {
-        backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        backgroundColor = greyColor
         
         addSubview(searchImageView)
         NSLayoutConstraint.activate([

@@ -21,7 +21,8 @@ class RecipeCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(named: "save"), for: .normal)
-        button.backgroundColor = .yellow
+        button.tintColor = .white
+        button.backgroundColor = greyColor
         button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(saveRecipe), for: .touchUpInside)
         return button
@@ -30,37 +31,46 @@ class RecipeCell: UICollectionViewCell {
     private var starImage1: UIImageView = {
         let image = UIImage(named: "star")
         let iv = UIImageView(image: image)
+        iv.tintColor = .yellow
         return iv
     }()
     
     private var starImage2: UIImageView = {
         let image = UIImage(named: "star")
         let iv = UIImageView(image: image)
+        iv.tintColor = .yellow
+
         return iv
     }()
     
     private var starImage3: UIImageView = {
         let image = UIImage(named: "star.filled")
         let iv = UIImageView(image: image)
+        iv.tintColor = .yellow
+
         return iv
     }()
     
     private var starImage4: UIImageView = {
         let image = UIImage(named: "star.half.filled")
         let iv = UIImageView(image: image)
+        iv.tintColor = .yellow
+
         return iv
     }()
     
     private var starImage5: UIImageView = {
         let image = UIImage(named: "star")
         let iv = UIImageView(image: image)
+        iv.tintColor = .yellow
+
         return iv
     }()
     
-     var priceLabel: UILabel = {
+     var recipeNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
+        label.textColor = .white
         label.text = "Home made Italian carboanra"
         return label
     }()
@@ -74,22 +84,34 @@ class RecipeCell: UICollectionViewCell {
         return iv
     }()
     
-     lazy var addIngredientsButton: UIButton = {
+    lazy var addIngredientsButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .blue
-        button.layer.cornerRadius = 10
-        button.setTitle("Add 11 ingridients", for: .normal)
+        button.backgroundColor = .clear
+        button.layer.borderColor = UIColor.white.cgColor
+        button.layer.borderWidth = 2
+        button.layer.cornerRadius = 15
+        
+        let cartSymbol = UIImage(systemName: "cart.fill")
+        let title = "ADD 11 INGREDIENTS"
+        let attributedTitle = NSMutableAttributedString()
+        attributedTitle.append(NSAttributedString(attachment: NSTextAttachment(image: cartSymbol!)))
+        attributedTitle.append(NSAttributedString(string: " " + title))
+        
+        button.setAttributedTitle(attributedTitle, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
+        
         return button
     }()
+
 
     
     //MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureCell()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -124,17 +146,17 @@ class RecipeCell: UICollectionViewCell {
             stack.widthAnchor.constraint(equalToConstant: frame.width / 4)
         ])
         
-        addSubview(priceLabel)
+        addSubview(recipeNameLabel)
         NSLayoutConstraint.activate([
-            priceLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 4),
-            priceLabel.topAnchor.constraint(equalTo: stack.bottomAnchor, constant: 6)
+            recipeNameLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 4),
+            recipeNameLabel.topAnchor.constraint(equalTo: stack.bottomAnchor, constant: 6)
         ])
         
         addSubview(addIngredientsButton)
         NSLayoutConstraint.activate([
             addIngredientsButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             addIngredientsButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
-            addIngredientsButton.widthAnchor.constraint(equalToConstant: bounds.width - 10),
+            addIngredientsButton.widthAnchor.constraint(equalToConstant: bounds.width - 30),
             addIngredientsButton.heightAnchor.constraint(equalToConstant: bounds.height / 12)
         ])
         
@@ -149,10 +171,10 @@ class RecipeCell: UICollectionViewCell {
         let filledStarImage = UIImage(systemName: "star.fill")
         let halfFilledStarImage = UIImage(systemName: "star.lefthalf.fill")
         let emptyStarImage = UIImage(systemName: "star")
-
+        
         let filledCount = Int(rating)
         let hasHalfStar = rating - Float(filledCount) >= 0.5
-
+        
         for (index, imageView) in imageViews.enumerated() {
             if index < filledCount {
                 imageView.image = filledStarImage
@@ -168,9 +190,11 @@ class RecipeCell: UICollectionViewCell {
         guard let recipe = recipeViewModel else { return }
         
         itemImageView.sd_setImage(with: URL(string: recipe.recipe.recipeImageUrl!)!)
-        priceLabel.text = recipe.recipe.name
-        addIngredientsButton.setTitle("Add \(recipe.recipe.ingredients.count) ingredients", for: .normal)
-        configureRatingImages(rating: 3.5, imageViews: [starImage1, starImage2, starImage3, starImage4, starImage5 ])
+        recipeNameLabel.text = recipe.recipe.name
+        addIngredientsButton.setTitle("ADD \(recipe.recipe.ingredients.count) INGREDIENTS", for: .normal)
+//        configureRatingImages(rating: 3.5, imageViews: [starImage1, starImage2, starImage3, starImage4, starImage5 ])
+        
+        configureRatingImages(rating: Float(recipe.recipe.rating!), imageViews: [starImage1, starImage2, starImage3, starImage4, starImage5 ])
     }
     
     //MARK: - Selectors

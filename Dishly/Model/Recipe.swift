@@ -8,6 +8,7 @@ struct Recipe {
     var serve: String?
     var cookTime: String?
     var category: Category
+    var sumOfRatings: Float?
     
     var ingredients: [Ingredient]
     var instructions: [Instruction]

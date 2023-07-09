@@ -24,6 +24,7 @@ class CartViewController: UIViewController {
     
     private let tableView: UITableView = {
         let tableView = UITableView()
+        tableView.backgroundColor = greyColor
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(UINib(nibName: "IngredientTableCell", bundle: nil), forCellReuseIdentifier: tableCellReuseIdentifier)
         return tableView
@@ -33,7 +34,7 @@ class CartViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = greyColor
         tableView.delegate = self
         tableView.dataSource = self
         setupNavigationBar()
@@ -44,6 +45,11 @@ class CartViewController: UIViewController {
     
     private func setupNavigationBar() {
         navigationItem.title = "My Groceries"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+           navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+
         navigationController?.navigationBar.prefersLargeTitles = true
         
         let rightButton = UIBarButtonItem(title: "Clear cart", style: .plain, target: self, action: #selector(rightButtonTapped))

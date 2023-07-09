@@ -9,6 +9,19 @@ import Foundation
 import FirebaseFirestore
 import FirebaseAuth
 
+func sumRatings(_ ratings: [[String: Any]]) -> Float {
+    var totalRating: Float = 0.0
+
+    for dictionary in ratings {
+        if let rating = dictionary["rating"] as? Float {
+            totalRating += rating
+        }
+    }
+
+    return totalRating
+}
+
+
 func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
     let uid = Auth.auth().currentUser!.uid
     
@@ -19,7 +32,7 @@ func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
     let ownerId = recipe.data()["ownerId"] as? String ?? ""
     let ingredients = recipe.data()["ingredients"] as? [String : [String : Float]] ?? [:]
     
-    let test = recipe.data()["rating"] as? Float ?? 0.0
+    var test = recipe.data()["rating"] as? Float ?? 0.0
     
     var ingredientsArray: [Ingredient] = []
     
@@ -35,7 +48,7 @@ func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
     var isRated = false
     
     
-    let numOfRatings = recipe.data()["numOfRatings"] as? [[String: Any]] ?? [[:]]
+    var numOfRatings = recipe.data()["numOfRatings"] as? [[String: Any]]
     
     
     
@@ -45,15 +58,24 @@ func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
     
     var testArray: [Rating] = []
     
-    for rate in numOfRatings {
-        if rate["uid"] as? String ?? "" == uid {
-            isRated = true
+    var sumOfRatings: Float = 0.0
+    
+    if let numOfRatings = numOfRatings {
+        
+        sumOfRatings = sumRatings(numOfRatings)
+        
+        
+        for rate in numOfRatings {
+            if rate["uid"] as? String == uid {
+                isRated = true
+            }
+            let uid = rate["uid"] as? String ?? ""
+            let ratingNum = rate["rating"] as? Float ?? 0.0
+            let rating = Rating(uid: uid, rating: ratingNum)
+            testArray.append(rating)
         }
-        let uid = rate["uid"] as? String ?? ""
-        let ratingNum = rate["rating"] as? Float ?? 0.0
-        let rating = Rating(uid: uid, rating: ratingNum)
-        testArray.append(rating)
     }
+
     
     let recipeModel = Recipe(ownerId: ownerId,
                              id: id,
@@ -61,6 +83,7 @@ func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
                              serve: serve,
                              cookTime: cookTime,
                              category: Recipe.Category(rawValue: category)!,
+                             sumOfRatings: sumOfRatings,
                              ingredients: ingredientsArray,
                              instructions: [],
                              recipeImageUrl: recipeImageUrl,

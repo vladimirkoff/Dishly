@@ -39,7 +39,7 @@ class ParentCell: UICollectionViewCell {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: CGRect(x: 0, y: titleLabel.frame.maxY, width: bounds.width, height: bounds.height - 40), collectionViewLayout: collectionViewLayout)
-        collectionView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        collectionView.backgroundColor = greyColor
         collectionView.delegate = self
         collectionView.dataSource = self
         return collectionView
@@ -49,7 +49,7 @@ class ParentCell: UICollectionViewCell {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: CGRect(x: 0, y: bounds.midY - bounds.midY / 2, width: bounds.width, height: bounds.height - 60), collectionViewLayout: collectionViewLayout)
-        collectionView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        collectionView.backgroundColor = greyColor
         collectionView.delegate = self
         collectionView.dataSource = self
         return collectionView
@@ -65,7 +65,7 @@ class ParentCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        backgroundColor = greyColor
     }
     
     required init?(coder: NSCoder) {
@@ -127,7 +127,7 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
             if let recipes = recipes {
                 cell.recipeViewModel = recipes[indexPath.row]
             }
-            cell.backgroundColor = .white
+            cell.backgroundColor = #colorLiteral(red: 0.3215686275, green: 0.3215686275, blue: 0.3215686275, alpha: 1)
             return cell
         } else if collectionView == categoryCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell
@@ -154,7 +154,7 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == horizontalCollectionView {
-            collectionView.isScrollEnabled = false
+            collectionView.isScrollEnabled = true
             let width = collectionView.bounds.width * 3/4
             let height = collectionView.bounds.height - 10
             return CGSize(width: width, height: height)

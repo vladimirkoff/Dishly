@@ -52,7 +52,7 @@ class ExploreViewController: UIViewController {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        collectionView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        collectionView.backgroundColor = greyColor
         collectionView.delegate = self
         collectionView.dataSource = self
         return collectionView
@@ -106,7 +106,7 @@ class ExploreViewController: UIViewController {
     }
     
     func configureUI() {
-        view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        view.backgroundColor = greyColor
         
         collectionView.backgroundColor = view.backgroundColor
         collectionView.delegate = self
@@ -216,7 +216,7 @@ extension ExploreViewController: ParentCellDelegate {
         if kind == UICollectionView.elementKindSectionHeader {
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath) as! SearchHeaderView
             headerView.searchBar.delegate = self
-            headerView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+            headerView.backgroundColor = greyColor
             return headerView
         }
         
@@ -270,7 +270,7 @@ class SearchHeaderView: UICollectionReusableView {
         
         
         addSubview(searchBar)
-        searchBar.barTintColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        searchBar.barTintColor = greyColor
         searchBar.tintColor = .white
         searchBar.searchTextField.backgroundColor = .white
         

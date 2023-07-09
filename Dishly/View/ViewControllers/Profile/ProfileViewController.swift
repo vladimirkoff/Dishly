@@ -34,7 +34,7 @@ class ProfileViewController: UIViewController {
     private let versionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Version 12.2.0"
+        label.text = "Version 1.0.0"
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textColor = .white
         return label
@@ -65,11 +65,11 @@ class ProfileViewController: UIViewController {
         return tableView
     }()
     
-    private let instaSymbol = UIImageView.createSNSymbol(with: "insta")
-    private let facebookSymbol = UIImageView.createSNSymbol(with: "facebook")
-    private let pinterestSymbol = UIImageView.createSNSymbol(with: "pinterest")
-    private let youtubeSymbol = UIImageView.createSNSymbol(with: "youtube")
-    private let twitterSymbol = UIImageView.createSNSymbol(with: "twitter")
+    private let instaSymbol = UIImageView.createSNSymbol(with: "insta.white")
+    private let facebookSymbol = UIImageView.createSNSymbol(with: "facebook.white")
+    private let pinterestSymbol = UIImageView.createSNSymbol(with: "pinterest.white")
+    private let youtubeSymbol = UIImageView.createSNSymbol(with: "youtube.white")
+    private let twitterSymbol = UIImageView.createSNSymbol(with: "twitter.white")
     
     //MARK: - Lifecycle
     
@@ -131,12 +131,15 @@ class ProfileViewController: UIViewController {
     func configureUI() {
         tableView.dataSource = self
         
-        view.backgroundColor = UIColor(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        view.backgroundColor = greyColor
         
         tabBarController?.tabBar.isHidden = true
         
         navigationItem.title = user.user!.fullName
         
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+           navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+
         navigationController?.navigationBar.prefersLargeTitles = true
         
         view.addSubview(editProfileButton)
@@ -233,13 +236,17 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! ProfileOptionCell
         switch indexPath.row {
         case 0:
-            cell.optionLabel.text = "1"
+            let questionImage = UIImage(systemName: "questionmark.circle.fill")
+            cell.cellSymbol.image = questionImage
+            cell.optionLabel.text = "Help & Support"
         case 1:
-            cell.optionLabel.text = "2"
+            let lockImage = UIImage(systemName: "lock.fill")
+            cell.cellSymbol.image = lockImage
+            cell.optionLabel.text = "Privacy Policy"
         case 2:
             let infoImage = UIImage(systemName: "info.bubble.fill")
             cell.cellSymbol.image = infoImage
-            cell.optionLabel.text = "About Developer"
+            cell.optionLabel.text = "About Us"
         case 3:
             let gearImage = UIImage(systemName: "gearshape.fill")
             cell.cellSymbol.image = gearImage
@@ -254,6 +261,12 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 3 {
             showLogoutAlert()
+        } else if indexPath.row == 1 {
+            let vc = ProfileOptionVC(docTitle: "Privacy Policy", text: privacyPolicy)
+            navigationController?.pushViewController(vc, animated: true)
+        } else if indexPath.row == 2 {
+            let vc = ProfileOptionVC(docTitle: "Terms and configitons", text: termsAndConditions)
+            navigationController?.pushViewController(vc, animated: true)
         }
     }
     

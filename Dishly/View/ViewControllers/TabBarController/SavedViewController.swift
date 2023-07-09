@@ -65,7 +65,7 @@ class SavedViewController: UICollectionViewController {
     
     func configureUI() {
         navigationController?.navigationBar.isHidden = false
-        view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        view.backgroundColor = greyColor
         
         
         navigationItem.title = "My Saved Recipes"
@@ -73,7 +73,7 @@ class SavedViewController: UICollectionViewController {
     }
     
     func configureCollectionView() {
-        collectionView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        collectionView.backgroundColor = greyColor
         collectionView.register(RecipeCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView.register(ItemsHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
     }

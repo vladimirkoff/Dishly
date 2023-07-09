@@ -11,7 +11,7 @@ class MealPlanVC: UIViewController {
     
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        collectionView.backgroundColor = greyColor
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
@@ -73,7 +73,7 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         }
         
         cell.delegate = self
-        cell.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        cell.backgroundColor = greyColor
         cell.dayLabel.text = getDayOfWeek()[indexPath.row].rawValue
 
         return cell

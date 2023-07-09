@@ -33,6 +33,7 @@ class PrepareViewController: UIViewController, Storyboardable {
                 print("Error creating recipe - \(error.localizedDescription)")
                 return
             }
+            self.dismiss(animated: true)
             print("DEBUG: Recipe created successfully")
         }
     }

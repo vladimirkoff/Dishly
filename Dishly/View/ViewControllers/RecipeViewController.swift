@@ -246,8 +246,9 @@ class RecipeViewController: UIViewController {
         dishImage.sd_setImage(with: URL(string: recipeViewModel.recipe.recipeImageUrl!)!)
         nameAndAuthorLabel.attributedText = configureNameAndAuthorLabel(name: recipeViewModel.recipe.name!, author: "Vladimir")
         timeLabel.text = "\(recipeViewModel.recipe.cookTime!) min"
+        print(recipeViewModel.recipe.rating!)
         ratingLabel.text = "\(recipeViewModel.recipe.rating!)"
-        ratingsCount.text = "\(recipeViewModel.recipe.ratingList!.count - 1) ratings"
+        ratingsCount.text = "\(recipeViewModel.recipe.ratingList!.count) ratings"
         configureRatingImages(rating: Float(recipeViewModel.recipe.rating!), imageViews: starsImages)
         categoryLabel.text = recipeViewModel.recipe.category.rawValue
         serveLabel.text = recipeViewModel.recipe.serve
@@ -438,37 +439,64 @@ class RecipeViewController: UIViewController {
         starsStack.translatesAutoresizingMaskIntoConstraints = false
         starsStack.distribution = .fillEqually
         view.addSubview(starsStack)
-        
+
         NSLayoutConstraint.activate([
             starsStack.centerXAnchor.constraint(equalTo: footerView.centerXAnchor),
             starsStack.topAnchor.constraint(equalTo: addToCartButton.bottomAnchor, constant: 12),
             starsStack.widthAnchor.constraint(equalToConstant: view.bounds.width / 2),
             starsStack.heightAnchor.constraint(equalToConstant:  40)
         ])
-        
+
+        var starButtons: [UIButton] = []
+
         for i in 1...5 {
+            print("Here")
             let starButton = UIButton(type: .custom)
-            
+
             starButton.setImage(UIImage(systemName: "star"), for: .normal)
             starButton.setImage(UIImage(systemName: "star.fill"), for: .selected)
-            
+
             starButton.tag = i
             starButton.tintColor = .yellow
             starButton.addTarget(self, action: #selector(starButtonTapped(_:)), for: .touchUpInside)
             starButton.translatesAutoresizingMaskIntoConstraints = false
-            
+
             starButton.widthAnchor.constraint(equalToConstant: starSize).isActive = true
             starButton.heightAnchor.constraint(equalToConstant: starSize).isActive = true
-            
-            
+
             starsStack.addArrangedSubview(starButton)
+            starButtons.append(starButton)
         }
+
+        // Call the function to initially configure the star buttons
+        configureRatingStars(rating: Float(recipeViewModel.recipe.rating!), starButtons: starButtons)
+
         
     }
+    func configureRatingStars(rating: Float, starButtons: [UIButton]) {
+        let filledStarImage = UIImage(systemName: "star.fill")
+        let halfFilledStarImage = UIImage(systemName: "star.lefthalf.fill")
+        let emptyStarImage = UIImage(systemName: "star")
+
+        let filledCount = Int(rating)
+        let hasHalfStar = rating - Float(filledCount) >= 0.5
+
+        for (index, button) in starButtons.enumerated() {
+            if index < filledCount {
+                button.setImage(filledStarImage, for: .normal)
+            } else if index == filledCount && hasHalfStar {
+                button.setImage(halfFilledStarImage, for: .normal)
+            } else {
+                button.setImage(emptyStarImage, for: .normal)
+            }
+        }
+    }
+
     
     private func updateStarColors() {
         for i in 1...5 {
             if let starButton = view.viewWithTag(i) as? UIButton {
+                starButton.isSelected = false
                 starButton.isSelected = i <= rating
             }
         }
@@ -522,26 +550,37 @@ class RecipeViewController: UIViewController {
         
         self.rating = sender.tag
         
-        var currentRating = recipeViewModel.recipe.rating!
-        var currentRatingNum = Float(recipeViewModel.recipe.ratingList!.count - 1)
+        print(recipeViewModel)
         
-        currentRating += Float(rating)
+        print(self.rating)
+        
+        let currentRating = recipeViewModel.recipe.sumOfRatings!
+        var currentRatingNum = Float(recipeViewModel.recipe.ratingList!.count)
+        
         currentRatingNum += 1
         
-        let updatedRating = currentRating / currentRatingNum
+        var updatedRating = (currentRating + Float(rating)) / currentRatingNum
         
         
         var ratings = recipeViewModel.recipe.ratingList!
         
-        print("Рейтинги - \(ratings)")
+        
+        let uid = user.user!.uid
+        
+        if let index = ratings.firstIndex(where: { $0.uid as? String == uid }) {
+            ratings[index].rating = Float(rating)
+            updatedRating = Float(rating)
+        } else {
+            ratings.append(Rating(uid: user.user!.uid, rating: Float(rating)))
+        }
+        
+        
+        print("Ratings - \(ratings)")
 
-        ratings.append(Rating(uid: user.user!.uid, rating: Float(rating)))
         
         recipeViewModel.recipe.ratingList = ratings
         
         var test: [[String : Any]] = []
-        
-    
         
         for new in ratings {
             print(new)

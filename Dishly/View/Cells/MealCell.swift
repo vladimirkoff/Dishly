@@ -121,14 +121,14 @@ extension MealCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
         
         if collectionView.numberOfItems(inSection: 0) == 1 {
             cell.itemImageView.backgroundColor = .yellow
-            cell.priceLabel.text = ""
+            cell.recipeNameLabel.text = ""
             cell.addIngredientsButton.isHidden = true
         }
         
         
         if let recipes = recipes {
             if recipes.count != 0 {
-                cell.priceLabel.text = recipes[indexPath.row].recipe.name
+                cell.recipeNameLabel.text = recipes[indexPath.row].recipe.name
                 if let url = URL(string: recipes[indexPath.row].recipe.recipeImageUrl!) {
                     cell.itemImageView.sd_setImage(with: url)
                 }

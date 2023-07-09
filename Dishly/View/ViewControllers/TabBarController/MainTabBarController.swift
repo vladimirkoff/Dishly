@@ -137,7 +137,9 @@ class MainTabBarController: UITabBarController {
                 let leftBarButton = UIBarButtonItem(customView: self.profileContainerView)
                 self.navigationItem.leftBarButtonItem = leftBarButton
                 
-                let rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "cart"), style: .plain, target: self, action: #selector(self.rightBarButtonTapped))
+                let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "cart.fill"), style: .plain, target: self, action: #selector(self.rightBarButtonTapped))
+                rightBarButtonItem.tintColor = .white
+
                 self.navigationItem.rightBarButtonItem = rightBarButtonItem
             }
         }

@@ -28,7 +28,7 @@ class ItemsHeader: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureCollectionView()
-        backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        backgroundColor = greyColor
     }
     
     required init?(coder: NSCoder) {
@@ -48,7 +48,7 @@ class ItemsHeader: UICollectionReusableView {
         collectionView!.delegate = self
         collectionView!.dataSource = self
         
-        collectionView!.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        collectionView!.backgroundColor = greyColor
         collectionView!.register(CollectionCell.self, forCellWithReuseIdentifier: "TopCategoryCell")
         
         self.addSubview(collectionView!)
@@ -68,7 +68,7 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TopCategoryCell", for: indexPath) as! CollectionCell
-        cell.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        cell.backgroundColor = greyColor
         
         if let collections = collections {
             if indexPath.row == collections.count  {

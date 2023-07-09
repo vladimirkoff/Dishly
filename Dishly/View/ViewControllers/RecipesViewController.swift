@@ -7,11 +7,13 @@
 
 import UIKit
 
+
+
 private let collectionCellReuseId = "RecipeCell"
 
 class RecipesViewController: UICollectionViewController {
     //MARK: - Properties
-    
+        
     private let userService: UserServiceProtocol
     private var userViewModel: UserViewModel!
     
@@ -21,16 +23,20 @@ class RecipesViewController: UICollectionViewController {
         }
     }
     
+    private var exploreVC: ExploreViewController?
+    
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        collectionView.backgroundColor = greyColor
         userViewModel = UserViewModel(user: nil, userService: userService)
         collectionView.register(RecipeCell.self, forCellWithReuseIdentifier: collectionCellReuseId)
     }
     
-    init(recipes: [RecipeViewModel], userService: UserServiceProtocol) {
+    init(recipes: [RecipeViewModel], userService: UserServiceProtocol, exploreVC: ExploreViewController) {
         self.recipes = recipes
         self.userService = userService
+        self.exploreVC = exploreVC
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
         
     }
@@ -58,7 +64,8 @@ extension RecipesViewController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionCellReuseId, for: indexPath) as! RecipeCell
-        if let recipes = recipes {
+        if let recipes = recipes, let exploreVC = exploreVC {
+            cell.delegate = exploreVC as! any RecipeCellDelegate
             cell.recipeViewModel = recipes[indexPath.row]
         }
         return cell
@@ -87,7 +94,7 @@ extension RecipesViewController: UICollectionViewDelegateFlowLayout {
      }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-          let inset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5) 
+          let inset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
           return inset
       }
 }

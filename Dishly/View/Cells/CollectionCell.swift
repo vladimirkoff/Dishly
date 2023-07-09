@@ -29,7 +29,7 @@ class CollectionCell: UICollectionViewCell {
     private let collectionNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Favorites"
+        label.text = "Create"
         label.textColor = .white
         return label
     }()

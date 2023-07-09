@@ -36,7 +36,7 @@ class ExploreViewController: UIViewController {
         collectionViewModel = CollectionViewModel(collectionService: collectionService, collection: nil)
         view.collectionViewModel = collectionViewModel
         
-        view.backgroundColor = .white
+        view.backgroundColor = lightGrey
         view.layer.cornerRadius = 10
         
         return view
@@ -194,7 +194,7 @@ extension ExploreViewController: ParentCellDelegate {
     func goToCategory(category: String) {
         recipeViewModel.fetchRecipesFor(category: category) { recipes in
             DispatchQueue.main.async {
-                let vc = RecipesViewController(recipes: recipes, userService: self.userService)
+                let vc = RecipesViewController(recipes: recipes, userService: self.userService, exploreVC: self)
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }
@@ -281,14 +281,26 @@ class SearchHeaderView: UICollectionReusableView {
             searchBar.centerYAnchor.constraint(equalTo: centerYAnchor),
             searchBar.heightAnchor.constraint(equalToConstant: 50),
             searchBar.widthAnchor.constraint(equalToConstant: bounds.width)
-            //            searchBar.topAnchor.constraint(equalTo: topAnchor),
-            //            searchBar.leadingAnchor.constraint(equalTo: leadingAnchor),
-            //            searchBar.trailingAnchor.constraint(equalTo: trailingAnchor),
-            //            searchBar.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+extension ExploreViewController: RecipeCellDelegate {
+    func addGroceries(groceries: [Ingredient]) {
+        
+    }
+    
+    func saveRecipe(recipe: RecipeViewModel) {
+        popUp(recipe: recipe)
+    }
+    
+    func deleteRecipe(id: String) {
+        
+    }
+    
+    
 }

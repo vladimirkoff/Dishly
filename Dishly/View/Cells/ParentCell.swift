@@ -170,6 +170,8 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
 //MARK: - RecipeCellDelegate
 
 extension ParentCell: RecipeCellDelegate {
+    func deleteRecipe(id: String) {}
+    
     
     func addGroceries(groceries: [Ingredient]) {
         myGroceries = groceries

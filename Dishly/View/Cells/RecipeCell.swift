@@ -6,18 +6,23 @@ import SDWebImage
 protocol RecipeCellDelegate {
     func addGroceries(groceries: [Ingredient])
     func saveRecipe(recipe: RecipeViewModel)
+    func deleteRecipe(id: String)
 }
 
 class RecipeCell: UICollectionViewCell {
     //MARK: - Properties
     
+    var isFromSaved: Bool?
+    
     var delegate: RecipeCellDelegate?
+    
+    var savedDelegate: RecipeCellDelegate?
     
     var recipeViewModel: RecipeViewModel? {
         didSet { configure() }
     }
     
-    private let saveButton: UIButton = {
+     var saveButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(named: "save"), for: .normal)
@@ -92,14 +97,7 @@ class RecipeCell: UICollectionViewCell {
         button.layer.borderWidth = 2
         button.layer.cornerRadius = 15
         
-        let cartSymbol = UIImage(systemName: "cart.fill")
-        let title = "ADD 11 INGREDIENTS"
-        let attributedTitle = NSMutableAttributedString()
-        attributedTitle.append(NSAttributedString(attachment: NSTextAttachment(image: cartSymbol!)))
-        attributedTitle.append(NSAttributedString(string: " " + title))
         
-        button.setAttributedTitle(attributedTitle, for: .normal)
-        button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         
         return button
@@ -191,8 +189,18 @@ class RecipeCell: UICollectionViewCell {
         
         itemImageView.sd_setImage(with: URL(string: recipe.recipe.recipeImageUrl!)!)
         recipeNameLabel.text = recipe.recipe.name
-        addIngredientsButton.setTitle("ADD \(recipe.recipe.ingredients.count) INGREDIENTS", for: .normal)
-//        configureRatingImages(rating: 3.5, imageViews: [starImage1, starImage2, starImage3, starImage4, starImage5 ])
+        
+        let cartSymbol = UIImage(systemName: "cart.fill")
+        let title = "ADD \(recipe.recipe.ingredients.count) INGREDIENTS"
+        let attributedTitle = NSMutableAttributedString()
+        attributedTitle.append(NSAttributedString(attachment: NSTextAttachment(image: cartSymbol!)))
+        attributedTitle.append(NSAttributedString(string: " " + title))
+        
+        addIngredientsButton.setAttributedTitle(attributedTitle, for: .normal)
+        addIngredientsButton.setTitleColor(.white, for: .normal)
+        
+//        addIngredientsButton.setTitle("ADD \(recipe.recipe.ingredients.count) INGREDIENTS", for: .normal)
+
         
         configureRatingImages(rating: Float(recipe.recipe.rating!), imageViews: [starImage1, starImage2, starImage3, starImage4, starImage5 ])
     }
@@ -204,7 +212,11 @@ class RecipeCell: UICollectionViewCell {
     }
     
     @objc func saveRecipe() {
-        delegate?.saveRecipe(recipe: recipeViewModel!)
+        if let isFromSaved = isFromSaved {
+            savedDelegate?.deleteRecipe(id: recipeViewModel!.recipe.id!)
+        } else {
+            delegate?.saveRecipe(recipe: recipeViewModel!)
+        }
     }
     
 }

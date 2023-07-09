@@ -49,7 +49,6 @@ class MainTabBarController: UITabBarController {
         super.viewWillAppear(animated)
         navigationItem.hidesBackButton = true
         navigationController?.navigationBar.topItem?.hidesBackButton = true
-        selectedIndex = 0
     }
     
     override func viewDidLoad() {
@@ -93,7 +92,7 @@ class MainTabBarController: UITabBarController {
         let addVC = UIViewController()
         let add = configureVC(image: UIImage(named: "add")!, vc: addVC)
         
-        let savedVC = SavedViewController(collectionService: collectionService)
+        let savedVC = SavedViewController(collectionService: collectionService, user: user)
         let saved = configureVC(image: UIImage(named: "save")!, vc: savedVC)
         
         let mealVC = MealPlanVC()

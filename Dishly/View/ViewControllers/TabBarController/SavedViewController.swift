@@ -15,6 +15,10 @@ class SavedViewController: UICollectionViewController {
     
     var isToChoseMeal = false
     
+    var collection: Collection?
+    
+    private var user: UserViewModel?
+    
     private var collections: [Collection]? {
         didSet {
             delegate?.reload(collections: collections!)
@@ -35,13 +39,20 @@ class SavedViewController: UICollectionViewController {
     
     //MARK: - Lifecycle
     
-    init(collectionService: CollectionServiceProtocol) {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        collectionView.reloadData()
+    }
+    
+    init(collectionService: CollectionServiceProtocol, user: UserViewModel?) {
         self.collectionService = collectionService
+        self.user = user
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+        
     }
     
     override func viewDidLoad() {
@@ -85,9 +96,11 @@ class SavedViewController: UICollectionViewController {
         if let recipes = recipes {
             cell.recipeViewModel = recipes[indexPath.row]
         }
+        cell.isFromSaved = true
+        cell.saveButton.setImage(UIImage(systemName: "minus.circle"), for: .normal)
         cell.layer.cornerRadius = 10
-        cell.backgroundColor = .white
         cell.clipsToBounds = true
+        cell.savedDelegate = self
         return cell
     }
     
@@ -97,7 +110,12 @@ class SavedViewController: UICollectionViewController {
             self.dismiss(animated: true)
             mealDelegate?.addRecipe(recipe: cell.recipeViewModel!)
         } else {
+            guard let cell = collectionView.cellForItem(at: indexPath) as? RecipeCell else { return }
             
+            if let recipe = cell.recipeViewModel {
+                let vc = RecipeViewController(user: user!, recipe: recipe)
+                navigationController?.pushViewController(vc, animated: true)
+            }
         }
     }
     
@@ -113,12 +131,18 @@ class SavedViewController: UICollectionViewController {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerReuseIdentifier, for: indexPath) as! ItemsHeader
         self.delegate = header
         header.delegate = self
+        if let cell = header.collectionView!.cellForItem(at: IndexPath(item: 0, section: 0)) as? CollectionCell {
+            cell.isSelected = true
+        }
+
         return header
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-           return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-        }
+        return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+    }
+    
+ 
 }
 
 //MARK: - UICollectionViewDelegateFlowLayout
@@ -137,6 +161,7 @@ extension SavedViewController: UICollectionViewDelegateFlowLayout {
 extension SavedViewController: ItemsHeaderDelegate {
     
     func fecthRecipes(with collection: Collection) {
+        self.collection = collection
         collectionService.fetchRecipesWith(collection: collection) { recipes in
             self.recipes = recipes
         }
@@ -145,6 +170,22 @@ extension SavedViewController: ItemsHeaderDelegate {
     func createCollection(collection: Collection, completion: @escaping (Error?) -> ()) {
         collectionViewModel.saveToCollection(collection: collection) { error in
             completion(error)
+        }
+    }
+    
+    
+}
+
+//MARK: - RecipeCellDelegate
+
+extension SavedViewController: RecipeCellDelegate {
+    func addGroceries(groceries: [Ingredient]) {}
+    func saveRecipe(recipe: RecipeViewModel) {}
+    
+    
+    func deleteRecipe(id: String) {
+        collectionService.deleteRecipeFrom(collection: collection! , id: id) { error in
+            print("DEBUG: recipe deleted")
         }
     }
     

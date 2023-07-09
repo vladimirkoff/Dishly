@@ -13,7 +13,6 @@ class IngredientTableCell: UITableViewCell {
 
     @IBOutlet weak var mealPortionButton: UIImageView!
     @IBOutlet weak var deleteButton: UIButton!
-    
     @IBOutlet weak var item: UITextField!
     
     private var portionModel: PortionModel?

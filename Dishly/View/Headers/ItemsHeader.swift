@@ -17,7 +17,7 @@ class ItemsHeader: UICollectionReusableView {
     
     private var collections: [Collection]?
     
-    private var collectionView: UICollectionView?
+    var collectionView: UICollectionView?
     
     private var numberOfItems = 8
     
@@ -121,7 +121,6 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
             
         } else {
             delegate?.fecthRecipes(with: collections![indexPath.row])
-            
         }
     }
 

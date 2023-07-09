@@ -30,8 +30,9 @@ class CollectionsPopupView: UIView {
     private let popupLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Choose a collection to save the recipe"
-        label.textColor = .black
+        label.text = "Save to"
+        label.textColor = .white
+        label.font = UIFont.boldSystemFont(ofSize: 32)
         return label
     }()
     
@@ -76,8 +77,8 @@ class CollectionsPopupView: UIView {
         
         addSubview(popupLabel)
         NSLayoutConstraint.activate([
-            popupLabel.bottomAnchor.constraint(equalTo: collectionView.topAnchor, constant: -6),
-            popupLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 4)
+            popupLabel.bottomAnchor.constraint(equalTo: collectionView.topAnchor, constant: -18),
+            popupLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 18)
         ])
     }
 }
@@ -95,7 +96,6 @@ extension CollectionsPopupView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        // Dequeue and configure the collection view cell
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionCell", for: indexPath) as! CollectionCell
         
         if let collections = collections {
@@ -106,7 +106,7 @@ extension CollectionsPopupView: UICollectionViewDataSource {
                 cell.collection = collections[indexPath.row]
             }
         }
-        cell.backgroundColor = .red
+        cell.backgroundColor = lightGrey
         return cell
     }
     

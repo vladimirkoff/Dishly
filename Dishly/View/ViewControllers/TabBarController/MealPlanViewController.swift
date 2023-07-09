@@ -103,7 +103,7 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
 
 extension MealPlanVC: MealCellDelegate {
     func addRecipe(cell: MealCell) {
-        let vc = SavedViewController(collectionService: CollectionService())
+        let vc = SavedViewController(collectionService: CollectionService(), user: nil)
         vc.mealDelegate = cell
         vc.isToChoseMeal = true
         present(vc, animated: true)

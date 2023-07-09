@@ -95,6 +95,7 @@ extension CartViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: tableCellReuseIdentifier, for: indexPath) as! IngredientTableCell
         cell.item.isUserInteractionEnabled = false
         cell.delegate = self
+        cell.item.backgroundColor = .white
         cell.configure(ingredient: myGroceries[indexPath.row])
         return cell
     }

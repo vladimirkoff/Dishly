@@ -7,10 +7,13 @@ private let headerReuseIdentifier = "ItemsHeader"
 
 protocol SavedVCProtocol {
     func reload(collections: [Collection])
+    func addRecipe(recipe: RecipeViewModel)
 }
 
 class SavedViewController: UICollectionViewController {
     //MARK: - Properties
+    
+    var isToChoseMeal = false
     
     private var collections: [Collection]? {
         didSet {
@@ -28,6 +31,7 @@ class SavedViewController: UICollectionViewController {
     }
     
     var delegate: SavedVCProtocol?
+    var mealDelegate: SavedVCProtocol?
     
     //MARK: - Lifecycle
     
@@ -88,7 +92,13 @@ class SavedViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        if isToChoseMeal {
+            guard let cell = collectionView.cellForItem(at: indexPath) as? RecipeCell else { return }
+            self.dismiss(animated: true)
+            mealDelegate?.addRecipe(recipe: cell.recipeViewModel!)
+        } else {
+            
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -121,6 +131,8 @@ extension SavedViewController: UICollectionViewDelegateFlowLayout {
     
 
 }
+
+//MARK: - ItemsHeaderDelegate
 
 extension SavedViewController: ItemsHeaderDelegate {
     

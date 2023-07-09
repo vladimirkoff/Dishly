@@ -74,7 +74,7 @@ class RecipeCell: UICollectionViewCell {
         return iv
     }()
     
-    private lazy var addIngredientsButton: UIButton = {
+     lazy var addIngredientsButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .blue

@@ -7,13 +7,15 @@
 
 import UIKit
 
-import Foundation
+import UIKit
 
 struct RecipeViewModel {
     //MARK: - Properties
     private let recipeService: RecipeServiceProtocol?
     
     var recipe: Recipe
+    
+    var recipeImage: UIImageView?
     
     //MARK: - Init
     

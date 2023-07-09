@@ -135,6 +135,8 @@ extension ItemsHeader: UICollectionViewDelegateFlowLayout {
 }
 
 extension ItemsHeader: SavedVCProtocol {
+    func addRecipe(recipe: RecipeViewModel) {}
+    
     func reload(collections: [Collection]) {
         self.collections = collections
         collectionView?.reloadData()

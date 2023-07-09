@@ -59,8 +59,7 @@ class RecipeSearchViewController: UIViewController, UITextFieldDelegate {
 
     
     @objc func cancelButtonTapped() {
-    
-     
+        navigationController?.popViewController(animated: true)
     }
     
     func searchRecipes(with searchText: String) {

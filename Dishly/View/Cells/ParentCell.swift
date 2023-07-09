@@ -12,8 +12,8 @@ class ParentCell: UICollectionViewCell {
     
     var numOfRecipes: Int!
     
-    private let categories = ["Breakfast", "Lunch", "Dinner", "Dessert", "Drinks", "Appetizer"]
-    
+    var index: Int!
+
     var recipeViewModel: RecipeViewModel!
     var delegate: ParentCellDelegate?
     
@@ -57,6 +57,12 @@ class ParentCell: UICollectionViewCell {
     
     //MARK: - Lifecycle
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        horizontalCollectionView.isHidden = true
+        categoryCollectionView.isHidden = true
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
@@ -67,12 +73,6 @@ class ParentCell: UICollectionViewCell {
     }
     
     //MARK: - Helpers
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        horizontalCollectionView.isHidden = true
-        categoryCollectionView.isHidden = true
-    }
     
     func configureCell() {
         horizontalCollectionView.isHidden = false
@@ -110,7 +110,11 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         case horizontalCollectionView:
             return numOfRecipes
         case categoryCollectionView:
-            return 6
+            if index == 1 {
+                return  mealCategories.count
+            } else {
+                return countryCategories.count
+            }
         default:
             return 0
         }
@@ -128,7 +132,11 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         } else if collectionView == categoryCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell
             cell.backgroundColor = .yellow
-            cell.title.text = categories[indexPath.row]
+            if index == 1 {
+                cell.title.text = mealCategories[indexPath.row]
+            } else if index == 2 {
+                cell.title.text = countryCategories[indexPath.row]
+            }
             return cell
         }
         return UICollectionViewCell()
@@ -146,6 +154,7 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == horizontalCollectionView {
+            collectionView.isScrollEnabled = false
             let width = collectionView.bounds.width * 3/4
             let height = collectionView.bounds.height - 10
             return CGSize(width: width, height: height)

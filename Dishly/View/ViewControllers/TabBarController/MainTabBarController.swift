@@ -87,7 +87,7 @@ class MainTabBarController: UITabBarController {
     func configureVC() {
         self.delegate = self
         
-        let mainVC = ExploreViewController(user: user!, recipes: recipes!, userService: userService, recipeService: recipeService, collectionService: collectionService)
+        let mainVC = ExploreViewController(user: user, recipes: recipes!, userService: userService, recipeService: recipeService, collectionService: collectionService)
         let main = configureVC(image: UIImage(named: "home")!, vc: mainVC)
         
         let addVC = UIViewController()
@@ -116,23 +116,6 @@ class MainTabBarController: UITabBarController {
     }
     
     func configureVC(image: UIImage, vc: UIViewController) -> UIViewController {
-        if let exploreViewController = vc as? ExploreViewController {
-            let searchController = UISearchController(searchResultsController: nil)
-            searchController.searchBar.placeholder = "Search"
-            
-            exploreViewController.navigationItem.searchController = searchController
-            
-            exploreViewController.navigationItem.searchController?.searchBar.showsCancelButton = true
-            
-            exploreViewController.navigationItem.hidesSearchBarWhenScrolling = true
-        } else {
-            vc.navigationItem.searchController = nil
-            vc.navigationItem.searchController?.searchBar.isHidden = true
-            vc.navigationItem.searchController?.searchBar.isEnabled = false
-            vc.navigationItem.searchController?.searchBar.isTranslucent = true
-            
-        }
-        
         let selectedImage = UIImageView(image: image)
         selectedImage.tintColor = .white
         
@@ -144,14 +127,6 @@ class MainTabBarController: UITabBarController {
     }
     
     func configureNavBar() {
-        let searchController = UISearchController(searchResultsController: nil)
-        searchController.searchBar.placeholder = "Search"
-        
-        navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.largeTitleDisplayMode = .always
-        navigationItem.title = "Search"
         
         guard let imageUrl = URL(string: user.user!.profileImage) else { return }
         
@@ -193,6 +168,7 @@ extension MainTabBarController: UITabBarControllerDelegate {
         }
         if selectedIndex == 1 {
             let vc = AddRecipeViewController.instantiateFromStoryboard()
+            vc.recipeService = recipeService
             vc.user = user
             let nav = UINavigationController(rootViewController: vc)
             navigationController?.modalPresentationStyle = .fullScreen

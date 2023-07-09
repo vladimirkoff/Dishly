@@ -17,7 +17,7 @@ class ExploreViewController: UIViewController {
     
     var collectionViewModel: CollectionViewModel!
     
-    var recipes: [RecipeViewModel] 
+    var recipes: [RecipeViewModel]
     
     lazy private var backgroundView: UIView = {
         let view = UIView(frame: window.bounds)
@@ -42,12 +42,10 @@ class ExploreViewController: UIViewController {
         return view
     }()
     
-    private lazy var searchController: UISearchController = {
-        let searchController = UISearchController(searchResultsController: nil)
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search"
-        return searchController
+    private lazy var searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.delegate = self
+        return searchBar
     }()
     
     private lazy var collectionView: UICollectionView = {
@@ -77,16 +75,19 @@ class ExploreViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureNavBar()
-        configureUI()
         
         userViewModel = UserViewModel(user: nil, userService: userService)
         
         
-        recipeViewModel = RecipeViewModel(recipe: Recipe(category: Recipe.Category(rawValue: "Main Course")!, ingredients: [], instructions: []), recipeService: recipeService)
-        
-        
+        recipeViewModel = RecipeViewModel(recipe: Recipe(category: Recipe.Category(rawValue: "Ukraine")!, ingredients: [], instructions: []), recipeService: recipeService)
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        configureUI()
+        configureNavBar()
+    }
+    
     
     //MARK: - Helpers
     
@@ -97,9 +98,7 @@ class ExploreViewController: UIViewController {
     }
     
     func configureNavBar() {
-        navigationItem.searchController = searchController
-        navigationItem.setHidesBackButton(true, animated: false)
-        definesPresentationContext = true
+        
         
         navigationItem.title = "Search"
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -109,17 +108,23 @@ class ExploreViewController: UIViewController {
     func configureUI() {
         view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
         
+        collectionView.backgroundColor = view.backgroundColor
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(ParentCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.register(SearchHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
+        
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.heightAnchor.constraint(equalTo: view.heightAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        
-        collectionView.register(ParentCell.self, forCellWithReuseIdentifier: "Cell")
     }
+    
+    
     
     //MARK: - Selectors
     
@@ -153,6 +158,7 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ParentCell
+        cell.index = indexPath.row
         cell.delegate = self
         cell.numOfRecipes = 0
         cell.configure(index: indexPath.row)
@@ -160,7 +166,7 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
             cell.numOfRecipes = recipes.count
             cell.recipes = recipes
         }
-        if indexPath.row == 1 {
+        if indexPath.row == 1 || indexPath.row == 2 || indexPath.row == 3  {
             cell.isForCategories = true
         } else {
             cell.isForCategories = false
@@ -205,6 +211,23 @@ extension ExploreViewController: ParentCellDelegate {
         }
         
     }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath) as! SearchHeaderView
+            headerView.searchBar.delegate = self
+            headerView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+            return headerView
+        }
+        
+        return UICollectionReusableView()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let height: Double = 60
+        let width: Double = view.frame.width
+        return CGSize(width: width, height: height)
+    }
 }
 
 //MARK: - CollectionsPopupViewDelegate
@@ -223,5 +246,49 @@ extension ExploreViewController: CollectionsPopupViewDelegate {
         
     }
     
+}
+
+extension ExploreViewController: UISearchBarDelegate {
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        let vc = RecipeSearchViewController()
+        navigationController?.pushViewController(vc, animated: true)
+        return false
+    }
+}
+
+
+
+class SearchHeaderView: UICollectionReusableView {
+    lazy var searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        return searchBar
+    }()
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        
+        addSubview(searchBar)
+        searchBar.barTintColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        searchBar.tintColor = .white
+        searchBar.searchTextField.backgroundColor = .white
+        
+        
+        
+        NSLayoutConstraint.activate([
+            searchBar.centerXAnchor.constraint(equalTo: centerXAnchor),
+            searchBar.centerYAnchor.constraint(equalTo: centerYAnchor),
+            searchBar.heightAnchor.constraint(equalToConstant: 50),
+            searchBar.widthAnchor.constraint(equalToConstant: bounds.width)
+            //            searchBar.topAnchor.constraint(equalTo: topAnchor),
+            //            searchBar.leadingAnchor.constraint(equalTo: leadingAnchor),
+            //            searchBar.trailingAnchor.constraint(equalTo: trailingAnchor),
+            //            searchBar.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

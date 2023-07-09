@@ -39,9 +39,7 @@ class AddRecipeViewController: UIViewController, Storyboardable {
     var delegate: AddRecipeViewControllerProtocol?
     
     private var ingredients = [Ingredient]() {
-        didSet {
-            tableView.reloadData()
-        }
+        didSet { tableView.reloadData() }
     }
     
     private var recipeViewModel: RecipeViewModel?
@@ -121,26 +119,17 @@ class AddRecipeViewController: UIViewController, Storyboardable {
         
         let ingredients = self.ingredients
         
-        if var recipeViewModel = recipeViewModel {
-            recipeViewModel.recipe.name = title
-            recipeViewModel.recipe.serve = serve
-            recipeViewModel.recipe.cookTime = time
-            recipeViewModel.recipe.ingredients = ingredients
-            recipeViewModel.recipe.category = selectedCategory
-            recipeViewModel.recipe.serve = serve
-        } else {
-            let recipe = Recipe(ownerId: user.user!.uid,
-                                id: UUID().uuidString,
-                                name: self.recipeNameField.text,
-                                serve: self.serveField.text,
-                                cookTime: self.cookTimeField.text,
-                                category: selectedCategory,
-                                ingredients: self.ingredients,
-                                instructions: [],
-                                ratingList: []
-            )
-            self.recipeViewModel = RecipeViewModel(recipe: recipe, recipeService: RecipeService())
-        }
+        let recipe = Recipe(ownerId: user.user!.uid,
+                            id: UUID().uuidString,
+                            name: title,
+                            serve: serve,
+                            cookTime: time,
+                            category: selectedCategory,
+                            ingredients: ingredients,
+                            instructions: [],
+                            ratingList: []
+        )
+        self.recipeViewModel = RecipeViewModel(recipe: recipe, recipeService: RecipeService())
     }
     
     var checkFieldValid: Bool {
@@ -198,7 +187,7 @@ class AddRecipeViewController: UIViewController, Storyboardable {
             configureViewModel()
             let vc = PrepareViewController.instantiateFromStoryboard()
             vc.recipeViewModel = recipeViewModel
-            vc.recipeImage = newImage
+            vc.recipeImage = foodImage.image
             navigationController?.pushViewController(vc, animated: true)
         }
     }

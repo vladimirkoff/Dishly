@@ -1,6 +1,8 @@
 
 import UIKit
 
+private let tableCellReuseIdentifier = "IngredientTableCell"
+
 class CartViewController: UIViewController {
     // MARK: - Properties
     
@@ -23,7 +25,7 @@ class CartViewController: UIViewController {
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(UINib(nibName: "IngredientTableCell", bundle: nil), forCellReuseIdentifier: "IngredientTableCell")
+        tableView.register(UINib(nibName: "IngredientTableCell", bundle: nil), forCellReuseIdentifier: tableCellReuseIdentifier)
         return tableView
     }()
     
@@ -59,8 +61,8 @@ class CartViewController: UIViewController {
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 8),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            tableView.widthAnchor.constraint(equalToConstant: view.bounds.width - 20),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     
@@ -74,8 +76,6 @@ class CartViewController: UIViewController {
         tableView.reloadData()
         isClearTapped = false
     }
-    
-
 }
 
 //MARK: - UITableViewDelegate & UITableViewDataSource
@@ -86,11 +86,25 @@ extension CartViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientTableCell", for: indexPath) as! IngredientTableCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: tableCellReuseIdentifier, for: indexPath) as! IngredientTableCell
         cell.item.isUserInteractionEnabled = false
-        cell.deleteButton.isHidden = true
+        cell.delegate = self
         cell.configure(ingredient: myGroceries[indexPath.row])
         return cell
     }
+}
+
+//MARK: - IngredientCellDelegate
+
+extension CartViewController: IngredientCellDelegate {
+    func updateCell(itemName: String?, portion: PortionModel, cell: IngredientTableCell) {}
+    func portionButtonTapped(cell: IngredientTableCell) {}
+
+    func deleteCell(cell: IngredientTableCell) {
+        guard let ingredientToDelete = cell.item.text else { return }
+        myGroceries.removeAll {$0.name == ingredientToDelete}
+        tableView.reloadData()
+    }
+    
 }
 

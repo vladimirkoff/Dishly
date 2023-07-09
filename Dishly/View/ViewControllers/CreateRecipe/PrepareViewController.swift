@@ -1,17 +1,12 @@
-
-
 import UIKit
 
 class PrepareViewController: UIViewController, Storyboardable {
-    
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var saveButton: UIButton!
     
     var recipeViewModel: RecipeViewModel?
-    
     var recipeImage: UIImage!
-    
     private var instructions = [Instruction]() {
         didSet {
             tableView.reloadData()
@@ -28,18 +23,18 @@ class PrepareViewController: UIViewController, Storyboardable {
     //MARK: - Functions
     
     func updateUI() {
-        guard let instructions = recipeViewModel?.recipe.instructions else {return}
+        guard let instructions = recipeViewModel?.recipe.instructions else { return }
         self.instructions = instructions
     }
     
     func saveRecipe() {
-        recipeViewModel?.createRecipe(image: recipeImage, completion: { error in
+        recipeViewModel?.createRecipe(image: recipeImage) { error in
             if let error = error {
                 print("Error creating recipe - \(error.localizedDescription)")
                 return
             }
             print("DEBUG: Recipe created successfully")
-        })
+        }
     }
     
     //MARK: - Button Taps
@@ -57,14 +52,13 @@ class PrepareViewController: UIViewController, Storyboardable {
     }
     
     var checkFieldValid: Bool {
-        
         guard !instructions.isEmpty else {
-            presentAlert(title: "Can not continue", message: "Please enter an instruction", completion: nil);
+            presentAlert(title: "Can not continue", message: "Please enter an instruction", completion: nil)
             return false
         }
         
         guard !(instructions.contains { ($0.text?.isEmpty ?? true) }) else {
-            presentAlert(title: "Can not continue", message: "Please fill all instruction fields", completion: nil);
+            presentAlert(title: "Can not continue", message: "Please fill all instruction fields", completion: nil)
             return false
         }
         return true
@@ -82,7 +76,9 @@ extension PrepareViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PrepareTableCell.identifier, for: indexPath) as? PrepareTableCell else {fatalError("Could not Load")}
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PrepareTableCell.identifier, for: indexPath) as? PrepareTableCell else {
+            fatalError("Could not Load")
+        }
         cell.tag = indexPath.row
         cell.configure(instruction: instructions[indexPath.row])
         cell.delegate = self
@@ -100,6 +96,8 @@ extension PrepareViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
 }
+
+//MARK: - PrepareCellDelegate
 
 extension PrepareViewController: PrepareCellDelegate {
     func updateCell(textView: String?, cell: PrepareTableCell) {

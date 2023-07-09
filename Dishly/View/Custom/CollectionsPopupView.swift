@@ -144,7 +144,7 @@ extension CollectionsPopupView: UICollectionViewDataSource {
         if indexPath.row == collections!.count {
             showCollectionNameAlert()
         } else {
-//            saveToCollection(collection: collection.collection! )
+            saveToCollection(collection: collection.collection! )
         }
     }
     
@@ -155,6 +155,12 @@ extension CollectionsPopupView: UICollectionViewDataSource {
                 self.collections = collections
             }
         })
+    }
+    
+    func saveToCollection(collection: Collection) {
+        CollectionService().saveRecipeToCollection(collection: collection, recipe: recipe) { error in
+            print("SUCCESS")
+        }
     }
 }
 

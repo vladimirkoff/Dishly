@@ -3,6 +3,12 @@ import UIKit
 class MealPlanVC: UIViewController {
     //MARK: - Properties
     
+    var recipes: [String : [RecipeViewModel]]? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+    
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
@@ -16,6 +22,7 @@ class MealPlanVC: UIViewController {
         super.viewDidLoad()
         configureNavBar()
         setupCollectionView()
+        fecthRecipesForPlans()
     }
     
     //MARK: - Helpers
@@ -47,7 +54,7 @@ class MealPlanVC: UIViewController {
 //MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
 
 extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -58,22 +65,26 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MealCell", for: indexPath) as! MealCell
-        cell.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
-        cell.dayLabel.text = getDayOfWeek(for: indexPath.row)
-        return cell
-    }
-
-    private func getDayOfWeek(for index: Int) -> String {
-        let calendar = Calendar.current
-        let weekday = calendar.component(.weekday, from: Date())
+        let dayOfWeek = getDayOfWeek()[indexPath.row]
         
-        if let weekdaySymbol = calendar.weekdaySymbols.first {
-            let offset = (index + weekday - 1) % 7
-            let weekdayIndex = (offset == 0) ? 7 : offset
-            return calendar.weekdaySymbols[weekdayIndex - 1]
+        cell.day = dayOfWeek
+        if let recipes = recipes {
+            cell.recipes = recipes[dayOfWeek.rawValue]
         }
         
-        return ""
+        cell.delegate = self
+        cell.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        cell.dayLabel.text = getDayOfWeek()[indexPath.row].rawValue
+
+        return cell
+    }
+    
+    private func getDayOfWeek() -> [DaysOfWeek] {
+        var days: [DaysOfWeek] = []
+        for day in DaysOfWeek.allCases {
+            days.append(day)
+        }
+        return days
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -81,7 +92,23 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         return CGSize(width: width, height: 300)
     }
     
+    func fecthRecipesForPlans() {
+        RecipeService().fetchRecipesForPlans { complexRecipes in
+            self.recipes = complexRecipes
+        }
+    }
+}
 
+//MARK: - MealCellDelegate
+
+extension MealPlanVC: MealCellDelegate {
+    func addRecipe(cell: MealCell) {
+        let vc = SavedViewController(collectionService: CollectionService())
+        vc.mealDelegate = cell
+        vc.isToChoseMeal = true
+        present(vc, animated: true)
+    }
+    
 }
 
 

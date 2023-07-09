@@ -1,7 +1,21 @@
 import UIKit
 
+protocol MealCellDelegate {
+    func addRecipe(cell: MealCell)
+}
+
 class MealCell: UICollectionViewCell {
     //MARK: - Properties
+     
+    var delegate: MealCellDelegate?
+    
+    var recipes: [RecipeViewModel]? {
+        didSet {
+            horizontalCollectionView.reloadData()
+        }
+    }
+    
+    var day: DaysOfWeek?
     
     let dayLabel: UILabel = {
         let label = UILabel()
@@ -17,6 +31,7 @@ class MealCell: UICollectionViewCell {
         button.setTitle("Add meal", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         button.tintColor = .white
+        button.addTarget(self, action: #selector(addButtonTaped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -83,24 +98,75 @@ class MealCell: UICollectionViewCell {
             horizontalCollectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
+    
+    //MARK: - Selectors
+    
+    @objc func addButtonTaped() {
+        delegate?.addRecipe(cell: self)
+    }
 }
 
 //MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
 
 extension MealCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        guard let count = recipes?.count else { return 1 }
+        if count == 0 { return 1 }
+        else { return count }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath) as! RecipeCell
         cell.backgroundColor = .white
+        
+        if collectionView.numberOfItems(inSection: 0) == 1 {
+            cell.itemImageView.backgroundColor = .yellow
+            cell.priceLabel.text = ""
+            cell.addIngredientsButton.isHidden = true
+        }
+        
+        
+        if let recipes = recipes {
+            if recipes.count != 0 {
+                cell.priceLabel.text = recipes[indexPath.row].recipe.name
+                if let url = URL(string: recipes[indexPath.row].recipe.recipeImageUrl!) {
+                    cell.itemImageView.sd_setImage(with: url)
+                }
+            }
+        }
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView.numberOfItems(inSection: 0) == 1 {
+            print("Add recipe")
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width / 2
         let height = collectionView.frame.height - 30
         return CGSize(width: width, height: height)
+    }
+}
+
+//MARK: - SavedVCProtocol
+
+extension MealCell: SavedVCProtocol {
+    func reload(collections: [Collection]) {}
+    
+    func addRecipe(recipe: RecipeViewModel) {
+        if var recipes = recipes {
+            recipes.append(recipe)
+            RecipeService().mealPlan(recipes: recipes, day: day!) { error in
+                self.recipes = recipes
+            }
+        } else {
+            self.recipes = []
+            RecipeService().mealPlan(recipes: [recipe], day: day!) { error in
+                self.recipes!.append(recipe)
+                self.horizontalCollectionView.reloadData()
+            }
+        }
     }
 }

@@ -18,9 +18,7 @@ class CollectionsPopupView: UIView {
     var collectionViewModel: CollectionViewModel?
     
     private var collections: [Collection]? {
-        didSet {
-            collectionView.reloadData()
-        }
+        didSet { collectionView.reloadData() }
     }
     
     override func didMoveToSuperview() {
@@ -87,28 +85,24 @@ class CollectionsPopupView: UIView {
 
 extension CollectionsPopupView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let collectionsNum = collections?.count {
-            return collectionsNum + 1
-        } else {
-            return 0
-        }
-        
+        return collections?.count ?? 0 + 1
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionCell", for: indexPath) as! CollectionCell
         
         if let collections = collections {
-            
             if indexPath.row == collections.count  {
                 cell.collectionImageView.image = UIImage(systemName: "plus")
             } else {
                 cell.collection = collections[indexPath.row]
             }
         }
+        
         cell.backgroundColor = lightGrey
         return cell
     }
+ 
     
     func showCollectionNameAlert() {
         let alertController = UIAlertController(title: "Enter collection name", message: nil, preferredStyle: .alert)
@@ -119,14 +113,14 @@ extension CollectionsPopupView: UICollectionViewDataSource {
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+        let okAction = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
             if let collectionName = alertController.textFields?.first?.text {
                 print("Entered collection name: \(collectionName)")
                 let collection = Collection(name: collectionName, imageUrl: "", id: UUID().uuidString)
-                self.collectionViewModel?.saveToCollection(collection: collection) { error in
+                self?.collectionViewModel?.saveToCollection(collection: collection) { [weak self] error in
                     print("SUCCESS")
-                    self.collections!.append(collection)
-                    self.collectionView!.reloadData()
+                    self?.collections?.append(collection)
+                    self?.collectionView?.reloadData()
                 }
             }
         }
@@ -138,30 +132,34 @@ extension CollectionsPopupView: UICollectionViewDataSource {
             topViewController.present(alertController, animated: true, completion: nil)
         }
     }
+
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let collection = collectionView.cellForItem(at: indexPath) as! CollectionCell
-        if indexPath.row == collections!.count {
+        if indexPath.row == collections?.count {
             showCollectionNameAlert()
         } else {
-            saveToCollection(collection: collection.collection! )
+            if let collectionCell = collectionView.cellForItem(at: indexPath) as? CollectionCell {
+                if let collection = collectionCell.collection {
+                    saveToCollection(collection: collection)
+                }
+            }
         }
     }
-    
+
     func fetchCollections() {
-        guard let collectionViewModel = collectionViewModel else { return }
-        collectionViewModel.fetchCollections(completion: { collections in
+        collectionViewModel?.fetchCollections(completion: { [weak self] collections in
             DispatchQueue.main.async {
-                self.collections = collections
+                self?.collections = collections
             }
         })
     }
-    
+
     func saveToCollection(collection: Collection) {
         CollectionService().saveRecipeToCollection(collection: collection, recipe: recipe) { error in
             print("SUCCESS")
         }
     }
+
 }
 
 //MARK: - UICollectionViewDelegateFlowLayout

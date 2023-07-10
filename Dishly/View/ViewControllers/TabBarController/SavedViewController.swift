@@ -7,7 +7,7 @@ private let headerReuseIdentifier = "ItemsHeader"
 
 protocol SavedVCProtocol {
     func reload(collections: [Collection])
-    func addRecipe(recipe: RecipeViewModel)
+    func addRecipe(recipe: RecipeViewModel, mealsViewModel: MealsViewModel?)
 }
 
 class SavedViewController: UICollectionViewController {
@@ -108,7 +108,7 @@ class SavedViewController: UICollectionViewController {
         if isToChoseMeal {
             guard let cell = collectionView.cellForItem(at: indexPath) as? RecipeCell else { return }
             self.dismiss(animated: true)
-            mealDelegate?.addRecipe(recipe: cell.recipeViewModel!)
+            mealDelegate?.addRecipe(recipe: cell.recipeViewModel!, mealsViewModel: nil)
         } else {
             guard let cell = collectionView.cellForItem(at: indexPath) as? RecipeCell else { return }
             

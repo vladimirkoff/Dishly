@@ -18,11 +18,8 @@ class ItemsHeader: UICollectionReusableView {
     private var collections: [Collection]?
     
     var collectionView: UICollectionView?
-    
-    private var numberOfItems = 8
-    
+        
     var delegate: ItemsHeaderDelegate?
-
     
     //MARK: - Lifecycle
     override init(frame: CGRect) {
@@ -39,7 +36,6 @@ class ItemsHeader: UICollectionReusableView {
     
     func configureCollectionView() {
         
-
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         
@@ -53,9 +49,10 @@ class ItemsHeader: UICollectionReusableView {
         
         self.addSubview(collectionView!)
         
-        
     }
 }
+
+//MARK: - UICollectionViewDelegate & UICollectionViewDataSource
 
 extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -115,16 +112,12 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row == collections!.count {
-            
-            showCollectionNameAlert()
-            
-        } else {
-            delegate?.fecthRecipes(with: collections![indexPath.row])
-        }
+        indexPath.row == collections!.count ? showCollectionNameAlert() : delegate?.fecthRecipes(with: collections![indexPath.row])
     }
 
 }
+
+//MARK: - UICollectionViewDelegateFlowLayout
 
 extension ItemsHeader: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -133,8 +126,10 @@ extension ItemsHeader: UICollectionViewDelegateFlowLayout {
     }
 }
 
+//MARK: - SavedVCProtocol
+
 extension ItemsHeader: SavedVCProtocol {
-    func addRecipe(recipe: RecipeViewModel) {}
+    func addRecipe(recipe: RecipeViewModel, mealsViewModel: MealsViewModel?) {}
     
     func reload(collections: [Collection]) {
         self.collections = collections

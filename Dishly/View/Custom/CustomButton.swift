@@ -39,7 +39,5 @@ class CustomButton: UIButton {
             self.titleLabel?.minimumScaleFactor = newValue
         }
     }
-    
-    
 
 }

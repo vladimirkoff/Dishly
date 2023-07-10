@@ -22,7 +22,7 @@ class RecipeCell: UICollectionViewCell {
         didSet { configure() }
     }
     
-     var saveButton: UIButton = {
+    var saveButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(named: "save"), for: .normal)
@@ -44,7 +44,7 @@ class RecipeCell: UICollectionViewCell {
         let image = UIImage(named: "star")
         let iv = UIImageView(image: image)
         iv.tintColor = .yellow
-
+        
         return iv
     }()
     
@@ -52,7 +52,7 @@ class RecipeCell: UICollectionViewCell {
         let image = UIImage(named: "star.filled")
         let iv = UIImageView(image: image)
         iv.tintColor = .yellow
-
+        
         return iv
     }()
     
@@ -60,7 +60,7 @@ class RecipeCell: UICollectionViewCell {
         let image = UIImage(named: "star.half.filled")
         let iv = UIImageView(image: image)
         iv.tintColor = .yellow
-
+        
         return iv
     }()
     
@@ -68,11 +68,11 @@ class RecipeCell: UICollectionViewCell {
         let image = UIImage(named: "star")
         let iv = UIImageView(image: image)
         iv.tintColor = .yellow
-
+        
         return iv
     }()
     
-     var recipeNameLabel: UILabel = {
+    var recipeNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
@@ -80,7 +80,7 @@ class RecipeCell: UICollectionViewCell {
         return label
     }()
     
-     var itemImageView: UIImageView = {
+    var itemImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.layer.cornerRadius = 15
@@ -102,8 +102,8 @@ class RecipeCell: UICollectionViewCell {
         
         return button
     }()
-
-
+    
+    
     
     //MARK: - Lifecycle
     override init(frame: CGRect) {
@@ -117,7 +117,7 @@ class RecipeCell: UICollectionViewCell {
     }
     
     //MARK: - Helpers
- 
+    
     
     func configureCell() {
         
@@ -198,9 +198,6 @@ class RecipeCell: UICollectionViewCell {
         
         addIngredientsButton.setAttributedTitle(attributedTitle, for: .normal)
         addIngredientsButton.setTitleColor(.white, for: .normal)
-        
-//        addIngredientsButton.setTitle("ADD \(recipe.recipe.ingredients.count) INGREDIENTS", for: .normal)
-
         
         configureRatingImages(rating: Float(recipe.recipe.rating!), imageViews: [starImage1, starImage2, starImage3, starImage4, starImage5 ])
     }

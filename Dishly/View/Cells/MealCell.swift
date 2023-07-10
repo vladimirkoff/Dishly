@@ -2,6 +2,7 @@ import UIKit
 
 protocol MealCellDelegate {
     func addRecipe(cell: MealCell)
+    func goToRecipe(recipe: RecipeViewModel)
 }
 
 class MealCell: UICollectionViewCell {
@@ -111,36 +112,23 @@ class MealCell: UICollectionViewCell {
 extension MealCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let count = recipes?.count else { return 1 }
-        if count == 0 { return 1 }
-        else { return count }
+        return count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath) as! RecipeCell
-        cell.backgroundColor = .white
-        
-        if collectionView.numberOfItems(inSection: 0) == 1 {
-            cell.itemImageView.backgroundColor = .yellow
-            cell.recipeNameLabel.text = ""
-            cell.addIngredientsButton.isHidden = true
-        }
-        
-        
+        cell.backgroundColor = lightGrey
+       
         if let recipes = recipes {
-            if recipes.count != 0 {
-                cell.recipeNameLabel.text = recipes[indexPath.row].recipe.name
-                if let url = URL(string: recipes[indexPath.row].recipe.recipeImageUrl!) {
-                    cell.itemImageView.sd_setImage(with: url)
-                }
-            }
+            cell.recipeViewModel = recipes[indexPath.row]
         }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView.numberOfItems(inSection: 0) == 1 {
-            print("Add recipe")
-        }
+        guard let cell = collectionView.cellForItem(at: indexPath) as? RecipeCell else { return }
+        delegate?.goToRecipe(recipe: cell.recipeViewModel!)
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -155,18 +143,20 @@ extension MealCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
 extension MealCell: SavedVCProtocol {
     func reload(collections: [Collection]) {}
     
-    func addRecipe(recipe: RecipeViewModel) {
-        if var recipes = recipes {
-            recipes.append(recipe)
-            RecipeService().mealPlan(recipes: recipes, day: day!) { error in
-                self.recipes = recipes
+    func addRecipe(recipe: RecipeViewModel, mealsViewModel: MealsViewModel?) {
+        guard let mealsViewModel = mealsViewModel else { return }
+        if var currentRecipes = recipes {
+            currentRecipes.append(recipe)
+            mealsViewModel.mealPlan(recipes: currentRecipes, day: day!) { error in
+                self.recipes = currentRecipes
             }
         } else {
-            self.recipes = []
-            RecipeService().mealPlan(recipes: [recipe], day: day!) { error in
-                self.recipes!.append(recipe)
+            let newRecipes = [recipe]
+            mealsViewModel.mealPlan(recipes: newRecipes, day: day!) { error in
+                self.recipes = newRecipes
                 self.horizontalCollectionView.reloadData()
             }
         }
     }
+    
 }

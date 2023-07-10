@@ -41,9 +41,12 @@ class RecipeViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Add to cart", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        button.backgroundColor = .green
+        button.backgroundColor = .white
+        button.setTitleColor(.black, for: .normal)
+        button.layer.borderColor = UIColor.white.cgColor
+        button.layer.borderWidth = 2
         button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 8
+        button.layer.cornerRadius = 15
         button.addTarget(self, action: #selector(addToCartButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -69,15 +72,15 @@ class RecipeViewController: UIViewController {
     private let discriptionView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        view.backgroundColor = greyColor
         return view
     }()
     
     private let totalTimeView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .black
         view.layer.cornerRadius = 15
+        view.backgroundColor = .clear
         view.layer.borderColor = UIColor.white.cgColor
         view.layer.borderWidth = 2
         return view
@@ -124,8 +127,8 @@ class RecipeViewController: UIViewController {
     private let ingridientsLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 26)
-        label.textColor = .black
+        label.font = UIFont.boldSystemFont(ofSize: 32)
+        label.textColor = .white
         label.text = "Ingridients"
         return label
     }()
@@ -133,7 +136,7 @@ class RecipeViewController: UIViewController {
     private let footerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .lightGray
+        view.backgroundColor = lightGrey
         return view
     }()
     
@@ -141,6 +144,7 @@ class RecipeViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "4.5"
+        label.textColor = .white
         return label
     }()
     
@@ -148,6 +152,7 @@ class RecipeViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "25 ratings"
+        label.textColor = .white
         label.textAlignment = .center
         return label
     }()
@@ -212,7 +217,7 @@ class RecipeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+        view.backgroundColor = greyColor
         
         setupNavigationBar()
         setupScrollView()
@@ -238,7 +243,7 @@ class RecipeViewController: UIViewController {
         attributedText.append(NSAttributedString(string: "\n", attributes: [.font: UIFont.boldSystemFont(ofSize: 14), .foregroundColor: UIColor.white]))
         attributedText.append(NSAttributedString(string: "\(name)\n", attributes: [.font: UIFont.boldSystemFont(ofSize: 18), .foregroundColor: UIColor.white]))
         attributedText.append(NSAttributedString(string: "\n", attributes: [.font: UIFont.boldSystemFont(ofSize: 14), .foregroundColor: UIColor.white]))
-        attributedText.append(NSAttributedString(string: "by \(author)", attributes: [.font: UIFont.systemFont(ofSize: 18), .foregroundColor: UIColor.lightGray]))
+        attributedText.append(NSAttributedString(string: "by \(author)", attributes: [.font: UIFont.boldSystemFont(ofSize: 18), .foregroundColor: UIColor.white]))
         return attributedText
     }
     
@@ -246,15 +251,14 @@ class RecipeViewController: UIViewController {
         dishImage.sd_setImage(with: URL(string: recipeViewModel.recipe.recipeImageUrl!)!)
         nameAndAuthorLabel.attributedText = configureNameAndAuthorLabel(name: recipeViewModel.recipe.name!, author: "Vladimir")
         timeLabel.text = "\(recipeViewModel.recipe.cookTime!) min"
-        print(recipeViewModel.recipe.rating!)
         ratingLabel.text = "\(recipeViewModel.recipe.rating!)"
         ratingsCount.text = "\(recipeViewModel.recipe.ratingList!.count) ratings"
         configureRatingImages(rating: Float(recipeViewModel.recipe.rating!), imageViews: starsImages)
         categoryLabel.text = recipeViewModel.recipe.category.rawValue
         serveLabel.text = recipeViewModel.recipe.serve
-        usernameLabel.text = user.user!.username
+        usernameLabel.text = user.user?.username ?? "Mo value"
         
-        if let url = URL(string: user.user!.profileImage) {
+        if let url = URL(string: user.user?.profileImage ?? "") {
             profileImage.sd_setImage(with: url)
         }
         
@@ -280,6 +284,10 @@ class RecipeViewController: UIViewController {
     }
     
     private func configureUI() {
+        contentView.backgroundColor = greyColor
+        scrollView.backgroundColor = greyColor
+        tableView.backgroundColor = greyColor
+        
         contentView.addSubview(dishImage)
         NSLayoutConstraint.activate([
             dishImage.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -289,7 +297,7 @@ class RecipeViewController: UIViewController {
             dishImage.heightAnchor.constraint(equalToConstant: view.frame.height / 2 )
         ])
         
-        dishImage.addSubview(nameAndAythorView)
+        contentView.addSubview(nameAndAythorView)
         NSLayoutConstraint.activate([
             nameAndAythorView.widthAnchor.constraint(equalToConstant: view.frame.width - 30),
             nameAndAythorView.heightAnchor.constraint(equalToConstant: view.frame.height / 6 ),
@@ -356,8 +364,8 @@ class RecipeViewController: UIViewController {
         footerView.addSubview(addToCartButton)
         NSLayoutConstraint.activate([
             addToCartButton.topAnchor.constraint(equalTo: footerView.topAnchor, constant: 8),
-            addToCartButton.leadingAnchor.constraint(equalTo: footerView.leadingAnchor, constant: 16),
-            addToCartButton.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -16),
+            addToCartButton.leadingAnchor.constraint(equalTo: footerView.leadingAnchor, constant: 40),
+            addToCartButton.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -40),
             addToCartButton.heightAnchor.constraint(equalToConstant: 40)
         ])
         
@@ -380,15 +388,28 @@ class RecipeViewController: UIViewController {
             ratingsCount.centerXAnchor.constraint(equalTo: stack.centerXAnchor)
         ])
         
+        view.addSubview(ratingLabel)
+        NSLayoutConstraint.activate([
+            ratingLabel.rightAnchor.constraint(equalTo: stack.leftAnchor, constant: -4),
+            ratingLabel.bottomAnchor.constraint(equalTo: stack.bottomAnchor)
+        ])
+        
         view.addSubview(profileView)
         NSLayoutConstraint.activate([
-            profileView.bottomAnchor.constraint(equalTo: totalTimeView.topAnchor, constant: -16),
+            profileView.bottomAnchor.constraint(equalTo: totalTimeView.topAnchor, constant: -18),
             profileView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             profileView.heightAnchor.constraint(equalToConstant: 100),
             profileView.widthAnchor.constraint(equalToConstant: view.bounds.width - 20)
         ])
         
         profileView.addSubview(profileImage)
+        
+        let chefHatImage: UIImageView = {
+            let iv = UIImageView()
+            iv.translatesAutoresizingMaskIntoConstraints = false
+            iv.image = UIImage(named: "chef")
+            return iv
+        }()
         
         let heightAnchor = profileView.heightAnchor
         
@@ -401,6 +422,14 @@ class RecipeViewController: UIViewController {
                 profileImage.heightAnchor.constraint(equalToConstant: heightConstant - 10),
                 profileImage.widthAnchor.constraint(equalToConstant: heightConstant - 10)
             ])
+            
+            profileView.addSubview(chefHatImage)
+            NSLayoutConstraint.activate([
+                chefHatImage.centerYAnchor.constraint(equalTo: profileView.centerYAnchor),
+                chefHatImage.rightAnchor.constraint(equalTo: profileView.rightAnchor, constant: -8),
+                chefHatImage.heightAnchor.constraint(equalToConstant: (heightConstant - 10) / 2 ),
+                chefHatImage.widthAnchor.constraint(equalToConstant: (heightConstant - 10) / 2 )
+            ])
         }
         
         
@@ -409,6 +438,11 @@ class RecipeViewController: UIViewController {
             usernameLabel.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor),
             usernameLabel.leftAnchor.constraint(equalTo: profileImage.rightAnchor, constant: 4)
         ])
+        
+        
+      
+        
+   
         
         view.addSubview(categoryImageView)
         NSLayoutConstraint.activate([

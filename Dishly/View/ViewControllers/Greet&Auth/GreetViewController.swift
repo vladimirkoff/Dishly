@@ -25,6 +25,7 @@ class GreetViewController: UIViewController {
     private var collectionService: CollectionServiceProtocol!
     private var userRealmService: UserRealmServiceProtocol!
     private var googleAuthService: GoogleAuthServiceProtocol!
+    private var mealsService: MealsServiceProtocol!
     
     private var userViewModel: UserViewModel!
     private var authViewModel: AuthViewModel!
@@ -187,13 +188,14 @@ class GreetViewController: UIViewController {
         
     }
     
-    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol, googleAuthService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol) {
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol, googleAuthService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol, mealsService: MealsServiceProtocol) {
         self.authService = authService
         self.userService = userService
         self.recipeService = recipeService
         self.userRealmService = userRealmService
         self.googleAuthService = googleAuthService
         self.collectionService = collectionService
+        self.mealsService = mealsService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -215,14 +217,14 @@ class GreetViewController: UIViewController {
             if providerID == GoogleAuthProviderID {
                 googleAuthViewModel.checkIfUserLoggedIn { user in
                     DispatchQueue.main.async { [self] in
-                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: collectionService, googleService: self.googleAuthService)
+                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
                         self.navigationController?.pushViewController(vc, animated: true)
                     }
                 }
             } else {
                 authViewModel.checkIfUserExists { user in
                     DispatchQueue.main.async {
-                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleAuthService)
+                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
                         self.navigationController?.pushViewController(vc, animated: true)
                     }
                 }
@@ -295,7 +297,7 @@ class GreetViewController: UIViewController {
                 self.showLoader(false)
                 if let user = user {
                     self.user = user
-                    let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleAuthService)
+                    let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
             }
@@ -306,12 +308,12 @@ class GreetViewController: UIViewController {
         guard let authService = authService else { return }
         guard let userService = userService else { return }
         guard let recipeService = recipeService else { return }
-        let vc = LoginViewController(authService: authService, userService: userService, recipeService: recipeService, googleService: googleAuthService, collectionService: collectionService)
+        let vc = LoginViewController(authService: authService, userService: userService, recipeService: recipeService, googleService: googleAuthService, collectionService: collectionService, mealsService: mealsService)
         navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func goToSignUp() {
-        let vc = SignupController(authService: authService, userService: userService, recipeService: recipeService, userRealmService: userRealmService, collectionService: collectionService, googleService: googleAuthService)
+        let vc = SignupController(authService: authService, userService: userService, recipeService: recipeService, userRealmService: userRealmService, collectionService: collectionService, googleService: googleAuthService, mealsService: mealsService)
         navigationController?.pushViewController(vc, animated: true)
     }
 }

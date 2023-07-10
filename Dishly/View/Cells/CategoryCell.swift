@@ -23,7 +23,6 @@ class CategoryCell: UICollectionViewCell {
         return label
     }()
 
-
     //MARK: - Lifecycle
 
     override init(frame: CGRect) {
@@ -42,20 +41,11 @@ class CategoryCell: UICollectionViewCell {
         layer.cornerRadius = 10
         clipsToBounds = true
 
-//        addSubview(categoryImageView)
-//        NSLayoutConstraint.activate([
-//            categoryImageView.leftAnchor.constraint(equalTo: leftAnchor),
-//            categoryImageView.rightAnchor.constraint(equalTo: rightAnchor),
-//            categoryImageView.topAnchor.constraint(equalTo: topAnchor),
-//            categoryImageView.heightAnchor.constraint(equalToConstant: frame.height)
-//        ])
-
         addSubview(title)
         NSLayoutConstraint.activate([
             title.leftAnchor.constraint(equalTo: leftAnchor, constant: bounds.width / 10),
             title.topAnchor.constraint(equalTo: topAnchor, constant: bounds.height / 5)
         ])
-
 
     }
 }

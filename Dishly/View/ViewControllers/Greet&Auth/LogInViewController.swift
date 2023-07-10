@@ -11,6 +11,7 @@ class LoginViewController: UIViewController {
     private let recipeService: RecipeServiceProtocol!
     private let googleService: GoogleAuthServiceProtocol!
     private let collectionService: CollectionServiceProtocol!
+    private let mealsService: MealsServiceProtocol!
     
     private var authViewModel: AuthViewModel!
     private var userViewModel: UserViewModel!
@@ -57,12 +58,13 @@ class LoginViewController: UIViewController {
         userViewModel = UserViewModel(user: nil, userService: userService)
     }
     
-    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol) {
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol, mealsService: MealsServiceProtocol) {
          self.authService = authService
          self.recipeService = recipeService
          self.userService = userService
-        self.googleService = googleService
+         self.googleService = googleService
         self.collectionService = collectionService
+        self.mealsService = mealsService
          super.init(nibName: nil, bundle: nil)
      }
     
@@ -115,7 +117,7 @@ class LoginViewController: UIViewController {
             }
             self.userViewModel.fetchUser { user in
                 DispatchQueue.main.async {
-                    let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleService)
+                    let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleService, mealsService: self.mealsService)
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
 

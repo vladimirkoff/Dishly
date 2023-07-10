@@ -6,15 +6,14 @@ class MainTabBarController: UITabBarController {
     
     //MARK: - Properties
     
-    var authService: AuthServiceProtocol!
-    var userService: UserServiceProtocol!
-    var recipeService: RecipeServiceProtocol!
+    private let authService: AuthServiceProtocol!
+    private let userService: UserServiceProtocol!
+    private let recipeService: RecipeServiceProtocol!
+    private let mealsService: MealsServiceProtocol
+    private let googleService: GoogleAuthServiceProtocol!
+    private let collectionService: CollectionServiceProtocol!
     
-    var googleService: GoogleAuthServiceProtocol!
-    
-    private var collectionService: CollectionServiceProtocol!
-    
-    var recipesViewModel: RecipesViewModel!
+    private var recipesViewModel: RecipesViewModel!
     
     private let userRealmService: UserRealmServiceProtocol = UserRealmService()
     
@@ -58,13 +57,14 @@ class MainTabBarController: UITabBarController {
         fecthRecipes()
     }
     
-    init(user: UserViewModel, authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, collectionService: CollectionServiceProtocol, googleService: GoogleAuthServiceProtocol) {
+    init(user: UserViewModel, authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, collectionService: CollectionServiceProtocol, googleService: GoogleAuthServiceProtocol, mealsService: MealsServiceProtocol) {
         self.authService = authService
         self.userService = userService
         self.recipeService = recipeService
         self.user = user
         self.collectionService = collectionService
         self.googleService = googleService
+        self.mealsService = mealsService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -95,7 +95,7 @@ class MainTabBarController: UITabBarController {
         let savedVC = SavedViewController(collectionService: collectionService, user: user)
         let saved = configureVC(image: UIImage(named: "save")!, vc: savedVC)
         
-        let mealVC = MealPlanVC()
+        let mealVC = MealPlanVC(mealsService: mealsService)
         let plan = configureVC(image: UIImage(named: "list")!, vc: mealVC)
         
         viewControllers = [main,  add, saved, plan]
@@ -152,7 +152,7 @@ class MainTabBarController: UITabBarController {
     }
     
     @objc func leftBarButtonTapped() {
-        let vc = ProfileViewController(user: user, userService: userService, profileImage: profileImageView, authService: authService, userRealmService: userRealmService, googleService: googleService, collectionService: collectionService )
+        let vc = ProfileViewController(user: user, userService: userService, profileImage: profileImageView, authService: authService, userRealmService: userRealmService, googleService: googleService, collectionService: collectionService)
         navigationController?.pushViewController(vc, animated: true)
     }
     

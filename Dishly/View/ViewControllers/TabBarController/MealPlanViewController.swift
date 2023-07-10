@@ -3,6 +3,8 @@ import UIKit
 class MealPlanVC: UIViewController {
     //MARK: - Properties
     
+    private var mealsViewModel: MealsViewModel!
+    
     var recipes: [String : [RecipeViewModel]]? {
         didSet {
             collectionView.reloadData()
@@ -17,6 +19,15 @@ class MealPlanVC: UIViewController {
     }()
     
     //MARK: - Lifecycle
+    
+    init(mealsService: MealsServiceProtocol) {
+        mealsViewModel = MealsViewModel(mealsService: mealsService)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,10 +65,7 @@ class MealPlanVC: UIViewController {
 //MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
 
 extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
+
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 7
@@ -65,26 +73,13 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MealCell", for: indexPath) as! MealCell
-        let dayOfWeek = getDayOfWeek()[indexPath.row]
-        
+        let dayOfWeek = DaysOfWeek.allCases[indexPath.row]
         cell.day = dayOfWeek
-        if let recipes = recipes {
-            cell.recipes = recipes[dayOfWeek.rawValue]
-        }
-        
+        cell.recipes = recipes?[dayOfWeek.rawValue]
         cell.delegate = self
         cell.backgroundColor = greyColor
-        cell.dayLabel.text = getDayOfWeek()[indexPath.row].rawValue
-
+        cell.dayLabel.text = dayOfWeek.rawValue
         return cell
-    }
-    
-    private func getDayOfWeek() -> [DaysOfWeek] {
-        var days: [DaysOfWeek] = []
-        for day in DaysOfWeek.allCases {
-            days.append(day)
-        }
-        return days
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -92,9 +87,13 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         return CGSize(width: width, height: 300)
     }
     
+    //MARK: - DB calls
+    
     func fecthRecipesForPlans() {
-        RecipeService().fetchRecipesForPlans { complexRecipes in
-            self.recipes = complexRecipes
+        mealsViewModel.fetchRecipesForPlans { recipes in
+            DispatchQueue.main.async {
+                self.recipes = recipes
+            }
         }
     }
 }
@@ -102,13 +101,17 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
 //MARK: - MealCellDelegate
 
 extension MealPlanVC: MealCellDelegate {
+    func goToRecipe(recipe: RecipeViewModel) {
+        let vc = RecipeViewController(user: UserViewModel(user: nil, userService: UserService()), recipe: recipe)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     func addRecipe(cell: MealCell) {
         let vc = SavedViewController(collectionService: CollectionService(), user: nil)
         vc.mealDelegate = cell
         vc.isToChoseMeal = true
         present(vc, animated: true)
     }
-    
 }
 
 

@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var userRealmService: UserRealmServiceProtocol!
     var googleAuthService: GoogleAuthServiceProtocol!
     var collectionService: CollectionServiceProtocol!
-    
+    var mealsService: MealsServiceProtocol!
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
@@ -29,6 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         userRealmService = container.getUserRealmService()
         googleAuthService = container.getGoogleAuthService(userService: userService)
         collectionService = container.getCollectionService()
+        mealsService = container.getMealsService()
         
 
         let greetVC = GreetViewController(authService: authService,
@@ -36,7 +37,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                                           recipeService: recipeService,
                                           userRealmService: userRealmService,
                                           googleAuthService: googleAuthService,
-                                          collectionService: collectionService
+                                          collectionService: collectionService,
+                                          mealsService: mealsService
         )
         
         window = UIWindow(windowScene: scene)

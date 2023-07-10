@@ -65,6 +65,7 @@ class CartViewController: UIViewController {
         ])
         
         view.addSubview(tableView)
+    
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 8),
             tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -97,6 +98,8 @@ extension CartViewController: UITableViewDelegate, UITableViewDataSource {
         cell.delegate = self
         cell.item.backgroundColor = .white
         cell.configure(ingredient: myGroceries[indexPath.row])
+        
+        cell.backgroundColor = .red
         return cell
     }
 }

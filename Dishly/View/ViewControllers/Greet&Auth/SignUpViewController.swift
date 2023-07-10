@@ -6,11 +6,12 @@ class SignupController: UIViewController {
     
     //MARK: - Properies
     
-    private var authService: AuthServiceProtocol!
-    private var collectionService: CollectionServiceProtocol!
-    private var userService: UserServiceProtocol!
-    private var googleService: GoogleAuthServiceProtocol!
-    private var userRealmService: UserRealmServiceProtocol!
+    private let authService: AuthServiceProtocol!
+    private let collectionService: CollectionServiceProtocol!
+    private let userService: UserServiceProtocol!
+    private let googleService: GoogleAuthServiceProtocol!
+    private let userRealmService: UserRealmServiceProtocol!
+    private let mealsService: MealsServiceProtocol!
 
     private var authViewModel: AuthViewModel!
     private var recipeService: RecipeServiceProtocol!
@@ -75,13 +76,14 @@ class SignupController: UIViewController {
         authViewModel = AuthViewModel(authService: authService)
     }
     
-    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol, collectionService: CollectionServiceProtocol, googleService: GoogleAuthServiceProtocol) {
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol, collectionService: CollectionServiceProtocol, googleService: GoogleAuthServiceProtocol, mealsService: MealsServiceProtocol) {
         self.userService = userService
         self.recipeService = recipeService
         self.authService = authService
         self.userRealmService = userRealmService
         self.collectionService = collectionService
         self.googleService = googleService
+        self.mealsService = mealsService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -138,7 +140,7 @@ class SignupController: UIViewController {
             DispatchQueue.main.async {
                 let profileImage = self.plusButton.imageView?.image?.pngData()
                 self.createTestUser(email: email, name: fullname, uid: user!.user!.uid, profileImage: profileImage!)
-                let vc = MainTabBarController(user: user!, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleService)
+                let vc = MainTabBarController(user: user!, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleService, mealsService: self.mealsService)
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }

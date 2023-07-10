@@ -36,4 +36,8 @@ class DependencyContainer {
         return CollectionService()
     }
     
+    func getMealsService() -> MealsServiceProtocol {
+        return MealsService()
+    }
+    
 }

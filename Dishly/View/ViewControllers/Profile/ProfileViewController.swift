@@ -6,20 +6,17 @@ class ProfileViewController: UIViewController {
     //MARK: - Properties
     
     var userService: UserServiceProtocol!
-    var userViewModel: UserViewModel!
-    
     var collectionService: CollectionServiceProtocol!
-    
-    var authService: AuthServiceProtocol!
-    var authViewModel: AuthViewModel!
-    
     var googleService: GoogleAuthServiceProtocol!
-    
+    var authService: AuthServiceProtocol!
+    var userRealmService: UserRealmServiceProtocol!
+    var mealsService: MealsServiceProtocol!
+
+    var userViewModel: UserViewModel!
+    var authViewModel: AuthViewModel!
     var user: UserViewModel!
     
     var profileImage: UIImageView!
-    
-    var userRealmService: UserRealmServiceProtocol!
     
     private var profileImageView: UIImageView = {
         let iv = UIImageView()
@@ -188,7 +185,7 @@ class ProfileViewController: UIViewController {
         authViewModel.logOut { error, success in
             DispatchQueue.main.async {
                 let recipeService = RecipeService()
-                let vc = GreetViewController(authService: self.authService, userService: self.userService, recipeService: recipeService, userRealmService: self.userRealmService, googleAuthService: self.googleService, collectionService: self.collectionService)
+                let vc = GreetViewController(authService: self.authService, userService: self.userService, recipeService: recipeService, userRealmService: self.userRealmService, googleAuthService: self.googleService, collectionService: self.collectionService, mealsService: self.mealsService)
                 let navVC = UINavigationController(rootViewController: vc)
                 navVC.modalPresentationStyle = .fullScreen
                 self.present(navVC, animated: true)

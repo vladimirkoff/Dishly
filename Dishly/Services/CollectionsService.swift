@@ -11,67 +11,69 @@ protocol CollectionServiceProtocol {
 
 class CollectionService: CollectionServiceProtocol {
     
-    func deleteRecipeFrom(collection: Collection, id: String, completion: @escaping(Error?) -> ()) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        COLLECTION_USERS.document(uid).collection("collections").document(collection.id).collection(collection.name).document(id).delete(completion: completion)
+    func deleteRecipeFrom(collection: Collection, id: String, completion: @escaping (Error?) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            completion(nil)
+            return
+        }
+        
+        let documentRef = COLLECTION_USERS.document(uid)
+            .collection("collections")
+            .document(collection.id)
+            .collection(collection.name)
+            .document(id)
+        
+        documentRef.delete(completion: completion)
     }
+
     
     func saveRecipeToCollection(collection: Collection, recipe: RecipeViewModel?, completion: @escaping (Error?) -> Void) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        guard let uid = Auth.auth().currentUser?.uid else {
+            completion(nil)
+            return
+        }
         
         COLLECTION_USERS.document(uid).collection("collections").getDocuments { snapshot, error in
             if let collections = snapshot?.documents {
-                for collectionModel in collections {
-                    let name = collectionModel["name"] as? String ?? ""
-                    if name == collection.name {
-                        return
-                    }
-                }
+                let isCollectionExist = collections.contains { $0["name"] as? String == collection.name }
                 
+                guard !isCollectionExist else {
+                    completion(nil)
+                    return
+                }
+            }
+            
+            if let recipe = recipe {
+                let instructions = recipe.recipe.instructions.compactMap { $0.text }
+                let ingredients = recipe.recipe.ingredients.compactMap { $0.name }
+                
+                let data = generateRecipeData(for: recipe)
+
+                COLLECTION_USERS.document(uid)
+                    .collection("collections")
+                    .document(collection.id)
+                    .collection(collection.name)
+                    .document(recipe.recipe.id ?? "")
+                    .setData(data) { error in
+                        completion(error)
+                    }
+            } else {
                 let collectionData: [String: Any] = [
                     "name": collection.name,
                     "id": collection.id,
                     "imageUrl": collection.imageUrl
                 ]
                 
-                if let recipe = recipe {
-                    let instructions = recipe.recipe.instructions.compactMap { $0.text }
-                    let ingredients = recipe.recipe.ingredients.compactMap { $0.name }
-                    
-                    let data: [String: Any] = [
-                        "name": recipe.recipe.name ?? "",
-                        "cookTime": recipe.recipe.cookTime ?? "",
-                        "recipeImageUrl": recipe.recipe.recipeImageUrl ?? "",
-                        "id": recipe.recipe.id ?? "",
-                        "ownerId": recipe.recipe.ownerId ?? "",
-                        "instructions": instructions,
-                        "ingredients": ingredients,
-                        "category": recipe.recipe.category.rawValue,
-                        "rating": 0,
-                        "numOfRatings": 0,
-                        "serve": recipe.recipe.serve ?? ""
-                    ]
-                    
-                    COLLECTION_USERS.document(uid)
-                        .collection("collections")
-                        .document(collection.id)
-                        .collection(collection.name)
-                        .document(recipe.recipe.id ?? "")
-                        .setData(data)
-                } else {
-                    COLLECTION_USERS.document(uid)
-                        .collection("collections")
-                        .document(collection.id)
-                        .setData(collectionData)
-                }
-                
-                completion(nil)
-                
+                COLLECTION_USERS.document(uid)
+                    .collection("collections")
+                    .document(collection.id)
+                    .setData(collectionData) { error in
+                        completion(error)
+                    }
             }
         }
-        
-       
     }
+    
     
     func fetchCollections(completion: @escaping ([Collection]) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else {
@@ -82,19 +84,7 @@ class CollectionService: CollectionServiceProtocol {
         COLLECTION_USERS.document(uid)
             .collection("collections")
             .getDocuments { snapshot, error in
-                var collectionsArray: [Collection] = []
-                
-                if let collections = snapshot?.documents {
-                    for collection in collections {
-                        let name = collection.data()["name"] as? String ?? ""
-                        let url = collection.data()["imageUrl"] as? String ?? ""
-                        let id = collection.data()["id"] as? String ?? ""
-                        
-                        let collectionModel = Collection(name: name, imageUrl: url, id: id)
-                        collectionsArray.append(collectionModel)
-                    }
-                }
-                
+                let collectionsArray = self.parseCollectionsSnapshot(snapshot)
                 completion(collectionsArray)
             }
     }
@@ -105,21 +95,59 @@ class CollectionService: CollectionServiceProtocol {
             return
         }
         
+        let dispatchGroup = DispatchGroup()
+        var recipesArray: [RecipeViewModel] = []
+        
         COLLECTION_USERS.document(uid)
             .collection("collections")
             .document(collection.id)
             .collection(collection.name)
             .getDocuments { snapshot, error in
-                var recipesArray: [RecipeViewModel] = []
-                
                 if let recipes = snapshot?.documents {
                     for recipe in recipes {
-                        let recipeViewModel = setRecipesConfiguration(recipe: recipe)
-                        recipesArray.append(recipeViewModel)
+                        if let id = recipe.data()["id"] as? String {
+                            dispatchGroup.enter()
+                            self.fetchRecipeFromFirestore(id: id) { recipeViewModel in
+                                recipesArray.append(recipeViewModel)
+                                dispatchGroup.leave()
+                            }
+                        }
                     }
                 }
-                
-                completion(recipesArray)
+                dispatchGroup.notify(queue: .main) {
+                    completion(recipesArray)
+                }
             }
+    }
+}
+
+//MARK: - Helpers
+
+extension CollectionService {
+    
+    func fetchRecipeFromFirestore(id: String, completion: @escaping (RecipeViewModel) -> Void) {
+        COLLECTION_RECIPES.whereField("id", isEqualTo: id).getDocuments { snapshot, error in
+            if let document = snapshot?.documents.first {
+                let recipeViewModel = setRecipesConfiguration(recipe: document)
+                completion(recipeViewModel)
+            }
+        }
+    }
+    
+    func parseCollectionsSnapshot(_ snapshot: QuerySnapshot?) -> [Collection] {
+        var collectionsArray: [Collection] = []
+        
+        if let collections = snapshot?.documents {
+            for collection in collections {
+                let name = collection.data()["name"] as? String ?? ""
+                let url = collection.data()["imageUrl"] as? String ?? ""
+                let id = collection.data()["id"] as? String ?? ""
+                
+                let collectionModel = Collection(name: name, imageUrl: url, id: id)
+                collectionsArray.append(collectionModel)
+            }
+        }
+        
+        return collectionsArray
     }
 }

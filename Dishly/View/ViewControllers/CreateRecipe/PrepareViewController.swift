@@ -1,10 +1,13 @@
 import UIKit
+import JGProgressHUD
 
 class PrepareViewController: UIViewController, Storyboardable {
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var saveButton: UIButton!
     
+    private let hud = JGProgressHUD(style: .dark)
+
     var recipeViewModel: RecipeViewModel?
     var recipeImage: UIImage!
     private var instructions = [Instruction]() {
@@ -22,17 +25,25 @@ class PrepareViewController: UIViewController, Storyboardable {
     
     //MARK: - Functions
     
+    func showLoader(_ show: Bool) {
+        view.endEditing(true )
+        show ? hud.show(in: view) : hud.dismiss()
+    }
+    
     func updateUI() {
         guard let instructions = recipeViewModel?.recipe.instructions else { return }
         self.instructions = instructions
     }
     
     func saveRecipe() {
+        showLoader(true)
         recipeViewModel?.createRecipe(image: recipeImage) { error in
             if let error = error {
+                self.showLoader(false)
                 print("Error creating recipe - \(error.localizedDescription)")
                 return
             }
+            self.showLoader(false)
             self.dismiss(animated: true)
             print("DEBUG: Recipe created successfully")
         }

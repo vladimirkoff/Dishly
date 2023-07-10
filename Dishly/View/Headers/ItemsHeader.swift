@@ -10,6 +10,7 @@ import UIKit
 protocol ItemsHeaderDelegate {
     func fecthRecipes(with collection: Collection)
     func createCollection(collection: Collection, completion: @escaping(Error?) -> ())
+    func presentAlert(alert: UIAlertController)
 }
 
 class ItemsHeader: UICollectionReusableView {
@@ -88,12 +89,17 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 
         let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-            if let collectionName = alertController.textFields?.first?.text {
-                print("Entered collection name: \(collectionName)")
-                
+            if let collectionName = alertController.textFields?.first?.text {  
+
                 let collection = Collection(name: collectionName, imageUrl: "", id: UUID().uuidString)
                 self.delegate?.createCollection(collection: collection) { error in
-                    print("SUCCESS")
+                    if let error = error as? CollectionErrors {
+                        let alertController = UIAlertController(title: "Error", message: error.errorMessage, preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alertController.addAction(okAction)
+                        self.delegate?.presentAlert(alert: alertController)
+                        return
+                    }
                     self.collections!.append(collection)
                     self.collectionView!.reloadData()
                 }

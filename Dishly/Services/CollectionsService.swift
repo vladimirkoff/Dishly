@@ -34,16 +34,8 @@ class CollectionService: CollectionServiceProtocol {
         }
         
         COLLECTION_USERS.document(uid).collection("collections").getDocuments { snapshot, error in
-            if let collections = snapshot?.documents {
-                let isCollectionExist = collections.contains { $0["name"] as? String == collection.name }
-                
-                guard !isCollectionExist else {
-                    completion(nil)
-                    return
-                }
-            }
-            
-            if let recipe = recipe {
+
+            if let recipe = recipe {  // add recipe to existing collection
                 let instructions = recipe.recipe.instructions.compactMap { $0.text }
                 let ingredients = recipe.recipe.ingredients.compactMap { $0.name }
                 
@@ -57,7 +49,18 @@ class CollectionService: CollectionServiceProtocol {
                     .setData(data) { error in
                         completion(error)
                     }
-            } else {
+            } else {  // create new collection
+                
+                if let collections = snapshot?.documents {
+                    let isCollectionExist = collections.contains { $0["name"] as? String == collection.name }
+
+                    guard !isCollectionExist else {
+                        let error = CollectionErrors(errorMessage: "Collection already exists" )
+                        completion(error)            // collection already exists
+                        return
+                    }
+                }
+                
                 let collectionData: [String: Any] = [
                     "name": collection.name,
                     "id": collection.id,

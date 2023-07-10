@@ -3,6 +3,7 @@
 import UIKit
 
 private let tableCellReuseId = "IngredientTableCell"
+private let instrTableCellId = "InstructionsCell"
 
 class RecipeViewController: UIViewController {
     //MARK: - Properties
@@ -211,6 +212,18 @@ class RecipeViewController: UIViewController {
         label.text = "4 serve"
         label.textColor = .white
         return label
+    }()
+    
+    private lazy var instructionsTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.dataSource = self
+        tableView.register(UINib(nibName: "IngredientTableCell", bundle: nil), forCellReuseIdentifier: tableCellReuseId)
+        tableView.delegate = self
+        return tableView
     }()
     
     //MARK: - Lifecycle
@@ -581,14 +594,12 @@ class RecipeViewController: UIViewController {
     }
     
     @objc private func starButtonTapped(_ sender: UIButton) {
-        
+        guard let uid = user.user?.uid else { return }
+        guard let currentRating = recipeViewModel.recipe.sumOfRatings else { return }
+        guard var ratings = recipeViewModel.recipe.ratingList else { return }
+
         self.rating = sender.tag
         
-        print(recipeViewModel)
-        
-        print(self.rating)
-        
-        let currentRating = recipeViewModel.recipe.sumOfRatings!
         var currentRatingNum = Float(recipeViewModel.recipe.ratingList!.count)
         
         currentRatingNum += 1
@@ -596,12 +607,7 @@ class RecipeViewController: UIViewController {
         var updatedRating = (currentRating + Float(rating)) / currentRatingNum
         
         
-        var ratings = recipeViewModel.recipe.ratingList!
-        
-        
-        let uid = user.user!.uid
-        
-        if let index = ratings.firstIndex(where: { $0.uid as? String == uid }) {
+        if let index = ratings.firstIndex(where: { $0.uid == uid }) {
             ratings[index].rating = Float(rating)
             updatedRating = Float(rating)
         } else {
@@ -609,12 +615,9 @@ class RecipeViewController: UIViewController {
         }
         
         
-        print("Ratings - \(ratings)")
-
-        
         recipeViewModel.recipe.ratingList = ratings
         
-        var test: [[String : Any]] = []
+        var ratingDict: [[String : Any]] = []
         
         for new in ratings {
             print(new)
@@ -625,15 +628,13 @@ class RecipeViewController: UIViewController {
                          "rating" : rat
             ] as [String : Any]
             
-            test.append(testt)
+            ratingDict.append(testt)
         }
-        
-        print("test - \(test)")
-        
+            
         recipeViewModel.recipe.rating = updatedRating
         
         let updatedData: [String : Any] = ["rating" : updatedRating,
-                                           "numOfRatings" : test
+                                           "numOfRatings" : ratingDict
         ]
         
         recipeViewModel.updateRecipe(with: updatedData, recipe: recipeViewModel.recipe.id!) { error in

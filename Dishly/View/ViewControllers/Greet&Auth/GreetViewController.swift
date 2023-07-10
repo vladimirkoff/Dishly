@@ -216,13 +216,15 @@ class GreetViewController: UIViewController {
             let providerID = currentUser.providerData.first?.providerID
             if providerID == GoogleAuthProviderID {
                 googleAuthViewModel.checkIfUserLoggedIn { user in
-                    DispatchQueue.main.async { [self] in
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
                         self.navigationController?.pushViewController(vc, animated: true)
                     }
                 }
             } else {
-                authViewModel.checkIfUserExists { user in
+                authViewModel.checkIfUserExists { [weak self] user in
+                    guard let self = self else { return }
                     DispatchQueue.main.async {
                         let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
                         self.navigationController?.pushViewController(vc, animated: true)

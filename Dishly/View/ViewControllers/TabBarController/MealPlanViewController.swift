@@ -58,8 +58,6 @@ class MealPlanVC: UIViewController {
         ])
     }
     
-    //MARK: - Selectors
-    
 }
 
 //MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
@@ -75,7 +73,9 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MealCell", for: indexPath) as! MealCell
         let dayOfWeek = DaysOfWeek.allCases[indexPath.row]
         cell.day = dayOfWeek
-        cell.recipes = recipes?[dayOfWeek.rawValue]
+        if let recipes = recipes {
+            cell.recipes = recipes[dayOfWeek.rawValue]
+        }
         cell.delegate = self
         cell.backgroundColor = greyColor
         cell.dayLabel.text = dayOfWeek.rawValue
@@ -91,8 +91,8 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     
     func fecthRecipesForPlans() {
         mealsViewModel.fetchRecipesForPlans { recipes in
-            DispatchQueue.main.async {
-                self.recipes = recipes
+            DispatchQueue.main.async { [weak self] in
+                self?.recipes = recipes
             }
         }
     }

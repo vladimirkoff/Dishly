@@ -183,7 +183,8 @@ class ProfileViewController: UIViewController {
     
     func handleLogOut() {
         authViewModel.logOut { error, success in
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 let recipeService = RecipeService()
                 let vc = GreetViewController(authService: self.authService, userService: self.userService, recipeService: recipeService, userRealmService: self.userRealmService, googleAuthService: self.googleService, collectionService: self.collectionService, mealsService: self.mealsService)
                 let navVC = UINavigationController(rootViewController: vc)

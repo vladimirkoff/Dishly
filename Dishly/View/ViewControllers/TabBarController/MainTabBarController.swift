@@ -76,9 +76,9 @@ class MainTabBarController: UITabBarController {
     
     func fecthRecipes() {
         recipesViewModel.fetchRecipes { recipes in
-            DispatchQueue.main.async {
-                self.recipes = recipes
-                self.configureVC()
+            DispatchQueue.main.async { [weak self] in
+                self?.recipes = recipes
+                self?.configureVC()
             }
         }
     }
@@ -130,7 +130,8 @@ class MainTabBarController: UITabBarController {
         guard let imageUrl = URL(string: user.user!.profileImage) else { return }
         
         SDWebImageManager.shared.loadImage(with: imageUrl, options: [], progress: nil) { (image, _, _, _, _, _) in
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 self.profileImageView.image = image
                 self.profileContainerView.addSubview(self.profileImageView)
                 let leftBarButton = UIBarButtonItem(customView: self.profileContainerView)

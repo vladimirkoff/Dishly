@@ -66,8 +66,8 @@ class SavedViewController: UICollectionViewController {
     
     func fetchCollections() {
         collectionService.fetchCollections { collections in
-            DispatchQueue.main.async {
-                self.collections = collections
+            DispatchQueue.main.async { [weak self] in
+                self?.collections = collections
             }
         }
     }
@@ -160,9 +160,15 @@ extension SavedViewController: UICollectionViewDelegateFlowLayout {
 
 extension SavedViewController: ItemsHeaderDelegate {
     
+    func presentAlert(alert: UIAlertController) {
+        present(alert, animated: true)
+    }
+    
+    
     func fecthRecipes(with collection: Collection) {
         self.collection = collection
-        collectionService.fetchRecipesWith(collection: collection) { recipes in
+        collectionService.fetchRecipesWith(collection: collection) { [weak self] recipes in
+            guard let self = self else { return }
             self.recipes = recipes
         }
     }
@@ -188,6 +194,4 @@ extension SavedViewController: RecipeCellDelegate {
             print("DEBUG: recipe deleted")
         }
     }
-    
-    
 }

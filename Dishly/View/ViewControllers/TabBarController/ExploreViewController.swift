@@ -35,7 +35,7 @@ class ExploreViewController: UIViewController {
         
         collectionViewModel = CollectionViewModel(collectionService: collectionService, collection: nil)
         view.collectionViewModel = collectionViewModel
-        
+        view.delegate = self
         view.backgroundColor = lightGrey
         view.layer.cornerRadius = 10
         
@@ -121,13 +121,7 @@ class ExploreViewController: UIViewController {
     //MARK: - Selectors
     
     @objc func dismissView() {
-        backgroundView.removeFromSuperview()
-        
-        UIView.animate(withDuration: 1) {
-            self.windowView.removeFromSuperview()
-            
-            self.windowView.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY, width: self.view.frame.width, height: 300)
-        }
+        hidePopUp()
     }
     
 }
@@ -185,7 +179,8 @@ extension ExploreViewController: ParentCellDelegate {
     
     func goToCategory(category: String) {
         recipeViewModel.fetchRecipesFor(category: category) { recipes in
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 let vc = RecipesViewController(recipes: recipes, userService: self.userService, exploreVC: self)
                 self.navigationController?.pushViewController(vc, animated: true)
             }
@@ -198,7 +193,8 @@ extension ExploreViewController: ParentCellDelegate {
         self.window.addSubview(self.windowView)
         
         
-        UIView.animate(withDuration: 0.6) {
+        UIView.animate(withDuration: 0.6) { [weak self] in
+            guard let self = self else { return }
             self.windowView.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY - 300, width: self.view.bounds.width, height: 300)
         }
         
@@ -220,22 +216,29 @@ extension ExploreViewController: ParentCellDelegate {
         let width: Double = view.frame.width
         return CGSize(width: width, height: height)
     }
+    
+    func hidePopUp() {
+        backgroundView.removeFromSuperview()
+        
+        UIView.animate(withDuration: 1) { [weak self] in
+            guard let self = self else { return }
+            
+            self.windowView.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY, width: self.view.frame.width, height: 300)
+        }
+    }
 }
 
 //MARK: - CollectionsPopupViewDelegate
 
 extension ExploreViewController: CollectionsPopupViewDelegate {
     
-    func fetchCollections() {
-        
+    func presentAlert(alert: UIAlertController) {
+        present(alert, animated: true)
     }
     
-    func createCollection() {
-        
-    }
     
-    func saveToCollection() {
-        
+    func hidePopup() {
+        hidePopUp()
     }
     
 }
@@ -262,7 +265,14 @@ extension ExploreViewController: RecipeCellDelegate {
     }
     
     func deleteRecipe(id: String) {
+        backgroundView.removeFromSuperview()
         
+        UIView.animate(withDuration: 1) { [weak self] in
+            guard let self = self else { return }
+            self.windowView.removeFromSuperview()
+            
+            self.windowView.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY, width: self.view.frame.width, height: 300)
+        }
     }
     
     

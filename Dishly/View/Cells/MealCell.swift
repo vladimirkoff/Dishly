@@ -118,7 +118,7 @@ extension MealCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath) as! RecipeCell
         cell.backgroundColor = lightGrey
-       
+        cell.saveButton.isHidden = true
         if let recipes = recipes {
             cell.recipeViewModel = recipes[indexPath.row]
         }

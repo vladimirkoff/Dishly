@@ -116,7 +116,8 @@ class LoginViewController: UIViewController {
                 return
             }
             self.userViewModel.fetchUser { user in
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleService, mealsService: self.mealsService)
                     self.navigationController?.pushViewController(vc, animated: true)
                 }

@@ -37,7 +37,8 @@ class PrepareViewController: UIViewController, Storyboardable {
     
     func saveRecipe() {
         showLoader(true)
-        recipeViewModel?.createRecipe(image: recipeImage) { error in
+        recipeViewModel?.createRecipe(image: recipeImage) { [weak self] error in
+            guard let self = self else { return }
             if let error = error {
                 self.showLoader(false)
                 print("Error creating recipe - \(error.localizedDescription)")

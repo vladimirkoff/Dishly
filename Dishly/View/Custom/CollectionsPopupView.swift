@@ -1,13 +1,15 @@
 import UIKit
+import JGProgressHUD
 
 protocol CollectionsPopupViewDelegate {
-    func fetchCollections()
-    func createCollection()
-    func saveToCollection()
+    func hidePopup()
+    func presentAlert(alert : UIAlertController)
 }
 
 class CollectionsPopupView: UIView {
     //MARK: - Properties
+    private let hud = JGProgressHUD(style: .dark)
+
     
     private var collectionView: UICollectionView!
     
@@ -79,13 +81,18 @@ class CollectionsPopupView: UIView {
             popupLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 18)
         ])
     }
+    
+    func showLoader(_ show: Bool) {
+        self.endEditing(true)
+        show ? hud.show(in: self) : hud.dismiss()
+    }
 }
 
 //MARK: - UICollectionViewDataSource
 
 extension CollectionsPopupView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collections?.count ?? 0 + 1
+        return (collections?.count ?? 0) + 1
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -118,7 +125,13 @@ extension CollectionsPopupView: UICollectionViewDataSource {
                 print("Entered collection name: \(collectionName)")
                 let collection = Collection(name: collectionName, imageUrl: "", id: UUID().uuidString)
                 self?.collectionViewModel?.saveToCollection(collection: collection) { [weak self] error in
-                    print("SUCCESS")
+                    if let error = error as? CollectionErrors {
+                        let alertController = UIAlertController(title: "Error", message: error.errorMessage, preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alertController.addAction(okAction)
+                        self?.delegate?.presentAlert(alert: alertController)
+                        return
+                    }
                     self?.collections?.append(collection)
                     self?.collectionView?.reloadData()
                 }
@@ -145,6 +158,8 @@ extension CollectionsPopupView: UICollectionViewDataSource {
             }
         }
     }
+    
+    // API calls
 
     func fetchCollections() {
         collectionViewModel?.fetchCollections(completion: { [weak self] collections in
@@ -155,8 +170,11 @@ extension CollectionsPopupView: UICollectionViewDataSource {
     }
 
     func saveToCollection(collection: Collection) {
-        CollectionService().saveRecipeToCollection(collection: collection, recipe: recipe) { error in
-            print("SUCCESS")
+        showLoader(true)
+        CollectionService().saveRecipeToCollection(collection: collection, recipe: recipe) { [weak self] error in
+            guard let self = self else { return }
+            self.showLoader(false)
+            delegate?.hidePopup()
         }
     }
 

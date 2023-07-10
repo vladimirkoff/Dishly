@@ -9,9 +9,7 @@ class CartViewController: UIViewController {
     private var isClearTapped = false
     
     var ingredients: [Ingredient]? {
-        didSet {
-            tableView.reloadData()
-        }
+        didSet { tableView.reloadData() }
     }
     
     private let itemCountLabel: UILabel = {
@@ -98,8 +96,6 @@ extension CartViewController: UITableViewDelegate, UITableViewDataSource {
         cell.delegate = self
         cell.item.backgroundColor = .white
         cell.configure(ingredient: myGroceries[indexPath.row])
-        
-        cell.backgroundColor = .red
         return cell
     }
 }

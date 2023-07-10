@@ -10,6 +10,10 @@ import Firebase
 import FirebaseFirestore
 
 class RecipeSearchViewController: UIViewController, UITextFieldDelegate {
+    //MARK: - Properties
+    
+    private let recipesService: RecipeServiceProtocol!
+    private var recipesViewModel: RecipesViewModel!
     
     private var recipes: [RecipeViewModel]? {
         didSet {
@@ -30,6 +34,17 @@ class RecipeSearchViewController: UIViewController, UITextFieldDelegate {
     }()
     
     //MARK: - Lifecycle
+    
+    init(recipesService: RecipeServiceProtocol) {
+        self.recipesService = recipesService
+        recipesViewModel = RecipesViewModel(recipeService: recipesService)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,42 +71,30 @@ class RecipeSearchViewController: UIViewController, UITextFieldDelegate {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
-        let leftBarButton = UIBarButtonItem(image: UIImage(named: "arrow.backward"), style: .plain, target: self, action: #selector(self.rightBarButtonTapped))
-        self.navigationItem.leftBarButtonItem = leftBarButton
-        
     }
+    
+    //MARK: - Selectors
 
     
     @objc func cancelButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
-    
-    func searchRecipes(with searchText: String) {
-   
-    }
-    
-   
-    
-    @objc func  rightBarButtonTapped() {
-    }
-    
+
 }
 
 //MARK: - UISearchResultsUpdating
 
 extension RecipeSearchViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        guard let searchText = searchController.searchBar.text else {
-            return
-        }
-        
-        searchForRecipes(text: searchText) { recipes in
-            self.recipes = recipes
-        }
-        
- }
     
-
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchText = searchController.searchBar.text else { return }
+        
+        recipesViewModel.searchForRecipes(text: searchText) { [weak self] recipes in
+            self?.recipes = recipes
+        }
+    }
+    
+    
 }
 
 //MARK: - UITableViewDelegate & UITableViewDataSource
@@ -117,23 +120,6 @@ extension RecipeSearchViewController: UITableViewDelegate, UITableViewDataSource
         }
     }
     
-    
-    func searchForRecipes(text: String, completion: @escaping([RecipeViewModel]) -> ()) {
-        COLLECTION_RECIPES.getDocuments { snapshot, error in
-            var recipesArray: [RecipeViewModel] = []
-            if let recipes = snapshot?.documents {
-                for recipe in recipes {
-                    let name = recipe.data()["name"] as? String ?? ""
-                    
-                    if name.starts(with: text) {
-                        let recipeViewModel =  setRecipesConfiguration(recipe: recipe)
-                        recipesArray.append(recipeViewModel)
-                    }
-                }
-                completion(recipesArray)
-            }
-        }
-    }
 }
 
 

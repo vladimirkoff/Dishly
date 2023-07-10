@@ -111,6 +111,26 @@ class EditProfileViewController: UIViewController {
         ])
     }
     
+    func configureCell(_ cell: ProfileInfoCell, for indexPath: IndexPath) {
+        cell.backgroundColor = .blue
+        cell.delegate = self
+        
+        switch indexPath.row {
+        case 0:
+            cell.configureFields(email: nil, password: nil, name: user.user!.fullName)
+        case 1:
+            cell.configureFields(email: user.user!.email, password: nil, name: nil)
+        default:
+            cell.configureFields(email: nil, password: user.user!.username, name: nil)
+        }
+    }
+
+    func addSeparator(to cell: UITableViewCell) {
+        let separator = UIView(frame: CGRect(x: 16, y: cell.frame.height - 1, width: cell.frame.width - 32, height: 1))
+        separator.backgroundColor = .white
+        cell.addSubview(separator)
+    }
+    
     //MARK: - Selectors
     
     @objc func chooseImage() {
@@ -125,18 +145,28 @@ class EditProfileViewController: UIViewController {
         showLoader(true)
         navigationController?.navigationBar.topItem?.hidesBackButton = true
         
-        ImageUploader.shared.uploadImage(image: profileImage.image!, isForRecipe: false) { imageURL in
-            let dict = ["fullName": self.changedUser.user!.fullName,
-                        "profileImage": imageURL,
-                        "username": self.changedUser.user!.username,
-                        "email" : self.changedUser.user!.email,
-                        "uid" : self.user.user!.uid
+        ImageUploader.shared.uploadImage(image: profileImage.image!, isForRecipe: false) { [weak self] imageURL in
+            guard let self = self else { return }
+            
+            let dict = [
+                "fullName": self.changedUser.user!.fullName,
+                "profileImage": imageURL,
+                "username": self.changedUser.user!.username,
+                "email": self.changedUser.user!.email,
+                "uid": self.user.user!.uid
             ]
+            
             let updatedUser = User(dictionary: dict)
             let updatedUserViewModel = UserViewModel(user: updatedUser, userService: nil)
-            self.userViewModel.updateUser(with: updatedUserViewModel) { error in
+            
+            self.userViewModel.updateUser(with: updatedUserViewModel) { [weak self] error in
+                guard let self = self else { return }
+                
                 self.authViewModel.changeEmail(to: self.changedUser.user!.email)
-                self.userRealmViewModel.updateUser(user: updatedUser) { success in
+                
+                self.userRealmViewModel.updateUser(user: updatedUser) { [weak self] success in
+                    guard let self = self else { return }
+                    
                     DispatchQueue.main.async {
                         self.showLoader(false)
                         self.navigationController?.navigationBar.topItem?.hidesBackButton = false
@@ -145,6 +175,7 @@ class EditProfileViewController: UIViewController {
             }
         }
     }
+
 }
 
 //MARK: - UITableViewDelegate & UITableViewDataSource
@@ -157,22 +188,13 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ProfileInfoCell
-        cell.backgroundColor = .blue
-        cell.delegate = self
-        if indexPath.row == 0 {
-            cell.configureFields(email: nil, password: nil, name: user.user!.fullName)
-        } else if indexPath.row == 1 {
-            cell.configureFields(email: user.user!.email, password: nil, name: nil)
-        } else {
-            cell.configureFields(email: nil, password: user.user!.username, name: nil)
-        }
-        let separator = UIView(frame: CGRect(x: 16, y: cell.frame.height - 1, width: cell.frame.width - 32, height: 1))
-        separator.backgroundColor = .white
-        cell.addSubview(separator)
         
+        configureCell(cell, for: indexPath)
+        addSeparator(to: cell)
+
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }

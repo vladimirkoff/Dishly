@@ -18,9 +18,7 @@ class RecipesViewController: UICollectionViewController {
     private var userViewModel: UserViewModel!
     
     private var recipes: [RecipeViewModel]? {
-        didSet {
-            collectionView.reloadData()
-        }
+        didSet { collectionView.reloadData() }
     }
     
     private var exploreVC: ExploreViewController?
@@ -65,7 +63,7 @@ extension RecipesViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionCellReuseId, for: indexPath) as! RecipeCell
         if let recipes = recipes, let exploreVC = exploreVC {
-            cell.delegate = exploreVC as! any RecipeCellDelegate
+            cell.delegate = exploreVC as any RecipeCellDelegate
             cell.recipeViewModel = recipes[indexPath.row]
         }
         return cell

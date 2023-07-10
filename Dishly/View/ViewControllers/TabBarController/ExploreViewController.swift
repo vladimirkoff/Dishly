@@ -77,15 +77,15 @@ class ExploreViewController: UIViewController {
         super.viewDidLoad()
         
         userViewModel = UserViewModel(user: nil, userService: userService)
-        
-        
         recipeViewModel = RecipeViewModel(recipe: Recipe(category: Recipe.Category(rawValue: "Ukraine")!, ingredients: [], instructions: []), recipeService: recipeService)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         configureUI()
-        configureNavBar()
+        
+        navigationItem.title = "Search"
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     
@@ -95,14 +95,6 @@ class ExploreViewController: UIViewController {
         let attributedText = NSMutableAttributedString(string: "Hello, ", attributes: [.font: UIFont.boldSystemFont(ofSize: 16), .foregroundColor: UIColor.white])
         attributedText.append(NSAttributedString(string: "Vladimir\n", attributes: [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.green]))
         return attributedText
-    }
-    
-    func configureNavBar() {
-        
-        
-        navigationItem.title = "Search"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        
     }
     
     func configureUI() {
@@ -248,46 +240,17 @@ extension ExploreViewController: CollectionsPopupViewDelegate {
     
 }
 
+//MARK: - UISearchBarDelegate
+
 extension ExploreViewController: UISearchBarDelegate {
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        let vc = RecipeSearchViewController()
+        let vc = RecipeSearchViewController(recipesService: recipeService)
         navigationController?.pushViewController(vc, animated: true)
         return false
     }
 }
 
-
-
-class SearchHeaderView: UICollectionReusableView {
-    lazy var searchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-        return searchBar
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        
-        addSubview(searchBar)
-        searchBar.barTintColor = greyColor
-        searchBar.tintColor = .white
-        searchBar.searchTextField.backgroundColor = .white
-        
-        
-        
-        NSLayoutConstraint.activate([
-            searchBar.centerXAnchor.constraint(equalTo: centerXAnchor),
-            searchBar.centerYAnchor.constraint(equalTo: centerYAnchor),
-            searchBar.heightAnchor.constraint(equalToConstant: 50),
-            searchBar.widthAnchor.constraint(equalToConstant: bounds.width)
-        ])
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
+//MARK: - RecipeCellDelegate
 
 extension ExploreViewController: RecipeCellDelegate {
     func addGroceries(groceries: [Ingredient]) {

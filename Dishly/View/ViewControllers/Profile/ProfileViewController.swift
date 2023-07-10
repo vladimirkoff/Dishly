@@ -11,7 +11,7 @@ class ProfileViewController: UIViewController {
     var authService: AuthServiceProtocol!
     var userRealmService: UserRealmServiceProtocol!
     var mealsService: MealsServiceProtocol!
-
+    
     var userViewModel: UserViewModel!
     var authViewModel: AuthViewModel!
     var user: UserViewModel!
@@ -135,8 +135,8 @@ class ProfileViewController: UIViewController {
         navigationItem.title = user.user!.fullName
         
         navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-           navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        
         navigationController?.navigationBar.prefersLargeTitles = true
         
         view.addSubview(editProfileButton)
@@ -179,7 +179,7 @@ class ProfileViewController: UIViewController {
         ])
     }
     
-   
+    
     
     func handleLogOut() {
         authViewModel.logOut { error, success in

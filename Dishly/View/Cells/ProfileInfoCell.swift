@@ -5,7 +5,7 @@ protocol ProfileInfoCellDelegate {
     func disableDoneButton()
 }
 
-class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
+class ProfileInfoCell: UITableViewCell {
     
     // MARK: - Properties
     
@@ -92,6 +92,30 @@ class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
         textViewDidChange(textView)
     }
     
+    // MARK: - Configuration
+    
+    func configure(with name: String, text: String) {
+        nameLabel.text = name
+        textView.text = text
+    }
+    
+    func configureFields(email: String?, password: String?, name: String?) {
+        if let email = email {
+            nameLabel.text = "Email"
+            textView.text = email
+        } else if let password = password {
+            nameLabel.text = "Username"
+            textView.text = password
+        } else if let name = name {
+            nameLabel.text = "Name"
+            textView.text = name
+        } 
+    }
+}
+
+//MARK: - UITextViewDelegate
+
+extension ProfileInfoCell: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         guard !textView.text.isEmpty else {
             delegate?.disableDoneButton()
@@ -112,25 +136,5 @@ class ProfileInfoCell: UITableViewCell, UITextViewDelegate {
             tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
         }
         delegate?.infoDidChange(text: textView.text, fieldIndex: 0)
-    }
-    
-    // MARK: - Configuration
-    
-    func configure(with name: String, text: String) {
-        nameLabel.text = name
-        textView.text = text
-    }
-    
-    func configureFields(email: String?, password: String?, name: String?) {
-        if let email = email {
-            nameLabel.text = "Email"
-            textView.text = email
-        } else if let password = password {
-            nameLabel.text = "Username"
-            textView.text = password
-        } else if let name = name {
-            nameLabel.text = "Name"
-            textView.text = name
-        } 
     }
 }

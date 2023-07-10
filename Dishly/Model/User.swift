@@ -9,10 +9,6 @@ struct User {
     let username: String
     
     let imageData: Data
-    
-//    var isCurrentUser: Bool {
-//        return Auth.auth().currentUser?.uid == uid ? true : false
-//    }
 
     init(dictionary: [String: Any]) {
         self.profileImage = dictionary["profileImage"] as? String ?? ""

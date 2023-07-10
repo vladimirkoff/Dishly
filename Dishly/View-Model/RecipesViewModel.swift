@@ -25,4 +25,10 @@ class RecipesViewModel {
             completion(recipes)
         }
     }
+    
+    func searchForRecipes(text: String, completion: @escaping([RecipeViewModel]) -> ()) {
+        recipeService.searchForRecipes(text: text) { recipes in
+            completion(recipes)
+        }
+    }
 }

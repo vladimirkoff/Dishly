@@ -145,19 +145,19 @@ extension MealCell: SavedVCProtocol {
     func reload(collections: [Collection]) {}
     
     func addRecipe(recipe: RecipeViewModel, mealsViewModel: MealsViewModel?) {
-        guard let mealsViewModel = mealsViewModel else { return }
-        if var currentRecipes = recipes {
-            currentRecipes.append(recipe)
-            mealsViewModel.mealPlan(recipes: currentRecipes, day: day!) { error in
-                self.recipes = currentRecipes
-            }
-        } else {
-            let newRecipes = [recipe]
-            mealsViewModel.mealPlan(recipes: newRecipes, day: day!) { error in
-                self.recipes = newRecipes
-                self.horizontalCollectionView.reloadData()
-            }
-        }
+//        guard let mealsViewModel = mealsViewModel else { return }
+//        if var currentRecipes = recipes {
+//            currentRecipes.append(recipe)
+//            mealsViewModel.mealPlan(recipes: currentRecipes, day: day!) { error in
+//                self.recipes = currentRecipes
+//            }
+//        } else {
+//            let newRecipes = [recipe]
+//            mealsViewModel.mealPlan(recipes: newRecipes, day: day!) { error in
+//                self.recipes = newRecipes
+//                self.horizontalCollectionView.reloadData()
+//            }
+//        }
     }
     
 }

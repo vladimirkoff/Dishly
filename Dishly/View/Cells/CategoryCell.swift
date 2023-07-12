@@ -11,13 +11,14 @@ class CategoryCell: UICollectionViewCell {
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.layer.cornerRadius = 10
         iv.backgroundColor = .gray
+        iv.contentMode = .scaleAspectFill
         return iv
     }()
 
      let title: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
+        label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.text = "Breakfast"
         return label
@@ -37,15 +38,24 @@ class CategoryCell: UICollectionViewCell {
     //MARK: - Helpers
 
     func configureCell() {
-        backgroundColor = .white
         layer.cornerRadius = 10
         clipsToBounds = true
 
-        addSubview(title)
+        
+        addSubview(categoryImageView)
         NSLayoutConstraint.activate([
-            title.leftAnchor.constraint(equalTo: leftAnchor, constant: bounds.width / 10),
-            title.topAnchor.constraint(equalTo: topAnchor, constant: bounds.height / 5)
+            categoryImageView.leftAnchor.constraint(equalTo: leftAnchor),
+            categoryImageView.topAnchor.constraint(equalTo: topAnchor),
+            categoryImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            categoryImageView.rightAnchor.constraint(equalTo: rightAnchor)
         ])
+        
+        categoryImageView.addSubview(title)
+        NSLayoutConstraint.activate([
+            title.leftAnchor.constraint(equalTo: categoryImageView.leftAnchor, constant: 12),
+            title.topAnchor.constraint(equalTo: categoryImageView.topAnchor, constant: 6 )
+        ])
+ 
 
     }
 }

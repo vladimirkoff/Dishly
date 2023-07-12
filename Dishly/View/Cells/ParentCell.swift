@@ -132,9 +132,15 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         } else if collectionView == categoryCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell
             cell.backgroundColor = .yellow
+            
+            
+            
             if index == 1 {
                 cell.title.text = mealCategories[indexPath.row]
             } else if index == 2 {
+                if indexPath.row == 0 {
+                    cell.categoryImageView.image = UIImage(named: "ukraine")
+                }
                 cell.title.text = countryCategories[indexPath.row]
             }
             return cell

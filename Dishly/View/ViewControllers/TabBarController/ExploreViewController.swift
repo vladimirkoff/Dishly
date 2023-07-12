@@ -240,6 +240,7 @@ extension ExploreViewController: ParentCellDelegate {
             DispatchQueue.main.async {
                 if let error = error {
                     let alert = createErrorAlert(error: error.localizedDescription)
+                    self.refreshControl.endRefreshing()
                     return
                 } else {
                     self.recipes = recipes!

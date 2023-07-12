@@ -46,6 +46,7 @@ class UserRealmService: UserRealmServiceProtocol {
                 "fullName": user.name,
                 "imageData": user.imageData
             ]
+            
             let user = User(dictionary: dict)
             completion(user)
         }

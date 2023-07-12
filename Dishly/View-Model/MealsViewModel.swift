@@ -13,12 +13,12 @@ class MealsViewModel {
     init(mealsService: MealsServiceProtocol) {
         self.mealsService = mealsService
     }
-    
-    func mealPlan(recipes: [RecipeViewModel], day: DaysOfWeek, completion: @escaping(Error?) -> ()) {
-        mealsService.mealPlan(recipes: recipes, day: day) { error in
-            completion(error)
-        }
-    }
+//    
+//    func mealPlan(recipes: [RecipeViewModel], day: DaysOfWeek, completion: @escaping(Error?) -> ()) {
+//        mealsService.mealPlan(recipes: recipes, day: day) { error in
+//            completion(error)
+//            }
+//    }
     
     func fetchRecipesForPlans(completion: @escaping([String : [RecipeViewModel]]) -> ()) {
         mealsService.fetchRecipesForPlans { recipes in

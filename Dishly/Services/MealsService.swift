@@ -11,7 +11,7 @@ import FirebaseFirestore
 
 protocol MealsServiceProtocol {
     func fetchRecipesForPlans(completion: @escaping ([String: [RecipeViewModel]]) -> ())
-    func mealPlan(recipes: [RecipeViewModel], day: DaysOfWeek, completion: @escaping(Error?) -> ())
+//    func mealPlan(recipes: [RecipeViewModel], day: DaysOfWeek, completion: @escaping(Error?) -> ())
 }
 
 class MealsService: MealsServiceProtocol {
@@ -63,61 +63,61 @@ class MealsService: MealsServiceProtocol {
 
 
     
-    func mealPlan(recipes: [RecipeViewModel], day: DaysOfWeek, completion: @escaping(Error?) -> Void) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        let dispatchGroup = DispatchGroup()
-        var errors: [Error?] = []
-        
-        for recipe in recipes {
-            dispatchGroup.enter()
-            
-            var instructions: [String] = []
-            var ingredients: [String: [String: Float]] = [:]
-            
-            instructions = recipe.recipe.instructions.compactMap { $0.text }
-            
-            for ingredient in recipe.recipe.ingredients {
-                if let name = ingredient.name, let portion = ingredient.portion, let volume = ingredient.volume {
-                    ingredients[name] = [portion: volume]
-                }
-            }
-            
-            var ratingsArray: [[String: Any]] = []
-            
-            for rating in recipe.recipe.ratingList! {
-                let uid = rating.uid
-                let rate = rating.rating
-                
-                let ratingData: [String: Any] = [
-                    "uid": uid,
-                    "rating": rate
-                ]
-                
-                ratingsArray.append(ratingData)
-            }
-            
-            let data = generateRecipeData(for: recipe)
-            
-            COLLECTION_USERS.document(uid).collection(day.rawValue).document(recipe.recipe.id!).setData(data) { error in
-                if let error = error {
-                    errors.append(error)
-                }
-                
-                addRecipeRealm(recipe: recipe, day: day.rawValue) { success in
-                    print(success)
-                }
-                
-                
-                dispatchGroup.leave()
-            }
-        }
-        
-        dispatchGroup.notify(queue: .main) {
-            let combinedError = errors.reduce(nil) { $0 ?? $1 }
-            completion(combinedError)
-        }
-    }
+//    func mealPlan(recipes: [RecipeViewModel], day: DaysOfWeek, completion: @escaping(Error?) -> Void) {
+//        guard let uid = Auth.auth().currentUser?.uid else { return }
+//
+//        let dispatchGroup = DispatchGroup()
+//        var errors: [Error?] = []
+//
+//        for recipe in recipes {
+//            dispatchGroup.enter()
+//
+//            var instructions: [String] = []
+//            var ingredients: [String: [String: Float]] = [:]
+//
+//            instructions = recipe.recipe.instructions.compactMap { $0.text }
+//
+//            for ingredient in recipe.recipe.ingredients {
+//                if let name = ingredient.name, let portion = ingredient.portion, let volume = ingredient.volume {
+//                    ingredients[name] = [portion: volume]
+//                }
+//            }
+//
+//            var ratingsArray: [[String: Any]] = []
+//
+//            for rating in recipe.recipe.ratingList! {
+//                let uid = rating.uid
+//                let rate = rating.rating
+//
+//                let ratingData: [String: Any] = [
+//                    "uid": uid,
+//                    "rating": rate
+//                ]
+//
+//                ratingsArray.append(ratingData)
+//            }
+//
+//            let data = generateRecipeData(for: recipe)
+//
+//            COLLECTION_USERS.document(uid).collection(day.rawValue).document(recipe.recipe.id!).setData(data) { error in
+//                if let error = error {
+//                    errors.append(error)
+//                }
+//
+//                addRecipeRealm(recipe: recipe, day: day.rawValue) { success in
+//                    print(success)
+//                }
+//
+//
+//                dispatchGroup.leave()
+//            }
+//        }
+//
+//        dispatchGroup.notify(queue: .main) {
+//            let combinedError = errors.reduce(nil) { $0 ?? $1 }
+//            completion(combinedError)
+//        }
+//    }
 
 }
 

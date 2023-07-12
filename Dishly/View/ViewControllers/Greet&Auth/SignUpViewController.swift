@@ -132,11 +132,16 @@ class SignupController: UIViewController {
         guard let username = usernameField.text else { return }
         
         let userCreds = AuthCreds(email: email, password: password, fullname: fullname, username: username, profileImage: plusButton.imageView?.image ?? UIImage(named: "profile_selected"))
-        authViewModel.register(creds: userCreds) { error, user in
+        authViewModel.register(creds: userCreds) { [weak self] error, user in
+            guard let self = self else { return }
+            
             if let error = error {
+                let alert = createErrorAlert(error: error.localizedDescription)
+                self.present(alert, animated: true)
                 print("DEBUG: Error registering user - \(error.localizedDescription)")
                 return
             }
+            
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 let profileImage = self.plusButton.imageView?.image?.pngData()

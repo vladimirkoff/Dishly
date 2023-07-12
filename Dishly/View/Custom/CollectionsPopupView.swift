@@ -126,9 +126,7 @@ extension CollectionsPopupView: UICollectionViewDataSource {
                 let collection = Collection(name: collectionName, imageUrl: "", id: UUID().uuidString)
                 self?.collectionViewModel?.saveToCollection(collection: collection) { [weak self] error in
                     if let error = error as? CollectionErrors {
-                        let alertController = UIAlertController(title: "Error", message: error.errorMessage, preferredStyle: .alert)
-                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                        alertController.addAction(okAction)
+                        let alertController = createErrorAlert(error: error.errorMessage)
                         self?.delegate?.presentAlert(alert: alertController)
                         return
                     }

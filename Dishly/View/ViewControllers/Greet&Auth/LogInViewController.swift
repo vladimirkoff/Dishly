@@ -126,21 +126,24 @@ class LoginViewController: UIViewController {
         guard let email = emailField.text else { return }
         guard let password = passwordField.text else { return }
 
-        authViewModel.login(email: email, password: password) { error in
+        authViewModel.login(email: email, password: password) { [weak self] error in
+            guard let self = self else { return }
+            
             if let error = error {
+                let alert = createErrorAlert(error: error.localizedDescription)
+                self.present(alert, animated: true)
                 print("DEBUG: Error signing in - \(error)")
                 return
             }
             
-            self.userViewModel.fetchUser { [self] user in
+            self.userViewModel.fetchUser {  user in
                 guard let userModel = user.user else { return }
                 guard let url = URL(string: userModel.profileImage) else { return }
-                getImageFromURL(url: url) { image in
+                self.getImageFromURL(url: url) { image in
                     guard let image = image else { return }
                     if let imageData = image.pngData() {
                         self.createTestUser(email: userModel.email, name: userModel.fullName, uid: userModel.uid, profileImage: imageData, username: userModel.username)
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self = self else { return }
+                        DispatchQueue.main.async {  
                             let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleService, mealsService: self.mealsService)
                             self.navigationController?.pushViewController(vc, animated: true)
                         }

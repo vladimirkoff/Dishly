@@ -21,8 +21,10 @@ class AuthViewModel {
         }
     }
     
-    func changeEmail(to newEmail: String) {
-        authService.changeEmail(to: newEmail)
+    func changeEmail(to newEmail: String, completion: @escaping(Error?) -> ()) {
+        authService.changeEmail(to: newEmail) { error in
+            completion(error)
+        }
     }
     
     func logOut(completion: @escaping(Error?, Bool) -> ()) {

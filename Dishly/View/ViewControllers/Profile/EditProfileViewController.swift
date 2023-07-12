@@ -162,7 +162,12 @@ class EditProfileViewController: UIViewController {
             self.userViewModel.updateUser(with: updatedUserViewModel) { [weak self] error in
                 guard let self = self else { return }
                 
-                self.authViewModel.changeEmail(to: self.changedUser.user!.email)
+                self.authViewModel.changeEmail(to: self.changedUser.user!.email) { error in
+                    if let error = error as? AuthErros {
+                        let alertController = createErrorAlert(error: error.localizedDescription)
+                        self.present(alertController, animated: true)
+                    }
+                }
                 
                 self.userRealmViewModel.updateUser(user: updatedUser) { [weak self] success in
                     guard let self = self else { return }

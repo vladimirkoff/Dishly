@@ -184,12 +184,12 @@ class ProfileViewController: UIViewController {
     
     
     func handleLogOut() {
-        authViewModel.logOut { error, success in
+        authViewModel.logOut { [weak self] error, success in
+            guard let self = self else { return }
             
-            if let error = error {
-                // handle error
-                
-            
+            if let error = error as? AuthErros {
+                let alert = createErrorAlert(error: error.localizedDescription)
+                self.present(alert, animated: true)
                 return
             }
             
@@ -202,8 +202,7 @@ class ProfileViewController: UIViewController {
                    realm.delete(user)
                }
             
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+            DispatchQueue.main.async { 
                 let recipeService = RecipeService()
                 let vc = GreetViewController(authService: self.authService, userService: self.userService, recipeService: recipeService, userRealmService: self.userRealmService, googleAuthService: self.googleService, collectionService: self.collectionService, mealsService: self.mealsService)
                 let navVC = UINavigationController(rootViewController: vc)

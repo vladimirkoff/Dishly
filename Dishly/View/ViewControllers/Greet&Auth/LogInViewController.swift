@@ -79,7 +79,7 @@ class LoginViewController: UIViewController {
     
     //MARK: - Helpers
     
-    func createTestUser(email: String, name: String, uid: String, profileImage: Data, username: String) {
+    func createRealmUser(email: String, name: String, uid: String, profileImage: Data, username: String) {
         userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
         userRealmViewModel.createUser(name: name, email: email, profileImage: profileImage, id: uid, username: username)
     }
@@ -142,7 +142,7 @@ class LoginViewController: UIViewController {
                 self.getImageFromURL(url: url) { image in
                     guard let image = image else { return }
                     if let imageData = image.pngData() {
-                        self.createTestUser(email: userModel.email, name: userModel.fullName, uid: userModel.uid, profileImage: imageData, username: userModel.username)
+                        self.createRealmUser(email: userModel.email, name: userModel.fullName, uid: userModel.uid, profileImage: imageData, username: userModel.username)
                         DispatchQueue.main.async {  
                             let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleService, mealsService: self.mealsService)
                             self.navigationController?.pushViewController(vc, animated: true)

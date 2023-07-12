@@ -12,6 +12,7 @@ import GoogleSignIn
 import FirebaseCore
 import JGProgressHUD
 import RealmSwift
+import SDWebImage
 
 
 class GreetViewController: UIViewController {
@@ -227,13 +228,11 @@ class GreetViewController: UIViewController {
     }
     
     func checkIfLoggedIn() {
+        
         if checkIfLoggedInWithRealm() {
             let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
             self.navigationController?.pushViewController(vc, animated: true)
         }
-        
-        
-        
         
 //        let currentUser = Auth.auth().currentUser
 //        if let currentUser = currentUser {
@@ -309,22 +308,54 @@ class GreetViewController: UIViewController {
         
     }
     
+    func createRealmUser(email: String, name: String, uid: String, profileImage: Data, username: String) {
+        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+        userRealmViewModel.createUser(name: name, email: email, profileImage: profileImage, id: uid, username: username)
+    }
+    
+    
+    func createImageData(from url: URL, completion: @escaping (Data?) -> Void) {
+        let downloader = SDWebImageDownloader.shared
+        downloader.downloadImage(with: url) { (image, _, _, _) in
+            guard let image = image else {
+                completion(nil)
+                return
+            }
+            
+            if let imageData = image.pngData() {
+                completion(imageData)
+            } else {
+                completion(nil)
+            }
+        }
+    }
+    
     //MARK: - Selectors
     
     @objc func googleAuthButtonPressed() {
         googleAuthViewModel = GoogleAuthViewModel(googleAuthService: googleAuthService)
         googleAuthViewModel.signInWithGoogle(with: self) { error, user in
-            self.showLoader(true)
-            if let error = error {
-                print("Error authorizing with Google - \(error.localizedDescription)")
-                return
-            }
             DispatchQueue.main.async {
-                self.showLoader(false)
-                if let user = user {
-                    self.user = user
-                    let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
-                    self.navigationController?.pushViewController(vc, animated: true)
+                self.showLoader(true)
+                if let error = error {
+                    print("Error authorizing with Google - \(error.localizedDescription)")
+                    return
+                }
+                guard let userModel = user?.user else { return }
+                let stringUrl = userModel.profileImage
+                if let url = URL(string: stringUrl) {
+                    self.createImageData(from: url) { data in
+                        if let data = data {
+                            self.createRealmUser(email: userModel.email, name: userModel.fullName, uid: userModel.uid, profileImage: data, username: userModel.username)
+                            self.showLoader(false)
+                            if let user = user {
+                                self.user = user
+                                let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
+                                self.navigationController?.pushViewController(vc, animated: true)
+                            }
+                            
+                        }
+                    }
                 }
             }
         }

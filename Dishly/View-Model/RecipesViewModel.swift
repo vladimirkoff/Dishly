@@ -14,21 +14,15 @@ class RecipesViewModel {
         self.recipeService = recipeService
     }
     
-    func fetchRecipes(completion: @escaping([RecipeViewModel]) -> ()) {
-        recipeService.fetchRecipes { recipes in
-            completion(recipes)
+    func fetchRecipes(completion: @escaping([RecipeViewModel]?, Error?) -> ()) {
+        recipeService.fetchRecipes { recipes, error in
+            completion(recipes, error)
         }
     }
     
-    func fetchRecipesWith(category: Recipe.Category, completion: @escaping([RecipeViewModel]) -> ()) {
-        recipeService.fetchRecipesWith(category: category) { recipes in
-            completion(recipes)
-        }
-    }
-    
-    func searchForRecipes(text: String, completion: @escaping([RecipeViewModel]) -> ()) {
-        recipeService.searchForRecipes(text: text) { recipes in
-            completion(recipes)
+    func searchForRecipes(text: String, completion: @escaping([RecipeViewModel]?, Error?) -> ()) {
+        recipeService.searchForRecipes(text: text) { recipes, error in
+            completion(recipes, error)
         }
     }
 }

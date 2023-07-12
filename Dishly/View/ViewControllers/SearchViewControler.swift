@@ -88,13 +88,18 @@ extension RecipeSearchViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text else { return }
-        
-        recipesViewModel.searchForRecipes(text: searchText) { [weak self] recipes in
-            self?.recipes = recipes
+        recipesViewModel.searchForRecipes(text: searchText) { [weak self] recipes, error in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                if let error = error {
+                    let alert = createErrorAlert(error: error.localizedDescription)
+                    return
+                } else {
+                    self.recipes = recipes!
+                }
+            }
         }
     }
-    
-    
 }
 
 //MARK: - UITableViewDelegate & UITableViewDataSource

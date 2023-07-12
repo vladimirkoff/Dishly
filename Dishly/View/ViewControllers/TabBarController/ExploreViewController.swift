@@ -181,11 +181,16 @@ extension ExploreViewController: ParentCellDelegate {
     }
     
     func goToCategory(category: String) {
-        recipeViewModel.fetchRecipesFor(category: category) { recipes in
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                let vc = RecipesViewController(recipes: recipes, userService: self.userService, exploreVC: self)
-                self.navigationController?.pushViewController(vc, animated: true)
+        recipeViewModel.fetchRecipesFor(category: category) { [weak self] recipes, error in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                if let error = error {
+                    let alert = createErrorAlert(error: error.localizedDescription)
+                    return
+                } else {
+                    let vc = RecipesViewController(recipes: recipes!, userService: self.userService, exploreVC: self)
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
             }
         }
     }
@@ -231,10 +236,17 @@ extension ExploreViewController: ParentCellDelegate {
     }
     
     @objc func refreshCollectionView() {
-        recipeViewModel.fetchRecipes { recipes in
-            self.recipes = recipes
-            self.collectionView.reloadData()
-            self.refreshControl.endRefreshing()
+        recipeViewModel.fetchRecipes { recipes, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    let alert = createErrorAlert(error: error.localizedDescription)
+                    return
+                } else {
+                    self.recipes = recipes!
+                    self.collectionView.reloadData()
+                    self.refreshControl.endRefreshing()
+                }
+            }
         }
     }
 }

@@ -76,8 +76,12 @@ class MainTabBarController: UITabBarController {
     //MARK: - Helpers
     
     func fecthRecipes() {
-        recipesViewModel.fetchRecipes { recipes in
+        recipesViewModel.fetchRecipes { recipes, error in
             DispatchQueue.main.async { [weak self] in
+                if let error = error {
+                    let alert = createErrorAlert(error: error.localizedDescription)
+                    return
+                }
                 self?.recipes = recipes
                 self?.configureVC()
             }

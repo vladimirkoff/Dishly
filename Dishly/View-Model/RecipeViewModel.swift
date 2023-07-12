@@ -33,10 +33,10 @@ struct RecipeViewModel {
         }
     }
     
-    func fetchRecipes(completion: @escaping ([RecipeViewModel]) -> Void) {
+    func fetchRecipes(completion: @escaping ([RecipeViewModel]?, Error?) -> Void) {
         guard let recipeService = recipeService else { return }
-        recipeService.fetchRecipes { recipes in
-            completion(recipes)
+        recipeService.fetchRecipes { recipes, error in
+            completion(recipes, error)
         }
     }
     
@@ -47,10 +47,10 @@ struct RecipeViewModel {
         })
     }
     
-    func fetchRecipesFor(category: String, completion: @escaping([RecipeViewModel]) -> ()) {
+    func fetchRecipesFor(category: String, completion: @escaping([RecipeViewModel]?, Error?) -> ()) {
         guard let recipeService = recipeService else { return }
-        recipeService.fetchRecipesFor(category: category, completion: { recipes in
-            completion(recipes)
+        recipeService.fetchRecipesFor(category: category, completion: { recipes, error in
+            completion(recipes, error)
         })
     }
 }

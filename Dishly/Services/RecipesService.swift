@@ -3,17 +3,20 @@ import FirebaseAuth
 import FirebaseFirestore
 
 protocol RecipeServiceProtocol {
-    func fetchRecipes(completion: @escaping ([RecipeViewModel]) -> Void)
+    func fetchRecipes(completion: @escaping ([RecipeViewModel]?, Error?) -> Void)
     func createRecipe(recipe: RecipeViewModel, image: UIImage, completion: @escaping (Error?) -> ())
     func updateRating(with data: [String: Any],recipe: String, completion: @escaping (Error?) -> ())
-    func fetchRecipesWith(category: Recipe.Category, completion: @escaping ([RecipeViewModel]) -> ())
-    func fetchRecipesFor(category: String, completion: @escaping([RecipeViewModel]) -> ())
-    func searchForRecipes(text: String, completion: @escaping([RecipeViewModel]) -> ())
+    func fetchRecipesFor(category: String, completion: @escaping([RecipeViewModel]?, Error?) -> ())
+    func searchForRecipes(text: String, completion: @escaping([RecipeViewModel]?, Error?) -> ())
 }
 class RecipeService: RecipeServiceProtocol {
     
-    func searchForRecipes(text: String, completion: @escaping([RecipeViewModel]) -> ()) {
+    func searchForRecipes(text: String, completion: @escaping([RecipeViewModel]?, Error?) -> ()) {
         COLLECTION_RECIPES.getDocuments { snapshot, error in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
             var recipesArray: [RecipeViewModel] = []
             if let recipes = snapshot?.documents {
                 for recipe in recipes {
@@ -24,52 +27,52 @@ class RecipeService: RecipeServiceProtocol {
                         recipesArray.append(recipeViewModel)
                     }
                 }
-                completion(recipesArray)
+                completion(recipesArray, nil)
             }
         }
     }
     
     func updateRating(with data: [String: Any], recipe: String, completion: @escaping (Error?) -> ()) {
-        COLLECTION_RECIPES.document(recipe).updateData(data)
-        COLLECTION_RECIPES.document(recipe).addSnapshotListener { snapshot, error in
-            if let category = snapshot?.data()?["category"] as? String, let ownerId = snapshot?.data()?["ownerId"] as? String {
-                Firestore.firestore().collection(category).document(recipe).updateData(data) { error in
-                    COLLECTION_USERS.document(ownerId).collection("recipes").document(recipe).updateData(data)
+        COLLECTION_RECIPES.document(recipe).updateData(data) { error in
+            if let error = error {
+                completion(error)
+                return
+            }
+            COLLECTION_RECIPES.document(recipe).addSnapshotListener { snapshot, error in
+                if let error = error {
+                    completion(error)
+                    return
+                }
+                if let category = snapshot?.data()?["category"] as? String, let ownerId = snapshot?.data()?["ownerId"] as? String {
+                    Firestore.firestore().collection(category).document(recipe).updateData(data) { error in
+                        if let error = error {
+                            completion(error)
+                            return
+                        }
+                        COLLECTION_USERS.document(ownerId).collection("recipes").document(recipe).updateData(data)
+                    }
                 }
             }
         }
+        
     }
     
-    func fetchRecipesFor(category: String, completion: @escaping([RecipeViewModel]) -> ()) {
+    func fetchRecipesFor(category: String, completion: @escaping([RecipeViewModel]?, Error?) -> ()) {
         var recipesArray: [RecipeViewModel] = []
         
         Firestore.firestore().collection(category).getDocuments { snapshot, error in
-            if let recipes = snapshot?.documents {
-                for recipe in recipes {
-                    guard let recipeViewModel = setRecipesConfiguration(recipe: recipe) else { return }
-                    recipesArray.append(recipeViewModel)
-                }
-                completion(recipesArray)
-            }
-        }
-    }
-    
-    func fetchRecipesWith(category: Recipe.Category, completion: @escaping ([RecipeViewModel]) -> ()) {
-        COLLECTION_RECIPES.whereField("category", isEqualTo: category.rawValue).getDocuments { snapshot, error in
             if let error = error {
                 print(error.localizedDescription)
+                completion(nil, error)
                 return
             }
-            var recipesArray: [RecipeViewModel] = []
-            
             if let recipes = snapshot?.documents {
                 for recipe in recipes {
                     guard let recipeViewModel = setRecipesConfiguration(recipe: recipe) else { return }
                     recipesArray.append(recipeViewModel)
                 }
+                completion(recipesArray, nil)
             }
-            
-            completion(recipesArray)
         }
     }
     
@@ -112,12 +115,14 @@ class RecipeService: RecipeServiceProtocol {
                     .setData(data) { error in
                         if let error = error {
                             print(error.localizedDescription)
+                            completion(error)
                             return
                         }
                         Firestore.firestore().collection(recipe.recipe.category.rawValue).document(recipe.recipe.id ?? "")
                             .setData(data) { error in
                                 if let error = error {
                                     print(error.localizedDescription)
+                                    completion(error)
                                     return
                                 }
                             }
@@ -128,10 +133,11 @@ class RecipeService: RecipeServiceProtocol {
         }
     }
     
-    func fetchRecipes(completion: @escaping ([RecipeViewModel]) -> ()) {
+    func fetchRecipes(completion: @escaping ([RecipeViewModel]?, Error?) -> ()) {
         COLLECTION_RECIPES.getDocuments { snapshot, error in
             if let error = error {
                 print(error.localizedDescription)
+                completion(nil, error)
                 return
             }
             
@@ -143,7 +149,7 @@ class RecipeService: RecipeServiceProtocol {
                     recipesArray.append(recipeViewModel)
                 }
             }
-            completion(recipesArray)
+            completion(recipesArray, nil)
         }
     }
 }

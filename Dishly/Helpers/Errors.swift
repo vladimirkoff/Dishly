@@ -7,8 +7,6 @@
 
 import Foundation
 
-// Collection errors
-
 struct CollectionErrors: Error {
     let errorMessage: String
 
@@ -36,12 +34,4 @@ enum AuthErros: Error {
     
 }
 
-// User errors
 
-struct UserErrors: Error {
-    let errorMessage: String
-
-    init(errorMessage: String = "Collection already exists") {
-        self.errorMessage = errorMessage
-    }
-}

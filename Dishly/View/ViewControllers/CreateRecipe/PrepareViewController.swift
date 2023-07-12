@@ -45,15 +45,21 @@ class PrepareViewController: UIViewController, Storyboardable {
         showLoader(true)
         recipeViewModel?.createRecipe(image: recipeImage) { [weak self] error in
             guard let self = self else { return }
-            if let error = error {
-                self.showLoader(false)
-                print("Error creating recipe - \(error.localizedDescription)")
-                return
+            DispatchQueue.main.async {
+                if let error = error {
+                    self.showLoader(false)
+                    print("DEBUG: Error creating recipe - \(error.localizedDescription)")
+                    let alert = createErrorAlert(error: error.localizedDescription)
+                    self.present(alert, animated: true)
+                    return
+                } else {
+                    self.delegate?.update()
+                    self.showLoader(false)
+                    self.dismiss(animated: true)
+                    print("DEBUG: Recipe created successfully")
+                }
             }
-            delegate?.update()
-            self.showLoader(false)
-            self.dismiss(animated: true)
-            print("DEBUG: Recipe created successfully")
+            
         }
     }
     

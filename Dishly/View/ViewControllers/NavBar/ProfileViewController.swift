@@ -12,6 +12,7 @@ class ProfileViewController: UIViewController {
     var authService: AuthServiceProtocol!
     var userRealmService: UserRealmServiceProtocol!
     var mealsService: MealsServiceProtocol!
+    var recipesRealmService: RecipesRealmServiceProtocol!
     
     var userViewModel: UserViewModel!
     var authViewModel: AuthViewModel!
@@ -83,7 +84,7 @@ class ProfileViewController: UIViewController {
         tabBarController?.tabBar.isHidden = false
     }
     
-    init(user: UserViewModel, userService: UserServiceProtocol, profileImage: UIImageView, authService: AuthServiceProtocol, userRealmService: UserRealmServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol, mealsService: MealsServiceProtocol) {
+    init(user: UserViewModel, userService: UserServiceProtocol, profileImage: UIImageView, authService: AuthServiceProtocol, userRealmService: UserRealmServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol, mealsService: MealsServiceProtocol, recipesRealmService: RecipesRealmServiceProtocol) {
         self.user = user
         self.userService = userService
         self.profileImage = profileImage
@@ -92,6 +93,7 @@ class ProfileViewController: UIViewController {
         self.googleService = googleService
         self.collectionService = collectionService
         self.mealsService = mealsService
+        self.recipesRealmService = recipesRealmService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -186,25 +188,25 @@ class ProfileViewController: UIViewController {
     func handleLogOut() {
         authViewModel.logOut { [weak self] error, success in
             guard let self = self else { return }
-            
-            if let error = error as? AuthErros {
-                let alert = createErrorAlert(error: error.localizedDescription)
-                self.present(alert, animated: true)
-                return
-            }
-            
-            let realm = try! Realm()
-            guard let user = realm.objects(UserRealm.self).first else {
-                  print("User not found in Realm.")
-                  return
-              }
-            try! realm.write {
-                   realm.delete(user)
-               }
-            
-            DispatchQueue.main.async { 
+            DispatchQueue.main.async {
+                if let error = error as? AuthErros {
+                    let alert = createErrorAlert(error: error.localizedDescription)
+                    self.present(alert, animated: true)
+                    return
+                }
+                
+                let realm = try! Realm()
+                guard let user = realm.objects(UserRealm.self).first else {
+                      print("User not found in Realm.")
+                      return
+                  }
+                
+                try! realm.write {
+                       realm.delete(user)
+                   }
+                
                 let recipeService = RecipeService()
-                let vc = GreetViewController(authService: self.authService, userService: self.userService, recipeService: recipeService, userRealmService: self.userRealmService, googleAuthService: self.googleService, collectionService: self.collectionService, mealsService: self.mealsService)
+                let vc = GreetViewController(authService: self.authService, userService: self.userService, recipeService: recipeService, userRealmService: self.userRealmService, googleAuthService: self.googleService, collectionService: self.collectionService, mealsService: self.mealsService, recipesRealmService: self.recipesRealmService)
                 let navVC = UINavigationController(rootViewController: vc)
                 navVC.modalPresentationStyle = .fullScreen
                 self.present(navVC, animated: true)

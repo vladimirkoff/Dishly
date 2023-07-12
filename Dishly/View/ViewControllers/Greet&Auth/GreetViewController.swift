@@ -21,13 +21,14 @@ class GreetViewController: UIViewController {
     
     private var user: UserViewModel!
     
-    private var authService: AuthServiceProtocol!
-    private var userService: UserServiceProtocol!
-    private var recipeService: RecipeServiceProtocol!
-    private var collectionService: CollectionServiceProtocol!
-    private var userRealmService: UserRealmServiceProtocol!
-    private var googleAuthService: GoogleAuthServiceProtocol!
-    private var mealsService: MealsServiceProtocol!
+    private let authService: AuthServiceProtocol!
+    private let userService: UserServiceProtocol!
+    private let recipeService: RecipeServiceProtocol!
+    private let collectionService: CollectionServiceProtocol!
+    private let userRealmService: UserRealmServiceProtocol!
+    private let googleAuthService: GoogleAuthServiceProtocol!
+    private let mealsService: MealsServiceProtocol!
+    private let recipesRealmService: RecipesRealmServiceProtocol!
     
     private var userViewModel: UserViewModel!
     private var authViewModel: AuthViewModel!
@@ -145,37 +146,37 @@ class GreetViewController: UIViewController {
     }()
     
     //MARK: - Lifecycle
-    //
-    //        func createTestUser() {
-    //            userRealmService = UserRealmService()
-    //            userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-    //            userRealmViewModel.createUser(name: "Vova", email: "None", profileImage: "///.com", id: "1iwyfwei7d")
-    //        }
     
-    //    func fetchTestUser() {
-    //        userRealmService = UserRealmService()
-    //        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-    //        userRealmViewModel.getUser(with: "KXYZtUbg3vSu0VOTwtjFyNDAhPg1") { user in
-    //            if let image = UIImage(data: user.imageData) {
-    //                self.backGroundImage.image = image
-    //            }
-    //        }
-    //    }
-    //        func fetchUsers() {
-    //            userRealmService = UserRealmService()
-    //            userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-    //        }
-    //
-    //        func updateUser() {
-    //            userRealmService = UserRealmService()
-    //            userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-    //            let user = User(dictionary: ["fullName" : "Sasha",
-    //                                         "uid" : "1iwyfwei7d"
-    //                                        ])
-    //            userRealmViewModel.updateUser(user: user) { success in
-    //                print(success)
-    //            }
-    //        }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkIfLoggedIn()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureUI()
+        userViewModel = UserViewModel(user: nil, userService: userService)
+        googleAuthViewModel = GoogleAuthViewModel(googleAuthService: googleAuthService)
+        
+    }
+    
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol, googleAuthService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol, mealsService: MealsServiceProtocol, recipesRealmService: RecipesRealmServiceProtocol) {
+        self.authService = authService
+        self.userService = userService
+        self.recipeService = recipeService
+        self.userRealmService = userRealmService
+        self.googleAuthService = googleAuthService
+        self.collectionService = collectionService
+        self.mealsService = mealsService
+        self.recipesRealmService = recipesRealmService
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    //MARK: - Helpers
     
     func checkIfLoggedInWithRealm() -> Bool {
         let realm = try! Realm()
@@ -194,36 +195,6 @@ class GreetViewController: UIViewController {
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        checkIfLoggedIn()
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        configureUI()
-        userViewModel = UserViewModel(user: nil, userService: userService)
-        googleAuthViewModel = GoogleAuthViewModel(googleAuthService: googleAuthService)
-        
-    }
-    
-    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol, googleAuthService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol, mealsService: MealsServiceProtocol) {
-        self.authService = authService
-        self.userService = userService
-        self.recipeService = recipeService
-        self.userRealmService = userRealmService
-        self.googleAuthService = googleAuthService
-        self.collectionService = collectionService
-        self.mealsService = mealsService
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    //MARK: - Helpers
-    
     func showLoader(_ show: Bool) {
         view.endEditing(true )
         show ? hud.show(in: view) : hud.dismiss()
@@ -232,7 +203,7 @@ class GreetViewController: UIViewController {
     func checkIfLoggedIn() {
         
         if checkIfLoggedInWithRealm() {
-            let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
+            let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: collectionService, googleService: self.googleAuthService, mealsService: self.mealsService, recipesRealmService: recipesRealmService)
             self.navigationController?.pushViewController(vc, animated: true)
         }
         
@@ -341,7 +312,8 @@ class GreetViewController: UIViewController {
                 let alert = createErrorAlert(error: error.localizedDescription)
                 return
             }
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 self.showLoader(true)
                 if let error = error {
                     print("Error authorizing with Google - \(error.localizedDescription)")
@@ -356,7 +328,7 @@ class GreetViewController: UIViewController {
                             self.showLoader(false)
                             if let user = user {
                                 self.user = user
-                                let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
+                                let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleAuthService, mealsService: self.mealsService, recipesRealmService: self.recipesRealmService)
                                 self.navigationController?.pushViewController(vc, animated: true)
                             }
                         }
@@ -370,12 +342,12 @@ class GreetViewController: UIViewController {
         guard let authService = authService else { return }
         guard let userService = userService else { return }
         guard let recipeService = recipeService else { return }
-        let vc = LoginViewController(authService: authService, userService: userService, recipeService: recipeService, googleService: googleAuthService, collectionService: collectionService, mealsService: mealsService, userRealmService: userRealmService)
+        let vc = LoginViewController(authService: authService, userService: userService, recipeService: recipeService, googleService: googleAuthService, collectionService: collectionService, mealsService: mealsService, userRealmService: userRealmService, recipesRealmService: recipesRealmService)
         navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func goToSignUp() {
-        let vc = SignupController(authService: authService, userService: userService, recipeService: recipeService, userRealmService: userRealmService, collectionService: collectionService, googleService: googleAuthService, mealsService: mealsService)
+        let vc = SignupController(authService: authService, userService: userService, recipeService: recipeService, userRealmService: userRealmService, collectionService: collectionService, googleService: googleAuthService, mealsService: mealsService, recipesRealmService: recipesRealmService)
         navigationController?.pushViewController(vc, animated: true)
     }
 }

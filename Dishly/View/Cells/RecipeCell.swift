@@ -15,8 +15,10 @@ class RecipeCell: UICollectionViewCell {
     var isFromSaved: Bool?
     
     var delegate: RecipeCellDelegate?
-    var isFromPlans: Bool?
     var savedDelegate: RecipeCellDelegate?
+    var mealPlanDelegate: RecipeCellDelegate?
+
+    var isFromPlans: Bool?
     
     var recipeViewModel: RecipeViewModel? {
         didSet { configure() }
@@ -85,6 +87,7 @@ class RecipeCell: UICollectionViewCell {
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.layer.cornerRadius = 15
         iv.clipsToBounds = true
+        iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .lightGray
         return iv
     }()
@@ -220,9 +223,7 @@ class RecipeCell: UICollectionViewCell {
         if let isFromSaved = isFromSaved {
             savedDelegate?.deleteRecipe(id: recipeViewModel!.recipe.id!)
         } else if let isFromPlans {
-            deleteRecipeRealm(id: recipeViewModel!.recipe.realmId!) { success in
-                print(success)
-            }
+            mealPlanDelegate?.deleteRecipe(id: recipeViewModel!.recipe.id!)
         } else {
             delegate?.saveRecipe(recipe: recipeViewModel!)
         }

@@ -96,11 +96,18 @@ class SavedViewController: UICollectionViewController {
         if let recipes = recipes {
             cell.recipeViewModel = recipes[indexPath.row]
         }
-        cell.isFromSaved = true
+        
+        if isToChoseMeal {
+            cell.isFromPlans = true
+            cell.mealPlanDelegate = self
+        } else {
+            cell.isFromSaved = true
+            cell.savedDelegate = self
+        }
+        
         cell.saveButton.setImage(UIImage(systemName: "minus.circle"), for: .normal)
         cell.layer.cornerRadius = 10
         cell.clipsToBounds = true
-        cell.savedDelegate = self
         return cell
     }
     
@@ -110,7 +117,9 @@ class SavedViewController: UICollectionViewController {
             self.dismiss(animated: true)
             cell.recipeViewModel?.recipe.imageData = cell.itemImageView.image?.pngData()
             mealDelegate?.addRecipe(recipe: cell.recipeViewModel!, mealsViewModel: MealsViewModel(mealsService: MealsService()))
-        } else {
+            }
+        
+         else {
             guard let cell = collectionView.cellForItem(at: indexPath) as? RecipeCell else { return }
             
             if let recipe = cell.recipeViewModel {
@@ -187,10 +196,15 @@ extension SavedViewController: RecipeCellDelegate {
     func addGroceries(groceries: [Ingredient]) {}
     func saveRecipe(recipe: RecipeViewModel) {}
     
-    
     func deleteRecipe(id: String) {
-        collectionService.deleteRecipeFrom(collection: collection! , id: id) { error in
-            print("DEBUG: recipe deleted")
+        if isToChoseMeal {
+            RecipesRealmService().deleteRecipeRealm(id: id) { success in
+                print(success)
+            }
+        } else {
+            collectionService.deleteRecipeFrom(collection: collection! , id: id) { error in
+                print("DEBUG: recipe deleted")
+            }
         }
     }
 }

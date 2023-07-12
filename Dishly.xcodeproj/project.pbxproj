@@ -24,6 +24,7 @@
 		852667172A5D3851005BFCFC /* RecipeRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852667162A5D3851005BFCFC /* RecipeRealm.swift */; };
 		8526671D2A5E7464005BFCFC /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8526671C2A5E7464005BFCFC /* Alerts.swift */; };
 		8526671F2A5E8458005BFCFC /* RecipesRealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8526671E2A5E8458005BFCFC /* RecipesRealmService.swift */; };
+		852667212A5EAA0B005BFCFC /* RecipesRealmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852667202A5EAA0B005BFCFC /* RecipesRealmViewModel.swift */; };
 		853EEB342A55798400DDB93F /* CollectionsPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853EEB332A55798400DDB93F /* CollectionsPopupView.swift */; };
 		853F3B1F2A5676FA00D53EB8 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B1E2A5676FA00D53EB8 /* CustomButton.swift */; };
 		853F3B252A567C2E00D53EB8 /* PrepareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B242A567C2E00D53EB8 /* PrepareViewController.swift */; };
@@ -108,6 +109,7 @@
 		852667162A5D3851005BFCFC /* RecipeRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeRealm.swift; sourceTree = "<group>"; };
 		8526671C2A5E7464005BFCFC /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
 		8526671E2A5E8458005BFCFC /* RecipesRealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipesRealmService.swift; sourceTree = "<group>"; };
+		852667202A5EAA0B005BFCFC /* RecipesRealmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipesRealmViewModel.swift; sourceTree = "<group>"; };
 		853EEB332A55798400DDB93F /* CollectionsPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsPopupView.swift; sourceTree = "<group>"; };
 		853F3B1E2A5676FA00D53EB8 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		853F3B242A567C2E00D53EB8 /* PrepareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrepareViewController.swift; sourceTree = "<group>"; };
@@ -201,13 +203,14 @@
 			path = TabBarController;
 			sourceTree = "<group>";
 		};
-		852666F32A596D1A005BFCFC /* Profile */ = {
+		852666F32A596D1A005BFCFC /* NavBar */ = {
 			isa = PBXGroup;
 			children = (
+				85C1B7102A485B2300BEAF2F /* CartViewController.swift */,
 				85C1B6EC2A447EAD00BEAF2F /* ProfileViewController.swift */,
 				85C1B7262A4C26AD00BEAF2F /* EditProfileViewController.swift */,
 			);
-			path = Profile;
+			path = NavBar;
 			sourceTree = "<group>";
 		};
 		852666F42A596D31005BFCFC /* CreateRecipe */ = {
@@ -233,19 +236,19 @@
 			isa = PBXGroup;
 			children = (
 				85C1B70C2A45D11100BEAF2F /* ItemsHeader.swift */,
+				8526670A2A5C3D76005BFCFC /* SearchHeader.swift */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
 		};
-		853F3B232A5678BA00D53EB8 /* Custom */ = {
+		853F3B232A5678BA00D53EB8 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
 				853EEB332A55798400DDB93F /* CollectionsPopupView.swift */,
 				852667062A5C2C80005BFCFC /* CustomTableView.swift */,
 				853F3B1E2A5676FA00D53EB8 /* CustomButton.swift */,
-				8526670A2A5C3D76005BFCFC /* SearchHeader.swift */,
 			);
-			path = Custom;
+			path = CustomViews;
 			sourceTree = "<group>";
 		};
 		85C1B64E2A39FE5700BEAF2F = {
@@ -301,7 +304,7 @@
 		85C1B6E42A447C9500BEAF2F /* View */ = {
 			isa = PBXGroup;
 			children = (
-				853F3B232A5678BA00D53EB8 /* Custom */,
+				853F3B232A5678BA00D53EB8 /* CustomViews */,
 				853F3B222A5678A400D53EB8 /* Headers */,
 				85C1B6FB2A44862500BEAF2F /* Cells */,
 				85C1B6E62A447CA100BEAF2F /* ViewControllers */,
@@ -320,6 +323,7 @@
 				853F3B2A2A56A6A900D53EB8 /* RecipesViewModel.swift */,
 				853F3B382A580E2B00D53EB8 /* CollectionViewModel.swift */,
 				852667082A5C33B7005BFCFC /* MealsViewModel.swift */,
+				852667202A5EAA0B005BFCFC /* RecipesRealmViewModel.swift */,
 			);
 			path = "View-Model";
 			sourceTree = "<group>";
@@ -330,9 +334,8 @@
 				852666F52A596D44005BFCFC /* Greet&Auth */,
 				852666F22A596CF1005BFCFC /* TabBarController */,
 				852666F42A596D31005BFCFC /* CreateRecipe */,
-				852666F32A596D1A005BFCFC /* Profile */,
+				852666F32A596D1A005BFCFC /* NavBar */,
 				85C1B7182A4982EF00BEAF2F /* RecipeViewController.swift */,
-				85C1B7102A485B2300BEAF2F /* CartViewController.swift */,
 				853F3B3A2A58569F00D53EB8 /* SearchViewControler.swift */,
 				852666F62A59917A005BFCFC /* RecipesViewController.swift */,
 				852666F82A5AEA92005BFCFC /* ProfileOptionVC.swift */,
@@ -634,6 +637,7 @@
 				85C1B65D2A39FE5700BEAF2F /* SceneDelegate.swift in Sources */,
 				85C1B7562A541AA000BEAF2F /* RandomUsernameGenerator.swift in Sources */,
 				85C1B6FF2A458CBE00BEAF2F /* CategoryCell.swift in Sources */,
+				852667212A5EAA0B005BFCFC /* RecipesRealmViewModel.swift in Sources */,
 				85C1B71D2A49942B00BEAF2F /* LogInViewController.swift in Sources */,
 				85C1B71F2A49943300BEAF2F /* SignUpViewController.swift in Sources */,
 				853F3B332A57F4E500D53EB8 /* Collection.swift in Sources */,

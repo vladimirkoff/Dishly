@@ -45,6 +45,7 @@ class RecipeViewController: UIViewController {
         let iv = UIImageView(image: image)
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.backgroundColor = .lightGray
+        iv.contentMode = .scaleAspectFill
         return iv
     }()
     
@@ -682,7 +683,7 @@ class RecipeViewController: UIViewController {
             
         recipeViewModel.recipe.rating = updatedRating
         
-        updateRecipe(id: recipeViewModel.recipe.id!, rating: updatedRating, numOfRating: ratings.count) { success in
+        RecipesRealmService().updateRecipe(id: recipeViewModel.recipe.id!, rating: updatedRating, numOfRating: ratings.count) { success in
             
         }
         

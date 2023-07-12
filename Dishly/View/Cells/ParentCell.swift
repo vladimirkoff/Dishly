@@ -180,7 +180,7 @@ extension ParentCell: RecipeCellDelegate {
     
     
     func addGroceries(groceries: [Ingredient]) {
-        myGroceries = groceries
+        myGroceries += groceries
     }
     
     func saveRecipe(recipe: RecipeViewModel) {

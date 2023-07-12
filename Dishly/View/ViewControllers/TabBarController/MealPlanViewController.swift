@@ -4,6 +4,7 @@ class MealPlanVC: UIViewController {
     //MARK: - Properties
     
     private var mealsViewModel: MealsViewModel!
+    private let recipesRealmViewModel: RecipesRealmViewModel!
     
     var recipes: [String : [RecipeViewModel]]? {
         didSet {
@@ -20,8 +21,9 @@ class MealPlanVC: UIViewController {
     
     //MARK: - Lifecycle
     
-    init(mealsService: MealsServiceProtocol) {
+    init(mealsService: MealsServiceProtocol, recipesRealmService: RecipesRealmServiceProtocol) {
         mealsViewModel = MealsViewModel(mealsService: mealsService)
+        recipesRealmViewModel = RecipesRealmViewModel(recipesRealmService: recipesRealmService)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -90,7 +92,7 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     //MARK: - DB calls
     
     func fecthRecipesForPlans() {
-        fecthRecipesRealm { recipesViewModels in
+        recipesRealmViewModel.fecthRecipesRealm { recipesViewModels in
             var recipes: [RecipeViewModel] = []
             for day in DaysOfWeek.allCases {
                 for recipe in recipesViewModels {

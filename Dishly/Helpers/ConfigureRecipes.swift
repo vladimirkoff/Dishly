@@ -45,8 +45,7 @@ func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel? 
        }
     
     var isRated = false
-    
-    
+
     var sumOfRatings: Float = 0.0
     
     if let numOfRatings = recipe.data()["numOfRatings"] as? [[String: Any]] {

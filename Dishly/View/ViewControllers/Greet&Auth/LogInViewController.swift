@@ -14,6 +14,7 @@ class LoginViewController: UIViewController {
     private let collectionService: CollectionServiceProtocol!
     private let mealsService: MealsServiceProtocol!
     private let userRealmService: UserRealmServiceProtocol!
+    private let recipesRealmService: RecipesRealmServiceProtocol!
 
     
     private var authViewModel: AuthViewModel!
@@ -62,7 +63,7 @@ class LoginViewController: UIViewController {
         userViewModel = UserViewModel(user: nil, userService: userService)
     }
     
-    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol, mealsService: MealsServiceProtocol, userRealmService: UserRealmServiceProtocol) {
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol, mealsService: MealsServiceProtocol, userRealmService: UserRealmServiceProtocol, recipesRealmService: RecipesRealmServiceProtocol) {
          self.authService = authService
          self.recipeService = recipeService
          self.userService = userService
@@ -70,6 +71,7 @@ class LoginViewController: UIViewController {
         self.collectionService = collectionService
         self.mealsService = mealsService
         self.userRealmService = userRealmService
+        self.recipesRealmService = recipesRealmService
          super.init(nibName: nil, bundle: nil)
      }
     
@@ -144,7 +146,7 @@ class LoginViewController: UIViewController {
                     if let imageData = image.pngData() {
                         self.createRealmUser(email: userModel.email, name: userModel.fullName, uid: userModel.uid, profileImage: imageData, username: userModel.username)
                         DispatchQueue.main.async {  
-                            let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleService, mealsService: self.mealsService)
+                            let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleService, mealsService: self.mealsService, recipesRealmService: self.recipesRealmService)
                             self.navigationController?.pushViewController(vc, animated: true)
                         }
                     }

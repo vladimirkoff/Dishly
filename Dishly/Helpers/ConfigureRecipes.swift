@@ -14,8 +14,8 @@ func sumRatings(_ ratings: [[String: Any]]) -> Float {
 }
 
 
-func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
-    let uid = Auth.auth().currentUser!.uid
+func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel? {
+    guard let uid = Auth.auth().currentUser?.uid else { return nil }
     
     let serve = recipe.data()["serve"] as? String ?? ""
     let id = recipe.data()["id"] as? String ?? ""
@@ -30,6 +30,14 @@ func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
 
     var currentRating = recipe.data()["rating"] as? Float ?? 0.0
     
+    var ratingList: [Rating] = []
+    var instructionsList: [Instruction] = []
+    
+    for instruction in instructions {
+        let instructionModel = Instruction(text: instruction)
+        instructionsList.append(instructionModel)
+    }
+    
     let ingredientsArray = ingredients.flatMap { (ingredient, portion) in
            portion.map { (name, volume) in
                Ingredient(name: ingredient, volume: volume, portion: name)
@@ -39,7 +47,6 @@ func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
     var isRated = false
     
     
-    var ratingList: [Rating] = []
     var sumOfRatings: Float = 0.0
     
     if let numOfRatings = recipe.data()["numOfRatings"] as? [[String: Any]] {
@@ -64,7 +71,7 @@ func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel {
                              category: Recipe.Category(rawValue: category)!,
                              sumOfRatings: sumOfRatings,
                              ingredients: ingredientsArray,
-                             instructions: [],
+                             instructions: instructionsList,
                              recipeImageUrl: recipeImageUrl,
                              ratingList: ratingList,
                              rating: currentRating,

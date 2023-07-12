@@ -1,4 +1,5 @@
 import UIKit
+import RealmSwift
 
 private let reuseIdentifier = "ProfileOptionCell"
 
@@ -82,7 +83,7 @@ class ProfileViewController: UIViewController {
         tabBarController?.tabBar.isHidden = false
     }
     
-    init(user: UserViewModel, userService: UserServiceProtocol, profileImage: UIImageView, authService: AuthServiceProtocol, userRealmService: UserRealmServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol) {
+    init(user: UserViewModel, userService: UserServiceProtocol, profileImage: UIImageView, authService: AuthServiceProtocol, userRealmService: UserRealmServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol, mealsService: MealsServiceProtocol) {
         self.user = user
         self.userService = userService
         self.profileImage = profileImage
@@ -90,6 +91,7 @@ class ProfileViewController: UIViewController {
         self.userRealmService = userRealmService
         self.googleService = googleService
         self.collectionService = collectionService
+        self.mealsService = mealsService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -183,6 +185,23 @@ class ProfileViewController: UIViewController {
     
     func handleLogOut() {
         authViewModel.logOut { error, success in
+            
+            if let error = error {
+                // handle error
+                
+            
+                return
+            }
+            
+            let realm = try! Realm()
+            guard let user = realm.objects(UserRealm.self).first else {
+                  print("User not found in Realm.")
+                  return
+              }
+            try! realm.write {
+                   realm.delete(user)
+               }
+            
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 let recipeService = RecipeService()

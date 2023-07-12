@@ -8,6 +8,7 @@ class UserRealm: Object {
     @Persisted var name = ""
     @Persisted var email = ""
     @Persisted var imageData: Data?
+    @Persisted var username: String?
 
     override static func primaryKey() -> String? {
         return "id"

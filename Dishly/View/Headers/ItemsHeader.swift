@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 protocol ItemsHeaderDelegate {
     func fecthRecipes(with collection: Collection)
     func createCollection(collection: Collection, completion: @escaping(Error?) -> ())
@@ -46,7 +47,8 @@ class ItemsHeader: UICollectionReusableView {
         collectionView!.dataSource = self
         
         collectionView!.backgroundColor = greyColor
-        collectionView!.register(CollectionCell.self, forCellWithReuseIdentifier: "TopCategoryCell")
+        collectionView!.register(CollectionCell.self, forCellWithReuseIdentifier: "TopCategoryCell"
+        )
         
         self.addSubview(collectionView!)
         
@@ -66,12 +68,18 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TopCategoryCell", for: indexPath) as! CollectionCell
+        
+
+        
         cell.backgroundColor = greyColor
         
         if let collections = collections {
             if indexPath.row == collections.count  {
                 cell.collectionImageView.image = UIImage(systemName: "plus")
             } else {
+                if indexPath.row == 0 {
+                    self.collectionView(collectionView, didSelectItemAt: indexPath)
+                }
                 cell.collection = collections[indexPath.row]
             }
         }
@@ -118,9 +126,20 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? CollectionCell {
+            cell.collectionImageView.layer.borderWidth = 3
+            cell.collectionImageView.layer.borderColor = UIColor.white.cgColor
+        }
+        
         indexPath.row == collections!.count ? showCollectionNameAlert() : delegate?.fecthRecipes(with: collections![indexPath.row])
     }
-
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? CollectionCell {
+            cell.collectionImageView.layer.borderWidth = 0
+        }
+    }
+    
 }
 
 //MARK: - UICollectionViewDelegateFlowLayout

@@ -108,7 +108,8 @@ class SavedViewController: UICollectionViewController {
         if isToChoseMeal {
             guard let cell = collectionView.cellForItem(at: indexPath) as? RecipeCell else { return }
             self.dismiss(animated: true)
-            mealDelegate?.addRecipe(recipe: cell.recipeViewModel!, mealsViewModel: nil)
+            cell.recipeViewModel?.recipe.imageData = cell.itemImageView.image?.pngData()
+            mealDelegate?.addRecipe(recipe: cell.recipeViewModel!, mealsViewModel: MealsViewModel(mealsService: MealsService()))
         } else {
             guard let cell = collectionView.cellForItem(at: indexPath) as? RecipeCell else { return }
             
@@ -152,8 +153,6 @@ extension SavedViewController: UICollectionViewDelegateFlowLayout {
         let size = CGSize(width: view.frame.width / 2 - 20, height: view.frame.height / 2.6)
         return size
     }
-    
-
 }
 
 //MARK: - ItemsHeaderDelegate

@@ -25,17 +25,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
-        let config = Realm.Configuration(schemaVersion: 1, migrationBlock: { migration, oldSchemaVersion in
-            if oldSchemaVersion < 1 {
-                migration.enumerateObjects(ofType: UserRealm.className()) { oldObject, newObject in
-                    if let imageUrl = oldObject?["url"] as? String {
-                        let imageData = imageUrl.data(using: .utf8)
-                        
-                        newObject?["imageData"] = imageData
+        let config = Realm.Configuration(
+            schemaVersion: 6,
+            migrationBlock: { migration, oldSchemaVersion in
+                if oldSchemaVersion < 6 {
+                    // Add the 'primaryKey' property
+                    migration.enumerateObjects(ofType: RecipeRealm.className()) { _, newObject in
+                        newObject?["primaryKey"] = ""
                     }
+             
                 }
             }
-        })
+        )
 
         Realm.Configuration.defaultConfiguration = config
         
@@ -43,6 +44,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let realm = try Realm()
         } catch {
             print("Failed to initialize Realm: \(error)")
+        }
+        
+        if let realmURL = Realm.Configuration.defaultConfiguration.fileURL {
+            print("Realm file path: \(realmURL.path)")
+
         }
         
         return true

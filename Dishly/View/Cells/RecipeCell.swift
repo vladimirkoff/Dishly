@@ -15,7 +15,7 @@ class RecipeCell: UICollectionViewCell {
     var isFromSaved: Bool?
     
     var delegate: RecipeCellDelegate?
-    
+    var isFromPlans: Bool?
     var savedDelegate: RecipeCellDelegate?
     
     var recipeViewModel: RecipeViewModel? {
@@ -186,8 +186,16 @@ class RecipeCell: UICollectionViewCell {
     
     func configure() {
         guard let recipe = recipeViewModel else { return }
-        
-        itemImageView.sd_setImage(with: URL(string: recipe.recipe.recipeImageUrl!)!)
+        if let urlString = recipe.recipe.recipeImageUrl {
+            if let url = URL(string: urlString) {
+                itemImageView.sd_setImage(with: url)
+            }
+        } else {
+            if let imageData = recipe.recipe.imageData {
+                let image = UIImage(data: imageData)
+                itemImageView.image = image
+            }
+        }
         recipeNameLabel.text = recipe.recipe.name
         
         let cartSymbol = UIImage(systemName: "cart.fill")
@@ -199,7 +207,7 @@ class RecipeCell: UICollectionViewCell {
         addIngredientsButton.setAttributedTitle(attributedTitle, for: .normal)
         addIngredientsButton.setTitleColor(.white, for: .normal)
         
-        configureRatingImages(rating: Float(recipe.recipe.rating!), imageViews: [starImage1, starImage2, starImage3, starImage4, starImage5 ])
+        configureRatingImages(rating: Float(recipe.recipe.rating ?? 0), imageViews: [starImage1, starImage2, starImage3, starImage4, starImage5 ])
     }
     
     //MARK: - Selectors
@@ -211,6 +219,10 @@ class RecipeCell: UICollectionViewCell {
     @objc func saveRecipe() {
         if let isFromSaved = isFromSaved {
             savedDelegate?.deleteRecipe(id: recipeViewModel!.recipe.id!)
+        } else if let isFromPlans {
+            deleteRecipeRealm(id: recipeViewModel!.recipe.realmId!) { success in
+                print(success)
+            }
         } else {
             delegate?.saveRecipe(recipe: recipeViewModel!)
         }

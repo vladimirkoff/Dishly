@@ -10,15 +10,19 @@ class PrepareTableCell: UITableViewCell {
 
     static let identifier = "PrepareTableCell"
     
-    @IBOutlet private weak var textView: UITextView!
-    @IBOutlet private weak var rowLabel: UILabel!
+    var instruction: Instruction? {
+        didSet {
+            textView.text = instruction!.text
+        }
+    }
+    
+    @IBOutlet  weak var textView: UITextView!
     
     weak var delegate: PrepareCellDelegate?
     
     override func layoutSubviews() {
         textView.delegate = self
-        rowLabel.layer.cornerRadius = rowLabel.frame.width / 2
-        rowLabel.clipsToBounds = true
+
         textView.layer.cornerRadius = 20.0
         textView.layer.borderWidth = 2.0
         textView.layer.borderColor = UIColor(named:"Dark Red")?.cgColor
@@ -31,12 +35,13 @@ class PrepareTableCell: UITableViewCell {
     
     func configure(instruction: Instruction?) {
         guard let instruction = instruction else {return}
-        rowLabel.text = "\(self.tag + 1)"
         textView.text = instruction.text
     }
 }
 
-extension PrepareTableCell: UITextViewDelegate, UITextFieldDelegate {
+//MARK: - UITextViewDelegate
+
+extension PrepareTableCell: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         print(textView.text)

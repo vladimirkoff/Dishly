@@ -40,7 +40,7 @@ class MealsService: MealsServiceProtocol {
                             innerGroup.enter()
                             COLLECTION_RECIPES.whereField("id", isEqualTo: id).getDocuments { snapshot, error in
                                 if let document = snapshot?.documents.first {
-                                    let recipeViewModel = setRecipesConfiguration(recipe: document)
+                                    guard let recipeViewModel = setRecipesConfiguration(recipe: document) else { return }
                                     recipesArray.append(recipeViewModel)
                                 }
                                 innerGroup.leave()
@@ -103,6 +103,12 @@ class MealsService: MealsServiceProtocol {
                 if let error = error {
                     errors.append(error)
                 }
+                
+                addRecipeRealm(recipe: recipe, day: day.rawValue) { success in
+                    print(success)
+                }
+                
+                
                 dispatchGroup.leave()
             }
         }

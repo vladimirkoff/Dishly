@@ -1,9 +1,10 @@
 
 
 import UIKit
+import FirebaseAuth
 
 private let tableCellReuseId = "IngredientTableCell"
-private let instrTableCellId = "InstructionsCell"
+private let instrTableCellId = "PrepareTableCell"
 
 class RecipeViewController: UIViewController {
     //MARK: - Properties
@@ -29,6 +30,16 @@ class RecipeViewController: UIViewController {
     let scrollView = UIScrollView()
     let contentView = UIView()
     
+    
+    
+    private let tapToRateLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        label.text = "Tap to rate"
+        return label
+    }()
+    
     private let dishImage: UIImageView = {
         let image = UIImage(named: "" )
         let iv = UIImageView(image: image)
@@ -43,14 +54,14 @@ class RecipeViewController: UIViewController {
         button.setTitle("Add to cart", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         button.backgroundColor = .white
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.black, for: .normal)  // Set text color to black
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 2
-        button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 15
         button.addTarget(self, action: #selector(addToCartButtonTapped), for: .touchUpInside)
         return button
     }()
+
     
     private lazy var nameAndAythorView: UIView = {
         let view = UIView()
@@ -134,10 +145,19 @@ class RecipeViewController: UIViewController {
         return label
     }()
     
+    private let instructionsLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 32)
+        label.textColor = .white
+        label.text = "Instructions"
+        return label
+    }()
+    
     private let footerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = lightGrey
+        view.backgroundColor = greyColor
         return view
     }()
     
@@ -217,11 +237,11 @@ class RecipeViewController: UIViewController {
     private lazy var instructionsTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-
+        tableView.backgroundColor = greyColor
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableView.automaticDimension
         tableView.dataSource = self
-        tableView.register(UINib(nibName: "IngredientTableCell", bundle: nil), forCellReuseIdentifier: tableCellReuseId)
+        tableView.register(UINib(nibName: "PrepareTableCell", bundle: nil), forCellReuseIdentifier: instrTableCellId)
         tableView.delegate = self
         return tableView
     }()
@@ -261,11 +281,21 @@ class RecipeViewController: UIViewController {
     }
     
     func configure() {
-        dishImage.sd_setImage(with: URL(string: recipeViewModel.recipe.recipeImageUrl!)!)
+        if let urlString = recipeViewModel.recipe.recipeImageUrl {
+            if let url = URL(string: urlString) {
+                dishImage.sd_setImage(with: url)
+            }
+        } else {
+            if let imageData = recipeViewModel.recipe.imageData {
+                let image = UIImage(data: imageData)
+                dishImage.image = image
+            }
+        }
+        
         nameAndAuthorLabel.attributedText = configureNameAndAuthorLabel(name: recipeViewModel.recipe.name!, author: "Vladimir")
-        timeLabel.text = "\(recipeViewModel.recipe.cookTime!) min"
-        ratingLabel.text = "\(recipeViewModel.recipe.rating!)"
-        ratingsCount.text = "\(recipeViewModel.recipe.ratingList!.count) ratings"
+        timeLabel.text = "\(recipeViewModel.recipe.cookTime ?? "") min"
+        ratingLabel.text = "\(recipeViewModel.recipe.rating ?? 0.0)"
+        ratingsCount.text = "\(recipeViewModel.recipe.ratingList?.count ?? 0) ratings"
         configureRatingImages(rating: Float(recipeViewModel.recipe.rating!), imageViews: starsImages)
         categoryLabel.text = recipeViewModel.recipe.category.rawValue
         serveLabel.text = recipeViewModel.recipe.serve
@@ -486,12 +516,23 @@ class RecipeViewController: UIViewController {
         starsStack.translatesAutoresizingMaskIntoConstraints = false
         starsStack.distribution = .fillEqually
         view.addSubview(starsStack)
-
         NSLayoutConstraint.activate([
-            starsStack.centerXAnchor.constraint(equalTo: footerView.centerXAnchor),
-            starsStack.topAnchor.constraint(equalTo: addToCartButton.bottomAnchor, constant: 12),
-            starsStack.widthAnchor.constraint(equalToConstant: view.bounds.width / 2),
-            starsStack.heightAnchor.constraint(equalToConstant:  40)
+            starsStack.rightAnchor.constraint(equalTo: footerView.rightAnchor, constant: -6),
+            starsStack.topAnchor.constraint(equalTo: addToCartButton.bottomAnchor, constant: 32),
+            starsStack.widthAnchor.constraint(equalToConstant: view.bounds.width / 1.8),
+            starsStack.heightAnchor.constraint(equalToConstant:  50)
+        ])
+        
+        footerView.addSubview(tapToRateLabel)
+        NSLayoutConstraint.activate([
+            tapToRateLabel.centerYAnchor.constraint(equalTo: starsStack.centerYAnchor),
+            tapToRateLabel.leftAnchor.constraint(equalTo: footerView.leftAnchor, constant: 12)
+        ])
+        
+        footerView.addSubview(instructionsLabel)
+        NSLayoutConstraint.activate([
+            instructionsLabel.bottomAnchor.constraint(equalTo: footerView.bottomAnchor, constant: -4),
+            instructionsLabel.leftAnchor.constraint(equalTo: footerView.leftAnchor, constant: 6)
         ])
 
         var starButtons: [UIButton] = []
@@ -515,9 +556,16 @@ class RecipeViewController: UIViewController {
             starButtons.append(starButton)
         }
 
-        // Call the function to initially configure the star buttons
-        configureRatingStars(rating: Float(recipeViewModel.recipe.rating!), starButtons: starButtons)
-
+        configureRatingStars(rating: Float(recipeViewModel.recipe.rating ?? 0), starButtons: starButtons)
+        
+        contentView.addSubview(instructionsTableView)
+        NSLayoutConstraint.activate([
+            instructionsTableView.topAnchor.constraint(equalTo: footerView.bottomAnchor, constant: 4),
+            instructionsTableView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            instructionsTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            instructionsTableView.widthAnchor.constraint(equalToConstant: view.bounds.width)
+        ])
+        
         
     }
     func configureRatingStars(rating: Float, starButtons: [UIButton]) {
@@ -594,7 +642,7 @@ class RecipeViewController: UIViewController {
     }
     
     @objc private func starButtonTapped(_ sender: UIButton) {
-        guard let uid = user.user?.uid else { return }
+        guard let uid = Auth.auth().currentUser?.uid else { return }
         guard let currentRating = recipeViewModel.recipe.sumOfRatings else { return }
         guard var ratings = recipeViewModel.recipe.ratingList else { return }
 
@@ -611,7 +659,7 @@ class RecipeViewController: UIViewController {
             ratings[index].rating = Float(rating)
             updatedRating = Float(rating)
         } else {
-            ratings.append(Rating(uid: user.user!.uid, rating: Float(rating)))
+            ratings.append(Rating(uid: uid, rating: Float(rating)))
         }
         
         
@@ -620,7 +668,6 @@ class RecipeViewController: UIViewController {
         var ratingDict: [[String : Any]] = []
         
         for new in ratings {
-            print(new)
             let id = new.uid
             let rat = new.rating
             
@@ -630,8 +677,14 @@ class RecipeViewController: UIViewController {
             
             ratingDict.append(testt)
         }
+        
+        
             
         recipeViewModel.recipe.rating = updatedRating
+        
+        updateRecipe(id: recipeViewModel.recipe.id!, rating: updatedRating, numOfRating: ratings.count) { success in
+            
+        }
         
         let updatedData: [String : Any] = ["rating" : updatedRating,
                                            "numOfRatings" : ratingDict
@@ -647,21 +700,39 @@ class RecipeViewController: UIViewController {
 
 extension RecipeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recipeViewModel.recipe.ingredients.count
+        if tableView == self.tableView {
+            return recipeViewModel.recipe.ingredients.count
+        } else {
+            print(recipeViewModel.recipe.instructions.count)
+            return recipeViewModel.recipe.instructions.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: tableCellReuseId, for: indexPath) as! IngredientTableCell
-        cell.item.isUserInteractionEnabled = false
-        
-        if let ingredients = recipeViewModel?.recipe.ingredients {
-            cell.configure(ingredient: ingredients[indexPath.row])
+        if tableView == self.tableView {
+            let cell = tableView.dequeueReusableCell(withIdentifier: tableCellReuseId, for: indexPath) as! IngredientTableCell
+            cell.item.isUserInteractionEnabled = false
+            
+            if let ingredients = recipeViewModel?.recipe.ingredients {
+                cell.configure(ingredient: ingredients[indexPath.row])
+            }
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: instrTableCellId, for: indexPath) as! PrepareTableCell
+            cell.textView.isUserInteractionEnabled = false
+            cell.textView.backgroundColor = .white
+            cell.instruction = recipeViewModel.recipe.instructions[indexPath.row]
+            return cell
         }
-        return cell
+
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
+        if tableView == self.tableView {
+            return 70
+        } else {
+            return 250
+        }
     }
     
 }

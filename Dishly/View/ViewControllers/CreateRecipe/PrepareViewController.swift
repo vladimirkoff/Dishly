@@ -1,12 +1,18 @@
 import UIKit
 import JGProgressHUD
 
+protocol PrepareViewControllerDelegate {
+    func update()
+}
+
 class PrepareViewController: UIViewController, Storyboardable {
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var saveButton: UIButton!
     
     private let hud = JGProgressHUD(style: .dark)
+    
+    var delegate: PrepareViewControllerDelegate?
 
     var recipeViewModel: RecipeViewModel?
     var recipeImage: UIImage!
@@ -44,6 +50,7 @@ class PrepareViewController: UIViewController, Storyboardable {
                 print("Error creating recipe - \(error.localizedDescription)")
                 return
             }
+            delegate?.update()
             self.showLoader(false)
             self.dismiss(animated: true)
             print("DEBUG: Recipe created successfully")

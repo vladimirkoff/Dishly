@@ -2,7 +2,7 @@ import Foundation
 import RealmSwift
 
 protocol UserRealmServiceProtocol {
-    func createUser(name: String, email: String, profileImage: Data, id: String, completion: @escaping (Bool) -> Void)
+    func createUser(name: String, email: String, profileImage: Data, id: String, username: String, completion: @escaping (Bool) -> Void)
     func getUser(with id: String, completion: @escaping (User) -> Void)
     func updateUser(user: User, completion: @escaping (Bool) -> Void)
     func deleteUser(id: String)
@@ -15,12 +15,13 @@ class UserRealmService: UserRealmServiceProtocol {
         self.realm = realm
     }
     
-    func createUser(name: String, email: String, profileImage: Data, id: String, completion: @escaping (Bool) -> Void) {
+    func createUser(name: String, email: String, profileImage: Data, id: String, username: String, completion: @escaping (Bool) -> Void) {
         let user = UserRealm()
         user.id = id
         user.name = name
         user.email = email
         user.imageData = profileImage
+        user.username = username
         
         do {
             try realm.write {

@@ -90,11 +90,19 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     //MARK: - DB calls
     
     func fecthRecipesForPlans() {
-        mealsViewModel.fetchRecipesForPlans { recipes in
-            DispatchQueue.main.async { [weak self] in
-                self?.recipes = recipes
+        fecthRecipesRealm { recipesViewModels in
+            var recipes: [RecipeViewModel] = []
+            for day in DaysOfWeek.allCases {
+                for recipe in recipesViewModels {
+                    if recipe.recipe.day == day.rawValue {
+                        recipes.append(recipe)
+                    }
+                }
+                recipesForMealPlan[day.rawValue] = recipes
+                recipes = []
             }
         }
+        self.recipes = recipesForMealPlan
     }
 }
 

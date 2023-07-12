@@ -132,7 +132,7 @@ extension CollectionService {
         COLLECTION_RECIPES.whereField("id", isEqualTo: id).getDocuments { snapshot, error in
             if let document = snapshot?.documents.first {
                 let recipeViewModel = setRecipesConfiguration(recipe: document)
-                completion(recipeViewModel)
+                completion(recipeViewModel!)
             }
         }
     }

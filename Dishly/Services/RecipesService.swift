@@ -20,7 +20,7 @@ class RecipeService: RecipeServiceProtocol {
                     let name = recipe.data()["name"] as? String ?? ""
                     
                     if name.starts(with: text) {
-                        let recipeViewModel =  setRecipesConfiguration(recipe: recipe)
+                        guard let recipeViewModel =  setRecipesConfiguration(recipe: recipe) else { return }
                         recipesArray.append(recipeViewModel)
                     }
                 }
@@ -46,7 +46,7 @@ class RecipeService: RecipeServiceProtocol {
         Firestore.firestore().collection(category).getDocuments { snapshot, error in
             if let recipes = snapshot?.documents {
                 for recipe in recipes {
-                    let recipeViewModel = setRecipesConfiguration(recipe: recipe)
+                    guard let recipeViewModel = setRecipesConfiguration(recipe: recipe) else { return }
                     recipesArray.append(recipeViewModel)
                 }
                 completion(recipesArray)
@@ -64,7 +64,7 @@ class RecipeService: RecipeServiceProtocol {
             
             if let recipes = snapshot?.documents {
                 for recipe in recipes {
-                    let recipeViewModel = setRecipesConfiguration(recipe: recipe)
+                    guard let recipeViewModel = setRecipesConfiguration(recipe: recipe) else { return }
                     recipesArray.append(recipeViewModel)
                 }
             }
@@ -139,7 +139,7 @@ class RecipeService: RecipeServiceProtocol {
             
             if let recipes = snapshot?.documents {
                 for recipe in recipes {
-                    let recipeViewModel = setRecipesConfiguration(recipe: recipe)
+                    guard let recipeViewModel = setRecipesConfiguration(recipe: recipe) else { return }
                     recipesArray.append(recipeViewModel)
                 }
             }

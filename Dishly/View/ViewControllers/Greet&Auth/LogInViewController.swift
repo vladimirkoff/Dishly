@@ -1,6 +1,7 @@
 
 
 import UIKit
+import SDWebImage
 
 class LoginViewController: UIViewController {
  
@@ -12,9 +13,12 @@ class LoginViewController: UIViewController {
     private let googleService: GoogleAuthServiceProtocol!
     private let collectionService: CollectionServiceProtocol!
     private let mealsService: MealsServiceProtocol!
+    private let userRealmService: UserRealmServiceProtocol!
+
     
     private var authViewModel: AuthViewModel!
     private var userViewModel: UserViewModel!
+    private var userRealmViewModel: UserRealmViewModel!
 
     private let logo = UIImageView(image: UIImage(named: "Instagram_logo_white"))
     
@@ -58,13 +62,14 @@ class LoginViewController: UIViewController {
         userViewModel = UserViewModel(user: nil, userService: userService)
     }
     
-    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol, mealsService: MealsServiceProtocol) {
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol, mealsService: MealsServiceProtocol, userRealmService: UserRealmServiceProtocol) {
          self.authService = authService
          self.recipeService = recipeService
          self.userService = userService
          self.googleService = googleService
         self.collectionService = collectionService
         self.mealsService = mealsService
+        self.userRealmService = userRealmService
          super.init(nibName: nil, bundle: nil)
      }
     
@@ -73,6 +78,11 @@ class LoginViewController: UIViewController {
     }
     
     //MARK: - Helpers
+    
+    func createTestUser(email: String, name: String, uid: String, profileImage: Data, username: String) {
+        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+        userRealmViewModel.createUser(name: name, email: email, profileImage: profileImage, id: uid, username: username)
+    }
     
     func configureUI() {
         navigationController?.navigationBar.barStyle = .black
@@ -106,6 +116,12 @@ class LoginViewController: UIViewController {
         }
     }
     
+    func getImageFromURL(url: URL, completion: @escaping (UIImage?) -> Void) {
+        SDWebImageManager.shared.loadImage(with: url, options: [], progress: nil) { (image, _, _, _, _, _) in
+            completion(image)
+        }
+    }
+    
     @objc func logIn() {
         guard let email = emailField.text else { return }
         guard let password = passwordField.text else { return }
@@ -115,13 +131,24 @@ class LoginViewController: UIViewController {
                 print("DEBUG: Error signing in - \(error)")
                 return
             }
-            self.userViewModel.fetchUser { user in
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleService, mealsService: self.mealsService)
-                    self.navigationController?.pushViewController(vc, animated: true)
+            
+            self.userViewModel.fetchUser { [self] user in
+                guard let userModel = user.user else { return }
+                guard let url = URL(string: userModel.profileImage) else { return }
+                getImageFromURL(url: url) { image in
+                    guard let image = image else { return }
+                    if let imageData = image.pngData() {
+                        self.createTestUser(email: userModel.email, name: userModel.fullName, uid: userModel.uid, profileImage: imageData, username: userModel.username)
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+                            let vc = MainTabBarController(user: user, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleService, mealsService: self.mealsService)
+                            self.navigationController?.pushViewController(vc, animated: true)
+                        }
+                    }
+                    
                 }
-
+                
+                
             }
         }
     }

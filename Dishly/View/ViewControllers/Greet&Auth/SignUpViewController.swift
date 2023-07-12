@@ -118,9 +118,9 @@ class SignupController: UIViewController {
         fullnameField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
     }
     
-    func createTestUser(email: String, name: String, uid: String, profileImage: Data) {
+    func createTestUser(email: String, name: String, uid: String, profileImage: Data, username: String) {
         userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-        userRealmViewModel.createUser(name: name, email: email, profileImage: profileImage, id: uid)
+        userRealmViewModel.createUser(name: name, email: email, profileImage: profileImage, id: uid, username: username)
     }
     
     //MARK: - Selectors
@@ -140,7 +140,7 @@ class SignupController: UIViewController {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 let profileImage = self.plusButton.imageView?.image?.pngData()
-                self.createTestUser(email: email, name: fullname, uid: user!.user!.uid, profileImage: profileImage!)
+                self.createTestUser(email: email, name: fullname, uid: user!.user!.uid, profileImage: profileImage!, username: username)
                 let vc = MainTabBarController(user: user!, authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleService, mealsService: self.mealsService)
                 self.navigationController?.pushViewController(vc, animated: true)
             }

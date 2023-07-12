@@ -15,6 +15,8 @@ class ExploreViewController: UIViewController {
     var userViewModel: UserViewModel!
     var recipeViewModel: RecipeViewModel!
     
+    private var refreshControl: UIRefreshControl!
+    
     var collectionViewModel: CollectionViewModel!
     
     var recipes: [RecipeViewModel]
@@ -86,6 +88,10 @@ class ExploreViewController: UIViewController {
         
         navigationItem.title = "Search"
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        refreshControl = UIRefreshControl()
+           refreshControl.addTarget(self, action: #selector(refreshCollectionView), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
     }
     
     
@@ -126,14 +132,6 @@ class ExploreViewController: UIViewController {
     
 }
 
-//MARK: - UISearchResultsUpdating
-
-extension ExploreViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        
-    }
-}
-
 //MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
 
 extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -171,10 +169,15 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
 
 extension ExploreViewController: ParentCellDelegate {
     
-    
     func goToRecipe(with recipe: RecipeViewModel) {
-        let vc = RecipeViewController(user: user, recipe: recipe)
-        navigationController?.pushViewController(vc, animated: true)
+        guard let uid = recipe.recipe.ownerId else { return }
+        userViewModel.fetchUser(with: uid) { [weak self] userOwner in
+            guard let self = self else  {return }
+            DispatchQueue.main.async {
+                let vc = RecipeViewController(user: userOwner, recipe: recipe)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
     }
     
     func goToCategory(category: String) {
@@ -224,6 +227,14 @@ extension ExploreViewController: ParentCellDelegate {
             guard let self = self else { return }
             
             self.windowView.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY, width: self.view.frame.width, height: 300)
+        }
+    }
+    
+    @objc func refreshCollectionView() {
+        recipeViewModel.fetchRecipes { recipes in
+            self.recipes = recipes
+            self.collectionView.reloadData()
+            self.refreshControl.endRefreshing()
         }
     }
 }

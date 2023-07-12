@@ -21,6 +21,7 @@
 		8526670F2A5C523D005BFCFC /* PrepareTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8526670E2A5C523D005BFCFC /* PrepareTableCell.xib */; };
 		852667132A5C5281005BFCFC /* IngredientTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 852667122A5C5281005BFCFC /* IngredientTableCell.xib */; };
 		852667152A5C68EC005BFCFC /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852667142A5C68EC005BFCFC /* Errors.swift */; };
+		852667172A5D3851005BFCFC /* RecipeRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852667162A5D3851005BFCFC /* RecipeRealm.swift */; };
 		853EEB342A55798400DDB93F /* CollectionsPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853EEB332A55798400DDB93F /* CollectionsPopupView.swift */; };
 		853F3B1F2A5676FA00D53EB8 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B1E2A5676FA00D53EB8 /* CustomButton.swift */; };
 		853F3B252A567C2E00D53EB8 /* PrepareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B242A567C2E00D53EB8 /* PrepareViewController.swift */; };
@@ -102,6 +103,7 @@
 		8526670E2A5C523D005BFCFC /* PrepareTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PrepareTableCell.xib; path = "../../../../../../Library/Mobile Documents/com~apple~CloudDocs/.Trash/PrepareTableCell.xib"; sourceTree = "<group>"; };
 		852667122A5C5281005BFCFC /* IngredientTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = IngredientTableCell.xib; path = "../../../../../test/Cuisiner/Screens/TabBar Menu/Create New/IngredientTableCell/IngredientTableCell.xib"; sourceTree = "<group>"; };
 		852667142A5C68EC005BFCFC /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		852667162A5D3851005BFCFC /* RecipeRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeRealm.swift; sourceTree = "<group>"; };
 		853EEB332A55798400DDB93F /* CollectionsPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsPopupView.swift; sourceTree = "<group>"; };
 		853F3B1E2A5676FA00D53EB8 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		853F3B242A567C2E00D53EB8 /* PrepareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrepareViewController.swift; sourceTree = "<group>"; };
@@ -287,6 +289,7 @@
 				85C1B6F02A447EDD00BEAF2F /* User.swift */,
 				85C1B74B2A51A1C100BEAF2F /* UserRealm.swift */,
 				853F3B322A57F4E500D53EB8 /* Collection.swift */,
+				852667162A5D3851005BFCFC /* RecipeRealm.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -574,6 +577,7 @@
 				85C1B74C2A51A1C100BEAF2F /* UserRealm.swift in Sources */,
 				852667072A5C2C81005BFCFC /* CustomTableView.swift in Sources */,
 				85C1B75A2A54825600BEAF2F /* GoogleAuthViewModel.swift in Sources */,
+				852667172A5D3851005BFCFC /* RecipeRealm.swift in Sources */,
 				85C1B7402A4DE16700BEAF2F /* AuthCreds.swift in Sources */,
 				85C1B72D2A4D969700BEAF2F /* UIButton.swift in Sources */,
 				85C1B6F52A4483D400BEAF2F /* RecipeViewModel.swift in Sources */,

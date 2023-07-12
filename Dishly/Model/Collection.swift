@@ -11,6 +11,6 @@ struct Collection {
     var name: String
     var imageUrl: String
     var id: String
-    
+        
     var recipe: RecipeViewModel?
 }

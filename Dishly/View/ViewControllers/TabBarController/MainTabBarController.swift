@@ -55,6 +55,7 @@ class MainTabBarController: UITabBarController {
         configureNavBar()
         recipesViewModel = RecipesViewModel(recipeService: recipeService)
         fecthRecipes()
+        
     }
     
     init(user: UserViewModel, authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, collectionService: CollectionServiceProtocol, googleService: GoogleAuthServiceProtocol, mealsService: MealsServiceProtocol) {
@@ -127,7 +128,21 @@ class MainTabBarController: UITabBarController {
     
     func configureNavBar() {
         
-        guard let imageUrl = URL(string: user.user!.profileImage) else { return }
+        guard let imageUrl = URL(string: user.user!.profileImage) else {
+            guard let imageData = user.user?.imageData else { return }
+            guard let image = UIImage(data: imageData) else { return }
+               
+            self.profileImageView.image = image
+            self.profileContainerView.addSubview(self.profileImageView)
+            let leftBarButton = UIBarButtonItem(customView: self.profileContainerView)
+            self.navigationItem.leftBarButtonItem = leftBarButton
+
+            let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "cart.fill"), style: .plain, target: self, action: #selector(self.rightBarButtonTapped))
+            rightBarButtonItem.tintColor = .white
+
+            self.navigationItem.rightBarButtonItem = rightBarButtonItem
+            return
+        }
         
         SDWebImageManager.shared.loadImage(with: imageUrl, options: [], progress: nil) { (image, _, _, _, _, _) in
             DispatchQueue.main.async { [weak self] in
@@ -153,7 +168,7 @@ class MainTabBarController: UITabBarController {
     }
     
     @objc func leftBarButtonTapped() {
-        let vc = ProfileViewController(user: user, userService: userService, profileImage: profileImageView, authService: authService, userRealmService: userRealmService, googleService: googleService, collectionService: collectionService)
+        let vc = ProfileViewController(user: user, userService: userService, profileImage: profileImageView, authService: authService, userRealmService: userRealmService, googleService: googleService, collectionService: collectionService, mealsService: mealsService)
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -179,4 +194,10 @@ extension MainTabBarController: UITabBarControllerDelegate {
         }
         return true
     }
+}
+
+extension MainTabBarController {
+    
+
+    
 }

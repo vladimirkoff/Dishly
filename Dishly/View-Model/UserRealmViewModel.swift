@@ -16,8 +16,8 @@ struct UserRealmViewModel {
         self.userRealmService = userRealmService
     }
     
-    func createUser(name: String, email: String, profileImage: Data, id: String) {
-        userRealmService.createUser(name: name, email: email, profileImage: profileImage, id: id) { success in
+    func createUser(name: String, email: String, profileImage: Data, id: String, username: String) {
+        userRealmService.createUser(name: name, email: email, profileImage: profileImage, id: id, username: username) { success in
             print(success)
         }
     }

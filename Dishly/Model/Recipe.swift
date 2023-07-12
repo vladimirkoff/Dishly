@@ -10,11 +10,18 @@ struct Recipe {
     var category: Category
     var sumOfRatings: Float?
     
+    var ratingNum: Int?
+    
+    var realmId: String?
+    
     var ingredients: [Ingredient]
     var instructions: [Instruction]
     var recipeImageUrl: String?
     var ratingList: [Rating]?
     var rating: Float?
+    
+    var imageData: Data?
+    var day: String?
     
     var isRated: Bool?
     

@@ -11,6 +11,7 @@ import FacebookLogin
 import GoogleSignIn
 import FirebaseCore
 import JGProgressHUD
+import RealmSwift
 
 
 class GreetViewController: UIViewController {
@@ -144,11 +145,11 @@ class GreetViewController: UIViewController {
     
     //MARK: - Lifecycle
     //
-    //    func createTestUser() {
-    //        userRealmService = UserRealmService()
-    //        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-    //        userRealmViewModel.createUser(name: "Vova", email: "None", profileImage: "///.com", id: "1iwyfwei7d")
-    //    }
+//        func createTestUser() {
+//            userRealmService = UserRealmService()
+//            userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+//            userRealmViewModel.createUser(name: "Vova", email: "None", profileImage: "///.com", id: "1iwyfwei7d")
+//        }
     
     //    func fetchTestUser() {
     //        userRealmService = UserRealmService()
@@ -159,21 +160,36 @@ class GreetViewController: UIViewController {
     //            }
     //        }
     //    }
-    //    func fetchUsers() {
-    //        userRealmService = UserRealmService()
-    //        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-    //    }
+//        func fetchUsers() {
+//            userRealmService = UserRealmService()
+//            userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+//        }
     //
-    //    func updateUser() {
-    //        userRealmService = UserRealmService()
-    //        userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
-    //        let user = User(dictionary: ["fullName" : "Sasha",
-    //                                     "uid" : "1iwyfwei7d"
-    //                                    ])
-    //        userRealmViewModel.updateUser(user: user) { success in
-    //            print(success)
-    //        }
-    //    }
+//        func updateUser() {
+//            userRealmService = UserRealmService()
+//            userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
+//            let user = User(dictionary: ["fullName" : "Sasha",
+//                                         "uid" : "1iwyfwei7d"
+//                                        ])
+//            userRealmViewModel.updateUser(user: user) { success in
+//                print(success)
+//            }
+//        }
+    
+    func checkIfLoggedInWithRealm() -> Bool {
+        let realm = try! Realm()
+        if let user = realm.objects(UserRealm.self).first {
+            
+            let dict: [String : Any] = ["fullName" : user.name,
+                        "uid" : user.id,
+                        "imageData" : user.imageData
+            ]
+            self.user = UserViewModel(user: User(dictionary: dict), userService: userService)
+            return true
+        } else {
+            return false
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -211,27 +227,35 @@ class GreetViewController: UIViewController {
     }
     
     func checkIfLoggedIn() {
-        let currentUser = Auth.auth().currentUser
-        if let currentUser = currentUser {
-            let providerID = currentUser.providerData.first?.providerID
-            if providerID == GoogleAuthProviderID {
-                googleAuthViewModel.checkIfUserLoggedIn { user in
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
-                        self.navigationController?.pushViewController(vc, animated: true)
-                    }
-                }
-            } else {
-                authViewModel.checkIfUserExists { [weak self] user in
-                    guard let self = self else { return }
-                    DispatchQueue.main.async {
-                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
-                        self.navigationController?.pushViewController(vc, animated: true)
-                    }
-                }
-            }
+        if checkIfLoggedInWithRealm() {
+            let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
+            self.navigationController?.pushViewController(vc, animated: true)
         }
+        
+        
+        
+        
+//        let currentUser = Auth.auth().currentUser
+//        if let currentUser = currentUser {
+//            let providerID = currentUser.providerData.first?.providerID
+//            if providerID == GoogleAuthProviderID {
+//                googleAuthViewModel.checkIfUserLoggedIn { user in
+//                    DispatchQueue.main.async { [weak self] in
+//                        guard let self = self else { return }
+//                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
+//                        self.navigationController?.pushViewController(vc, animated: true)
+//                    }
+//                }
+//            } else {
+//                authViewModel.checkIfUserExists { [weak self] user in
+//                    guard let self = self else { return }
+//                    DispatchQueue.main.async {
+//                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
+//                        self.navigationController?.pushViewController(vc, animated: true)
+//                    }
+//                }
+//            }
+//        }
     }
     
     func configureUI() {
@@ -310,7 +334,7 @@ class GreetViewController: UIViewController {
         guard let authService = authService else { return }
         guard let userService = userService else { return }
         guard let recipeService = recipeService else { return }
-        let vc = LoginViewController(authService: authService, userService: userService, recipeService: recipeService, googleService: googleAuthService, collectionService: collectionService, mealsService: mealsService)
+        let vc = LoginViewController(authService: authService, userService: userService, recipeService: recipeService, googleService: googleAuthService, collectionService: collectionService, mealsService: mealsService, userRealmService: userRealmService)
         navigationController?.pushViewController(vc, animated: true)
     }
     

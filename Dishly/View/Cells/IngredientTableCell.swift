@@ -18,7 +18,6 @@ class IngredientTableCell: UITableViewCell {
     private var portionModel: PortionModel?
     
     static let identifier = "IngredientTableCell"
-    
     weak var delegate: IngredientCellDelegate?
     
     private let protionLabel: UILabel = {

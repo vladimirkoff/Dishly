@@ -19,7 +19,6 @@
 		852667092A5C33B7005BFCFC /* MealsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852667082A5C33B7005BFCFC /* MealsViewModel.swift */; };
 		8526670B2A5C3D76005BFCFC /* SearchHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8526670A2A5C3D76005BFCFC /* SearchHeader.swift */; };
 		8526670F2A5C523D005BFCFC /* PrepareTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8526670E2A5C523D005BFCFC /* PrepareTableCell.xib */; };
-		852667132A5C5281005BFCFC /* IngredientTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 852667122A5C5281005BFCFC /* IngredientTableCell.xib */; };
 		852667152A5C68EC005BFCFC /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852667142A5C68EC005BFCFC /* Errors.swift */; };
 		852667172A5D3851005BFCFC /* RecipeRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852667162A5D3851005BFCFC /* RecipeRealm.swift */; };
 		8526671D2A5E7464005BFCFC /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8526671C2A5E7464005BFCFC /* Alerts.swift */; };
@@ -38,6 +37,7 @@
 		853F3B3B2A58569F00D53EB8 /* SearchViewControler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B3A2A58569F00D53EB8 /* SearchViewControler.swift */; };
 		853F3B3D2A585FEC00D53EB8 /* SearchTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B3C2A585FEC00D53EB8 /* SearchTableCell.swift */; };
 		853F3B3F2A5864E400D53EB8 /* ConfigureRecipes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B3E2A5864E400D53EB8 /* ConfigureRecipes.swift */; };
+		8548E8582A5ED48B0024A001 /* IngredientTableCell .xib in Resources */ = {isa = PBXBuildFile; fileRef = 8548E8572A5ED48A0024A001 /* IngredientTableCell .xib */; };
 		85C1B65B2A39FE5700BEAF2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B65A2A39FE5700BEAF2F /* AppDelegate.swift */; };
 		85C1B65D2A39FE5700BEAF2F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B65C2A39FE5700BEAF2F /* SceneDelegate.swift */; };
 		85C1B6622A39FE5700BEAF2F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85C1B6602A39FE5700BEAF2F /* Main.storyboard */; };
@@ -104,7 +104,6 @@
 		852667082A5C33B7005BFCFC /* MealsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealsViewModel.swift; sourceTree = "<group>"; };
 		8526670A2A5C3D76005BFCFC /* SearchHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHeader.swift; sourceTree = "<group>"; };
 		8526670E2A5C523D005BFCFC /* PrepareTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PrepareTableCell.xib; path = "../../../../../../Library/Mobile Documents/com~apple~CloudDocs/.Trash/PrepareTableCell.xib"; sourceTree = "<group>"; };
-		852667122A5C5281005BFCFC /* IngredientTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = IngredientTableCell.xib; path = "../../../../../test/Cuisiner/Screens/TabBar Menu/Create New/IngredientTableCell/IngredientTableCell.xib"; sourceTree = "<group>"; };
 		852667142A5C68EC005BFCFC /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		852667162A5D3851005BFCFC /* RecipeRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeRealm.swift; sourceTree = "<group>"; };
 		8526671C2A5E7464005BFCFC /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
@@ -123,6 +122,7 @@
 		853F3B3A2A58569F00D53EB8 /* SearchViewControler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewControler.swift; sourceTree = "<group>"; };
 		853F3B3C2A585FEC00D53EB8 /* SearchTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableCell.swift; sourceTree = "<group>"; };
 		853F3B3E2A5864E400D53EB8 /* ConfigureRecipes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureRecipes.swift; sourceTree = "<group>"; };
+		8548E8572A5ED48A0024A001 /* IngredientTableCell .xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "IngredientTableCell .xib"; path = "../../../../../../Library/Mobile Documents/com~apple~CloudDocs/.Trash/IngredientTableCell .xib"; sourceTree = "<group>"; };
 		85C1B6572A39FE5700BEAF2F /* Dishly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dishly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85C1B65A2A39FE5700BEAF2F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		85C1B65C2A39FE5700BEAF2F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -402,7 +402,7 @@
 				85C1B7162A487C1C00BEAF2F /* MealCell.swift */,
 				85C1B7282A4C2B9B00BEAF2F /* ProfileInfoCell.swift */,
 				85FE6B962A56725D00E6417D /* IngredientTableCell.swift */,
-				852667122A5C5281005BFCFC /* IngredientTableCell.xib */,
+				8548E8572A5ED48A0024A001 /* IngredientTableCell .xib */,
 				853F3B262A567C7400D53EB8 /* PrepareTableCell.swift */,
 				8526670E2A5C523D005BFCFC /* PrepareTableCell.xib */,
 				853F3B302A57F19300D53EB8 /* CollectionCell.swift */,
@@ -517,11 +517,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				852667132A5C5281005BFCFC /* IngredientTableCell.xib in Resources */,
 				8526670F2A5C523D005BFCFC /* PrepareTableCell.xib in Resources */,
 				85C1B6672A39FE5800BEAF2F /* LaunchScreen.storyboard in Resources */,
 				85C1B73B2A4DDF2E00BEAF2F /* GoogleService-Info.plist in Resources */,
 				85C1B6642A39FE5800BEAF2F /* Assets.xcassets in Resources */,
+				8548E8582A5ED48B0024A001 /* IngredientTableCell .xib in Resources */,
 				85C1B6622A39FE5700BEAF2F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

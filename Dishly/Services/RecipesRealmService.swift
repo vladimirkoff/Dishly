@@ -56,6 +56,7 @@ class RecipesRealmService: RecipesRealmServiceProtocol {
         recipeRealm.cookTime = recipe.recipe.cookTime!
         recipeRealm.rating = Double(recipe.recipe.rating!)
         recipeRealm.ratingsNum = recipe.recipe.ratingList?.count ?? 0
+        recipeRealm.instructions = instructionsRealm
         
         if let existingObject = realm.object(ofType: RecipeRealm.self, forPrimaryKey: recipe.recipe.id!) {
             try! realm.write {
@@ -85,7 +86,8 @@ class RecipesRealmService: RecipesRealmServiceProtocol {
         
         
         for recipeRealm in recipesRealm {
-            
+            instructions = []
+            ingredients = []
             for ingredientRealm in recipeRealm.ingredients {
                 let name = ingredientRealm.name
                 let portion = ingredientRealm.portion
@@ -101,6 +103,9 @@ class RecipesRealmService: RecipesRealmServiceProtocol {
                 let instruction = Instruction(text: text)
                 instructions.append(instruction)
             }
+            
+            
+            
             
             let name = recipeRealm.name
             let imageData = recipeRealm.imageData
@@ -151,6 +156,12 @@ class RecipesRealmService: RecipesRealmServiceProtocol {
         for recipeRealm in recipesRealm {
             if recipeRealm.primaryKey == id {
                 do {
+                    let ingredients = recipeRealm.ingredients
+                    for ingredient in ingredients {
+                        try realm.write {
+                            realm.delete(ingredient)
+                        }
+                    }
                     try realm.write {
                         realm.delete(recipeRealm)
                         completion(true)

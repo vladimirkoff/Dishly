@@ -118,6 +118,7 @@ extension MealCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath) as! RecipeCell
         cell.backgroundColor = lightGrey
+        cell.addIngredientsButton.isHidden = true
         cell.isFromPlans = true
         cell.saveButton.setImage(UIImage(systemName: "minus.circle"), for: .normal)
         if let recipes = recipes {
@@ -137,6 +138,11 @@ extension MealCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
         let height = collectionView.frame.height - 30
         return CGSize(width: width, height: height)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let inset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        return inset
+    }
 }
 
 //MARK: - SavedVCProtocol
@@ -147,6 +153,7 @@ extension MealCell: SavedVCProtocol {
     func addRecipe(recipe: RecipeViewModel, mealsViewModel: MealsViewModel?) {
         guard let mealsViewModel = mealsViewModel else { return }
         RecipesRealmService().addRecipeRealm(recipe: recipe, day: day!.rawValue) { success in
+            NotificationCenter.default.post(name: .savedVCTriggered, object: nil)
             print(success)
         }
     }

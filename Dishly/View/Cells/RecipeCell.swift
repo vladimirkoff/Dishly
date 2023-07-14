@@ -16,6 +16,7 @@ class RecipeCell: UICollectionViewCell {
     
     var delegate: RecipeCellDelegate?
     var savedDelegate: RecipeCellDelegate?
+    
     var mealPlanDelegate: RecipeCellDelegate?
 
     var isFromPlans: Bool?
@@ -223,7 +224,10 @@ class RecipeCell: UICollectionViewCell {
         if let isFromSaved = isFromSaved {
             savedDelegate?.deleteRecipe(id: recipeViewModel!.recipe.id!)
         } else if let isFromPlans {
-            mealPlanDelegate?.deleteRecipe(id: recipeViewModel!.recipe.id!)
+            RecipesRealmService().deleteRecipeRealm(id: recipeViewModel!.recipe.realmId!) { success in
+                NotificationCenter.default.post(name: .savedVCTriggered, object: nil)
+                print(success)
+            }
         } else {
             delegate?.saveRecipe(recipe: recipeViewModel!)
         }

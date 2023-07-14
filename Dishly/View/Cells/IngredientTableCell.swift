@@ -23,7 +23,8 @@ class IngredientTableCell: UITableViewCell {
     private let protionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 2
+        label.numberOfLines = 20
+        
         return label
     }()
     
@@ -33,6 +34,14 @@ class IngredientTableCell: UITableViewCell {
         let attributedText = NSMutableAttributedString(string: "\(volume)\n", attributes: [.font: UIFont.systemFont(ofSize: 12), .foregroundColor: UIColor.black])
         attributedText.append(NSAttributedString(string: portion, attributes: [.font: UIFont.systemFont(ofSize: 12), .foregroundColor: UIColor.black]))
         return attributedText
+    }
+    
+    func configureCell() {
+        addSubview(protionLabel)
+        NSLayoutConstraint.activate([
+            protionLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            protionLabel.rightAnchor.constraint(equalTo: mealPortionButton.leftAnchor, constant: -8)
+        ])
     }
     
     
@@ -51,6 +60,8 @@ class IngredientTableCell: UITableViewCell {
     }
     
     override func layoutSubviews() {
+        configureCell()
+        
         mealPortionButton.isUserInteractionEnabled = true
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(mealPortionButtonTapped))
         mealPortionButton.addGestureRecognizer(gestureRecognizer)
@@ -91,10 +102,6 @@ extension IngredientTableCell: AddRecipeViewControllerProtocol {
     func setPortion(portion: PortionModel) {
         portionModel = portion
         protionLabel.attributedText = configureAttributedString(volume: portion.volume, portion: portion.name)
-        addSubview(protionLabel)
-        NSLayoutConstraint.activate([
-            protionLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            protionLabel.rightAnchor.constraint(equalTo: mealPortionButton.leftAnchor, constant: -8)
-        ])
+
     }
 }

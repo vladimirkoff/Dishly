@@ -4,7 +4,7 @@ import UIKit
 class ProfileOptionCell: UITableViewCell {
     //MARK: - Propeties
     
-    private let accessoryImage: UIImageView = {
+     let accessoryImage: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.image = UIImage(systemName: "chevron.right")
@@ -17,6 +17,16 @@ class ProfileOptionCell: UITableViewCell {
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.tintColor = .black
         return iv
+    }()
+    
+    var mySwitch: UISwitch = {
+        let sw = UISwitch()
+        sw.translatesAutoresizingMaskIntoConstraints = false
+        sw.tintColor = .black
+        sw.isHidden = true
+        sw.onTintColor = .systemBlue
+        
+        return sw
     }()
     
      var optionLabel: UILabel = {
@@ -50,6 +60,7 @@ class ProfileOptionCell: UITableViewCell {
     //MARK: - Helpers
     
     func configureCell() {
+        isUserInteractionEnabled = true
         backgroundColor = .lightGray
         selectionStyle = .none
         
@@ -82,5 +93,14 @@ class ProfileOptionCell: UITableViewCell {
             cellSymbol.heightAnchor.constraint(equalToConstant: 30),
             cellSymbol.rightAnchor.constraint(equalTo: optionLabel.leftAnchor, constant: -4)
         ])
+        
+        addSubview(mySwitch)
+        NSLayoutConstraint.activate([
+            mySwitch.centerYAnchor.constraint(equalTo: centerYAnchor),
+            mySwitch.rightAnchor.constraint(equalTo: rightAnchor, constant: -12)
+        ])
+        
     }
+    
+
 }

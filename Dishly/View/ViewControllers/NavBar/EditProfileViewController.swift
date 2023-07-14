@@ -148,12 +148,13 @@ class EditProfileViewController: UIViewController {
         ImageUploader.shared.uploadImage(image: profileImage.image!, isForRecipe: false) { [weak self] imageURL in
             guard let self = self else { return }
             
-            let dict = [
+            let dict: [String : Any] = [
                 "fullName": self.changedUser.user!.fullName,
                 "profileImage": imageURL,
                 "username": self.changedUser.user!.username,
                 "email": self.changedUser.user!.email,
-                "uid": self.user.user!.uid
+                "uid": self.user.user!.uid,
+                "imageData" : profileImage.image!.pngData()
             ]
             
             let updatedUser = User(dictionary: dict)
@@ -167,8 +168,8 @@ class EditProfileViewController: UIViewController {
                         let alertController = createErrorAlert(error: error.localizedDescription)
                         self.present(alertController, animated: true)
                     }
+                   
                 }
-                
                 self.userRealmViewModel.updateUser(user: updatedUser) { [weak self] success in
                     guard let self = self else { return }
                     

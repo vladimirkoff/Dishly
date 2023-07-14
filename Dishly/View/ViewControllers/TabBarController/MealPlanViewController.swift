@@ -33,6 +33,8 @@ class MealPlanVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(updateController), name: .savedVCTriggered, object: nil)
+
         configureNavBar()
         setupCollectionView()
         fecthRecipesForPlans()
@@ -60,13 +62,18 @@ class MealPlanVC: UIViewController {
         ])
     }
     
+    //MARK: - Selectors
+    
+    @objc func updateController() {
+        fecthRecipesForPlans()
+    }
+    
 }
 
 //MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
 
 extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 7
     }
@@ -88,6 +95,8 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         let width = view.frame.width
         return CGSize(width: width, height: 300)
     }
+    
+  
     
     //MARK: - DB calls
     
@@ -124,5 +133,8 @@ extension MealPlanVC: MealCellDelegate {
     }
 }
 
+//MARK: - NotificationCenter
 
-
+extension Notification.Name {
+    static let savedVCTriggered = Notification.Name("SavedVCTriggeredNotification")
+}

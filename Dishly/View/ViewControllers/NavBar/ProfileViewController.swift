@@ -254,9 +254,9 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! ProfileOptionCell
         switch indexPath.row {
         case 0:
-            let questionImage = UIImage(systemName: "questionmark.circle.fill")
-            cell.cellSymbol.image = questionImage
-            cell.optionLabel.text = "Help & Support"
+            let gearImage = UIImage(systemName: "gearshape.fill")
+            cell.cellSymbol.image = gearImage
+            cell.optionLabel.text = "General Settings"
         case 1:
             let lockImage = UIImage(systemName: "lock.fill")
             cell.cellSymbol.image = lockImage
@@ -266,8 +266,8 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             cell.cellSymbol.image = infoImage
             cell.optionLabel.text = "About Us"
         case 3:
-            let gearImage = UIImage(systemName: "gearshape.fill")
-            cell.cellSymbol.image = gearImage
+            let logOutImage = UIImage(systemName: "rectangle.portrait.and.arrow.right")
+            cell.cellSymbol.image = logOutImage
             cell.optionLabel.text = "Log Out"
         default:
             print("Default")
@@ -284,6 +284,9 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             navigationController?.pushViewController(vc, animated: true)
         } else if indexPath.row == 2 {
             let vc = ProfileOptionVC(docTitle: "Terms and configitons", text: termsAndConditions)
+            navigationController?.pushViewController(vc, animated: true)
+        } else if indexPath.row == 0 {
+            let vc = SettingsViewController()
             navigationController?.pushViewController(vc, animated: true)
         }
     }

@@ -51,8 +51,8 @@ class AddRecipeViewController: UIViewController, Storyboardable {
         view.backgroundColor = greyColor
         tableView.backgroundColor = greyColor
         scrollView.backgroundColor = greyColor
-        let closeButton = UIBarButtonItem(image: #imageLiteral(resourceName: "xmark"), style: .plain, target: self, action: #selector(close))
-        navigationItem.rightBarButtonItem = closeButton
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(close))
+        navigationItem.rightBarButtonItem = cancelButton
         configureTableView()
         configureImagePicker()
         serveField.delegate = self

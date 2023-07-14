@@ -57,6 +57,7 @@ class SavedViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         configureUI()
         configureCollectionView()
         fetchCollections()

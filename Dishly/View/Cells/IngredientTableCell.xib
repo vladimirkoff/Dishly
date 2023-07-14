@@ -36,11 +36,11 @@
                                         <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="18"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="meal" translatesAutoresizingMaskIntoConstraints="NO" id="nua-Tg-tgf">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="meal" translatesAutoresizingMaskIntoConstraints="NO" id="gN9-Li-tnv">
                                         <rect key="frame" x="403" y="17.5" width="25" height="25"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="nua-Tg-tgf" secondAttribute="height" multiplier="1:1" id="JHd-7w-mkN"/>
-                                            <constraint firstAttribute="height" constant="25" id="UJC-u9-A6d"/>
+                                            <constraint firstAttribute="height" constant="25" id="DP2-fz-4eg"/>
+                                            <constraint firstAttribute="width" secondItem="gN9-Li-tnv" secondAttribute="height" multiplier="1:1" id="lMI-cR-XuM"/>
                                         </constraints>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="acO-4s-fB7">
@@ -58,7 +58,7 @@
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="nua-Tg-tgf" firstAttribute="width" secondItem="nua-Tg-tgf" secondAttribute="height" multiplier="1:1" id="AOD-PR-R6a"/>
+                                    <constraint firstItem="gN9-Li-tnv" firstAttribute="width" secondItem="gN9-Li-tnv" secondAttribute="height" multiplier="1:1" id="cBT-ol-wPi"/>
                                 </constraints>
                             </stackView>
                         </subviews>
@@ -110,9 +110,9 @@
             <connections>
                 <outlet property="deleteButton" destination="acO-4s-fB7" id="Vvb-k0-tOf"/>
                 <outlet property="item" destination="Vs9-gs-Czw" id="N5q-ML-tmp"/>
-                <outlet property="mealPortionButton" destination="nua-Tg-tgf" id="3xw-dn-b3h"/>
+                <outlet property="mealPortionButton" destination="gN9-Li-tnv" id="8aS-66-g2K"/>
             </connections>
-            <point key="canvasLocation" x="-212" y="-27"/>
+            <point key="canvasLocation" x="338.40579710144931" y="36.160714285714285"/>
         </tableViewCell>
     </objects>
     <resources>

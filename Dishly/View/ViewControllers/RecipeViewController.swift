@@ -296,7 +296,7 @@ class RecipeViewController: UIViewController {
         nameAndAuthorLabel.attributedText = configureNameAndAuthorLabel(name: recipeViewModel.recipe.name!, author: "Vladimir")
         timeLabel.text = "\(recipeViewModel.recipe.cookTime ?? "") min"
         ratingLabel.text = "\(recipeViewModel.recipe.rating ?? 0.0)"
-        ratingsCount.text = "\(recipeViewModel.recipe.ratingList?.count ?? 0) ratings"
+        ratingsCount.text = "\(recipeViewModel.recipe.ratingList?.count ?? recipeViewModel.recipe.ratingNum ?? 0) ratings"
         configureRatingImages(rating: Float(recipeViewModel.recipe.rating!), imageViews: starsImages)
         categoryLabel.text = recipeViewModel.recipe.category.rawValue
         serveLabel.text = recipeViewModel.recipe.serve

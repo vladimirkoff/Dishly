@@ -42,6 +42,11 @@
 		853F3B3B2A58569F00D53EB8 /* SearchViewControler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B3A2A58569F00D53EB8 /* SearchViewControler.swift */; };
 		853F3B3D2A585FEC00D53EB8 /* SearchTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B3C2A585FEC00D53EB8 /* SearchTableCell.swift */; };
 		853F3B3F2A5864E400D53EB8 /* ConfigureRecipes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853F3B3E2A5864E400D53EB8 /* ConfigureRecipes.swift */; };
+		85BB92482A66370F00E9E4A3 /* LoadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85BB92472A66370F00E9E4A3 /* LoadViewController.swift */; };
+		85BB924A2A66864800E9E4A3 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85BB92492A66864800E9E4A3 /* Theme.swift */; };
+		85BB924C2A67B78300E9E4A3 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85BB924B2A67B78300E9E4A3 /* UIView.swift */; };
+		85BB924E2A67BA9D00E9E4A3 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85BB924D2A67BA9D00E9E4A3 /* UILabel.swift */; };
+		85BB92502A67F0B600E9E4A3 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85BB924F2A67F0B600E9E4A3 /* UIImage.swift */; };
 		85C1B65B2A39FE5700BEAF2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B65A2A39FE5700BEAF2F /* AppDelegate.swift */; };
 		85C1B65D2A39FE5700BEAF2F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1B65C2A39FE5700BEAF2F /* SceneDelegate.swift */; };
 		85C1B6622A39FE5700BEAF2F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85C1B6602A39FE5700BEAF2F /* Main.storyboard */; };
@@ -154,6 +159,11 @@
 		853F3B3A2A58569F00D53EB8 /* SearchViewControler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewControler.swift; sourceTree = "<group>"; };
 		853F3B3C2A585FEC00D53EB8 /* SearchTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableCell.swift; sourceTree = "<group>"; };
 		853F3B3E2A5864E400D53EB8 /* ConfigureRecipes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureRecipes.swift; sourceTree = "<group>"; };
+		85BB92472A66370F00E9E4A3 /* LoadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadViewController.swift; sourceTree = "<group>"; };
+		85BB92492A66864800E9E4A3 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		85BB924B2A67B78300E9E4A3 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		85BB924D2A67BA9D00E9E4A3 /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
+		85BB924F2A67F0B600E9E4A3 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		85C1B6572A39FE5700BEAF2F /* Dishly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dishly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85C1B65A2A39FE5700BEAF2F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		85C1B65C2A39FE5700BEAF2F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -402,6 +412,7 @@
 				852666F62A59917A005BFCFC /* RecipesViewController.swift */,
 				852666F82A5AEA92005BFCFC /* ProfileOptionVC.swift */,
 				8509D0752A5F094F006E525B /* SettingsViewController.swift */,
+				85BB92472A66370F00E9E4A3 /* LoadViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -440,6 +451,7 @@
 				852666FA2A5AEC2E005BFCFC /* PrivacyPolicy.swift */,
 				852666FC2A5AEEF8005BFCFC /* TermsAndConditions.swift */,
 				852666FE2A5AF1CA005BFCFC /* AppColors.swift */,
+				85BB92492A66864800E9E4A3 /* Theme.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -451,6 +463,9 @@
 				85C1B72C2A4D969700BEAF2F /* UIButton.swift */,
 				85C1B7512A52D51E00BEAF2F /* UIImageView.swift */,
 				85FE6B942A56719800E6417D /* UIViewController.swift */,
+				85BB924B2A67B78300E9E4A3 /* UIView.swift */,
+				85BB924D2A67BA9D00E9E4A3 /* UILabel.swift */,
+				85BB924F2A67F0B600E9E4A3 /* UIImage.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -666,11 +681,13 @@
 				85C1B75A2A54825600BEAF2F /* GoogleAuthViewModel.swift in Sources */,
 				85D4C95A2A5EFDFE009D20D5 /* CollectionCell.swift in Sources */,
 				852667172A5D3851005BFCFC /* RecipeRealm.swift in Sources */,
+				85BB924E2A67BA9D00E9E4A3 /* UILabel.swift in Sources */,
 				85C1B7402A4DE16700BEAF2F /* AuthCreds.swift in Sources */,
 				85C1B72D2A4D969700BEAF2F /* UIButton.swift in Sources */,
 				85D4C95B2A5EFDFE009D20D5 /* MealCell.swift in Sources */,
 				85C1B6F52A4483D400BEAF2F /* RecipeViewModel.swift in Sources */,
 				853F3B372A58086B00D53EB8 /* CollectionsService.swift in Sources */,
+				85BB924A2A66864800E9E4A3 /* Theme.swift in Sources */,
 				85D4C9622A5EFDFE009D20D5 /* ProfileOptionCell.swift in Sources */,
 				85D4C9632A5EFDFE009D20D5 /* IngredientTableCell.swift in Sources */,
 				853F3B2D2A56D98400D53EB8 /* MyGroceries.swift in Sources */,
@@ -703,6 +720,7 @@
 				85C1B7112A485B2300BEAF2F /* CartViewController.swift in Sources */,
 				853F3B3B2A58569F00D53EB8 /* SearchViewControler.swift in Sources */,
 				85C1B7072A45B71C00BEAF2F /* ParentCell.swift in Sources */,
+				85BB924C2A67B78300E9E4A3 /* UIView.swift in Sources */,
 				852666FB2A5AEC2E005BFCFC /* PrivacyPolicy.swift in Sources */,
 				852666F92A5AEA92005BFCFC /* ProfileOptionVC.swift in Sources */,
 				85C1B7422A4F069F00BEAF2F /* DependencyContainer.swift in Sources */,
@@ -724,9 +742,11 @@
 				853F3B392A580E2B00D53EB8 /* CollectionViewModel.swift in Sources */,
 				85C1B6E92A447E9E00BEAF2F /* MainTabBarController.swift in Sources */,
 				85C1B65D2A39FE5700BEAF2F /* SceneDelegate.swift in Sources */,
+				85BB92502A67F0B600E9E4A3 /* UIImage.swift in Sources */,
 				85C1B7562A541AA000BEAF2F /* RandomUsernameGenerator.swift in Sources */,
 				85C1B6FF2A458CBE00BEAF2F /* CategoryCell.swift in Sources */,
 				852667212A5EAA0B005BFCFC /* RecipesRealmViewModel.swift in Sources */,
+				85BB92482A66370F00E9E4A3 /* LoadViewController.swift in Sources */,
 				85C1B71D2A49942B00BEAF2F /* LogInViewController.swift in Sources */,
 				85C1B71F2A49943300BEAF2F /* SignUpViewController.swift in Sources */,
 				853F3B332A57F4E500D53EB8 /* Collection.swift in Sources */,

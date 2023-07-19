@@ -97,7 +97,8 @@ extension CollectionsPopupView: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionCell", for: indexPath) as! CollectionCell
-        
+        cell.backgroundColor = .clear
+        cell.collectionNameLabel.textColor = .white
         if let collections = collections {
             if indexPath.row == collections.count  {
                 cell.collectionImageView.image = UIImage(systemName: "plus")
@@ -105,8 +106,6 @@ extension CollectionsPopupView: UICollectionViewDataSource {
                 cell.collection = collections[indexPath.row]
             }
         }
-        
-        cell.backgroundColor = lightGrey
         return cell
     }
  

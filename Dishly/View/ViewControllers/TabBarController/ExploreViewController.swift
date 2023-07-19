@@ -38,7 +38,8 @@ class ExploreViewController: UIViewController {
         collectionViewModel = CollectionViewModel(collectionService: collectionService, collection: nil)
         view.collectionViewModel = collectionViewModel
         view.delegate = self
-        view.backgroundColor = lightGrey
+        view.backgroundColor = AppColors.customLightGrey.color
+
         view.layer.cornerRadius = 10
         
         return view
@@ -54,13 +55,22 @@ class ExploreViewController: UIViewController {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        collectionView.backgroundColor = greyColor
+
         collectionView.delegate = self
         collectionView.dataSource = self
         return collectionView
     }()
     
+    private let customView = CustomUIViewBackground()
+    
     //MARK: - Lifecycle
+    
+    override func loadView() {
+        view = customView
+
+    }
+    
+    
     
     init(user: UserViewModel, recipes: [RecipeViewModel], userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, collectionService: CollectionServiceProtocol) {
         self.user = user
@@ -97,22 +107,13 @@ class ExploreViewController: UIViewController {
     
     //MARK: - Helpers
     
-    func configureAttributedString() -> NSAttributedString {
-        let attributedText = NSMutableAttributedString(string: "Hello, ", attributes: [.font: UIFont.boldSystemFont(ofSize: 16), .foregroundColor: UIColor.white])
-        attributedText.append(NSAttributedString(string: "Vladimir\n", attributes: [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.green]))
-        return attributedText
-    }
-    
     func configureUI() {
-        view.backgroundColor = greyColor
-        
-        collectionView.backgroundColor = view.backgroundColor
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(ParentCell.self, forCellWithReuseIdentifier: "Cell")
         collectionView.register(SearchHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
         
-        view.addSubview(collectionView)
+        customView.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -146,6 +147,7 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
         cell.delegate = self
         cell.numOfRecipes = 0
         cell.configure(index: indexPath.row)
+        cell.backgroundColor = .clear
         if indexPath.row == 0 {
             cell.numOfRecipes = recipes.count
             cell.recipes = recipes
@@ -159,8 +161,14 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellHeight = (collectionView.bounds.height - collectionView.contentInset.top - collectionView.contentInset.bottom) / 2
-        return CGSize(width: collectionView.bounds.width, height: cellHeight)
+        if indexPath.row == 2 {
+            let cellHeight: CGFloat = 80 * 11
+            return CGSize(width: collectionView.bounds.width, height: cellHeight)
+        } else {
+            let cellHeight = (collectionView.bounds.height - collectionView.contentInset.top - collectionView.contentInset.bottom) / 2
+            return CGSize(width: collectionView.bounds.width, height: cellHeight)
+
+        }
     }
     
 }
@@ -212,12 +220,15 @@ extension ExploreViewController: ParentCellDelegate {
         if kind == UICollectionView.elementKindSectionHeader {
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath) as! SearchHeaderView
             headerView.searchBar.delegate = self
-            headerView.backgroundColor = greyColor
+//            headerView.backgroundColor = AppColors.customGrey.color
+
             return headerView
         }
         
         return UICollectionReusableView()
     }
+    
+ 
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let height: Double = 60

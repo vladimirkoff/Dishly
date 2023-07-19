@@ -34,7 +34,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         recipesRealmService = container.getRecipesRealmService()
         
 
-        let greetVC = GreetViewController(authService: authService,
+        let loadVC = LoadViewController(authService: authService,
                                           userService: userService,
                                           recipeService: recipeService,
                                           userRealmService: userRealmService,
@@ -44,8 +44,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                                           recipesRealmService: recipesRealmService
         )
         
+        
+        
         window = UIWindow(windowScene: scene)
-        window?.rootViewController = UINavigationController(rootViewController: greetVC)
+        window?.rootViewController = UINavigationController(rootViewController: loadVC)
         window?.makeKeyAndVisible()
     }
 

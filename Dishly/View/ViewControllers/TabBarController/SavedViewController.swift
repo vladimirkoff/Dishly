@@ -1,12 +1,13 @@
 
 
 import UIKit
+import JGProgressHUD
 
 private let reuseIdentifier = "ItemCell"
 private let headerReuseIdentifier = "ItemsHeader"
 
 protocol SavedVCProtocol {
-    func reload(collections: [Collection])
+    func reload(collections: [Collection], afterDeletion: Bool)
     func addRecipe(recipe: RecipeViewModel, mealsViewModel: MealsViewModel?)
 }
 
@@ -17,16 +18,19 @@ class SavedViewController: UICollectionViewController {
     
     var collection: Collection?
     
+    private let hud = JGProgressHUD(style: .dark)
+    
     private var user: UserViewModel?
     
     private var collections: [Collection]? {
         didSet {
-            delegate?.reload(collections: collections!)
+            delegate?.reload(collections: collections!, afterDeletion: false)
         }
     }
     
-    private var collectionService: CollectionServiceProtocol!
+    private let collectionService: CollectionServiceProtocol!
     private var collectionViewModel: CollectionViewModel!
+    
     
     private var recipes: [RecipeViewModel]? {
         didSet {
@@ -65,9 +69,16 @@ class SavedViewController: UICollectionViewController {
         collectionViewModel = CollectionViewModel(collectionService: collectionService, collection: nil)
     }
     
+    func showLoader(_ show: Bool) {
+        view.endEditing(true )
+        show ? hud.show(in: view) : hud.dismiss()
+    }
+    
     func fetchCollections() {
+        showLoader(true)
         collectionService.fetchCollections { collections in
             DispatchQueue.main.async { [weak self] in
+                self?.showLoader(false)
                 self?.collections = collections
             }
         }
@@ -77,7 +88,8 @@ class SavedViewController: UICollectionViewController {
     
     func configureUI() {
         navigationController?.navigationBar.isHidden = false
-        view.backgroundColor = greyColor
+        view.backgroundColor = AppColors.customGrey.color
+
         
         
         navigationItem.title = "My Saved Recipes"
@@ -85,7 +97,8 @@ class SavedViewController: UICollectionViewController {
     }
     
     func configureCollectionView() {
-        collectionView.backgroundColor = greyColor
+//        collectionView.backgroundColor = AppColors.customGrey.color
+
         collectionView.register(RecipeCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView.register(ItemsHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
     }
@@ -120,12 +133,18 @@ class SavedViewController: UICollectionViewController {
             mealDelegate?.addRecipe(recipe: cell.recipeViewModel!, mealsViewModel: MealsViewModel(mealsService: MealsService()))
             }
         
-         else {
+        else {
             guard let cell = collectionView.cellForItem(at: indexPath) as? RecipeCell else { return }
-            
             if let recipe = cell.recipeViewModel {
-                let vc = RecipeViewController(user: user!, recipe: recipe)
-                navigationController?.pushViewController(vc, animated: true)
+                if let uid = recipe.recipe.ownerId {
+                    UserService().fetchUser(with: uid) { [weak self] userOwner in
+                        guard let self = self else  {return }
+                        DispatchQueue.main.async {
+                            let vc = RecipeViewController(user: userOwner, recipe: recipe)
+                            self.navigationController?.pushViewController(vc, animated: true)
+                        }
+                    }
+                }
             }
         }
     }
@@ -150,9 +169,28 @@ class SavedViewController: UICollectionViewController {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        return UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 10)
     }
     
+    func showDeleteAlert(for id: String) {
+        let alertController = UIAlertController(title: "Delete Cell", message: "Are you sure you want to delete this cell?", preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            self?.deleteCell(for: id)
+        }
+        alertController.addAction(deleteAction)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func deleteCell(for id: String) {
+        collectionViewModel.deleteCollection(id: id) { collections, error in
+            self.delegate?.reload(collections: collections, afterDeletion: true)
+        }
+    }
  
 }
 
@@ -175,9 +213,11 @@ extension SavedViewController: ItemsHeaderDelegate {
     
     
     func fecthRecipes(with collection: Collection) {
+        showLoader(true)
         self.collection = collection
         collectionService.fetchRecipesWith(collection: collection) { [weak self] recipes in
             guard let self = self else { return }
+            showLoader(false)
             self.recipes = recipes
         }
     }

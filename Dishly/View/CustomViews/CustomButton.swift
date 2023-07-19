@@ -41,3 +41,7 @@ class CustomButton: UIButton {
     }
 
 }
+
+class EditProfileButton: UIButton {
+    
+}

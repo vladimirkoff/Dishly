@@ -23,6 +23,14 @@ class PrepareViewController: UIViewController, Storyboardable {
         }
     }
     
+    private let customView = CustomUIViewBackground()
+    
+    //MARK: - Lifecycle
+    
+    override func loadView() {
+        view = customView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
@@ -32,7 +40,7 @@ class PrepareViewController: UIViewController, Storyboardable {
     //MARK: - Functions
     
     func showLoader(_ show: Bool) {
-        view.endEditing(true )
+        customView.endEditing(true )
         show ? hud.show(in: view) : hud.dismiss()
     }
     

@@ -31,6 +31,7 @@ extension UIImageView {
                    imageView.translatesAutoresizingMaskIntoConstraints = false
                    imageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
                    imageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+                   imageView.tintColor = AppColors.goldenColor.color
                    return imageView
                }()
                

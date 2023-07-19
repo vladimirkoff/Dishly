@@ -7,9 +7,22 @@ protocol CollectionServiceProtocol {
     func fetchRecipesWith(collection: Collection, completion: @escaping ([RecipeViewModel]) -> Void)
     func saveRecipeToCollection(collection: Collection, recipe: RecipeViewModel?, completion: @escaping (Error?) -> Void)
     func deleteRecipeFrom(collection: Collection, id: String, completion: @escaping(Error?) -> ())
+    func deleteCollection(id: String, completion: @escaping([Collection], Error?) -> ())
 }
 
 class CollectionService: CollectionServiceProtocol {
+    
+    func deleteCollection(id: String, completion: @escaping([Collection], Error?) -> ()) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        COLLECTION_USERS.document(uid).collection("collections").document(id).delete { error in
+            COLLECTION_USERS.document(uid)
+                .collection("collections")
+                .getDocuments { snapshot, error in
+                    let collectionsArray = self.parseCollectionsSnapshot(snapshot)
+                    completion(collectionsArray, nil)
+                }
+        }
+    }
     
     func deleteRecipeFrom(collection: Collection, id: String, completion: @escaping (Error?) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else {
@@ -34,19 +47,32 @@ class CollectionService: CollectionServiceProtocol {
         }
         
         COLLECTION_USERS.document(uid).collection("collections").getDocuments { snapshot, error in
-
-            if let recipe = recipe {  // add recipe to existing collection
+            
+            if let recipe = recipe {
                 let instructions = recipe.recipe.instructions.compactMap { $0.text }
                 let ingredients = recipe.recipe.ingredients.compactMap { $0.name }
+                let imageUrl = recipe.recipe.recipeImageUrl
                 
                 let data = generateRecipeData(for: recipe)
-
+                
                 COLLECTION_USERS.document(uid)
                     .collection("collections")
                     .document(collection.id)
                     .collection(collection.name)
                     .document(recipe.recipe.id ?? "")
                     .setData(data) { error in
+                        COLLECTION_USERS.document(uid)
+                            .collection("collections")
+                            .document(collection.id)
+                            .collection(collection.name).getDocuments { snapshot, error in
+                                if let documets = snapshot?.documents {
+                                    if documets.count == 1 {
+                                        COLLECTION_USERS.document(uid)
+                                            .collection("collections")
+                                            .document(collection.id).updateData(["imageUrl" : imageUrl as Any])
+                                    }
+                                }
+                            }
                         completion(error)
                     }
             } else {  // create new collection

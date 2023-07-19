@@ -39,7 +39,7 @@ class ProfileOptionVC: UIViewController {
     
     private func configureUI() {
         view.backgroundColor = .white
-        
+        textView.backgroundColor = .white
         view.addSubview(textView)
         textView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

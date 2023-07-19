@@ -15,7 +15,7 @@ class SearchTableCell: UITableViewCell {
     var searchVariantLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .white
+        label.textColor = isDark ? .white : .black
         label.font = UIFont.boldSystemFont(ofSize: 16)
         return label
     }()
@@ -24,6 +24,7 @@ class SearchTableCell: UITableViewCell {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.image = UIImage(systemName: "magnifyingglass")
+        iv.tintColor = isDark ? .white : .black
         return iv
     }()
     
@@ -41,7 +42,8 @@ class SearchTableCell: UITableViewCell {
     //MARK: - Helpers
     
     func configureCell() {
-        backgroundColor = greyColor
+        backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
+
         
         addSubview(searchImageView)
         NSLayoutConstraint.activate([

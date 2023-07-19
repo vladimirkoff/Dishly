@@ -21,16 +21,20 @@ class CollectionCell: UICollectionViewCell {
         iv.backgroundColor = .lightGray
         iv.layer.cornerRadius = 35
         iv.clipsToBounds = true
+         iv.contentMode = .scaleAspectFill
         iv.heightAnchor.constraint(equalToConstant: 70).isActive = true
         iv.widthAnchor.constraint(equalToConstant: 70).isActive = true
         return iv
     }()
     
-    private let collectionNameLabel: UILabel = {
+    let collectionNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Create"
-        label.textColor = .white
+        label.textColor = isDark ? .white : .black
+        if let font = UIFont(name: "GillSans-SemiBold", size: 16) {
+            label.font = font
+        }
         return label
     }()
     

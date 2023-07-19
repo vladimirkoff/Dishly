@@ -20,18 +20,19 @@ class MealCell: UICollectionViewCell {
     
     let dayLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 22)
-        label.textColor = .white
+        if let font = UIFont(name: "GillSans-SemiBold", size: 24) {
+            label.font = font
+        }
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     let addButton: UIButton = {
         let button = UIButton(type: .system)
+        
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.setTitle("Add meal", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-        button.tintColor = .white
+        button.titleLabel?.font = UIFont(name: "GillSans-SemiBold", size: 24)
         button.addTarget(self, action: #selector(addButtonTaped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -56,8 +57,11 @@ class MealCell: UICollectionViewCell {
     
     //MARK: - Lifecycle
     
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        backgroundView = customView
         setupSubviews()
         setupConstraints()
     }
@@ -100,6 +104,8 @@ class MealCell: UICollectionViewCell {
         ])
     }
     
+    private let customView = CustomUIViewBackground()
+    
     //MARK: - Selectors
     
     @objc func addButtonTaped() {
@@ -117,7 +123,6 @@ extension MealCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath) as! RecipeCell
-        cell.backgroundColor = lightGrey
         cell.addIngredientsButton.isHidden = true
         cell.isFromPlans = true
         cell.saveButton.setImage(UIImage(systemName: "minus.circle"), for: .normal)
@@ -148,7 +153,7 @@ extension MealCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
 //MARK: - SavedVCProtocol
 
 extension MealCell: SavedVCProtocol {
-    func reload(collections: [Collection]) {}
+    func reload(collections: [Collection], afterDeletion: Bool) {}
     
     func addRecipe(recipe: RecipeViewModel, mealsViewModel: MealsViewModel?) {
         guard let mealsViewModel = mealsViewModel else { return }

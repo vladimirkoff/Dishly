@@ -53,10 +53,11 @@ class MainTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tabBar.barTintColor = AppColors.customGrey.color
+
         configureNavBar()
         recipesViewModel = RecipesViewModel(recipeService: recipeService)
         fecthRecipes()
-        
     }
     
     init(user: UserViewModel, authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, collectionService: CollectionServiceProtocol, googleService: GoogleAuthServiceProtocol, mealsService: MealsServiceProtocol, recipesRealmService: RecipesRealmServiceProtocol) {
@@ -112,12 +113,11 @@ class MainTabBarController: UITabBarController {
         tabBar.items?[2].title = "Saved"
         tabBar.items?[3].title = "Meal Plan"
         
-        tabBar.tintColor = .black
+        tabBar.tintColor = .white
         
         tabBar.barStyle = .default
         tabBar.inputViewController?.hidesBottomBarWhenPushed = false
         
-        tabBar.backgroundColor = .white
         
     }
     
@@ -144,8 +144,9 @@ class MainTabBarController: UITabBarController {
             self.navigationItem.leftBarButtonItem = leftBarButton
 
             let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "cart.fill"), style: .plain, target: self, action: #selector(self.rightBarButtonTapped))
-            rightBarButtonItem.tintColor = .white
+            rightBarButtonItem.tintColor = isDark ? .white : AppColors.customPurple.color
 
+            
             self.navigationItem.rightBarButtonItem = rightBarButtonItem
             return
         }

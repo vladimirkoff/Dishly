@@ -14,10 +14,17 @@ class MealPlanVC: UIViewController {
     
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.backgroundColor = greyColor
+
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
+    
+    private var customView: CustomUIViewBackground!
+    
+    override func loadView() {
+        customView = CustomUIViewBackground()
+        view = customView
+    }
     
     //MARK: - Lifecycle
     
@@ -52,7 +59,7 @@ class MealPlanVC: UIViewController {
         collectionView.dataSource = self
         collectionView.register(MealCell.self, forCellWithReuseIdentifier: "MealCell")
         
-        view.addSubview(collectionView)
+        customView.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -86,7 +93,6 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
             cell.recipes = recipes[dayOfWeek.rawValue]
         }
         cell.delegate = self
-        cell.backgroundColor = greyColor
         cell.dayLabel.text = dayOfWeek.rawValue
         return cell
     }

@@ -16,12 +16,9 @@ class LoginViewController: UIViewController {
     private let userRealmService: UserRealmServiceProtocol!
     private let recipesRealmService: RecipesRealmServiceProtocol!
 
-    
     private var authViewModel: AuthViewModel!
     private var userViewModel: UserViewModel!
     private var userRealmViewModel: UserRealmViewModel!
-
-    private let logo = UIImageView(image: UIImage(named: "Instagram_logo_white"))
     
     private let emailField: AuthCustomTextField = {
         let tf = AuthCustomTextField(placeholder: "Email")
@@ -42,13 +39,22 @@ class LoginViewController: UIViewController {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Log in", for: .normal)
-        button.setTitleColor(UIColor(white: 1, alpha: 0.7), for: .normal)
-        button.backgroundColor = .purple.withAlphaComponent(0.7)
-        button.layer.cornerRadius = 5
+        button.setTitleColor(UIColor.black, for: .normal)
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 15
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.addTarget(self, action: #selector(logIn), for: .touchUpInside)
         return button
+    }()
+    
+    private let welcomeLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Welcome To Dishly 🥘"
+        label.textColor = .white
+        label.font = UIFont.boldSystemFont(ofSize: 32)
+        return label
     }()
     
     
@@ -88,11 +94,14 @@ class LoginViewController: UIViewController {
     
     func configureUI() {
         navigationController?.navigationBar.barStyle = .black
+        view.backgroundColor = AppColors.customGrey.color
+
     
-        view.addSubview(logo)
-        logo.translatesAutoresizingMaskIntoConstraints = false
-        logo.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        logo.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        view.addSubview(welcomeLabel)
+        NSLayoutConstraint.activate([
+            welcomeLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 22),
+            welcomeLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 14)
+        ])
         
         let stack = UIStackView(arrangedSubviews: [emailField, passwordField, loginButton])
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -100,7 +109,7 @@ class LoginViewController: UIViewController {
         stack.spacing = 20
 
         view.addSubview(stack)
-        stack.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 32).isActive = true
+        stack.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 32).isActive = true
         stack.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 32).isActive = true
         stack.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -32).isActive = true
     }

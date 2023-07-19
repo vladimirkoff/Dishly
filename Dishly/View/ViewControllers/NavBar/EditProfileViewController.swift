@@ -24,7 +24,8 @@ class EditProfileViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = greyColor
+        tableView.backgroundColor = AppColors.customGrey.color
+
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(ProfileInfoCell.self, forCellReuseIdentifier: "Cell")
@@ -86,7 +87,8 @@ class EditProfileViewController: UIViewController {
     }
     
     func configureUI() {
-        view.backgroundColor = greyColor
+        view.backgroundColor = AppColors.customGrey.color
+
         view.addSubview(tableView)
         let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonTapped))
         doneButton.isEnabled = false
@@ -213,7 +215,8 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
         configureHeader(headerView: headerView )
-        headerView.backgroundColor = greyColor
+        headerView.backgroundColor = AppColors.customGrey.color
+
         return headerView
     }
 }

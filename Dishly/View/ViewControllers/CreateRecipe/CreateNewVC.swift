@@ -10,6 +10,8 @@ class AddRecipeViewController: UIViewController, Storyboardable {
     
     //MARK: - Properties
     
+    @IBOutlet weak var addIngredientButton: CustomButton!
+    @IBOutlet weak var contentView: UIView!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var categoryButton: UIButton!
@@ -46,20 +48,40 @@ class AddRecipeViewController: UIViewController, Storyboardable {
     
     //MARK: - Lifecycle
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addIngredientButton.backgroundColor = .clear
+        addIngredientButton.setTitleColor(isDark ? UIColor.white : UIColor.black, for: .normal)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = greyColor
-        tableView.backgroundColor = greyColor
-        scrollView.backgroundColor = greyColor
+        view.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
+        contentView.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
+
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(close))
         navigationItem.rightBarButtonItem = cancelButton
         configureTableView()
         configureImagePicker()
         serveField.delegate = self
         cookTimeField.delegate = self
+        
+        
+        configureTextFields(placeholder: "Recipe name", textField: recipeNameField)
+        configureTextFields(placeholder: "Serve", textField: serveField)
+        configureTextFields(placeholder: "Minutes", textField: cookTimeField)
+
+        
     }
     
     //MARK: - Helpers
+    
+    func configureTextFields(placeholder: String, textField: UITextField) {
+        let placeholderText = placeholder
+        let attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+        textField.attributedPlaceholder = attributedPlaceholder
+        textField.backgroundColor = isDark ? AppColors.customLightGrey.color : AppColors.customPurple.color
+    }
     
     func configurePickerView() {
         categoryPickerView.delegate = self
@@ -158,11 +180,12 @@ class AddRecipeViewController: UIViewController, Storyboardable {
             presentAlert(title: "Can not continue", message: "Please enter an ingredient", completion: nil);
             return false
         }
-        
-        guard !(ingredients.contains { ($0.name?.isEmpty ?? true) }) else {
-            presentAlert(title: "Can not continue", message: "Please fill all ingredient fields", completion: nil);
+        print(ingredients)
+        guard !ingredients.contains(where: { $0.name?.isEmpty ?? true || $0.volume == nil }) else {
+            presentAlert(title: "Cannot continue", message: "Please fill all ingredient fields", completion: nil)
             return false
         }
+
         
         return true
         
@@ -260,7 +283,8 @@ extension AddRecipeViewController: UITableViewDelegate, UITableViewDataSource {
         let headerTitle: UILabel = {
             let title = UILabel()
             title.text = "Ingredients"
-            title.font = UIFont(name: "Gill Sans SemiBold", size: 20.0)
+            title.textColor = .white
+            title.font = UIFont(name: "Gill Sans SemiBold", size: 22)
             return title
         }()
         return headerTitle
@@ -273,13 +297,12 @@ extension AddRecipeViewController: IngredientCellDelegate {
     
     func portionButtonTapped(cell: IngredientTableCell) {
         configurePortionPickerView()
-       
     }
     
     func updateCell(itemName: String?, portion: PortionModel, cell: IngredientTableCell) {
         let row = cell.tag
-        let test = Ingredient(name: itemName, volume: portion.volume, portion: portion.name)
-        ingredients[row] = test
+        let ingredient = Ingredient(name: itemName, volume: portion.volume, portion: portion.name)
+        ingredients[row] = ingredient
     }
     
     func deleteCell(cell: IngredientTableCell) {

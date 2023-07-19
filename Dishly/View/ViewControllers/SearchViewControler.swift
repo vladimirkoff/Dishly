@@ -26,14 +26,20 @@ class RecipeSearchViewController: UIViewController, UITextFieldDelegate {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
+
         tableView.register(SearchTableCell.self, forCellReuseIdentifier: "Cell")
         tableView.delegate = self
         tableView.dataSource = self
         return tableView
     }()
     
+    private let customView = CustomUIViewBackground()
+    
     //MARK: - Lifecycle
+    
+    override func loadView() {
+        view = customView
+    }
     
     init(recipesService: RecipeServiceProtocol) {
         self.recipesService = recipesService
@@ -48,22 +54,20 @@ class RecipeSearchViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = #colorLiteral(red: 0.2235294118, green: 0.2117647059, blue: 0.2745098039, alpha: 1)
        
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Поиск рецептов"
+        searchController.searchBar.placeholder = "Search recipes"
         navigationItem.searchController = searchController
         definesPresentationContext = true
         
         searchController.searchBar.barTintColor = .lightGray
         searchController.searchBar.tintColor = .white
-        searchController.searchBar.searchTextField.backgroundColor = .white
-        
+        searchController.searchBar.searchTextField.backgroundColor = AppColors.customLightGrey.color
+        searchController.searchBar.searchTextField.textColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButtonTapped))
         
-        view.addSubview(tableView)
+        customView.addSubview(tableView)
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

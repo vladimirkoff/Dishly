@@ -22,7 +22,8 @@ class CartViewController: UIViewController {
     
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = greyColor
+        tableView.backgroundColor = AppColors.customGrey.color
+
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(UINib(nibName: "IngredientTableCell", bundle: nil), forCellReuseIdentifier: tableCellReuseIdentifier)
         return tableView
@@ -32,7 +33,8 @@ class CartViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = greyColor
+        view.backgroundColor = AppColors.customGrey.color
+
         tableView.delegate = self
         tableView.dataSource = self
         setupNavigationBar()
@@ -78,6 +80,7 @@ class CartViewController: UIViewController {
     @objc private func rightButtonTapped() {
         isClearTapped = true
         myGroceries = []
+        UserDefaults.standard.removeObject(forKey: "customIngredients")
         tableView.reloadData()
         isClearTapped = false
     }
@@ -87,7 +90,20 @@ class CartViewController: UIViewController {
 
 extension CartViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return isClearTapped ? 0 : myGroceries.count
+        var ingredientsCount = 0
+        if let savedData = UserDefaults.standard.data(forKey: "customIngredients") {
+            let decoder = JSONDecoder()
+            if let loadedIngredients = try? decoder.decode([Ingredient].self, from: savedData) {
+                ingredientsCount = loadedIngredients.count
+                for ingredient in loadedIngredients {
+                    // Выполните необходимые операции с каждым ингредиентом
+                    print(ingredient.name ?? "")
+                    print(ingredient.volume ?? "")
+                    print(ingredient.portion ?? "")
+                }
+            }
+        }
+        return isClearTapped ? 0 : ingredientsCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -95,7 +111,12 @@ extension CartViewController: UITableViewDelegate, UITableViewDataSource {
         cell.item.isUserInteractionEnabled = false
         cell.delegate = self
         cell.item.backgroundColor = .white
-        cell.configure(ingredient: myGroceries[indexPath.row])
+        if let savedData = UserDefaults.standard.data(forKey: "customIngredients") {
+            let decoder = JSONDecoder()
+            if let loadedIngredients = try? decoder.decode([Ingredient].self, from: savedData) {
+                cell.configure(ingredient: loadedIngredients[indexPath.row])
+            }
+        }
         return cell
     }
 }
@@ -108,7 +129,8 @@ extension CartViewController: IngredientCellDelegate {
 
     func deleteCell(cell: IngredientTableCell) {
         guard let ingredientToDelete = cell.item.text else { return }
-        myGroceries.removeAll {$0.name == ingredientToDelete}
+        myGroceries.removeAll { $0.name == ingredientToDelete }
+        UserDefaults.standard.removeObject(forKey: "customIngredients")
         tableView.reloadData()
     }
     

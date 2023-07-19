@@ -18,13 +18,20 @@ class CategoryCell: UICollectionViewCell {
      let title: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 18)
+         if let font = UIFont(name: "GillSans-SemiBold", size: 19) {
+             label.font = font
+         }
         label.text = "Breakfast"
         return label
     }()
 
     //MARK: - Lifecycle
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        title.text = ""
+        categoryImageView.image = UIImage(named: "")
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,7 +48,6 @@ class CategoryCell: UICollectionViewCell {
         layer.cornerRadius = 10
         clipsToBounds = true
 
-        
         addSubview(categoryImageView)
         NSLayoutConstraint.activate([
             categoryImageView.leftAnchor.constraint(equalTo: leftAnchor),

@@ -30,4 +30,10 @@ class CollectionViewModel {
         }
     }
     
+    func deleteCollection(id: String, completion: @escaping([Collection], Error?) -> ()) {
+        collectionService.deleteCollection(id: id) { collectons, error in
+            completion(collectons, error)
+        }
+    }
+    
 }

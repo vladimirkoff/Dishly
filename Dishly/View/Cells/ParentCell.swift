@@ -27,11 +27,12 @@ class ParentCell: UICollectionViewCell {
         }
     }
     
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 10, y: 10, width: bounds.width - 20, height: 30))
+    private lazy var titleLabel: BlackLabel = {
+        let label = BlackLabel(frame: CGRect(x: 10, y: 10, width: bounds.width - 20, height: 30))
         label.text = "Daily inspiration"
-        label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 24)
+        if let font = UIFont(name: "GillSans-SemiBold", size: 24) {
+            label.font = font
+        }
         return label
     }()
     
@@ -39,7 +40,7 @@ class ParentCell: UICollectionViewCell {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: CGRect(x: 0, y: titleLabel.frame.maxY, width: bounds.width, height: bounds.height - 40), collectionViewLayout: collectionViewLayout)
-        collectionView.backgroundColor = greyColor
+
         collectionView.delegate = self
         collectionView.dataSource = self
         return collectionView
@@ -49,7 +50,7 @@ class ParentCell: UICollectionViewCell {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: CGRect(x: 0, y: bounds.midY - bounds.midY / 2, width: bounds.width, height: bounds.height - 60), collectionViewLayout: collectionViewLayout)
-        collectionView.backgroundColor = greyColor
+
         collectionView.delegate = self
         collectionView.dataSource = self
         return collectionView
@@ -65,7 +66,7 @@ class ParentCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = greyColor
+
     }
     
     required init?(coder: NSCoder) {
@@ -74,18 +75,43 @@ class ParentCell: UICollectionViewCell {
     
     //MARK: - Helpers
     
+ 
     func configureCell() {
+        addSubview(titleLabel)
         horizontalCollectionView.isHidden = false
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(horizontalCollectionView)
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 6),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12)
+        ])
+
+        addSubview(horizontalCollectionView)
+        NSLayoutConstraint.activate([
+            horizontalCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+            horizontalCollectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            horizontalCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            horizontalCollectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+
         horizontalCollectionView.register(RecipeCell.self, forCellWithReuseIdentifier: "HorizontalCell")
     }
-    
+
     func configureCellForCategories() {
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(categoryCollectionView)
-        categoryCollectionView.register(CategoryCell.self, forCellWithReuseIdentifier: "CategoryCell")
         categoryCollectionView.isHidden = false
+        addSubview(titleLabel)
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 6),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12)
+        ])
+
+        addSubview(categoryCollectionView)
+        NSLayoutConstraint.activate([
+            categoryCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+            categoryCollectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            categoryCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            categoryCollectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+
+        categoryCollectionView.register(CategoryCell.self, forCellWithReuseIdentifier: "CategoryCell")
     }
     
     func configure(index: Int) {
@@ -120,6 +146,11 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let inset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        return inset
+    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == horizontalCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath) as! RecipeCell
@@ -127,14 +158,10 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
             if let recipes = recipes {
                 cell.recipeViewModel = recipes[indexPath.row]
             }
-            cell.backgroundColor = #colorLiteral(red: 0.3215686275, green: 0.3215686275, blue: 0.3215686275, alpha: 1)
+          
             return cell
         } else if collectionView == categoryCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell
-            cell.backgroundColor = .yellow
-            
-            
-            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell            
             if index == 1 {
                 cell.title.text = mealCategories[indexPath.row]
             } else if index == 2 {
@@ -146,6 +173,40 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
             return cell
         }
         return UICollectionViewCell()
+    }
+    
+    func configureCategoryCell(index: Int, cell: CategoryCell, image: String?) {
+        switch index {
+        case 0:
+            cell.categoryImageView.image = UIImage(named: "")
+            cell.title.text = ""
+        case 1:
+            cell.categoryImageView.image = UIImage(named: "")
+            cell.title.text = ""
+        case 2:
+            cell.categoryImageView.image = UIImage(named: "")
+            cell.title.text = ""
+        case 3:
+            cell.categoryImageView.image = UIImage(named: "")
+            cell.title.text = ""
+        case 4:
+            cell.categoryImageView.image = UIImage(named: "")
+            cell.title.text = ""
+        case 5:
+            cell.categoryImageView.image = UIImage(named: "")
+            cell.title.text = ""
+        case 6:
+            cell.categoryImageView.image = UIImage(named: "")
+            cell.title.text = ""
+        case 7:
+            cell.categoryImageView.image = UIImage(named: "")
+            cell.title.text = ""
+        case 8:
+            cell.categoryImageView.image = UIImage(named: "")
+            cell.title.text = ""
+        default:
+            return
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -181,6 +242,11 @@ extension ParentCell: RecipeCellDelegate {
     
     func addGroceries(groceries: [Ingredient]) {
         myGroceries += groceries
+        
+        let encoder = JSONEncoder()
+        if let encodedData = try? encoder.encode(myGroceries) {
+            UserDefaults.standard.set(encodedData, forKey: "customIngredients")
+        }
     }
     
     func saveRecipe(recipe: RecipeViewModel) {

@@ -20,6 +20,13 @@ class ProfileViewController: UIViewController {
     
     var profileImage: UIImageView!
     
+    private let switcher: UISwitch = {
+        let switcher = UISwitch()
+        switcher.translatesAutoresizingMaskIntoConstraints = false
+        // Customize the switcher appearance if needed
+        return switcher
+    }()
+    
     private var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -35,23 +42,20 @@ class ProfileViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Version 1.0.0"
         label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.textColor = .white
         return label
     }()
     
     private let editProfileButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        let attributedString = NSMutableAttributedString.init(string: "EDIT YOUR PROFILE")
-        attributedString.addAttribute(NSAttributedString.Key.underlineStyle,
-                                      value: 1, range:
-                                        NSRange.init(location: 0, length: attributedString.length)
-                                      
-        );
+        let attributedString = NSMutableAttributedString(string: "EDIT YOUR PROFILE")
+        attributedString.addAttribute(.underlineStyle, value: 1, range: NSRange(location: 0, length: attributedString.length))
+        attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: attributedString.length))
         button.setAttributedTitle(attributedString, for: .normal)
         button.addTarget(self, action: #selector(goToProfile), for: .touchUpInside)
         return button
     }()
+
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -70,13 +74,20 @@ class ProfileViewController: UIViewController {
     private let youtubeSymbol = UIImageView.createSNSymbol(with: "youtube.white")
     private let twitterSymbol = UIImageView.createSNSymbol(with: "twitter.white")
     
+    private let customView = CustomUIViewBackground()
+    
     //MARK: - Lifecycle
+    
+    override func loadView() {
+          view = customView
+      }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         userViewModel.fetchUser { user in
             self.navigationItem.title = user.user!.fullName
         }
+        changeEditProfileButton()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -103,12 +114,15 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        switcher.addTarget(self, action: #selector(switcherValueChanged(_:)), for: .valueChanged)
         configureTableView()
         configureUI()
         
         userViewModel = UserViewModel(user: nil, userService: userService)
         authViewModel = AuthViewModel(authService: authService)
     }
+    
+
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -119,7 +133,7 @@ class ProfileViewController: UIViewController {
     
     func configureProfileImage() {
         guard let navController = navigationController else { return }
-        view.addSubview(profileImageView)
+        customView.addSubview(profileImageView)
         profileImageView.image = profileImage.image
         NSLayoutConstraint.activate([
             profileImageView.heightAnchor.constraint(equalToConstant: 80),
@@ -128,22 +142,41 @@ class ProfileViewController: UIViewController {
             profileImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -12)
         ])
     }
+    @objc func switcherValueChanged(_ sender: UISwitch) {
+        changeAppearance(isDarkMode: sender.isOn, navigationController: navigationController!)
+        customView.backgroundColor = sender.isOn ? AppColors.customGrey.color : AppColors.customLight.color
+        changeEditProfileButton()
+    }
+    
+    func changeEditProfileButton() {
+        let attributedString = NSMutableAttributedString(string: "EDIT YOUR PROFILE")
+        attributedString.addAttribute(.underlineStyle, value: 1, range: NSRange(location: 0, length: attributedString.length))
+        attributedString.addAttribute(.foregroundColor, value: isDark ? UIColor.white : UIColor.black, range: NSRange(location: 0, length: attributedString.length))
+        editProfileButton.setAttributedTitle(attributedString, for: .normal)
+    }
     
     func configureUI() {
         tableView.dataSource = self
         
-        view.backgroundColor = greyColor
+        customView.addSubview(switcher)
+        
+        switcher.isOn = isDark
+
+        NSLayoutConstraint.activate([
+            switcher.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            switcher.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16)
+        ])
         
         tabBarController?.tabBar.isHidden = true
         
         navigationItem.title = user.user!.fullName
         
         navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+//        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        view.addSubview(editProfileButton)
+        customView.addSubview(editProfileButton)
         NSLayoutConstraint.activate([
             editProfileButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
             editProfileButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16)
@@ -151,7 +184,7 @@ class ProfileViewController: UIViewController {
         
         
         
-        view.addSubview(versionLabel)
+        customView.addSubview(versionLabel)
         NSLayoutConstraint.activate([
             versionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             versionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -24)
@@ -162,7 +195,7 @@ class ProfileViewController: UIViewController {
         stackView.distribution = .equalSpacing
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(stackView)
+        customView.addSubview(stackView)
         
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 16),
@@ -174,7 +207,7 @@ class ProfileViewController: UIViewController {
     
     func configureTableView() {
         tableView.register(ProfileOptionCell.self, forCellReuseIdentifier: reuseIdentifier)
-        view.addSubview(tableView)
+        customView.addSubview(tableView)
         NSLayoutConstraint.activate([
             tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tableView.centerYAnchor.constraint(equalTo: view.centerYAnchor),

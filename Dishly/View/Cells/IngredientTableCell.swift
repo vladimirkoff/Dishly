@@ -24,9 +24,17 @@ class IngredientTableCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 20
-        
         return label
     }()
+    
+    //MARK: - Lifecycle
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        protionLabel.text = nil
+        item.text = nil
+        portionModel = nil
+    }
     
     //MARK: - Helpers
     
@@ -37,6 +45,7 @@ class IngredientTableCell: UITableViewCell {
     }
     
     func configureCell() {
+        item.textColor = .black
         addSubview(protionLabel)
         NSLayoutConstraint.activate([
             protionLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -73,13 +82,11 @@ class IngredientTableCell: UITableViewCell {
 
 extension IngredientTableCell: UITextFieldDelegate {
     
-    
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let _ = protionLabel.text, let item = item.text, let portion = portionModel {
             delegate?.updateCell(itemName: item, portion: portion,
                                  cell: self)
         }
-        
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -102,6 +109,9 @@ extension IngredientTableCell: AddRecipeViewControllerProtocol {
     func setPortion(portion: PortionModel) {
         portionModel = portion
         protionLabel.attributedText = configureAttributedString(volume: portion.volume, portion: portion.name)
-
+        if let _ = protionLabel.text, let item = item.text, let portion = portionModel {
+            delegate?.updateCell(itemName: item, portion: portion,
+                                 cell: self)
+        }
     }
 }

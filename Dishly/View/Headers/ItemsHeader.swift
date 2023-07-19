@@ -12,22 +12,31 @@ protocol ItemsHeaderDelegate {
     func fecthRecipes(with collection: Collection)
     func createCollection(collection: Collection, completion: @escaping(Error?) -> ())
     func presentAlert(alert: UIAlertController)
+    func showDeleteAlert(for: String)
 }
 
 class ItemsHeader: UICollectionReusableView {
     //MARK: - Properties
     
+    var selectedIndexPath: IndexPath?
+    let initialCellScale: CGFloat = 1.0
+    let selectedCellScale: CGFloat = 0.9
+    
     private var collections: [Collection]?
     
     var collectionView: UICollectionView?
-        
+    
     var delegate: ItemsHeaderDelegate?
+    
+    private let customBackground = CustomUIViewBackground()
     
     //MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureCollectionView()
-        backgroundColor = greyColor
+//        backgroundColor = AppColors.customGrey.color
+        
+
     }
     
     required init?(coder: NSCoder) {
@@ -46,13 +55,36 @@ class ItemsHeader: UICollectionReusableView {
         collectionView!.delegate = self
         collectionView!.dataSource = self
         
-        collectionView!.backgroundColor = greyColor
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        collectionView!.addGestureRecognizer(longPressGesture)
+        
+//        collectionView!.backgroundColor = AppColors.customGrey.color
+
         collectionView!.register(CollectionCell.self, forCellWithReuseIdentifier: "TopCategoryCell"
         )
-        
+        collectionView!.allowsSelection = true
+           collectionView!.allowsMultipleSelection = false
         self.addSubview(collectionView!)
         
     }
+    
+    
+    
+    @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state == .began {
+            let point = gestureRecognizer.location(in: collectionView)
+            
+            if let indexPath = collectionView!.indexPathForItem(at: point) {
+                selectedIndexPath = indexPath
+                collectionView!.reloadData()
+                collectionView!.performBatchUpdates(nil, completion: nil)
+                if let cell = collectionView!.cellForItem(at: indexPath) as? CollectionCell {
+                    delegate?.showDeleteAlert(for: cell.collection!.id)
+                }
+            }
+        }
+    }
+    
 }
 
 //MARK: - UICollectionViewDelegate & UICollectionViewDataSource
@@ -66,12 +98,22 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 4, bottom: 4, right: 10)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TopCategoryCell", for: indexPath) as! CollectionCell
-        
+        cell.collectionNameLabel.textColor = isDark ? .white : .black
 
-        
-        cell.backgroundColor = greyColor
+        if indexPath == selectedIndexPath {
+            cell.transform = CGAffineTransform(scaleX: selectedCellScale, y: selectedCellScale)
+            cell.contentView.alpha = 0.7
+        } else {
+            cell.transform = CGAffineTransform.identity
+            cell.contentView.alpha = 1.0
+        }
+        cell.backgroundColor = .clear
         
         if let collections = collections {
             if indexPath.row == collections.count  {
@@ -97,8 +139,8 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 
         let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-            if let collectionName = alertController.textFields?.first?.text {  
-
+            if let collectionName = alertController.textFields?.first?.text {
+                
                 let collection = Collection(name: collectionName, imageUrl: "", id: UUID().uuidString)
                 self.delegate?.createCollection(collection: collection) { error in
                     if let error = error as? CollectionErrors {
@@ -128,7 +170,7 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? CollectionCell {
             cell.collectionImageView.layer.borderWidth = 3
-            cell.collectionImageView.layer.borderColor = UIColor.white.cgColor
+            cell.collectionImageView.layer.borderColor = isDark ? UIColor.white.cgColor : AppColors.customPurple.color.cgColor
         }
         
         indexPath.row == collections!.count ? showCollectionNameAlert() : delegate?.fecthRecipes(with: collections![indexPath.row])
@@ -156,8 +198,11 @@ extension ItemsHeader: UICollectionViewDelegateFlowLayout {
 extension ItemsHeader: SavedVCProtocol {
     func addRecipe(recipe: RecipeViewModel, mealsViewModel: MealsViewModel?) {}
     
-    func reload(collections: [Collection]) {
+    func reload(collections: [Collection], afterDeletion: Bool) {
         self.collections = collections
+        if afterDeletion {
+            collectionView!.performBatchUpdates(nil, completion: nil)
+        }
         collectionView?.reloadData()
     }
 }

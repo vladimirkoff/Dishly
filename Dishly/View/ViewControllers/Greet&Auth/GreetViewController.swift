@@ -61,6 +61,7 @@ class GreetViewController: UIViewController {
         button.widthAnchor.constraint(equalToConstant: view.bounds.width / 4 + 10).isActive = true
         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
         button.delegate = self
+        button.layer.cornerRadius = 17
         return button
     }()
     
@@ -84,7 +85,7 @@ class GreetViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.widthAnchor.constraint(equalToConstant: view.bounds.width / 4 + 10).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        button.layer.cornerRadius = 20
+        button.layer.cornerRadius = 17
         button.addTarget(self, action: #selector(googleAuthButtonPressed), for: .touchUpInside)
         return button
     }()
@@ -147,10 +148,7 @@ class GreetViewController: UIViewController {
     
     //MARK: - Lifecycle
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        checkIfLoggedIn()
-    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -178,59 +176,18 @@ class GreetViewController: UIViewController {
     
     //MARK: - Helpers
     
-    func checkIfLoggedInWithRealm() -> Bool {
-        let realm = try! Realm()
-        if let user = realm.objects(UserRealm.self).first {
-            
-            let dict: [String : Any] = ["fullName" : user.name,
-                                        "uid" : user.id,
-                                        "imageData" : user.imageData,
-                                        "email" : user.email,
-                                        "username" : user.username
-            ]
-            self.user = UserViewModel(user: User(dictionary: dict), userService: userService)
-            return true
-        } else {
-            return false
-        }
-    }
-    
     func showLoader(_ show: Bool) {
         view.endEditing(true )
         show ? hud.show(in: view) : hud.dismiss()
     }
     
-    func checkIfLoggedIn() {
-        
-        if checkIfLoggedInWithRealm() {
-            let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: collectionService, googleService: self.googleAuthService, mealsService: self.mealsService, recipesRealmService: recipesRealmService)
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
-        
-        //        let currentUser = Auth.auth().currentUser
-        //        if let currentUser = currentUser {
-        //            let providerID = currentUser.providerData.first?.providerID
-        //            if providerID == GoogleAuthProviderID {
-        //                googleAuthViewModel.checkIfUserLoggedIn { user in
-        //                    DispatchQueue.main.async { [weak self] in
-        //                        guard let self = self else { return }
-        //                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
-        //                        self.navigationController?.pushViewController(vc, animated: true)
-        //                    }
-        //                }
-        //            } else {
-        //                authViewModel.checkIfUserExists { [weak self] user in
-        //                    guard let self = self else { return }
-        //                    DispatchQueue.main.async {
-        //                        let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleAuthService, mealsService: self.mealsService)
-        //                        self.navigationController?.pushViewController(vc, animated: true)
-        //                    }
-        //                }
-        //            }
-        //        }
-    }
-    
     func configureUI() {
+        navigationItem.hidesBackButton = true
+        navigationController?.navigationBar.barStyle = .black 
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        
+
         view.addSubview(backGroundImage)
         NSLayoutConstraint.activate([
             backGroundImage.topAnchor.constraint(equalTo: view.topAnchor),

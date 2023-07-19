@@ -30,23 +30,24 @@ class RecipeCell: UICollectionViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(named: "save"), for: .normal)
         button.tintColor = .white
-        button.backgroundColor = greyColor
+        button.backgroundColor = isDark ? AppColors.customGrey.color : .clear
         button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(saveRecipe), for: .touchUpInside)
+       
         return button
     }()
     
     private var starImage1: UIImageView = {
         let image = UIImage(named: "star")
         let iv = UIImageView(image: image)
-        iv.tintColor = .yellow
+        iv.tintColor = AppColors.goldenColor.color
         return iv
     }()
     
     private var starImage2: UIImageView = {
         let image = UIImage(named: "star")
         let iv = UIImageView(image: image)
-        iv.tintColor = .yellow
+        iv.tintColor = AppColors.goldenColor.color
         
         return iv
     }()
@@ -54,7 +55,7 @@ class RecipeCell: UICollectionViewCell {
     private var starImage3: UIImageView = {
         let image = UIImage(named: "star.filled")
         let iv = UIImageView(image: image)
-        iv.tintColor = .yellow
+        iv.tintColor = AppColors.goldenColor.color
         
         return iv
     }()
@@ -62,7 +63,7 @@ class RecipeCell: UICollectionViewCell {
     private var starImage4: UIImageView = {
         let image = UIImage(named: "star.half.filled")
         let iv = UIImageView(image: image)
-        iv.tintColor = .yellow
+        iv.tintColor = AppColors.goldenColor.color
         
         return iv
     }()
@@ -70,15 +71,18 @@ class RecipeCell: UICollectionViewCell {
     private var starImage5: UIImageView = {
         let image = UIImage(named: "star")
         let iv = UIImageView(image: image)
-        iv.tintColor = .yellow
+        iv.tintColor = AppColors.goldenColor.color
         
         return iv
     }()
     
-    var recipeNameLabel: UILabel = {
-        let label = UILabel()
+    var recipeNameLabel: CustomCellUILabel = {
+        let label = CustomCellUILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
+        if let font = UIFont(name: "GillSans-SemiBold", size: 20) {
+            label.font = font
+        }
         label.text = "Home made Italian carboanra"
         return label
     }()
@@ -86,7 +90,6 @@ class RecipeCell: UICollectionViewCell {
     var itemImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.layer.cornerRadius = 15
         iv.clipsToBounds = true
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .lightGray
@@ -100,20 +103,25 @@ class RecipeCell: UICollectionViewCell {
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 2
         button.layer.cornerRadius = 15
-        
-        
+        if let font = UIFont(name: "GillSans-SemiBold", size: 12
+        ) {
+            button.titleLabel?.font = font
+        }
+        button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         
         return button
     }()
     
+    private let customBackGround = CustomUICollectionViewCellBackground()
     
     
     //MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
+        customBackGround.layer.cornerRadius = 15
+        self.backgroundView = customBackGround
         configureCell()
-        
     }
     
     required init?(coder: NSCoder) {

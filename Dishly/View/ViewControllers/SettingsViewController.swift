@@ -17,7 +17,8 @@ class SettingsViewController: UIViewController {
         tableView.dataSource = self
         tableView.rowHeight = 50
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = lightGrey
+        tableView.backgroundColor = AppColors.customLightGrey.color
+
         tableView.layer.cornerRadius = 10
         tableView.register(ProfileOptionCell.self, forCellReuseIdentifier: "ProfileOptionCell")
         return tableView
@@ -32,7 +33,8 @@ class SettingsViewController: UIViewController {
     //MARK: - Helpers
     
     func configureUI() {
-        view.backgroundColor = greyColor
+        view.backgroundColor = AppColors.customGrey.color
+
         
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
@@ -45,14 +47,16 @@ class SettingsViewController: UIViewController {
     
     func configureCell(cell: ProfileOptionCell, index: Int) {
         if index == 0 {
+            cell.delegate = self
             cell.optionLabel.text = "Change appearance"
             cell.cellSymbol.image = UIImage(systemName: "paintbrush.fill")
             cell.mySwitch.isHidden = false
             cell.mySwitch.isOn = true // Установите нужное значение isOn
-            cell.mySwitch.isUserInteractionEnabled = true
-            cell.mySwitch.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
+//            cell.mySwitch.isUserInteractionEnabled = true
             cell.accessoryImage.isHidden = true
         } else if index == 1 {
+            cell.delegate = self
+            cell.mySwitch.isHidden = true
             cell.optionLabel.text = "Delete account"
             cell.optionLabel.textColor = .red
         }
@@ -60,23 +64,20 @@ class SettingsViewController: UIViewController {
     
     //MARK: - Selectors
     
-    @objc func switchValueChanged(_ sender: UISwitch) {
-          // Обработка изменения состояния UISwitch
-          if sender.isOn {
-              print("Switch is ON")
-          } else {
-              print("Switch is OFF")
-          }
-      }
-    
+ 
 }
 
 //MARK: - UITableViewDelegate & UITableViewDataSource
 
 extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Selected")
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileOptionCell", for: indexPath) as! ProfileOptionCell
+        cell.delegate = self
         configureCell(cell: cell, index: indexPath.row)
         return cell
     }
@@ -85,4 +86,12 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
         return 5
     }
     
+}
+
+//MARK: - ProfileOptionCellDelegate
+
+extension SettingsViewController: ProfileOptionCellDelegate {
+    func switchToggled(sender: UISwitch) {
+        print("Toggled")
+    }
 }

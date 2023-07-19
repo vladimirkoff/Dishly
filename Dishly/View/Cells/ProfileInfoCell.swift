@@ -51,7 +51,8 @@ class ProfileInfoCell: UITableViewCell {
     // MARK: - Setup
     
     private func setupViews() {
-        contentView.backgroundColor = greyColor
+        contentView.backgroundColor = AppColors.customGrey.color
+
         contentView.addSubview(nameLabel)
         contentView.addSubview(textView)
         

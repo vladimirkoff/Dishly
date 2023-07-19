@@ -1,8 +1,14 @@
 
 import UIKit
 
+protocol ProfileOptionCellDelegate: AnyObject {
+    func switchToggled(sender: UISwitch)
+}
+
 class ProfileOptionCell: UITableViewCell {
     //MARK: - Propeties
+    
+    weak var delegate: ProfileOptionCellDelegate?
     
      let accessoryImage: UIImageView = {
         let iv = UIImageView()
@@ -25,7 +31,6 @@ class ProfileOptionCell: UITableViewCell {
         sw.tintColor = .black
         sw.isHidden = true
         sw.onTintColor = .systemBlue
-        
         return sw
     }()
     
@@ -48,7 +53,6 @@ class ProfileOptionCell: UITableViewCell {
     //MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        isUserInteractionEnabled = true
         configureCell()
     }
     
@@ -63,6 +67,9 @@ class ProfileOptionCell: UITableViewCell {
         isUserInteractionEnabled = true
         backgroundColor = .lightGray
         selectionStyle = .none
+        
+        mySwitch.addTarget(delegate, action: #selector(switchValueChanged(_:)), for: .valueChanged)
+
         
         addSubview(optionImage)
         NSLayoutConstraint.activate([
@@ -101,6 +108,10 @@ class ProfileOptionCell: UITableViewCell {
         ])
         
     }
+    
+    @objc func switchValueChanged(_ sender: UISwitch) {
+        delegate?.switchToggled(sender: sender)
+      }
     
 
 }

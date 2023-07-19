@@ -13,12 +13,11 @@ class AuthCustomTextField: UITextField {
         space.bounds = CGRect(x: 0, y: 0, width: 12, height: 50)
         leftView = space
         leftViewMode = .always
-
+         layer.cornerRadius = 15
         translatesAutoresizingMaskIntoConstraints = false
         borderStyle = .none
         textColor = .white
         keyboardAppearance = .dark
-        backgroundColor = UIColor(white: 1, alpha: 0.1)
         heightAnchor.constraint(equalToConstant: 50).isActive = true
         attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [.foregroundColor: UIColor(white: 1, alpha: 0.7)])
     }

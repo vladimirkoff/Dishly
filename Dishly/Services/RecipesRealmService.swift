@@ -7,6 +7,7 @@
 
 import Foundation
 import RealmSwift
+import FirebaseAuth
 
 protocol RecipesRealmServiceProtocol {
     func addRecipeRealm(recipe: RecipeViewModel, day: String, completion: @escaping(Bool) -> ())
@@ -17,6 +18,7 @@ protocol RecipesRealmServiceProtocol {
 
 class RecipesRealmService: RecipesRealmServiceProtocol {
     func addRecipeRealm(recipe: RecipeViewModel, day: String, completion: @escaping(Bool) -> ()) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
         let realm = try! Realm()
         
         let recipeRealm = RecipeRealm()
@@ -57,6 +59,7 @@ class RecipesRealmService: RecipesRealmServiceProtocol {
         recipeRealm.rating = Double(recipe.recipe.rating!)
         recipeRealm.ratingsNum = recipe.recipe.ratingList?.count ?? 0
         recipeRealm.instructions = instructionsRealm
+        recipeRealm.ownerId = uid
         
         if let existingObject = realm.object(ofType: RecipeRealm.self, forPrimaryKey: recipe.recipe.id!) {
             try! realm.write {
@@ -77,7 +80,10 @@ class RecipesRealmService: RecipesRealmServiceProtocol {
 
     func fecthRecipesRealm(completion: @escaping([RecipeViewModel]) -> ()) {
         let realm = try! Realm()
+        guard let userRealm = realm.objects(UserRealm.self).first else { return }
         
+        let uid = userRealm.id
+
         var recipes: [RecipeViewModel] = []
         var ingredients: [Ingredient] = []
         var instructions: [Instruction] = []
@@ -86,44 +92,44 @@ class RecipesRealmService: RecipesRealmServiceProtocol {
         
         
         for recipeRealm in recipesRealm {
-            instructions = []
-            ingredients = []
-            for ingredientRealm in recipeRealm.ingredients {
-                let name = ingredientRealm.name
-                let portion = ingredientRealm.portion
-                let volume = ingredientRealm.volume
+            if recipeRealm.ownerId == uid {
+                instructions = []
+                ingredients = []
+                for ingredientRealm in recipeRealm.ingredients {
+                    let name = ingredientRealm.name
+                    let portion = ingredientRealm.portion
+                    let volume = ingredientRealm.volume
+                    
+                    let ingredient = Ingredient(name: name, volume: volume, portion: portion)
+                    ingredients.append(ingredient)
+                }
                 
-                let ingredient = Ingredient(name: name, volume: volume, portion: portion)
-                ingredients.append(ingredient)
-            }
-            
-            for instructionRealm in recipeRealm.instructions {
-                let text = instructionRealm.text
+                for instructionRealm in recipeRealm.instructions {
+                    let text = instructionRealm.text
+                    
+                    let instruction = Instruction(text: text)
+                    instructions.append(instruction)
+                }
                 
-                let instruction = Instruction(text: text)
-                instructions.append(instruction)
+                let name = recipeRealm.name
+                let imageData = recipeRealm.imageData
+                let id = recipeRealm.id
+                let day = recipeRealm.day
+                let categoryString = recipeRealm.category
+                let cookTime = recipeRealm.cookTime
+                let category = Recipe.Category(rawValue: categoryString)
+                let serve = recipeRealm.serve
+                let ownerId = recipeRealm.ownerId
+                let rating = Float(recipeRealm.rating)
+                let ratingNum = recipeRealm.ratingsNum
+                let realmId = recipeRealm.primaryKey
+                
+                let recipe = Recipe(ownerId: ownerId, id: id, name: name, serve: serve, cookTime: cookTime, category: category!, ratingNum: ratingNum, realmId: realmId, ingredients: ingredients, instructions: instructions, rating: rating, imageData: imageData, day: day)
+                
+                let recipeViewModel = RecipeViewModel(recipe: recipe, recipeService: nil)
+                recipes.append(recipeViewModel)
             }
-            
-            
-            
-            
-            let name = recipeRealm.name
-            let imageData = recipeRealm.imageData
-            let id = recipeRealm.id
-            let day = recipeRealm.day
-            let categoryString = recipeRealm.category
-            let cookTime = recipeRealm.cookTime
-            let category = Recipe.Category(rawValue: categoryString)
-            let serve = recipeRealm.serve
-            let ownerId = recipeRealm.ownerId
-            let rating = Float(recipeRealm.rating)
-            let ratingNum = recipeRealm.ratingsNum
-            let realmId = recipeRealm.primaryKey
-            
-            let recipe = Recipe(ownerId: ownerId, id: id, name: name, serve: serve, cookTime: cookTime, category: category!, ratingNum: ratingNum, realmId: realmId, ingredients: ingredients, instructions: instructions, rating: rating, imageData: imageData, day: day)
-            
-            let recipeViewModel = RecipeViewModel(recipe: recipe, recipeService: nil)
-            recipes.append(recipeViewModel)
+  
         }
         completion(recipes)
     }

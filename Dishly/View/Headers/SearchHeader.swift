@@ -12,9 +12,9 @@ class SearchHeaderView: UICollectionReusableView {
         
         
         addSubview(searchBar)
-        searchBar.barTintColor = greyColor
-        searchBar.tintColor = .white
-        searchBar.searchTextField.backgroundColor = .white
+
+        searchBar.tintColor = .lightGray
+        searchBar.searchTextField.backgroundColor = .lightGray
         
         
         

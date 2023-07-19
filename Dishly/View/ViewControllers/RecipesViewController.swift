@@ -26,7 +26,6 @@ class RecipesViewController: UICollectionViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = greyColor
         userViewModel = UserViewModel(user: nil, userService: userService)
         collectionView.register(RecipeCell.self, forCellWithReuseIdentifier: collectionCellReuseId)
     }
@@ -60,8 +59,11 @@ extension RecipesViewController {
         return recipes?.count ?? 0
     }
     
+    
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionCellReuseId, for: indexPath) as! RecipeCell
+        cell.layer.cornerRadius = 15
         if let recipes = recipes, let exploreVC = exploreVC {
             cell.delegate = exploreVC as any RecipeCellDelegate
             cell.recipeViewModel = recipes[indexPath.row]
@@ -92,7 +94,7 @@ extension RecipesViewController: UICollectionViewDelegateFlowLayout {
      }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-          let inset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+          let inset = UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 5)
           return inset
       }
 }

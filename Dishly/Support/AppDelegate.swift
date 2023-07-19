@@ -23,6 +23,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
+        
+
+        let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
+        isDark = isDarkMode
+        
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
         let config = Realm.Configuration(

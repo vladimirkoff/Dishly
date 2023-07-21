@@ -185,7 +185,7 @@ class GreetViewController: UIViewController {
         navigationItem.hidesBackButton = true
         navigationController?.navigationBar.barStyle = .black 
         navigationController?.navigationBar.tintColor = .white
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
         
 
         view.addSubview(backGroundImage)

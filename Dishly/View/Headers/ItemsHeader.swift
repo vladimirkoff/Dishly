@@ -84,6 +84,7 @@ class ItemsHeader: UICollectionReusableView {
             }
         }
     }
+
     
 }
 
@@ -104,8 +105,9 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TopCategoryCell", for: indexPath) as! CollectionCell
-        cell.collectionNameLabel.textColor = isDark ? .white : .black
-
+        if indexPath.row == collections!.count {
+            cell.collectionNameLabel.text = "Create"
+        }
         if indexPath == selectedIndexPath {
             cell.transform = CGAffineTransform(scaleX: selectedCellScale, y: selectedCellScale)
             cell.contentView.alpha = 0.7
@@ -117,8 +119,24 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
         
         if let collections = collections {
             if indexPath.row == collections.count  {
-                cell.collectionImageView.image = UIImage(systemName: "plus")
-            } else {
+                let originalImage = UIImage(systemName: "plus")
+                let scaleFactor: CGFloat = 2.0
+                  let scaledImageSize = CGSize(width: (originalImage?.size.width ?? 0.0) * scaleFactor,
+                                               height: (originalImage?.size.height ?? 0.0) * scaleFactor)
+
+                  UIGraphicsBeginImageContextWithOptions(scaledImageSize, false, 0.0)
+                  originalImage?.draw(in: CGRect(origin: .zero, size: scaledImageSize))
+                  let smallerImage = UIGraphicsGetImageFromCurrentImageContext()
+                  UIGraphicsEndImageContext()
+                cell.collectionImageView.image = smallerImage?.withRenderingMode(.alwaysTemplate)
+                cell.collectionImageView.image = originalImage
+
+                cell.collectionImageView.backgroundColor = AppColors.customLightGrey.color
+                cell.collectionImageView.tintColor = .white
+                cell.collectionImageView.contentMode = .center // Adjust this to your desired content mode
+
+            }
+            else {
                 if indexPath.row == 0 {
                     self.collectionView(collectionView, didSelectItemAt: indexPath)
                 }
@@ -196,6 +214,12 @@ extension ItemsHeader: UICollectionViewDelegateFlowLayout {
 //MARK: - SavedVCProtocol
 
 extension ItemsHeader: SavedVCProtocol {
+    func handleCancel() {
+        selectedIndexPath = nil // Reset the selectedIndexPath to nil
+        collectionView!.reloadData()
+        collectionView!.performBatchUpdates(nil, completion: nil)
+    }
+    
     func addRecipe(recipe: RecipeViewModel, mealsViewModel: MealsViewModel?) {}
     
     func reload(collections: [Collection], afterDeletion: Bool) {

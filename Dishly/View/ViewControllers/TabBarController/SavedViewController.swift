@@ -9,6 +9,7 @@ private let headerReuseIdentifier = "ItemsHeader"
 protocol SavedVCProtocol {
     func reload(collections: [Collection], afterDeletion: Bool)
     func addRecipe(recipe: RecipeViewModel, mealsViewModel: MealsViewModel?)
+    func handleCancel()
 }
 
 class SavedViewController: UICollectionViewController {
@@ -16,7 +17,16 @@ class SavedViewController: UICollectionViewController {
     
     var isToChoseMeal = false
     
+    private lazy var noRecipesView: NoRecipesView = {
+          let view = NoRecipesView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
+          view.translatesAutoresizingMaskIntoConstraints = false
+          view.isHidden = true
+          return view
+      }()
+    
     var collection: Collection?
+    
+    private var refreshControl: UIRefreshControl!
     
     private let hud = JGProgressHUD(style: .dark)
     
@@ -45,7 +55,13 @@ class SavedViewController: UICollectionViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        collectionView.reloadData()
+        self.showLoader(true)
+        collectionService.fetchCollections { collections in
+            DispatchQueue.main.async { [weak self] in
+                self?.showLoader(false)
+                self?.collections = collections
+            }
+        }
     }
     
     init(collectionService: CollectionServiceProtocol, user: UserViewModel?) {
@@ -66,9 +82,24 @@ class SavedViewController: UICollectionViewController {
         configureCollectionView()
         fetchCollections()
         
+        refreshControl = UIRefreshControl()
+            refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+            collectionView.addSubview(refreshControl)
+        
         collectionViewModel = CollectionViewModel(collectionService: collectionService, collection: nil)
     }
     
+    
+    @objc private func handleRefresh() {
+        collectionService.fetchCollections { collections in
+            DispatchQueue.main.async { [weak self] in
+                self?.showLoader(false)
+                self?.collections = collections
+                self?.refreshControl.endRefreshing()
+            }
+        }
+    }
+
     func showLoader(_ show: Bool) {
         view.endEditing(true )
         show ? hud.show(in: view) : hud.dismiss()
@@ -84,21 +115,30 @@ class SavedViewController: UICollectionViewController {
         }
     }
     
+    
+    
     //MARK: - Helpers
     
     func configureUI() {
         navigationController?.navigationBar.isHidden = false
         view.backgroundColor = AppColors.customGrey.color
 
-        
+        navigationController?.navigationBar.shadowImage = nil
+
         
         navigationItem.title = "My Saved Recipes"
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        view.addSubview(noRecipesView)
+        NSLayoutConstraint.activate([
+            noRecipesView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            noRecipesView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 30),
+            noRecipesView.widthAnchor.constraint(equalToConstant: 250),
+            noRecipesView.heightAnchor.constraint(equalToConstant: 250),
+        ])
     }
     
     func configureCollectionView() {
-//        collectionView.backgroundColor = AppColors.customGrey.color
-
         collectionView.register(RecipeCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView.register(ItemsHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
     }
@@ -180,15 +220,19 @@ class SavedViewController: UICollectionViewController {
         }
         alertController.addAction(deleteAction)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
+            self?.delegate?.handleCancel()
+        }
         alertController.addAction(cancelAction)
+        
         
         present(alertController, animated: true, completion: nil)
     }
     
     func deleteCell(for id: String) {
-        collectionViewModel.deleteCollection(id: id) { collections, error in
-            self.delegate?.reload(collections: collections, afterDeletion: true)
+        collectionViewModel.deleteCollection(id: id) { [weak self] collections, error in
+            self?.collections = collections
+            self?.collectionView.reloadData()
         }
     }
  
@@ -218,6 +262,11 @@ extension SavedViewController: ItemsHeaderDelegate {
         collectionService.fetchRecipesWith(collection: collection) { [weak self] recipes in
             guard let self = self else { return }
             showLoader(false)
+            if recipes.count == 0 {
+                self.noRecipesView.isHidden = false
+            } else {
+                self.noRecipesView.isHidden = true
+            }
             self.recipes = recipes
         }
     }
@@ -249,3 +298,5 @@ extension SavedViewController: RecipeCellDelegate {
         }
     }
 }
+
+

@@ -22,11 +22,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        FirebaseApp.configure()
-        
-
         let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
         isDark = isDarkMode
+        
+        FirebaseApp.configure()
+        
+        if isDarkMode {
+            if #available(iOS 13.0, *) {
+                let appearance = UITabBarAppearance()
+                appearance.backgroundColor =  AppColors.customGrey.color
+                UITabBar.appearance().standardAppearance = appearance
+                UITabBar.appearance().scrollEdgeAppearance = appearance
+                UITabBar.appearance().tintColor = .white
+                UITabBar.appearance().isTranslucent = false
+            } else {
+                UITabBar.appearance().barTintColor = .white
+                UITabBar.appearance().isTranslucent = false
+            }
+        } else {
+            if #available(iOS 13.0, *) {
+                let appearance = UITabBarAppearance()
+                appearance.backgroundColor = .white
+                UITabBar.appearance().standardAppearance = appearance
+                UITabBar.appearance().scrollEdgeAppearance = appearance
+                UITabBar.appearance().tintColor = AppColors.customPurple.color
+                UITabBar.appearance().isTranslucent = false
+            } else {
+                UITabBar.appearance().barTintColor = UIColor.red
+                UITabBar.appearance().isTranslucent = false
+            }
+        }
+        
+  
+
+     
         
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         

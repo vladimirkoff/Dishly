@@ -41,6 +41,7 @@ class CollectionsPopupView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
+        fetchCollections()
     }
     
     required init?(coder: NSCoder) {

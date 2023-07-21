@@ -26,7 +26,6 @@ class RecipeSearchViewController: UIViewController, UITextFieldDelegate {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-
         tableView.register(SearchTableCell.self, forCellReuseIdentifier: "Cell")
         tableView.delegate = self
         tableView.dataSource = self
@@ -61,10 +60,9 @@ class RecipeSearchViewController: UIViewController, UITextFieldDelegate {
         navigationItem.searchController = searchController
         definesPresentationContext = true
         
-        searchController.searchBar.barTintColor = .lightGray
-        searchController.searchBar.tintColor = .white
-        searchController.searchBar.searchTextField.backgroundColor = AppColors.customLightGrey.color
-        searchController.searchBar.searchTextField.textColor = .white
+        searchController.searchBar.tintColor = isDark ? .white : .black
+        searchController.searchBar.searchTextField.backgroundColor = .white
+        searchController.searchBar.searchTextField.textColor = .black
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButtonTapped))
         
         customView.addSubview(tableView)

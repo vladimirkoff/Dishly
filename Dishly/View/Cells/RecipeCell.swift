@@ -25,15 +25,21 @@ class RecipeCell: UICollectionViewCell {
         didSet { configure() }
     }
     
+    private let saveView: CustomUICollectionViewCellBackground = {
+        let view = CustomUICollectionViewCellBackground()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 15
+        view.clipsToBounds = true
+        return view
+    }()
+    
     var saveButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(named: "save"), for: .normal)
         button.tintColor = .white
-        button.backgroundColor = isDark ? AppColors.customGrey.color : .clear
         button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(saveRecipe), for: .touchUpInside)
-       
         return button
     }()
     
@@ -76,8 +82,8 @@ class RecipeCell: UICollectionViewCell {
         return iv
     }()
     
-    var recipeNameLabel: CustomCellUILabel = {
-        let label = CustomCellUILabel()
+    var recipeNameLabel: UILabel = {
+        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         if let font = UIFont(name: "GillSans-SemiBold", size: 20) {
@@ -92,6 +98,7 @@ class RecipeCell: UICollectionViewCell {
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.clipsToBounds = true
         iv.contentMode = .scaleAspectFill
+        iv.layer.cornerRadius = 15
         iv.backgroundColor = .lightGray
         return iv
     }()
@@ -113,7 +120,7 @@ class RecipeCell: UICollectionViewCell {
         return button
     }()
     
-    private let customBackGround = CustomUICollectionViewCellBackground()
+    private let customBackGround = UIView()
     
     
     //MARK: - Lifecycle
@@ -159,21 +166,29 @@ class RecipeCell: UICollectionViewCell {
         addSubview(recipeNameLabel)
         NSLayoutConstraint.activate([
             recipeNameLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 4),
-            recipeNameLabel.topAnchor.constraint(equalTo: stack.bottomAnchor, constant: 6)
+            recipeNameLabel.topAnchor.constraint(equalTo: stack.bottomAnchor, constant: 2)
         ])
         
         addSubview(addIngredientsButton)
         NSLayoutConstraint.activate([
             addIngredientsButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            addIngredientsButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            addIngredientsButton.topAnchor.constraint(equalTo: recipeNameLabel.bottomAnchor, constant: 1),
             addIngredientsButton.widthAnchor.constraint(equalToConstant: bounds.width - 30),
             addIngredientsButton.heightAnchor.constraint(equalToConstant: bounds.height / 12)
         ])
         
-        addSubview(saveButton)
+        addSubview(saveView)
         NSLayoutConstraint.activate([
-            saveButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            saveButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -8)
+            saveView.topAnchor.constraint(equalTo: topAnchor),
+            saveView.rightAnchor.constraint(equalTo: rightAnchor),
+            saveView.heightAnchor.constraint(equalToConstant: 40),
+            saveView.widthAnchor.constraint(equalToConstant: 30)
+        ])
+        
+        saveView.addSubview(saveButton)
+        NSLayoutConstraint.activate([
+            saveButton.centerXAnchor.constraint(equalTo: saveView.centerXAnchor),
+            saveButton.centerYAnchor.constraint(equalTo: saveView.centerYAnchor)
         ])
     }
     
@@ -217,7 +232,6 @@ class RecipeCell: UICollectionViewCell {
         attributedTitle.append(NSAttributedString(string: " " + title))
         
         addIngredientsButton.setAttributedTitle(attributedTitle, for: .normal)
-        addIngredientsButton.setTitleColor(.white, for: .normal)
         
         configureRatingImages(rating: Float(recipe.recipe.rating ?? 0), imageViews: [starImage1, starImage2, starImage3, starImage4, starImage5 ])
     }

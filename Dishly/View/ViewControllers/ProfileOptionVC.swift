@@ -13,6 +13,9 @@ class ProfileOptionVC: UIViewController {
         return textView
     }()
     
+    private let navBarAppearance = UINavigationBarAppearance()
+
+    
     // MARK: - Lifecycle
     
     init(docTitle: String, text: String) {
@@ -23,6 +26,22 @@ class ProfileOptionVC: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navBarAppearance.backgroundColor = .white
+        navigationController?.navigationBar.tintColor = .black
+        navigationController?.navigationBar.standardAppearance = navBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navBarAppearance.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
+        navigationController?.navigationBar.tintColor = isDark ? .white : AppColors.customPurple.color
+        navigationController?.navigationBar.standardAppearance = navBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
     }
     
     override func viewDidLoad() {

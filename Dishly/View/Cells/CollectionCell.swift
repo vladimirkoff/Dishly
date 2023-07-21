@@ -15,23 +15,21 @@ class CollectionCell: UICollectionViewCell {
         didSet { configure() }
     }
     
-     var collectionImageView: UIImageView = {
+    var collectionImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.backgroundColor = .lightGray
         iv.layer.cornerRadius = 35
         iv.clipsToBounds = true
-         iv.contentMode = .scaleAspectFill
+        iv.contentMode = .scaleAspectFill
         iv.heightAnchor.constraint(equalToConstant: 70).isActive = true
         iv.widthAnchor.constraint(equalToConstant: 70).isActive = true
         return iv
     }()
     
-    let collectionNameLabel: UILabel = {
-        let label = UILabel()
+    let collectionNameLabel: CollectionLabel = {
+        let label = CollectionLabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Create"
-        label.textColor = isDark ? .white : .black
         if let font = UIFont(name: "GillSans-SemiBold", size: 16) {
             label.font = font
         }
@@ -39,7 +37,7 @@ class CollectionCell: UICollectionViewCell {
     }()
     
     func configure() {
-        collectionNameLabel.text = collection!.name
+        collectionNameLabel.text = collection?.name ?? "Error"
         
         if collection!.imageUrl == "" {
             collectionImageView.image = UIImage(named: "foodPlaceholder")
@@ -51,6 +49,13 @@ class CollectionCell: UICollectionViewCell {
     }
     
     //MARK: - Lifecycle
+    
+    override func prepareForReuse() {
+        collectionImageView.contentMode = .scaleAspectFill
+        collectionNameLabel.text = ""
+        isSelected = false
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureCell()

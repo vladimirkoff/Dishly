@@ -21,6 +21,7 @@ class CategoryCell: UICollectionViewCell {
          if let font = UIFont(name: "GillSans-SemiBold", size: 19) {
              label.font = font
          }
+         label.textColor = .white
         label.text = "Breakfast"
         return label
     }()
@@ -43,6 +44,14 @@ class CategoryCell: UICollectionViewCell {
     }
 
     //MARK: - Helpers
+    
+    func configure(categories: [String : String], index: Int) {
+        let categoriesNames = Array(categories.keys)
+        let images = Array(categories.values)
+        
+        title.text = categoriesNames[index]
+        categoryImageView.image = UIImage(named: images[index])
+    }
 
     func configureCell() {
         layer.cornerRadius = 10

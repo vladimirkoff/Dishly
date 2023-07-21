@@ -30,8 +30,8 @@ class RecipeViewController: UIViewController {
     let scrollView = UIScrollView()
     let contentView = CustomUIViewBackground()
     
-    private let tapToRateLabel: BlackLabel = {
-        let label = BlackLabel()
+    private let tapToRateLabel: UILabel = {
+        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Tap to rate"
         return label
@@ -52,7 +52,6 @@ class RecipeViewController: UIViewController {
         button.setTitle("Add to cart", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         button.backgroundColor = .white
-        button.setTitleColor(.black, for: .normal)  // Set text color to black
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 2
         button.layer.cornerRadius = 15
@@ -135,16 +134,16 @@ class RecipeViewController: UIViewController {
         return tableView
     }()
     
-    private let ingridientsLabel: BlackLabel = {
-        let label = BlackLabel()
+    private let ingridientsLabel: UILabel = {
+        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 32)
         label.text = "Ingridients"
         return label
     }()
     
-    private let instructionsLabel: BlackLabel = {
-        let label = BlackLabel()
+    private let instructionsLabel: UILabel = {
+        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 32)
         label.text = "Instructions"
@@ -157,15 +156,15 @@ class RecipeViewController: UIViewController {
         return view
     }()
     
-    let ratingLabel: BlackLabel = {
-        let label = BlackLabel()
+    let ratingLabel: UILabel = {
+        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "4.5"
         return label
     }()
     
-    let ratingsCount: BlackLabel = {
-        let label = BlackLabel()
+    let ratingsCount: UILabel = {
+        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "25 ratings"
         label.textAlignment = .center
@@ -205,16 +204,16 @@ class RecipeViewController: UIViewController {
         return iv
     }()
     
-    private let categoryLabel: BlackLabel = {
-        let label = BlackLabel()
+    private let categoryLabel: UILabel = {
+        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 12)
         label.text = "Dinners"
         return label
     }()
     
-    private let serveLabel: BlackLabel = {
-        let label = BlackLabel()
+    private let serveLabel: UILabel = {
+        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 12)
         label.text = "4 serve"
@@ -233,7 +232,18 @@ class RecipeViewController: UIViewController {
     
     //MARK: - Lifecycle
     
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        serveLabel.textColor = isDark ? .white : .black
+        ratingLabel.textColor = isDark ? .white : .black
+        timeLabel.textColor = isDark ? .white : .black
+        categoryLabel.textColor = isDark ? .white : .black
+        ratingsCount.textColor = isDark ? .white : .black
+        ingridientsLabel.textColor = isDark ? .white : .black
+        tapToRateLabel.textColor = isDark ? .white : .black
+        instructionsLabel.textColor = isDark ? .white : .black
+        nameAndAythorView.backgroundColor = isDark ? AppColors.customLightGrey.color : AppColors.customPurple.color
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

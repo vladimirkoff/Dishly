@@ -382,11 +382,13 @@
                     <size key="freeformSize" width="414" height="1078"/>
                     <connections>
                         <outlet property="addIngredientButton" destination="j1f-14-Ppg" id="gX5-Lb-wr0"/>
-                        <outlet property="categoryButton" destination="PVD-39-MCF" id="AcC-02-OxT"/>
+                        <outlet property="categoryButton" destination="PVD-39-MCF" id="AkF-8p-EZq"/>
                         <outlet property="categoryImage" destination="66Y-SZ-vv2" id="q2c-p8-Hkn"/>
                         <outlet property="contentView" destination="Qb6-YP-6uC" id="Rn7-MO-FLv"/>
+                        <outlet property="continueButton" destination="Nu0-Ol-Bv2" id="0IJ-ri-oaH"/>
                         <outlet property="cookTimeField" destination="h10-z9-VX2" id="k3o-pA-LOp"/>
                         <outlet property="cookTimeImage" destination="DDd-Uy-r8h" id="DHE-cm-Pam"/>
+                        <outlet property="createRecipeLabel" destination="oac-bG-MC3" id="oqc-of-xI4"/>
                         <outlet property="foodImage" destination="jWo-ie-g3L" id="oRp-lH-a5Z"/>
                         <outlet property="headerLabel" destination="oac-bG-MC3" id="3kn-DC-RsF"/>
                         <outlet property="pickerLogo" destination="cf4-cR-m5U" id="xao-UD-sCp"/>
@@ -519,9 +521,11 @@
                     </navigationItem>
                     <size key="freeformSize" width="414" height="899"/>
                     <connections>
+                        <outlet property="contentView" destination="8Je-wV-gio" id="y4t-57-YNK"/>
                         <outlet property="saveButton" destination="hfg-NL-vCP" id="qQl-59-L9x"/>
                         <outlet property="scrollView" destination="5h0-Qz-QRU" id="qJq-gn-eQN"/>
                         <outlet property="tableView" destination="Ej3-eE-WCl" id="jFe-mR-HX6"/>
+                        <outlet property="titleLabel" destination="uXn-vK-dJX" id="4i3-dz-uoh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oFd-Xw-bOG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

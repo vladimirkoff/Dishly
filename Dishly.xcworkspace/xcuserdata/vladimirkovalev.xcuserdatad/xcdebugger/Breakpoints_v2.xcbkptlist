@@ -14,28 +14,28 @@
             filePath = "Dishly/View/ViewControllers/SettingsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "93"
-            endingLineNumber = "93"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
             landmarkName = "SettingsViewController"
             landmarkType = "21">
             <Locations>
                <Location
-                  uuid = "888AA99D-7191-47D8-A7E2-BE74A5940E31 - 29e50c5a00ca97f6"
+                  uuid = "888AA99D-7191-47D8-A7E2-BE74A5940E31 - a3aecb787b2c817c"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Dishly.SettingsViewController.switchToggled(sender: __C.UISwitch) -&gt; ()"
+                  symbolName = "Dishly.SettingsViewController.tableView(_: __C.UITableView, cellForRowAt: Foundation.IndexPath) -&gt; __C.UITableViewCell"
                   moduleName = "Dishly"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/View/ViewControllers/SettingsViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "93"
-                  endingLineNumber = "93"
-                  offsetFromSymbolStart = "188">
+                  startingLineNumber = "94"
+                  endingLineNumber = "94"
+                  offsetFromSymbolStart = "500">
                </Location>
                <Location
-                  uuid = "888AA99D-7191-47D8-A7E2-BE74A5940E31 - 29e50c5a00ca97f6"
+                  uuid = "888AA99D-7191-47D8-A7E2-BE74A5940E31 - 29e50c5a00ca9791"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -45,24 +45,57 @@
                   urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/View/ViewControllers/SettingsViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "93"
-                  endingLineNumber = "93"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
                   offsetFromSymbolStart = "52">
                </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "794344DB-8894-4BBC-B6B1-E8F82DEAD138"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Dishly/View/Cells/ProfileOptionCell.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
+            landmarkName = "switchValueChanged(_:)"
+            landmarkType = "7">
+            <Locations>
                <Location
-                  uuid = "888AA99D-7191-47D8-A7E2-BE74A5940E31 - 29e50c5a00ca97b0"
+                  uuid = "794344DB-8894-4BBC-B6B1-E8F82DEAD138 - 9cf16d9f3da9da2"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Dishly.SettingsViewController.switchToggled(sender: __C.UISwitch) -&gt; ()"
+                  symbolName = "Dishly.ProfileOptionCell.switchValueChanged() -&gt; ()"
                   moduleName = "Dishly"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/View/ViewControllers/SettingsViewController.swift"
+                  urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/View/Cells/ProfileOptionCell.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "95"
-                  endingLineNumber = "95"
-                  offsetFromSymbolStart = "52">
+                  startingLineNumber = "113"
+                  endingLineNumber = "113"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  uuid = "794344DB-8894-4BBC-B6B1-E8F82DEAD138 - 48b6b4c33dc6fa18"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Dishly.ProfileOptionCell.switchValueChanged(__C.UISwitch) -&gt; ()"
+                  moduleName = "Dishly"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/View/Cells/ProfileOptionCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "112"
+                  endingLineNumber = "112"
+                  offsetFromSymbolStart = "40">
                </Location>
             </Locations>
          </BreakpointContent>

@@ -84,6 +84,7 @@ class LoadViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
+        isDark = isDarkMode
         changeAppearance(isDarkMode: isDarkMode, navigationController: navigationController!)
     }
 
@@ -99,7 +100,7 @@ class LoadViewController: UIViewController {
     
     //MARK: - Helpers
     
-    func checkIfLoggedInWithRealm() -> Bool {
+    func checkIfLoggedInWithRealm(completion: @escaping(Bool) -> ())  {
         let realm = try! Realm()
         if let user = realm.objects(UserRealm.self).first {
             
@@ -110,29 +111,33 @@ class LoadViewController: UIViewController {
                                         "username" : user.username
             ]
             self.user = UserViewModel(user: User(dictionary: dict), userService: userService)
-            return true
+            completion(true)
         } else {
-            return false
+            completion(false)
         }
     }
     
     func checkIfLoggedIn() {
-        
-        if checkIfLoggedInWithRealm() {
-            let vc = MainTabBarController(user: user , authService: self.authService, userService: self.userService, recipeService: self.recipeService, collectionService: collectionService, googleService: self.googleAuthService, mealsService: self.mealsService, recipesRealmService: recipesRealmService)
-            self.navigationController?.pushViewController(vc, animated: true)
-        } else {
-            let vc = GreetViewController(authService: authService,
-                                                         userService: userService,
-                                                         recipeService: recipeService,
-                                                         userRealmService: userRealmService,
-                                                         googleAuthService: googleAuthService,
-                                                         collectionService: collectionService,
-                                                         mealsService: mealsService,
-                                                         recipesRealmService: recipesRealmService
-                       )
-            self.navigationController?.pushViewController(vc, animated: true)
+        checkIfLoggedInWithRealm { isLoggedIn in
+            if isLoggedIn {
+                let vc = MainTabBarController(user: self.user,
+                                              authService: self.authService,
+                                              userService: self.userService, recipeService: self.recipeService, collectionService: self.collectionService, googleService: self.googleAuthService, mealsService: self.mealsService, recipesRealmService: self.recipesRealmService)
+                self.navigationController?.pushViewController(vc, animated: true)
+            } else {
+                let vc = GreetViewController(authService: self.authService,
+                                             userService: self.userService,
+                                             recipeService: self.recipeService,
+                                             userRealmService: self.userRealmService,
+                                             googleAuthService: self.googleAuthService,
+                                             collectionService: self.collectionService,
+                                             mealsService: self.mealsService,
+                                             recipesRealmService: self.recipesRealmService
+                           )
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
         }
+       
         
         //        let currentUser = Auth.auth().currentUser
         //        if let currentUser = currentUser {

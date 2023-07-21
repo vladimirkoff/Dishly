@@ -6,6 +6,8 @@ protocol PrepareViewControllerDelegate {
 }
 
 class PrepareViewController: UIViewController, Storyboardable {
+    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var saveButton: UIButton!
@@ -16,6 +18,7 @@ class PrepareViewController: UIViewController, Storyboardable {
 
     var recipeViewModel: RecipeViewModel?
     var recipeImage: UIImage!
+    
     private var instructions = [Instruction]() {
         didSet {
             tableView.reloadData()
@@ -23,13 +26,16 @@ class PrepareViewController: UIViewController, Storyboardable {
         }
     }
     
-    private let customView = CustomUIViewBackground()
-    
     //MARK: - Lifecycle
     
-    override func loadView() {
-        view = customView
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        titleLabel.textColor = isDark ? .white : .black
+        view.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
+        contentView.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
+        tableView.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
     }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +46,7 @@ class PrepareViewController: UIViewController, Storyboardable {
     //MARK: - Functions
     
     func showLoader(_ show: Bool) {
-        customView.endEditing(true )
+        view.endEditing(true )
         show ? hud.show(in: view) : hud.dismiss()
     }
     

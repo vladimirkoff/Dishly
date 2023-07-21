@@ -13,7 +13,13 @@ private let collectionCellReuseId = "RecipeCell"
 
 class RecipesViewController: UICollectionViewController {
     //MARK: - Properties
-        
+    
+    private lazy var noRecipesView: NoRecipesView = {
+          let view = NoRecipesView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
+          view.translatesAutoresizingMaskIntoConstraints = false
+          return view
+      }()
+    
     private let userService: UserServiceProtocol
     private var userViewModel: UserViewModel!
     
@@ -44,6 +50,16 @@ class RecipesViewController: UICollectionViewController {
     
     //MARK: - Helpers
     
+    func showNoRecipes() {
+        view.addSubview(noRecipesView)
+        NSLayoutConstraint.activate([
+            noRecipesView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            noRecipesView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            noRecipesView.widthAnchor.constraint(equalToConstant: 300),
+            noRecipesView.heightAnchor.constraint(equalToConstant: 300),
+        ])
+    }
+    
     func goToRecipe(with recipe: RecipeViewModel) {
         userViewModel.fetchUser(with: recipe.recipe.ownerId!) { user in
             let vc = RecipeViewController(user: user, recipe: recipe)
@@ -56,10 +72,16 @@ class RecipesViewController: UICollectionViewController {
 
 extension RecipesViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return recipes?.count ?? 0
+        if let numOfRecipes = recipes?.count {
+            if numOfRecipes == 0 {
+                showNoRecipes()
+            }
+            return numOfRecipes
+        } else {
+            showNoRecipes()
+            return 0
+        }
     }
-    
-    
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionCellReuseId, for: indexPath) as! RecipeCell

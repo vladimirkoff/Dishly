@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "bar101-cocktails-504754220-580e83415f9b58564cf470b9.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

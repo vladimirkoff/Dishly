@@ -3,7 +3,12 @@ import RealmSwift
 
 private let reuseIdentifier = "ProfileOptionCell"
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
+    
+    func switchToggled(sender: UISwitch) {
+        print("Toggled")
+    }
+    
     //MARK: - Properties
     
     var userService: UserServiceProtocol!
@@ -20,10 +25,11 @@ class ProfileViewController: UIViewController {
     
     var profileImage: UIImageView!
     
+    private let tabBar: UITabBar?
+    
     private let switcher: UISwitch = {
         let switcher = UISwitch()
         switcher.translatesAutoresizingMaskIntoConstraints = false
-        // Customize the switcher appearance if needed
         return switcher
     }()
     
@@ -59,20 +65,15 @@ class ProfileViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.isScrollEnabled = false
         tableView.delegate = self
+        tableView.dataSource = self
         tableView.rowHeight = 50
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .lightGray
         tableView.layer.cornerRadius = 10
         return tableView
     }()
-    
-    private let instaSymbol = UIImageView.createSNSymbol(with: "insta.white")
-    private let facebookSymbol = UIImageView.createSNSymbol(with: "facebook.white")
-    private let pinterestSymbol = UIImageView.createSNSymbol(with: "pinterest.white")
-    private let youtubeSymbol = UIImageView.createSNSymbol(with: "youtube.white")
-    private let twitterSymbol = UIImageView.createSNSymbol(with: "twitter.white")
     
     private let customView = CustomUIViewBackground()
     
@@ -84,6 +85,7 @@ class ProfileViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        versionLabel.textColor = isDark ? .white : .black
         userViewModel.fetchUser { user in
             self.navigationItem.title = user.user!.fullName
         }
@@ -95,7 +97,7 @@ class ProfileViewController: UIViewController {
         tabBarController?.tabBar.isHidden = false
     }
     
-    init(user: UserViewModel, userService: UserServiceProtocol, profileImage: UIImageView, authService: AuthServiceProtocol, userRealmService: UserRealmServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol, mealsService: MealsServiceProtocol, recipesRealmService: RecipesRealmServiceProtocol) {
+    init(tabBar: UITabBar?, user: UserViewModel, userService: UserServiceProtocol, profileImage: UIImageView, authService: AuthServiceProtocol, userRealmService: UserRealmServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol, mealsService: MealsServiceProtocol, recipesRealmService: RecipesRealmServiceProtocol) {
         self.user = user
         self.userService = userService
         self.profileImage = profileImage
@@ -105,6 +107,7 @@ class ProfileViewController: UIViewController {
         self.collectionService = collectionService
         self.mealsService = mealsService
         self.recipesRealmService = recipesRealmService
+        self.tabBar = tabBar
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -122,6 +125,14 @@ class ProfileViewController: UIViewController {
         authViewModel = AuthViewModel(authService: authService)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        let appearance = UITabBarAppearance()
+        appearance.backgroundColor = isDark ? AppColors.customGrey.color : .white
+        tabBar?.standardAppearance = appearance
+        tabBar?.scrollEdgeAppearance = appearance
+        tabBar?.tintColor = isDark ? .white : AppColors.customPurple.color
+    }
 
     
     override func viewDidLayoutSubviews() {
@@ -142,10 +153,17 @@ class ProfileViewController: UIViewController {
             profileImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -12)
         ])
     }
+    
     @objc func switcherValueChanged(_ sender: UISwitch) {
         changeAppearance(isDarkMode: sender.isOn, navigationController: navigationController!)
         customView.backgroundColor = sender.isOn ? AppColors.customGrey.color : AppColors.customLight.color
         changeEditProfileButton()
+        
+        
+        
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
+        versionLabel.textColor = isDark ? .white : .black
     }
     
     func changeEditProfileButton() {
@@ -155,9 +173,7 @@ class ProfileViewController: UIViewController {
         editProfileButton.setAttributedTitle(attributedString, for: .normal)
     }
     
-    func configureUI() {
-        tableView.dataSource = self
-        
+    func configureUI() {        
         customView.addSubview(switcher)
         
         switcher.isOn = isDark
@@ -171,7 +187,7 @@ class ProfileViewController: UIViewController {
         
         navigationItem.title = user.user!.fullName
         
-        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
 //        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -189,20 +205,7 @@ class ProfileViewController: UIViewController {
             versionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             versionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -24)
         ])
-        
-        let stackView = UIStackView(arrangedSubviews: [instaSymbol, facebookSymbol, pinterestSymbol, youtubeSymbol, twitterSymbol])
-        stackView.axis = .horizontal
-        stackView.distribution = .equalSpacing
-        
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        customView.addSubview(stackView)
-        
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 16),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
-            stackView.heightAnchor.constraint(equalToConstant: 30)
-        ])
+   
     }
     
     func configureTableView() {
@@ -285,11 +288,16 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! ProfileOptionCell
+        cell.delegate = self
         switch indexPath.row {
         case 0:
-            let gearImage = UIImage(systemName: "gearshape.fill")
-            cell.cellSymbol.image = gearImage
-            cell.optionLabel.text = "General Settings"
+            let appearanceImage = UIImage(systemName: "paintbrush.fill")
+            cell.accessoryImage.isHidden = true
+            cell.accessoryImage.isUserInteractionEnabled = false
+            cell.mySwitch.isHidden = false
+            cell.isUserInteractionEnabled = false
+            cell.cellSymbol.image = appearanceImage
+            cell.optionLabel.text = "Change appearance"
         case 1:
             let lockImage = UIImage(systemName: "lock.fill")
             cell.cellSymbol.image = lockImage
@@ -319,8 +327,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             let vc = ProfileOptionVC(docTitle: "Terms and configitons", text: termsAndConditions)
             navigationController?.pushViewController(vc, animated: true)
         } else if indexPath.row == 0 {
-            let vc = SettingsViewController()
-            navigationController?.pushViewController(vc, animated: true)
+           print("Tapped")
         }
     }
     

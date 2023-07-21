@@ -32,18 +32,7 @@ class ExploreViewController: UIViewController {
         return view
     }()
     
-    lazy private var windowView: CollectionsPopupView = {
-        let view = CollectionsPopupView(frame: CGRect(x: view.frame.minX, y: view.frame.maxY, width: view.frame.width, height: 300))
-        
-        collectionViewModel = CollectionViewModel(collectionService: collectionService, collection: nil)
-        view.collectionViewModel = collectionViewModel
-        view.delegate = self
-        view.backgroundColor = AppColors.customLightGrey.color
-
-        view.layer.cornerRadius = 10
-        
-        return view
-    }()
+    private var windowView: CollectionsPopupView?
     
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
@@ -67,7 +56,6 @@ class ExploreViewController: UIViewController {
     
     override func loadView() {
         view = customView
-
     }
     
     
@@ -87,7 +75,7 @@ class ExploreViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         userViewModel = UserViewModel(user: nil, userService: userService)
         recipeViewModel = RecipeViewModel(recipe: Recipe(category: Recipe.Category(rawValue: "Ukraine")!, ingredients: [], instructions: []), recipeService: recipeService)
     }
@@ -162,7 +150,7 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if indexPath.row == 2 {
-            let cellHeight: CGFloat = 80 * 11
+            let cellHeight: CGFloat = 60 * 12
             return CGSize(width: collectionView.bounds.width, height: cellHeight)
         } else {
             let cellHeight = (collectionView.bounds.height - collectionView.contentInset.top - collectionView.contentInset.bottom) / 2
@@ -204,14 +192,27 @@ extension ExploreViewController: ParentCellDelegate {
     }
     
     func popUp(recipe: RecipeViewModel) {
-        windowView.recipe = recipe
+        windowView  = {
+            let view = CollectionsPopupView(frame: CGRect(x: view.frame.minX, y: view.frame.maxY, width: view.frame.width, height: 300))
+            
+            collectionViewModel = CollectionViewModel(collectionService: collectionService, collection: nil)
+            view.collectionViewModel = collectionViewModel
+            view.delegate = self
+            view.backgroundColor = AppColors.customLightGrey.color
+
+            view.layer.cornerRadius = 10
+            
+            return view
+        }()
+        
+        windowView!.recipe = recipe
         self.window.addSubview(self.backgroundView)
-        self.window.addSubview(self.windowView)
+        self.window.addSubview(self.windowView!)
         
         
         UIView.animate(withDuration: 0.6) { [weak self] in
             guard let self = self else { return }
-            self.windowView.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY - 300, width: self.view.bounds.width, height: 300)
+            self.windowView!.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY - 200, width: self.view.bounds.width, height: 300)
         }
         
     }
@@ -242,7 +243,7 @@ extension ExploreViewController: ParentCellDelegate {
         UIView.animate(withDuration: 1) { [weak self] in
             guard let self = self else { return }
             
-            self.windowView.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY, width: self.view.frame.width, height: 300)
+            self.windowView?.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY + 100, width: self.view.frame.width, height: 300)
         }
     }
     
@@ -304,9 +305,9 @@ extension ExploreViewController: RecipeCellDelegate {
         
         UIView.animate(withDuration: 1) { [weak self] in
             guard let self = self else { return }
-            self.windowView.removeFromSuperview()
+            self.windowView?.removeFromSuperview()
             
-            self.windowView.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY, width: self.view.frame.width, height: 300)
+            self.windowView?.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY, width: self.view.frame.width, height: 300)
         }
     }
     

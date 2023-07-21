@@ -7,6 +7,5 @@
 
 import UIKit
 
-class CustomCellUILabel: UILabel {}
-
-class BlackLabel: UILabel {}
+class CollectionLabel: UILabel {}
+class TableLabel: UILabel {}

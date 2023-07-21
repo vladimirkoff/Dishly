@@ -45,6 +45,7 @@ class IngredientTableCell: UITableViewCell {
     }
     
     func configureCell() {
+        deleteButton.tintColor = .black
         item.textColor = .black
         addSubview(protionLabel)
         NSLayoutConstraint.activate([

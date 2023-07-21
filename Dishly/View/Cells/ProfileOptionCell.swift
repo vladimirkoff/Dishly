@@ -26,12 +26,11 @@ class ProfileOptionCell: UITableViewCell {
     }()
     
     var mySwitch: UISwitch = {
-        let sw = UISwitch()
-        sw.translatesAutoresizingMaskIntoConstraints = false
-        sw.tintColor = .black
-        sw.isHidden = true
-        sw.onTintColor = .systemBlue
-        return sw
+        let switcher = UISwitch()
+        switcher.translatesAutoresizingMaskIntoConstraints = false
+        switcher.isHidden = true
+        switcher.isOn = false
+        return switcher
     }()
     
      var optionLabel: UILabel = {
@@ -64,11 +63,10 @@ class ProfileOptionCell: UITableViewCell {
     //MARK: - Helpers
     
     func configureCell() {
-        isUserInteractionEnabled = true
         backgroundColor = .lightGray
         selectionStyle = .none
         
-        mySwitch.addTarget(delegate, action: #selector(switchValueChanged(_:)), for: .valueChanged)
+        mySwitch.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
 
         
         addSubview(optionImage)
@@ -107,6 +105,7 @@ class ProfileOptionCell: UITableViewCell {
             mySwitch.rightAnchor.constraint(equalTo: rightAnchor, constant: -12)
         ])
         
+        mySwitch.isUserInteractionEnabled = true
     }
     
     @objc func switchValueChanged(_ sender: UISwitch) {
@@ -115,3 +114,5 @@ class ProfileOptionCell: UITableViewCell {
     
 
 }
+
+

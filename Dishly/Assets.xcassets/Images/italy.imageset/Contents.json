@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "umk8i7ko_pasta_625x300_01_April_21.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

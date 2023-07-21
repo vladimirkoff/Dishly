@@ -48,7 +48,7 @@ class CartViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         
         navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-           navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
 
         navigationController?.navigationBar.prefersLargeTitles = true
         
@@ -96,7 +96,6 @@ extension CartViewController: UITableViewDelegate, UITableViewDataSource {
             if let loadedIngredients = try? decoder.decode([Ingredient].self, from: savedData) {
                 ingredientsCount = loadedIngredients.count
                 for ingredient in loadedIngredients {
-                    // Выполните необходимые операции с каждым ингредиентом
                     print(ingredient.name ?? "")
                     print(ingredient.volume ?? "")
                     print(ingredient.portion ?? "")
@@ -130,7 +129,10 @@ extension CartViewController: IngredientCellDelegate {
     func deleteCell(cell: IngredientTableCell) {
         guard let ingredientToDelete = cell.item.text else { return }
         myGroceries.removeAll { $0.name == ingredientToDelete }
-        UserDefaults.standard.removeObject(forKey: "customIngredients")
+        let encoder = JSONEncoder()
+        if let encodedData = try? encoder.encode(myGroceries) {
+            UserDefaults.standard.set(encodedData, forKey: "customIngredients")
+        }
         tableView.reloadData()
     }
     

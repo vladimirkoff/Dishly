@@ -12,9 +12,8 @@ class ProfileInfoCell: UITableViewCell {
     var delegate: ProfileInfoCellDelegate?
     var fieldIndex: Int!
     
-    private let nameLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
+    private let nameLabel: CollectionLabel = {
+        let label = CollectionLabel()
         label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         label.text = "Password"
         return label
@@ -28,7 +27,7 @@ class ProfileInfoCell: UITableViewCell {
      let textView: UITextView = {
         let textView = UITextView()
         textView.backgroundColor = .clear
-        textView.textColor = .white
+         textView.textColor = isDark ? .white : .black
         textView.font = UIFont.systemFont(ofSize: 22)
         textView.isScrollEnabled = false
         textView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -51,7 +50,7 @@ class ProfileInfoCell: UITableViewCell {
     // MARK: - Setup
     
     private func setupViews() {
-        contentView.backgroundColor = AppColors.customGrey.color
+ 
 
         contentView.addSubview(nameLabel)
         contentView.addSubview(textView)

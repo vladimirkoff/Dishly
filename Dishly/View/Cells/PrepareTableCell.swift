@@ -22,11 +22,12 @@ class PrepareTableCell: UITableViewCell {
     
     override func layoutSubviews() {
         textView.delegate = self
-
         textView.layer.cornerRadius = 20.0
         textView.layer.borderWidth = 2.0
-        textView.layer.borderColor = UIColor(named:"Dark Red")?.cgColor
+        textView.layer.borderColor = UIColor.black.cgColor
         textView.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
+        
+        textView.backgroundColor = .white
     }
     
     override func prepareForReuse() {
@@ -44,7 +45,6 @@ class PrepareTableCell: UITableViewCell {
 extension PrepareTableCell: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        print(textView.text)
         self.delegate?.updateCell(textView: textView.text, cell: self)
     }
     

@@ -79,6 +79,11 @@ class EditProfileViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
+    }
+    
     //MARK: - Helpers
     
     func showLoader(_ show: Bool) {
@@ -114,7 +119,6 @@ class EditProfileViewController: UIViewController {
     }
     
     func configureCell(_ cell: ProfileInfoCell, for indexPath: IndexPath) {
-        cell.backgroundColor = .blue
         cell.delegate = self
         
         switch indexPath.row {
@@ -199,7 +203,7 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
         
         configureCell(cell, for: indexPath)
         addSeparator(to: cell)
-
+        cell.backgroundColor = .clear
         return cell
     }
 
@@ -215,7 +219,7 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
         configureHeader(headerView: headerView )
-        headerView.backgroundColor = AppColors.customGrey.color
+        headerView.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
 
         return headerView
     }

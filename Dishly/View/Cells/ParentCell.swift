@@ -27,8 +27,8 @@ class ParentCell: UICollectionViewCell {
         }
     }
     
-    private lazy var titleLabel: BlackLabel = {
-        let label = BlackLabel(frame: CGRect(x: 10, y: 10, width: bounds.width - 20, height: 30))
+    private lazy var titleLabel: TableLabel = {
+        let label = TableLabel(frame: CGRect(x: 10, y: 10, width: bounds.width - 20, height: 30))
         label.text = "Daily inspiration"
         if let font = UIFont(name: "GillSans-SemiBold", size: 24) {
             label.font = font
@@ -96,8 +96,8 @@ class ParentCell: UICollectionViewCell {
     }
 
     func configureCellForCategories() {
-        categoryCollectionView.isHidden = false
         addSubview(titleLabel)
+        categoryCollectionView.isHidden = false
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 6),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12)
@@ -113,6 +113,7 @@ class ParentCell: UICollectionViewCell {
 
         categoryCollectionView.register(CategoryCell.self, forCellWithReuseIdentifier: "CategoryCell")
     }
+
     
     func configure(index: Int) {
         switch index {
@@ -154,6 +155,7 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == horizontalCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath) as! RecipeCell
+            cell.layer.cornerRadius = 15
             cell.delegate = self
             if let recipes = recipes {
                 cell.recipeViewModel = recipes[indexPath.row]
@@ -163,50 +165,13 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         } else if collectionView == categoryCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell            
             if index == 1 {
-                cell.title.text = mealCategories[indexPath.row]
+                cell.configure(categories: mealCategories, index: indexPath.row)
             } else if index == 2 {
-                if indexPath.row == 0 {
-                    cell.categoryImageView.image = UIImage(named: "ukraine")
-                }
-                cell.title.text = countryCategories[indexPath.row]
+                cell.configure(categories: countryCategories, index: indexPath.row)
             }
             return cell
         }
         return UICollectionViewCell()
-    }
-    
-    func configureCategoryCell(index: Int, cell: CategoryCell, image: String?) {
-        switch index {
-        case 0:
-            cell.categoryImageView.image = UIImage(named: "")
-            cell.title.text = ""
-        case 1:
-            cell.categoryImageView.image = UIImage(named: "")
-            cell.title.text = ""
-        case 2:
-            cell.categoryImageView.image = UIImage(named: "")
-            cell.title.text = ""
-        case 3:
-            cell.categoryImageView.image = UIImage(named: "")
-            cell.title.text = ""
-        case 4:
-            cell.categoryImageView.image = UIImage(named: "")
-            cell.title.text = ""
-        case 5:
-            cell.categoryImageView.image = UIImage(named: "")
-            cell.title.text = ""
-        case 6:
-            cell.categoryImageView.image = UIImage(named: "")
-            cell.title.text = ""
-        case 7:
-            cell.categoryImageView.image = UIImage(named: "")
-            cell.title.text = ""
-        case 8:
-            cell.categoryImageView.image = UIImage(named: "")
-            cell.title.text = ""
-        default:
-            return
-        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

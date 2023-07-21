@@ -49,6 +49,10 @@ class MainTabBarController: UITabBarController {
         super.viewWillAppear(animated)
         navigationItem.hidesBackButton = true
         navigationController?.navigationBar.topItem?.hidesBackButton = true
+        
+        navigationItem.rightBarButtonItem?.tintColor = isDark ? .white : AppColors.customPurple.color
+        
+
     }
     
     override func viewDidLoad() {
@@ -108,16 +112,15 @@ class MainTabBarController: UITabBarController {
         
         viewControllers = [main,  add, saved, plan]
         
+  
+        
         tabBar.items?[0].title = "Home"
         tabBar.items?[1].title = "Add"
         tabBar.items?[2].title = "Saved"
         tabBar.items?[3].title = "Meal Plan"
         
-        tabBar.tintColor = .white
-        
         tabBar.barStyle = .default
         tabBar.inputViewController?.hidesBottomBarWhenPushed = false
-        
         
     }
     
@@ -127,7 +130,6 @@ class MainTabBarController: UITabBarController {
         
         vc.tabBarItem.image = image
         vc.tabBarItem.selectedImage = image.withTintColor(UIColor.systemRed)
-        vc.tabBarController?.tabBar.backgroundColor = .black
         
         return vc
     }
@@ -175,7 +177,7 @@ class MainTabBarController: UITabBarController {
     }
     
     @objc func leftBarButtonTapped() {
-        let vc = ProfileViewController(user: user, userService: userService, profileImage: profileImageView, authService: authService, userRealmService: userRealmService, googleService: googleService, collectionService: collectionService, mealsService: mealsService, recipesRealmService: recipesRealmService)
+        let vc = ProfileViewController(tabBar: tabBar, user: user, userService: userService, profileImage: profileImageView, authService: authService, userRealmService: userRealmService, googleService: googleService, collectionService: collectionService, mealsService: mealsService, recipesRealmService: recipesRealmService)
         navigationController?.pushViewController(vc, animated: true)
     }
     

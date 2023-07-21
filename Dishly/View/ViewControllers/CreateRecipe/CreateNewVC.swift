@@ -10,11 +10,13 @@ class AddRecipeViewController: UIViewController, Storyboardable {
     
     //MARK: - Properties
     
+    @IBOutlet weak var continueButton: CustomButton!
+    @IBOutlet weak var createRecipeLabel: UILabel!
     @IBOutlet weak var addIngredientButton: CustomButton!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet private weak var categoryButton: UIButton!
+    @IBOutlet private weak var categoryButton: CustomButton!
     @IBOutlet private weak var headerLabel: UILabel!
     @IBOutlet private weak var foodImage: UIImageView!
     @IBOutlet private weak var pickerLogo: UIImageView!
@@ -24,6 +26,7 @@ class AddRecipeViewController: UIViewController, Storyboardable {
     @IBOutlet private weak var recipeNameField: UITextField!
     @IBOutlet private weak var serveField: UITextField!
     @IBOutlet private weak var cookTimeField: UITextField!
+  
     
     private var selectedCategory: Recipe.Category?
     private var categoryPickerView = UIPickerView()
@@ -50,8 +53,19 @@ class AddRecipeViewController: UIViewController, Storyboardable {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        recipeNameField.backgroundColor = .white
+        recipeNameField.textColor = .black
+        createRecipeLabel.textColor = isDark ? .white : .black
+        addIngredientButton.tintColor = isDark ? .white : .black
+        addIngredientButton.setTitleColor(isDark ? .white : .black, for: .normal)
+        continueButton.backgroundColor = isDark ? .white : AppColors.customPurple.color
+        continueButton.setTitleColor(isDark ? UIColor.black : UIColor.white, for: .normal)
+        continueButton.tintColor = isDark ? UIColor.black : UIColor.white
+        categoryButton.backgroundColor = isDark ? .black : AppColors.customPurple.color
+        categoryButton.setTitleColor(.white, for: .normal)
+        recipeNameField.clipsToBounds = true
+        recipeNameField.layer.cornerRadius = 20
         addIngredientButton.backgroundColor = .clear
-        addIngredientButton.setTitleColor(isDark ? UIColor.white : UIColor.black, for: .normal)
     }
     
     override func viewDidLoad() {
@@ -78,7 +92,8 @@ class AddRecipeViewController: UIViewController, Storyboardable {
     
     func configureTextFields(placeholder: String, textField: UITextField) {
         let placeholderText = placeholder
-        let attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+        let attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: [NSAttributedString.Key.foregroundColor: textField == recipeNameField ? UIColor.lightGray : UIColor.white])
+        textField.textColor = textField == recipeNameField ? .black : UIColor.white
         textField.attributedPlaceholder = attributedPlaceholder
         textField.backgroundColor = isDark ? AppColors.customLightGrey.color : AppColors.customPurple.color
     }
@@ -283,7 +298,7 @@ extension AddRecipeViewController: UITableViewDelegate, UITableViewDataSource {
         let headerTitle: UILabel = {
             let title = UILabel()
             title.text = "Ingredients"
-            title.textColor = .white
+            title.textColor = isDark ? .white : .black
             title.font = UIFont(name: "Gill Sans SemiBold", size: 22)
             return title
         }()

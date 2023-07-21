@@ -18,8 +18,8 @@ class MealCell: UICollectionViewCell {
     
     var day: DaysOfWeek?
     
-    let dayLabel: UILabel = {
-        let label = UILabel()
+    let dayLabel: TableLabel = {
+        let label = TableLabel()
         if let font = UIFont(name: "GillSans-SemiBold", size: 24) {
             label.font = font
         }
@@ -153,6 +153,8 @@ extension MealCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
 //MARK: - SavedVCProtocol
 
 extension MealCell: SavedVCProtocol {
+    func handleCancel() {}
+    
     func reload(collections: [Collection], afterDeletion: Bool) {}
     
     func addRecipe(recipe: RecipeViewModel, mealsViewModel: MealsViewModel?) {

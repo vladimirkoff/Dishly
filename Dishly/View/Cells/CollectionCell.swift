@@ -53,6 +53,7 @@ class CollectionCell: UICollectionViewCell {
     override func prepareForReuse() {
         collectionImageView.contentMode = .scaleAspectFill
         collectionNameLabel.text = ""
+        collectionImageView.layer.borderWidth = 0
         isSelected = false
     }
     

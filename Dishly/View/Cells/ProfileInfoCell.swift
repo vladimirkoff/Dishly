@@ -50,8 +50,7 @@ class ProfileInfoCell: UITableViewCell {
     // MARK: - Setup
     
     private func setupViews() {
- 
-
+        
         contentView.addSubview(nameLabel)
         contentView.addSubview(textView)
         

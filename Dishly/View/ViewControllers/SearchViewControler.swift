@@ -76,7 +76,6 @@ class RecipeSearchViewController: UIViewController, UITextFieldDelegate {
     }
     
     //MARK: - Selectors
-
     
     @objc func cancelButtonTapped() {
         navigationController?.popViewController(animated: true)

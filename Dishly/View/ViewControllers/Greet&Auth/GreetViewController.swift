@@ -148,7 +148,10 @@ class GreetViewController: UIViewController {
     
     //MARK: - Lifecycle
     
-
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.isHidden = false
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -182,6 +185,7 @@ class GreetViewController: UIViewController {
     }
     
     func configureUI() {
+        navigationController?.navigationBar.isHidden = true
         navigationItem.hidesBackButton = true
         navigationController?.navigationBar.barStyle = .black 
         navigationController?.navigationBar.tintColor = .white

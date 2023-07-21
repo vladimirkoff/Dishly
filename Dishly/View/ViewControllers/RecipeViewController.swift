@@ -34,6 +34,7 @@ class RecipeViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Tap to rate"
+        label.setFont(name: "GillSans-SemiBold", size: 18)
         return label
     }()
     
@@ -49,11 +50,19 @@ class RecipeViewController: UIViewController {
     let addToCartButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
+
+        let cartSymbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .bold)
+        let cartSymbol = UIImage(systemName: "cart.fill", withConfiguration: cartSymbolConfig)
+
+        button.setImage(cartSymbol, for: .normal)
+
         button.setTitle("Add to cart", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        button.backgroundColor = .white
+        button.backgroundColor = isDark ? .white : AppColors.customPurple.color
+        button.setTitleColor(isDark ? .black : .white, for: .normal)
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 2
+        button.tintColor = isDark ? .black : .white
         button.layer.cornerRadius = 15
         button.addTarget(self, action: #selector(addToCartButtonTapped), for: .touchUpInside)
         return button
@@ -90,8 +99,8 @@ class RecipeViewController: UIViewController {
         let view = CustomUIViewBackground()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 15
-        view.backgroundColor = .clear
-        view.layer.borderColor = UIColor.white.cgColor
+        view.backgroundColor = .white
+        view.layer.borderColor = UIColor.black.cgColor
         view.layer.borderWidth = 2
         return view
     }()
@@ -100,7 +109,7 @@ class RecipeViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 24)
-        label.textColor = .white
+        label.textColor = .black
         label.text = "41min"
         return label
     }()
@@ -108,8 +117,8 @@ class RecipeViewController: UIViewController {
     private let totalTimeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textColor = .lightGray
+        label.setFont(name: "GillSans-SemiBold", size: 18)
         label.text = "Total Time"
         return label
     }()
@@ -119,6 +128,7 @@ class RecipeViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.setFont(name: "GillSans-SemiBold", size: 24)
         label.attributedText = configureNameAndAuthorLabel(name: "Homemade Stuffing Width Sausage and Ham", author: "Vladimir")
         return label
     }()
@@ -137,7 +147,7 @@ class RecipeViewController: UIViewController {
     private let ingridientsLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 32)
+        label.setFont(name: "GillSans-SemiBold", size: 32)
         label.text = "Ingridients"
         return label
     }()
@@ -145,7 +155,7 @@ class RecipeViewController: UIViewController {
     private let instructionsLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 32)
+        label.setFont(name: "GillSans-SemiBold", size: 32)
         label.text = "Instructions"
         return label
     }()
@@ -159,6 +169,7 @@ class RecipeViewController: UIViewController {
     let ratingLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.setFont(name: "GillSans-SemiBold", size: 16)
         label.text = "4.5"
         return label
     }()
@@ -167,6 +178,7 @@ class RecipeViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "25 ratings"
+        label.setFont(name: "GillSans-SemiBold", size: 16)
         label.textAlignment = .center
         return label
     }()
@@ -182,6 +194,7 @@ class RecipeViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 26)
+        label.textColor = .white
         label.text = "@fdmvs"
         return label
     }()
@@ -207,7 +220,7 @@ class RecipeViewController: UIViewController {
     private let categoryLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.setFont(name: "GillSans-SemiBold", size: 12)
         label.text = "Dinners"
         return label
     }()
@@ -215,7 +228,7 @@ class RecipeViewController: UIViewController {
     private let serveLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.setFont(name: "GillSans-SemiBold", size: 12)
         label.text = "4 serve"
         return label
     }()
@@ -223,7 +236,6 @@ class RecipeViewController: UIViewController {
     private lazy var instructionsTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-
         tableView.dataSource = self
         tableView.register(UINib(nibName: "PrepareTableCell", bundle: nil), forCellReuseIdentifier: instrTableCellId)
         tableView.delegate = self
@@ -234,24 +246,13 @@ class RecipeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        serveLabel.textColor = isDark ? .white : .black
-        ratingLabel.textColor = isDark ? .white : .black
-        timeLabel.textColor = isDark ? .white : .black
-        categoryLabel.textColor = isDark ? .white : .black
-        ratingsCount.textColor = isDark ? .white : .black
-        ingridientsLabel.textColor = isDark ? .white : .black
-        tapToRateLabel.textColor = isDark ? .white : .black
-        instructionsLabel.textColor = isDark ? .white : .black
-        nameAndAythorView.backgroundColor = isDark ? AppColors.customLightGrey.color : AppColors.customPurple.color
+        configureTextColor()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = AppColors.customGrey.color
-
-        setupNavigationBar()
+//        setupNavigationBar()
         configureUI()
-        setupScrollView()
         configure()
     }
     
@@ -269,11 +270,14 @@ class RecipeViewController: UIViewController {
     //MARK: - Helpers
     
     func configureNameAndAuthorLabel(name: String, author: String) -> NSAttributedString {
-        let attributedText = NSMutableAttributedString(string: "RECIPE\n", attributes: [.font: UIFont.boldSystemFont(ofSize: 18), .foregroundColor: UIColor.white])
-        attributedText.append(NSAttributedString(string: "\n", attributes: [.font: UIFont.boldSystemFont(ofSize: 14), .foregroundColor: UIColor.white]))
-        attributedText.append(NSAttributedString(string: "\(name)\n", attributes: [.font: UIFont.boldSystemFont(ofSize: 18), .foregroundColor: UIColor.white]))
-        attributedText.append(NSAttributedString(string: "\n", attributes: [.font: UIFont.boldSystemFont(ofSize: 14), .foregroundColor: UIColor.white]))
-        attributedText.append(NSAttributedString(string: "by \(author)", attributes: [.font: UIFont.boldSystemFont(ofSize: 18), .foregroundColor: UIColor.white]))
+        let fontBig = UIFont(name: "GillSans-SemiBold", size: 22)!
+        let fontSmall = UIFont(name: "GillSans-SemiBold", size: 18)!
+        
+        let attributedText = NSMutableAttributedString(string: "RECIPE\n", attributes: [.font: fontBig, .foregroundColor: UIColor.white])
+        attributedText.append(NSAttributedString(string: "\n", attributes: [.font: fontSmall, .foregroundColor: UIColor.white]))
+        attributedText.append(NSAttributedString(string: "\(name)\n", attributes: [.font: fontBig, .foregroundColor: UIColor.white]))
+        attributedText.append(NSAttributedString(string: "\n", attributes: [.font: fontSmall, .foregroundColor: UIColor.white]))
+        attributedText.append(NSAttributedString(string: "by \(author)", attributes: [.font: fontBig, .foregroundColor: UIColor.white]))
         return attributedText
     }
     
@@ -302,6 +306,17 @@ class RecipeViewController: UIViewController {
             profileImage.sd_setImage(with: url)
         }
         
+    }
+    
+    func configureTextColor() {
+        serveLabel.textColor = isDark ? .white : .black
+        ratingLabel.textColor = isDark ? .white : .black
+        categoryLabel.textColor = isDark ? .white : .black
+        ratingsCount.textColor = isDark ? .white : .black
+        ingridientsLabel.textColor = isDark ? .white : .black
+        tapToRateLabel.textColor = isDark ? .white : .black
+        instructionsLabel.textColor = isDark ? .white : .black
+        nameAndAythorView.backgroundColor = isDark ? AppColors.customLightGrey.color : AppColors.customPurple.color
     }
     
     func configureRatingImages(rating: Float, imageViews: [UIImageView]) {
@@ -602,7 +617,6 @@ class RecipeViewController: UIViewController {
         }
     }
 
-    
     private func updateStarColors() {
         for i in 1...5 {
             if let starButton = view.viewWithTag(i) as? UIButton {
@@ -612,15 +626,10 @@ class RecipeViewController: UIViewController {
         }
     }
     
-    private func setupNavigationBar() {
-        let rightButton1 = UIBarButtonItem(image: UIImage(named: "save"), style: .plain, target: self, action: #selector(rightButton1Tapped))
-        navigationItem.rightBarButtonItems = [rightButton1]
-    }
-    
-    
-    private func setupScrollView() {
-
-    }
+//    private func setupNavigationBar() {
+//        let rightButton1 = UIBarButtonItem(image: UIImage(named: "save"), style: .plain, target: self, action: #selector(rightButton1Tapped))
+//        navigationItem.rightBarButtonItems = [rightButton1]
+//    }
     
     //MARK: - Selectors
     
@@ -681,8 +690,6 @@ class RecipeViewController: UIViewController {
             ratingDict.append(testt)
         }
         
-        
-            
         recipeViewModel.recipe.rating = updatedRating
         
         RecipesRealmService().updateRecipe(id: recipeViewModel.recipe.id!, rating: updatedRating, numOfRating: ratings.count) { success in

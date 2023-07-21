@@ -90,6 +90,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
             self.navigationItem.title = user.user!.fullName
         }
         changeEditProfileButton()
+        configureNavBar()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -159,8 +160,6 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         customView.backgroundColor = sender.isOn ? AppColors.customGrey.color : AppColors.customLight.color
         changeEditProfileButton()
         
-        
-        
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
         navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
         versionLabel.textColor = isDark ? .white : .black
@@ -171,6 +170,14 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         attributedString.addAttribute(.underlineStyle, value: 1, range: NSRange(location: 0, length: attributedString.length))
         attributedString.addAttribute(.foregroundColor, value: isDark ? UIColor.white : UIColor.black, range: NSRange(location: 0, length: attributedString.length))
         editProfileButton.setAttributedTitle(attributedString, for: .normal)
+    }
+    
+    func configureNavBar() {
+        navigationItem.title = user.user!.fullName
+        
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
+        
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     func configureUI() {        
@@ -185,13 +192,8 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         
         tabBarController?.tabBar.isHidden = true
         
-        navigationItem.title = user.user!.fullName
-        
-        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
-//        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        
-        navigationController?.navigationBar.prefersLargeTitles = true
-        
+
+        configureNavBar()
         customView.addSubview(editProfileButton)
         NSLayoutConstraint.activate([
             editProfileButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),

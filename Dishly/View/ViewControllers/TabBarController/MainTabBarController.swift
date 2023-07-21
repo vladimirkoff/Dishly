@@ -52,7 +52,6 @@ class MainTabBarController: UITabBarController {
         
         navigationItem.rightBarButtonItem?.tintColor = isDark ? .white : AppColors.customPurple.color
         
-
     }
     
     override func viewDidLoad() {
@@ -127,6 +126,7 @@ class MainTabBarController: UITabBarController {
     func configureVC(image: UIImage, vc: UIViewController) -> UIViewController {
         let selectedImage = UIImageView(image: image)
         selectedImage.tintColor = .white
+  
         
         vc.tabBarItem.image = image
         vc.tabBarItem.selectedImage = image.withTintColor(UIColor.systemRed)
@@ -205,8 +205,4 @@ extension MainTabBarController: UITabBarControllerDelegate {
     }
 }
 
-extension MainTabBarController {
-    
 
-    
-}

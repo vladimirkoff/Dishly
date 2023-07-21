@@ -121,13 +121,6 @@ class SavedViewController: UICollectionViewController {
     
     func configureUI() {
         navigationController?.navigationBar.isHidden = false
-        view.backgroundColor = AppColors.customGrey.color
-
-        navigationController?.navigationBar.shadowImage = nil
-
-        
-        navigationItem.title = "My Saved Recipes"
-        navigationController?.navigationBar.prefersLargeTitles = true
         
         view.addSubview(noRecipesView)
         NSLayoutConstraint.activate([

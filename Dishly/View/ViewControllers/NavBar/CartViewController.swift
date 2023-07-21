@@ -22,19 +22,23 @@ class CartViewController: UIViewController {
     
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = AppColors.customGrey.color
-
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(UINib(nibName: "IngredientTableCell", bundle: nil), forCellReuseIdentifier: tableCellReuseIdentifier)
         return tableView
     }()
     
+    private let customView = CustomUIViewBackground()
+    
     // MARK: - Lifecycle
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        view.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
+        
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = AppColors.customGrey.color
-
         tableView.delegate = self
         tableView.dataSource = self
         setupNavigationBar()
@@ -46,18 +50,12 @@ class CartViewController: UIViewController {
     private func setupNavigationBar() {
         navigationItem.title = "My Groceries"
         navigationController?.navigationBar.prefersLargeTitles = true
-        
-        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
-
         navigationController?.navigationBar.prefersLargeTitles = true
-        
         let rightButton = UIBarButtonItem(title: "Clear cart", style: .plain, target: self, action: #selector(rightButtonTapped))
         navigationItem.rightBarButtonItem = rightButton
     }
     
     private func setupUI() {
-
         view.addSubview(itemCountLabel)
         NSLayoutConstraint.activate([
             itemCountLabel.topAnchor.constraint(equalTo: view.topAnchor),
@@ -65,7 +63,6 @@ class CartViewController: UIViewController {
         ])
         
         view.addSubview(tableView)
-    
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 8),
             tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -90,19 +87,7 @@ class CartViewController: UIViewController {
 
 extension CartViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var ingredientsCount = 0
-        if let savedData = UserDefaults.standard.data(forKey: "customIngredients") {
-            let decoder = JSONDecoder()
-            if let loadedIngredients = try? decoder.decode([Ingredient].self, from: savedData) {
-                ingredientsCount = loadedIngredients.count
-                for ingredient in loadedIngredients {
-                    print(ingredient.name ?? "")
-                    print(ingredient.volume ?? "")
-                    print(ingredient.portion ?? "")
-                }
-            }
-        }
-        return isClearTapped ? 0 : ingredientsCount
+        return isClearTapped ? 0 : myGroceries.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

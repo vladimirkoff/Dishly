@@ -159,8 +159,8 @@ class RecipeCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: itemImageView.bottomAnchor, constant: 4),
             stack.leftAnchor.constraint(equalTo: leftAnchor, constant: 4),
-            stack.heightAnchor.constraint(equalToConstant: 12),
-            stack.widthAnchor.constraint(equalToConstant: frame.width / 4)
+            stack.heightAnchor.constraint(equalToConstant: 14),
+            stack.widthAnchor.constraint(equalToConstant: frame.width / 3)
         ])
         
         addSubview(recipeNameLabel)

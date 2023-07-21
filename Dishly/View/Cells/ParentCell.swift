@@ -49,7 +49,7 @@ class ParentCell: UICollectionViewCell {
     private lazy var categoryCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .vertical
-        let collectionView = UICollectionView(frame: CGRect(x: 0, y: bounds.midY - bounds.midY / 2, width: bounds.width, height: bounds.height - 60), collectionViewLayout: collectionViewLayout)
+        let collectionView = UICollectionView(frame: CGRect(x: 0, y: titleLabel.frame.maxY + 32, width: bounds.width, height: bounds.height - 60), collectionViewLayout: collectionViewLayout)
 
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -89,7 +89,6 @@ class ParentCell: UICollectionViewCell {
             horizontalCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
             horizontalCollectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             horizontalCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            horizontalCollectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
 
         horizontalCollectionView.register(RecipeCell.self, forCellWithReuseIdentifier: "HorizontalCell")
@@ -107,8 +106,7 @@ class ParentCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             categoryCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
             categoryCollectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            categoryCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            categoryCollectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            categoryCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
 
         categoryCollectionView.register(CategoryCell.self, forCellWithReuseIdentifier: "CategoryCell")

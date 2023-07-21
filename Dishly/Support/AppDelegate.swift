@@ -53,21 +53,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-  
-
-     
-        
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
-        
         let config = Realm.Configuration(
             schemaVersion: 6,
             migrationBlock: { migration, oldSchemaVersion in
                 if oldSchemaVersion < 6 {
-                    // Add the 'primaryKey' property
                     migration.enumerateObjects(ofType: RecipeRealm.className()) { _, newObject in
                         newObject?["primaryKey"] = ""
                     }
-             
                 }
             }
         )
@@ -80,10 +73,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Failed to initialize Realm: \(error)")
         }
         
-        if let realmURL = Realm.Configuration.defaultConfiguration.fileURL {
-            print("Realm file path: \(realmURL.path)")
-
+        if let savedData = UserDefaults.standard.data(forKey: "customIngredients") {
+            let decoder = JSONDecoder()
+            if let loadedIngredients = try? decoder.decode([Ingredient].self, from: savedData) {
+                myGroceries = loadedIngredients
+            }
         }
+        
+//        if let realmURL = Realm.Configuration.defaultConfiguration.fileURL {
+//            print("Realm file path: \(realmURL.path)")
+//
+//        }
         
         return true
     }

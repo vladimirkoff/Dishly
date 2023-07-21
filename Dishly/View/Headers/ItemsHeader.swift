@@ -18,6 +18,8 @@ protocol ItemsHeaderDelegate {
 class ItemsHeader: UICollectionReusableView {
     //MARK: - Properties
     
+    private var previousCell: UICollectionViewCell!
+    
     var selectedIndexPath: IndexPath?
     let initialCellScale: CGFloat = 1.0
     let selectedCellScale: CGFloat = 0.9
@@ -138,6 +140,8 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
             }
             else {
                 if indexPath.row == 0 {
+                    cell.collectionImageView.layer.borderWidth = 3
+                    cell.collectionImageView.layer.borderColor = isDark ? UIColor.white.cgColor : AppColors.customPurple.color.cgColor
                     self.collectionView(collectionView, didSelectItemAt: indexPath)
                 }
                 cell.collection = collections[indexPath.row]
@@ -148,6 +152,7 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func showCollectionNameAlert() {
+        guard let collections = collections else { return }
         let alertController = UIAlertController(title: "Enter collection name", message: nil, preferredStyle: .alert)
 
         alertController.addTextField { textField in
@@ -186,12 +191,22 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) as? CollectionCell {
-            cell.collectionImageView.layer.borderWidth = 3
-            cell.collectionImageView.layer.borderColor = isDark ? UIColor.white.cgColor : AppColors.customPurple.color.cgColor
+        guard let collections = collections else { return }
+        if let previousCell = previousCell as? CollectionCell {
+            previousCell.collectionImageView.layer.borderWidth = 0
         }
-        
-        indexPath.row == collections!.count ? showCollectionNameAlert() : delegate?.fecthRecipes(with: collections![indexPath.row])
+        if let cell = collectionView.cellForItem(at: indexPath) as? CollectionCell {
+            previousCell = cell
+            if indexPath.row == collections.count  {
+                cell.collectionImageView.layer.borderWidth = 0
+            } else {
+                cell.collectionImageView.layer.borderWidth = 3
+                cell.collectionImageView.layer.borderColor = isDark ? UIColor.white.cgColor : AppColors.customPurple.color.cgColor
+            }
+       
+        }
+    
+        indexPath.row == collections.count ? showCollectionNameAlert() : delegate?.fecthRecipes(with: collections[indexPath.row])
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {

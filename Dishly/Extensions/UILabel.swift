@@ -9,3 +9,11 @@ import UIKit
 
 class CollectionLabel: UILabel {}
 class TableLabel: UILabel {}
+
+extension UILabel {
+    func setFont(name: String, size: Int) {
+        if let font = UIFont(name: name, size: CGFloat(size)) {
+            self.font = font
+        }
+    }
+}

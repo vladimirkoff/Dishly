@@ -67,7 +67,7 @@ func setRecipesConfiguration(recipe: QueryDocumentSnapshot) -> RecipeViewModel? 
                              name: name,
                              serve: serve,
                              cookTime: cookTime,
-                             category: Recipe.Category(rawValue: category)!,
+                             category: Recipe.Category(rawValue: category) ?? Recipe.Category(rawValue: "Lunch")!,
                              sumOfRatings: sumOfRatings,
                              ingredients: ingredientsArray,
                              instructions: instructionsList,

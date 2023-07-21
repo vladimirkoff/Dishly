@@ -98,11 +98,29 @@ extension CollectionsPopupView: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionCell", for: indexPath) as! CollectionCell
+
         cell.backgroundColor = .clear
         cell.collectionNameLabel.textColor = .white
         if let collections = collections {
+           
             if indexPath.row == collections.count  {
-                cell.collectionImageView.image = UIImage(systemName: "plus")
+                cell.collectionNameLabel.text = "Create"
+                
+                let originalImage = UIImage(systemName: "plus")
+                let scaleFactor: CGFloat = 2.0
+                  let scaledImageSize = CGSize(width: (originalImage?.size.width ?? 0.0) * scaleFactor,
+                                               height: (originalImage?.size.height ?? 0.0) * scaleFactor)
+
+                  UIGraphicsBeginImageContextWithOptions(scaledImageSize, false, 0.0)
+                  originalImage?.draw(in: CGRect(origin: .zero, size: scaledImageSize))
+                  let smallerImage = UIGraphicsGetImageFromCurrentImageContext()
+                  UIGraphicsEndImageContext()
+                cell.collectionImageView.image = smallerImage?.withRenderingMode(.alwaysTemplate)
+                cell.collectionImageView.image = originalImage
+
+                cell.collectionImageView.backgroundColor = AppColors.customGrey.color
+                cell.collectionImageView.tintColor = .white
+                cell.collectionImageView.contentMode = .center // Adjust this to your desired content mode
             } else {
                 cell.collection = collections[indexPath.row]
             }

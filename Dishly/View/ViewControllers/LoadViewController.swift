@@ -137,8 +137,6 @@ class LoadViewController: UIViewController {
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }
-       
-        
         //        let currentUser = Auth.auth().currentUser
         //        if let currentUser = currentUser {
         //            let providerID = currentUser.providerData.first?.providerID

@@ -75,7 +75,8 @@ class ExploreViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        navigationItem.title = "Explore"
+        
         userViewModel = UserViewModel(user: nil, userService: userService)
         recipeViewModel = RecipeViewModel(recipe: Recipe(category: Recipe.Category(rawValue: "Ukraine")!, ingredients: [], instructions: []), recipeService: recipeService)
     }
@@ -83,10 +84,9 @@ class ExploreViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         configureUI()
-        
-        navigationItem.title = "Search"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        
+
+   
+
         refreshControl = UIRefreshControl()
            refreshControl.addTarget(self, action: #selector(refreshCollectionView), for: .valueChanged)
         collectionView.refreshControl = refreshControl

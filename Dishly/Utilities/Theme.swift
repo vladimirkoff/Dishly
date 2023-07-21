@@ -65,7 +65,6 @@ func changeAppearance(isDarkMode: Bool, navigationController: UINavigationContro
         UISearchBar.appearance().backgroundColor = .white
         UITextField.appearance().textColor = .black
         UITextField.appearance().backgroundColor = .white
-        navigationController.navigationItem.rightBarButtonItem?.tintColor = AppColors.customPurple.color
         CustomButton.appearance().backgroundColor = AppColors.customPurple.color
         CustomUIViewBackground.appearance().backgroundColor = AppColors.customLight.color
 //        CustomUIViewBackground.appearance().backgroundColor = AppColors.customLight.color
@@ -76,7 +75,6 @@ func changeAppearance(isDarkMode: Bool, navigationController: UINavigationContro
         
         UICollectionReusableView.appearance().backgroundColor = AppColors.customLight.color
         UISearchBar.appearance().backgroundColor = AppColors.customLight.color
-        navigationController.navigationItem.rightBarButtonItem?.tintColor = AppColors.customPurple.color
         navigationController.navigationBar.tintColor = AppColors.customPurple.color
         navigationController.navigationBar.backgroundColor = AppColors.customLight.color
         UITableView.appearance().backgroundColor = AppColors.customLight.color

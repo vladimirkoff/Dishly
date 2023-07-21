@@ -50,10 +50,11 @@ class MealCell: UICollectionViewCell {
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .orange
         collectionView.backgroundColor = .clear
         return collectionView
     }()
+    
+    private let customView = CustomUIViewBackground()
     
     //MARK: - Lifecycle
     
@@ -103,8 +104,6 @@ class MealCell: UICollectionViewCell {
             horizontalCollectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
-    
-    private let customView = CustomUIViewBackground()
     
     //MARK: - Selectors
     

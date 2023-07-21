@@ -23,7 +23,7 @@ class IngredientTableCell: UITableViewCell {
     private let protionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 20
+        label.numberOfLines = 0
         return label
     }()
     
@@ -39,12 +39,15 @@ class IngredientTableCell: UITableViewCell {
     //MARK: - Helpers
     
     func configureAttributedString(volume: Float, portion: String) -> NSAttributedString {
-        let attributedText = NSMutableAttributedString(string: "\(volume)\n", attributes: [.font: UIFont.systemFont(ofSize: 12), .foregroundColor: UIColor.black])
-        attributedText.append(NSAttributedString(string: portion, attributes: [.font: UIFont.systemFont(ofSize: 12), .foregroundColor: UIColor.black]))
+        let font = UIFont(name: "GillSans-SemiBold", size: 14)!
+
+        let attributedText = NSMutableAttributedString(string: "\(volume)\n", attributes: [.font: font, .foregroundColor: UIColor.black])
+        attributedText.append(NSAttributedString(string: portion, attributes: [.font: font, .foregroundColor: UIColor.black]))
         return attributedText
     }
     
     func configureCell() {
+        item.font = UIFont(name: "GillSans-SemiBold", size: 18)!
         deleteButton.tintColor = .black
         item.textColor = .black
         addSubview(protionLabel)

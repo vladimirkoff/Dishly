@@ -27,17 +27,8 @@ struct Recipe {
     
     enum Category: String, Codable, CaseIterable {
         case france = "France"
-        case australia = "Australia"
-        case chicken = "Chicken"
-        case seaFood = "Sea Food"
-        case pizza = "Pizza"
-        case burger = "Burger"
-        case pasta = "Pasta"
-        case toast = "Toast or Sandwich"
-        case vegan = "Vegan"
         case appetizer = "Appetizer"
         case breakfast = "Breakfast"
-        case bakery = "Bakery"
         case drinks = "Drinks"
         case belgium = "Belgium"
         case germany = "Germany"
@@ -49,6 +40,10 @@ struct Recipe {
         case italy = "Italiy"
         case canada = "Canada"
         case austria = "Austria"
+        case america = "America"
+        case belarus = "Belarus"
+        case india = "India"
+        case dessert = "Dessert"
     }
     
     enum Portion: String, Codable, CaseIterable {

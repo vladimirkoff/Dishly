@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 appearance.backgroundColor = .white
                 UITabBar.appearance().standardAppearance = appearance
                 UITabBar.appearance().scrollEdgeAppearance = appearance
-                UITabBar.appearance().tintColor = AppColors.customPurple.color
+                UITabBar.appearance().tintColor = AppColors.customBrown.color
                 UITabBar.appearance().isTranslucent = false
             } else {
                 UITabBar.appearance().barTintColor = UIColor.red

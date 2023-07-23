@@ -44,9 +44,9 @@ func changeAppearance(isDarkMode: Bool, navigationController: UINavigationContro
         isDark = false
         UIApplication.shared.statusBarStyle = .default
 
-        UIBarButtonItem.appearance().tintColor = AppColors.customPurple.color
+        UIBarButtonItem.appearance().tintColor = AppColors.customBrown.color
         UIButton.appearance().setTitleColor(.black, for: .normal)
-        UIButton.appearance().tintColor = AppColors.customPurple.color
+        UIButton.appearance().tintColor = AppColors.customBrown.color
 
         CollectionLabel.appearance().textColor = .black
         TableLabel.appearance().textColor = .black
@@ -60,20 +60,20 @@ func changeAppearance(isDarkMode: Bool, navigationController: UINavigationContro
         UISearchBar.appearance().backgroundColor = .white
         UITextField.appearance().textColor = .black
         UITextField.appearance().backgroundColor = .white
-        CustomButton.appearance().backgroundColor = AppColors.customPurple.color
+        CustomButton.appearance().backgroundColor = AppColors.customBrown.color
         CustomUIViewBackground.appearance().backgroundColor = AppColors.customLight.color
         UICollectionView.appearance().backgroundColor = AppColors.customLight.color
         
-        UICollectionViewCell.appearance().backgroundColor = AppColors.customPurple.color
-        CustomUICollectionViewCellBackground.appearance().backgroundColor = AppColors.customPurple.color
+        UICollectionViewCell.appearance().backgroundColor = AppColors.customBrown.color
+        CustomUICollectionViewCellBackground.appearance().backgroundColor = AppColors.customBrown.color
         
         UICollectionReusableView.appearance().backgroundColor = AppColors.customLight.color
         UISearchBar.appearance().backgroundColor = AppColors.customLight.color
-        navigationController.navigationBar.tintColor = AppColors.customPurple.color
+        navigationController.navigationBar.tintColor = AppColors.customBrown.color
         navigationController.navigationBar.backgroundColor = AppColors.customLight.color
         UITableView.appearance().backgroundColor = AppColors.customLight.color
         UIScrollView.appearance().backgroundColor = .clear
-        CustomButton.appearance().backgroundColor = AppColors.customPurple.color
+        CustomButton.appearance().backgroundColor = AppColors.customBrown.color
         CustomButton.appearance().tintColor = .white
         CustomButton.appearance().setTitleColor(.white, for: .normal)
         UISearchBar.appearance().backgroundColor = AppColors.customLight.color

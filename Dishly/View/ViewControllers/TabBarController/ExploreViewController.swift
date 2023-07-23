@@ -26,7 +26,12 @@ class ExploreViewController: UIViewController {
 
     private var refreshControl: UIRefreshControl!
     
-    var recipes: [RecipeViewModel]
+    var recipes: [RecipeViewModel] {
+        didSet {
+            NotificationCenter.default.post(name: .refreshRecipes, object: nil, userInfo: ["recipes" : recipes])
+            self.refreshControl.endRefreshing()
+        }
+    }
     
     lazy private var backgroundView: UIView = {
         let view = UIView(frame: window.bounds)
@@ -136,15 +141,16 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ParentCell
         cell.index = indexPath.row
         cell.delegate = self
-        cell.configure(index: indexPath.row)
         cell.backgroundColor = .clear
+        cell.configure(index: indexPath.row)
         if indexPath.row == 0 {
-            cell.numOfRecipes = recipes.count
             cell.recipes = recipes
         }
         if indexPath.row == 1 || indexPath.row == 2 || indexPath.row == 3  {
+            cell.categoryCollectionView.isHidden = false
             cell.isForCategories = true
         } else {
+            cell.horizontalCollectionView.isHidden = false
             cell.isForCategories = false
         }
         return cell
@@ -157,7 +163,6 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
         } else {
             let cellHeight = (collectionView.bounds.height - collectionView.contentInset.top - collectionView.contentInset.bottom) / 2
             return CGSize(width: collectionView.bounds.width, height: cellHeight)
-
         }
     }
     
@@ -237,8 +242,6 @@ extension ExploreViewController: ParentCellDelegate {
         
     }
     
-
-    
     func hidePopUp() {
         backgroundView.removeFromSuperview()
         
@@ -257,13 +260,12 @@ extension ExploreViewController: ParentCellDelegate {
                     self.refreshControl.endRefreshing()
                     return
                 } else {
-                    self.recipes = recipes!
-                    self.collectionView.reloadData()
-                    self.refreshControl.endRefreshing()
+                    self.recipes = recipes ?? []
                 }
             }
         }
     }
+
 }
 
 //MARK: - CollectionsPopupViewDelegate

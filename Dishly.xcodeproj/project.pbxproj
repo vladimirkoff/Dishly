@@ -344,7 +344,6 @@
 			isa = PBXGroup;
 			children = (
 				85FE6B8B2A566A1500E6417D /* Storyboard */,
-				85C1B73C2A4DE08000BEAF2F /* Helpers */,
 				85C1B6E72A447CAB00BEAF2F /* Support */,
 				85C1B6F62A44858700BEAF2F /* Services */,
 				85C1B6E52A447C9A00BEAF2F /* View-Model */,
@@ -387,6 +386,7 @@
 		85C1B6E52A447C9A00BEAF2F /* View-Model */ = {
 			isa = PBXGroup;
 			children = (
+				85C1B7222A49BA3B00BEAF2F /* CustomTextField.swift */,
 				85C1B6F42A4483D400BEAF2F /* RecipeViewModel.swift */,
 				85C1B71A2A49893B00BEAF2F /* UserViewModel.swift */,
 				85C1B7202A49B96600BEAF2F /* AuthViewModel.swift */,
@@ -444,7 +444,13 @@
 		85C1B6F92A4485BF00BEAF2F /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				85C1B7222A49BA3B00BEAF2F /* CustomTextField.swift */,
+				85C1B73F2A4DE16700BEAF2F /* AuthCreds.swift */,
+				85C1B7412A4F069F00BEAF2F /* DependencyContainer.swift */,
+				85C1B7552A541AA000BEAF2F /* RandomUsernameGenerator.swift */,
+				85FE6B8E2A566C4600E6417D /* Storyboardable.swift */,
+				853F3B3E2A5864E400D53EB8 /* ConfigureRecipes.swift */,
+				852667142A5C68EC005BFCFC /* Errors.swift */,
+				8526671C2A5E7464005BFCFC /* Alerts.swift */,
 				85C1B7442A51534900BEAF2F /* Constants.swift */,
 				853F3B2C2A56D98400D53EB8 /* MyGroceries.swift */,
 				852666FA2A5AEC2E005BFCFC /* PrivacyPolicy.swift */,
@@ -501,20 +507,6 @@
 				853F3B3C2A585FEC00D53EB8 /* SearchTableCell.swift */,
 			);
 			path = Cells;
-			sourceTree = "<group>";
-		};
-		85C1B73C2A4DE08000BEAF2F /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				85C1B73F2A4DE16700BEAF2F /* AuthCreds.swift */,
-				85C1B7412A4F069F00BEAF2F /* DependencyContainer.swift */,
-				85C1B7552A541AA000BEAF2F /* RandomUsernameGenerator.swift */,
-				85FE6B8E2A566C4600E6417D /* Storyboardable.swift */,
-				853F3B3E2A5864E400D53EB8 /* ConfigureRecipes.swift */,
-				852667142A5C68EC005BFCFC /* Errors.swift */,
-				8526671C2A5E7464005BFCFC /* Alerts.swift */,
-			);
-			path = Helpers;
 			sourceTree = "<group>";
 		};
 		85FE6B8B2A566A1500E6417D /* Storyboard */ = {

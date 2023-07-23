@@ -58,10 +58,10 @@ class AddRecipeViewController: UIViewController, Storyboardable {
         createRecipeLabel.textColor = isDark ? .white : .black
         addIngredientButton.tintColor = isDark ? .white : .black
         addIngredientButton.setTitleColor(isDark ? .white : .black, for: .normal)
-        continueButton.backgroundColor = isDark ? .white : AppColors.customPurple.color
+        continueButton.backgroundColor = isDark ? .white : AppColors.customBrown.color
         continueButton.setTitleColor(isDark ? UIColor.black : UIColor.white, for: .normal)
         continueButton.tintColor = isDark ? UIColor.black : UIColor.white
-        categoryButton.backgroundColor = isDark ? .black : AppColors.customPurple.color
+        categoryButton.backgroundColor = isDark ? .black : AppColors.customBrown.color
         categoryButton.setTitleColor(.white, for: .normal)
         recipeNameField.clipsToBounds = true
         recipeNameField.layer.cornerRadius = 20
@@ -95,7 +95,7 @@ class AddRecipeViewController: UIViewController, Storyboardable {
         let attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: [NSAttributedString.Key.foregroundColor: textField == recipeNameField ? UIColor.lightGray : UIColor.white])
         textField.textColor = textField == recipeNameField ? .black : UIColor.white
         textField.attributedPlaceholder = attributedPlaceholder
-        textField.backgroundColor = isDark ? AppColors.customLightGrey.color : AppColors.customPurple.color
+        textField.backgroundColor = isDark ? AppColors.customLightGrey.color : AppColors.customBrown.color
     }
     
     func configurePickerView() {
@@ -112,7 +112,7 @@ class AddRecipeViewController: UIViewController, Storyboardable {
         let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         
         let barButton = UIBarButtonItem(image: UIImage(systemName: "checkmark.circle.fill"),
-                                        style: .done, target: self, action: #selector(doneButtonTapped))
+                                        style: .done, target: self, action: #selector(configureCategoryPV))
         spacer.width = UIScreen.main.bounds.size.width - barButton.width
         toolBar.items = [spacer, barButton]
         toolBar.sizeToFit()
@@ -136,7 +136,7 @@ class AddRecipeViewController: UIViewController, Storyboardable {
         
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let barButton = UIBarButtonItem(image: UIImage(systemName: "checkmark.circle.fill"),
-                                        style: .done, target: self, action: #selector(doneButtonTapped))
+                                        style: .done, target: self, action: #selector(configurePortionPV))
                 
         toolBar.items = [spacer, barButton]
         toolBar.sizeToFit()
@@ -234,12 +234,12 @@ class AddRecipeViewController: UIViewController, Storyboardable {
         self.dismiss(animated: true)
     }
     
-    @objc func doneButtonTapped() {
+    @objc func configureCategoryPV() {
         categoryPickerView.removeFromSuperview()
         toolBar.removeFromSuperview()
     }
     
-    @objc func doneButto2nTapped() {
+    @objc func configurePortionPV() {
         portionPickerView.removeFromSuperview()
         toolBar.removeFromSuperview()
         

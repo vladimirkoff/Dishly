@@ -9,15 +9,21 @@ protocol ParentCellDelegate {
 
 class ParentCell: UICollectionViewCell {
     //MARK: - Properties
-    
-    var numOfRecipes = 0
-    
-    var index: Int!
+        
+    var index: Int! {
+        didSet {
+            if index == 0 {
+                NotificationCenter.default.addObserver(self, selector: #selector(refresh(_ :)), name: .refreshRecipes, object: nil)
+            }
+        }
+    }
 
     var recipeViewModel: RecipeViewModel!
     var delegate: ParentCellDelegate?
     
-    var recipes: [RecipeViewModel]?
+    var recipes: [RecipeViewModel]? {
+        didSet { horizontalCollectionView.reloadData() }
+    }
     
     var isForCategories: Bool? {
         didSet {
@@ -36,7 +42,7 @@ class ParentCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var horizontalCollectionView: UICollectionView = {
+     lazy var horizontalCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: CGRect(x: 0, y: titleLabel.frame.maxY, width: bounds.width, height: bounds.height - 40), collectionViewLayout: collectionViewLayout)
@@ -46,7 +52,7 @@ class ParentCell: UICollectionViewCell {
         return collectionView
     }()
     
-    private lazy var categoryCollectionView: UICollectionView = {
+     lazy var categoryCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: CGRect(x: 0, y: titleLabel.frame.maxY + 32, width: bounds.width, height: bounds.height - 60), collectionViewLayout: collectionViewLayout)
@@ -62,11 +68,13 @@ class ParentCell: UICollectionViewCell {
         super.prepareForReuse()
         horizontalCollectionView.isHidden = true
         categoryCollectionView.isHidden = true
+        recipes = nil
+        index = nil
+        isForCategories = nil
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-
     }
     
     required init?(coder: NSCoder) {
@@ -75,10 +83,18 @@ class ParentCell: UICollectionViewCell {
     
     //MARK: - Helpers
     
+    @objc func refresh(_ notification: Notification) {
+        if let userInfo = notification.userInfo {
+            if let recieps = userInfo["recipes"] as? [RecipeViewModel] {
+                self.recipes = recieps
+                horizontalCollectionView.reloadData()
+            }
+        }
+    }
+    
  
     func configureCell() {
         addSubview(titleLabel)
-        horizontalCollectionView.isHidden = false
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 6),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12)
@@ -96,7 +112,6 @@ class ParentCell: UICollectionViewCell {
 
     func configureCellForCategories() {
         addSubview(titleLabel)
-        categoryCollectionView.isHidden = false
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 6),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12)
@@ -133,7 +148,9 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView {
         case horizontalCollectionView:
-            return numOfRecipes
+            if let numOfRecipes = recipes?.count {
+                return numOfRecipes
+            } else { return 0 }
         case categoryCollectionView:
             if index == 1 {
                 return  mealCategories.count
@@ -153,12 +170,10 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == horizontalCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath) as! RecipeCell
-            cell.layer.cornerRadius = 15
             cell.delegate = self
             if let recipes = recipes {
                 cell.recipeViewModel = recipes[indexPath.row]
             }
-          
             return cell
         } else if collectionView == categoryCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell            
@@ -195,6 +210,8 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         }
         return CGSize.zero
     }
+    
+    
 }
 
 //MARK: - RecipeCellDelegate
@@ -217,3 +234,6 @@ extension ParentCell: RecipeCellDelegate {
     }
 }
 
+extension Notification.Name {
+    static let refreshRecipes = Notification.Name("RefreshRecipesTriggered")
+}

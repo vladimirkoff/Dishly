@@ -40,7 +40,7 @@ class ProfileOptionVC: UIViewController {
         super.viewWillDisappear(animated)
         navBarAppearance.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
         navBarAppearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
-        navigationController?.navigationBar.tintColor = isDark ? .white : AppColors.customPurple.color
+        navigationController?.navigationBar.tintColor = isDark ? .white : AppColors.customBrown.color
         
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance

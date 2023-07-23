@@ -61,7 +61,7 @@ class RecipeViewController: UIViewController {
 
         button.setTitle("Add to cart", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        button.backgroundColor = isDark ? .white : AppColors.customPurple.color
+        button.backgroundColor = isDark ? .white : AppColors.customBrown.color
         button.setTitleColor(isDark ? .black : .white, for: .normal)
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 2
@@ -322,7 +322,7 @@ class RecipeViewController: UIViewController {
         ingridientsLabel.textColor = isDark ? .white : .black
         tapToRateLabel.textColor = isDark ? .white : .black
         instructionsLabel.textColor = isDark ? .white : .black
-        nameAndAythorView.backgroundColor = isDark ? AppColors.customLightGrey.color : AppColors.customPurple.color
+        nameAndAythorView.backgroundColor = isDark ? AppColors.customLightGrey.color : AppColors.customBrown.color
     }
     
     func configureRatingImages(rating: Float, imageViews: [UIImageView]) {

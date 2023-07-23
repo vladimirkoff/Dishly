@@ -17,7 +17,6 @@ class SavedViewController: UICollectionViewController {
     
     var isToChoseMeal = false
     
-    
     private lazy var noRecipesView: NoRecipesView = {
         let view = NoRecipesView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -32,8 +31,7 @@ class SavedViewController: UICollectionViewController {
     private var refreshControl: UIRefreshControl!
     
     private let recipesRealmService: RecipesRealmServiceProtocol!
-    
-    private let collectionService: CollectionServiceProtocol!
+         private let collectionService: CollectionServiceProtocol!
     private var collectionViewModel: CollectionViewModel!
     
     private let hud = JGProgressHUD(style: .dark)

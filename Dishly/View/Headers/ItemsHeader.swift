@@ -141,7 +141,7 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
             else {
                 if indexPath.row == 0 {
                     cell.collectionImageView.layer.borderWidth = 3
-                    cell.collectionImageView.layer.borderColor = isDark ? UIColor.white.cgColor : AppColors.customPurple.color.cgColor
+                    cell.collectionImageView.layer.borderColor = isDark ? UIColor.white.cgColor : AppColors.customBrown.color.cgColor
                     self.collectionView(collectionView, didSelectItemAt: indexPath)
                 }
                 cell.collection = collections[indexPath.row]
@@ -201,7 +201,7 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
                 cell.collectionImageView.layer.borderWidth = 0
             } else {
                 cell.collectionImageView.layer.borderWidth = 3
-                cell.collectionImageView.layer.borderColor = isDark ? UIColor.white.cgColor : AppColors.customPurple.color.cgColor
+                cell.collectionImageView.layer.borderColor = isDark ? UIColor.white.cgColor : AppColors.customBrown.color.cgColor
             }
        
         }

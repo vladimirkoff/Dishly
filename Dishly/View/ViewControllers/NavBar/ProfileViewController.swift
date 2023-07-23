@@ -128,7 +128,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         appearance.backgroundColor = isDark ? AppColors.customGrey.color : .white
         tabBar?.standardAppearance = appearance
         tabBar?.scrollEdgeAppearance = appearance
-        tabBar?.tintColor = isDark ? .white : AppColors.customPurple.color
+        tabBar?.tintColor = isDark ? .white : AppColors.customBrown.color
     }
 
     

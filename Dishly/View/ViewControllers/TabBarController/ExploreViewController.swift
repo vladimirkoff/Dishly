@@ -58,8 +58,6 @@ class ExploreViewController: UIViewController {
         view = customView
     }
     
-    
-    
     init(user: UserViewModel, recipes: [RecipeViewModel], userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, collectionService: CollectionServiceProtocol) {
         self.user = user
         self.userService = userService
@@ -85,7 +83,6 @@ class ExploreViewController: UIViewController {
         super.viewDidLayoutSubviews()
         configureUI()
 
-   
 
         refreshControl = UIRefreshControl()
            refreshControl.addTarget(self, action: #selector(refreshCollectionView), for: .valueChanged)

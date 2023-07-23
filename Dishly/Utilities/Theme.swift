@@ -7,18 +7,16 @@ var isDark = true
 func changeAppearance(isDarkMode: Bool, navigationController: UINavigationController) {
     
     let navBarAppearance = UINavigationBarAppearance()
-    
 
     if isDarkMode {
         isDark = true
-
+        UIApplication.shared.statusBarStyle = .lightContent
         
         UIBarButtonItem.appearance().tintColor = .white
         UIButton.appearance().setTitleColor(.white, for: .normal)
         UIButton.appearance().tintColor = .white
         CustomUICollectionViewCellBackground.appearance().backgroundColor = AppColors.customLightGrey.color
 
-//        navigationController.navigationItem.rightBarButtonItem?.tintColor = .white
         CollectionLabel.appearance().textColor = .white
         TableLabel.appearance().textColor = .white
         navigationController.navigationBar.barStyle = .black
@@ -33,7 +31,6 @@ func changeAppearance(isDarkMode: Bool, navigationController: UINavigationContro
         UICollectionView.appearance().backgroundColor = AppColors.customGrey.color
         navigationController.navigationBar.tintColor = AppColors.customGrey.color
         navigationController.navigationBar.backgroundColor = AppColors.customGrey.color
-        navigationController.navigationItem.rightBarButtonItem?.tintColor = .white
         UITableView.appearance().backgroundColor = AppColors.customGrey.color
         UIScrollView.appearance().backgroundColor = .clear
         UISearchBar.appearance().barTintColor = AppColors.customGrey.color
@@ -43,17 +40,15 @@ func changeAppearance(isDarkMode: Bool, navigationController: UINavigationContro
         CustomButton.appearance().tintColor = .black
         CustomButton.appearance().setTitleColor(.black, for: .normal)
         UISearchBar.appearance().backgroundColor = AppColors.customGrey.color
-    
-
     } else {
         isDark = false
+        UIApplication.shared.statusBarStyle = .default
+
         UIBarButtonItem.appearance().tintColor = AppColors.customPurple.color
         UIButton.appearance().setTitleColor(.black, for: .normal)
-        UIButton.appearance().tintColor = .black
-
+        UIButton.appearance().tintColor = AppColors.customPurple.color
 
         CollectionLabel.appearance().textColor = .black
-        navigationController.navigationItem.rightBarButtonItem?.tintColor = AppColors.customPurple.color
         TableLabel.appearance().textColor = .black
         navigationController.navigationBar.barStyle = .default
         navBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
@@ -67,7 +62,6 @@ func changeAppearance(isDarkMode: Bool, navigationController: UINavigationContro
         UITextField.appearance().backgroundColor = .white
         CustomButton.appearance().backgroundColor = AppColors.customPurple.color
         CustomUIViewBackground.appearance().backgroundColor = AppColors.customLight.color
-//        CustomUIViewBackground.appearance().backgroundColor = AppColors.customLight.color
         UICollectionView.appearance().backgroundColor = AppColors.customLight.color
         
         UICollectionViewCell.appearance().backgroundColor = AppColors.customPurple.color

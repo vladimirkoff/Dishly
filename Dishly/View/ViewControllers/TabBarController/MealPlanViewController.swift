@@ -40,18 +40,12 @@ class MealPlanVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(updateController), name: .savedVCTriggered, object: nil)
-
-        configureNavBar()
+        NotificationCenter.default.addObserver(self, selector: #selector(deleteOrAddRecipe(_:)), name: .savedVCTriggered, object: nil)
         setupCollectionView()
         fecthRecipesForPlans()
     }
     
     //MARK: - Helpers
-    
-    private func configureNavBar() {
-       
-    }
     
     private func setupCollectionView() {
         collectionView.delegate = self
@@ -67,13 +61,7 @@ class MealPlanVC: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-    
-    //MARK: - Selectors
-    
-    @objc func updateController() {
-        fecthRecipesForPlans()
-    }
-    
+        
 }
 
 //MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
@@ -101,7 +89,40 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         return CGSize(width: width, height: 300)
     }
     
-  
+    @objc func deleteOrAddRecipe(_ notification: Notification) {
+        var id = ""
+        if let userInfo = notification.userInfo {
+            id = userInfo["id"] as? String ?? ""
+            
+            if let _ = userInfo["isToAdd"]  {
+                self.fecthRecipesForPlans()
+                return
+            }
+        }
+        showDeleteAlert(for: id)
+    }
+    
+    @objc func showDeleteAlert(for id: String) {
+        let alert = UIAlertController(title: "Delete recipe", message: "Are you sure you want to delete this recipe?", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(cancelAction)
+        
+        let logoutAction = UIAlertAction(title: "Yes", style: .destructive) { _ in
+            self.deleteRecipe(id: id)
+        }
+        alert.addAction(logoutAction)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func deleteRecipe(id: String) {
+        RecipesRealmService().deleteRecipeRealm(id: id) { [weak self] success in
+            guard let self = self else { return }
+            if success {
+                self.fecthRecipesForPlans()
+            }
+        }
+    }
     
     //MARK: - DB calls
     

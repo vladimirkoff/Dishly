@@ -107,11 +107,12 @@ class AddRecipeViewController: UIViewController, Storyboardable {
         
         toolBar = UIToolbar.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 50))
         toolBar.barStyle = .default
+        toolBar.backgroundColor = isDark ? .black : .white
         
         let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        
         let barButton = UIBarButtonItem(image: UIImage(systemName: "checkmark.circle.fill"),
                                         style: .done, target: self, action: #selector(doneButtonTapped))
-        
         spacer.width = UIScreen.main.bounds.size.width - barButton.width
         toolBar.items = [spacer, barButton]
         toolBar.sizeToFit()
@@ -123,25 +124,24 @@ class AddRecipeViewController: UIViewController, Storyboardable {
     }
     
     func configurePortionPickerView() {
-        
         portionPickerView.delegate = self
         portionPickerView.dataSource = self
         portionPickerView.contentMode = .top
-        portionPickerView.frame = CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 200)
+        portionPickerView.frame = CGRect(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 200)
         portionPickerView.backgroundColor = UIColor.systemBackground
         
-        toolBar = UIToolbar.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 50))
+        toolBar = UIToolbar(frame: CGRect(x: 0.0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: 50))
         toolBar.barStyle = .default
+        toolBar.backgroundColor = isDark ? .black : .white
         
-        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let barButton = UIBarButtonItem(image: UIImage(systemName: "checkmark.circle.fill"),
-                                        style: .done, target: self, action: #selector(doneButto2nTapped))
-        
-        spacer.width = UIScreen.main.bounds.size.width - barButton.width
+                                        style: .done, target: self, action: #selector(doneButtonTapped))
+                
         toolBar.items = [spacer, barButton]
         toolBar.sizeToFit()
         
-        UIView.transition(with: self.view, duration: 0.5, options: [.transitionCrossDissolve] , animations: {
+        UIView.transition(with: view, duration: 0.5, options: [.transitionCrossDissolve], animations: {
             self.view.addSubview(self.portionPickerView)
             self.view.addSubview(self.toolBar)
         })

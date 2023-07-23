@@ -58,8 +58,6 @@ class MealCell: UICollectionViewCell {
     
     //MARK: - Lifecycle
     
-    
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundView = customView
@@ -134,7 +132,6 @@ extension MealCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? RecipeCell else { return }
         delegate?.goToRecipe(recipe: cell.recipeViewModel!)
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -153,13 +150,12 @@ extension MealCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
 
 extension MealCell: SavedVCProtocol {
     func handleCancel() {}
-    
     func reload(collections: [Collection], afterDeletion: Bool) {}
     
     func addRecipe(recipe: RecipeViewModel, mealsViewModel: MealsViewModel?) {
         guard let mealsViewModel = mealsViewModel else { return }
         RecipesRealmService().addRecipeRealm(recipe: recipe, day: day!.rawValue) { success in
-            NotificationCenter.default.post(name: .savedVCTriggered, object: nil)
+            NotificationCenter.default.post(name: .savedVCTriggered, object: nil, userInfo: ["isToAdd" : true])
             print(success)
         }
     }

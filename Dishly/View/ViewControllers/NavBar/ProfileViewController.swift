@@ -11,6 +11,10 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     
     //MARK: - Properties
     
+//    override var preferredStatusBarStyle: UIStatusBarStyle {
+//         return .lightContent
+//     }
+    
     var userService: UserServiceProtocol!
     var collectionService: CollectionServiceProtocol!
     var googleService: GoogleAuthServiceProtocol!
@@ -163,6 +167,10 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
         navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
         versionLabel.textColor = isDark ? .white : .black
+//
+//        UIApplication.shared.statusBarStyle = isDark ? .lightContent : .default
+//        // Принудительно обновляем стиль статус-бара
+//        setNeedsStatusBarAppearanceUpdate()
     }
     
     func changeEditProfileButton() {

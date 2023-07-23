@@ -39,7 +39,7 @@ class RecipeCell: UICollectionViewCell {
         button.setImage(UIImage(named: "save"), for: .normal)
         button.tintColor = .white
         button.layer.cornerRadius = 10
-        button.addTarget(self, action: #selector(saveRecipe), for: .touchUpInside)
+        button.addTarget(self, action: #selector(saveOrDelete), for: .touchUpInside)
         return button
     }()
     
@@ -98,7 +98,6 @@ class RecipeCell: UICollectionViewCell {
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.clipsToBounds = true
         iv.contentMode = .scaleAspectFill
-        iv.layer.cornerRadius = 15
         iv.backgroundColor = .lightGray
         return iv
     }()
@@ -139,7 +138,7 @@ class RecipeCell: UICollectionViewCell {
     
     
     func configureCell() {
-        
+        clipsToBounds = true
         layer.cornerRadius = 15
         
         addSubview(itemImageView)
@@ -242,14 +241,12 @@ class RecipeCell: UICollectionViewCell {
         delegate?.addGroceries(groceries: recipeViewModel!.recipe.ingredients)
     }
     
-    @objc func saveRecipe() {
-        if let isFromSaved = isFromSaved {
+    @objc func saveOrDelete() {
+        if let _ = isFromSaved {
             savedDelegate?.deleteRecipe(id: recipeViewModel!.recipe.id!)
-        } else if let isFromPlans {
-            RecipesRealmService().deleteRecipeRealm(id: recipeViewModel!.recipe.realmId!) { success in
-                NotificationCenter.default.post(name: .savedVCTriggered, object: nil)
-                print(success)
-            }
+        } else if let _ = isFromPlans {
+            guard let id = recipeViewModel?.recipe.realmId else { return }
+            NotificationCenter.default.post(name: .savedVCTriggered, object: nil, userInfo: ["id" : id])
         } else {
             delegate?.saveRecipe(recipe: recipeViewModel!)
         }

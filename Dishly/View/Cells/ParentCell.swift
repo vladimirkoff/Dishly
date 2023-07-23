@@ -10,7 +10,7 @@ protocol ParentCellDelegate {
 class ParentCell: UICollectionViewCell {
     //MARK: - Properties
     
-    var numOfRecipes: Int!
+    var numOfRecipes = 0
     
     var index: Int!
 

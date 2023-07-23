@@ -18,11 +18,7 @@ class MainTabBarController: UITabBarController {
     
     private let userRealmService: UserRealmServiceProtocol = UserRealmService()
     
-    private var recipes: [RecipeViewModel]? {
-        didSet {
-            
-        }
-    }
+    private var recipes: [RecipeViewModel]? 
     
     var user: UserViewModel!
     
@@ -49,9 +45,6 @@ class MainTabBarController: UITabBarController {
         super.viewWillAppear(animated)
         navigationItem.hidesBackButton = true
         navigationController?.navigationBar.topItem?.hidesBackButton = true
-        
-//        navigationItem.rightBarButtonItem?.tintColor = isDark ? .white : AppColors.customPurple.color
-        
     }
     
     override func viewDidLoad() {
@@ -97,13 +90,13 @@ class MainTabBarController: UITabBarController {
     func configureVC() {
         self.delegate = self
         
-        let mainVC = ExploreViewController(user: user, recipes: recipes!, userService: userService, recipeService: recipeService, collectionService: collectionService)
+        let mainVC = ExploreViewController(user: user, recipes: recipes!, userService: userService, recipeService: recipeService, collectionService: collectionService, recipesRealmService: recipesRealmService)
         let main = configureVC(image: UIImage(named: "home")!, vc: mainVC)
         
         let addVC = UIViewController()
         let add = configureVC(image: UIImage(named: "add")!, vc: addVC)
         
-        let savedVC = SavedViewController(collectionService: collectionService, user: user)
+        let savedVC = SavedViewController(collectionService: collectionService, user: user, recipesRealmService: recipesRealmService)
         let saved = configureVC(image: UIImage(named: "save")!, vc: savedVC)
         
         let mealVC = MealPlanVC(mealsService: mealsService, recipesRealmService: recipesRealmService)
@@ -160,11 +153,6 @@ class MainTabBarController: UITabBarController {
                 self.profileContainerView.addSubview(self.profileImageView)
                 let leftBarButton = UIBarButtonItem(customView: self.profileContainerView)
                 self.navigationItem.leftBarButtonItem = leftBarButton
-                
-//                let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "cart.fill"), style: .plain, target: self, action: #selector(self.rightBarButtonTapped))
-//                rightBarButtonItem.tintColor = isDark ? .white : AppColors.customPurple.color
-//
-//                self.navigationItem.rightBarButtonItem = rightBarButtonItem
             }
         }
     }

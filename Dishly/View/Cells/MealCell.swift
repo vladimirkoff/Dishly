@@ -1,14 +1,14 @@
 import UIKit
 
-protocol MealCellDelegate {
+protocol MealCellDelegate: AnyObject {
     func addRecipe(cell: MealCell)
     func goToRecipe(recipe: RecipeViewModel)
 }
 
 class MealCell: UICollectionViewCell {
-    //MARK: - Properties
-     
-    var delegate: MealCellDelegate?
+    // MARK: - Properties
+    
+    weak var delegate: MealCellDelegate?
     
     var recipes: [RecipeViewModel]? {
         didSet {
@@ -20,43 +20,43 @@ class MealCell: UICollectionViewCell {
     
     let dayLabel: TableLabel = {
         let label = TableLabel()
-        if let font = UIFont(name: "GillSans-SemiBold", size: 24) {
-            label.font = font
-        }
+        label.font = UIFont(name: "GillSans-SemiBold", size: 24)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    let addButton: UIButton = {
+    private let addButton: UIButton = {
         let button = UIButton(type: .system)
-        
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.setTitle("Add meal", for: .normal)
         button.titleLabel?.font = UIFont(name: "GillSans-SemiBold", size: 24)
-        button.addTarget(self, action: #selector(addButtonTaped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    let separatorView: UIView = {
+    private let separatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    let horizontalCollectionView: UICollectionView = {
+    private lazy var horizontalCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .clear
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(RecipeCell.self, forCellWithReuseIdentifier: "HorizontalCell")
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
     
     private let customView = CustomUIViewBackground()
     
-    //MARK: - Lifecycle
+    // MARK: - Lifecycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -69,17 +69,13 @@ class MealCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - Helpers
+    // MARK: - Helpers
     
     private func setupSubviews() {
         addSubview(dayLabel)
         addSubview(addButton)
         addSubview(separatorView)
         addSubview(horizontalCollectionView)
-
-        horizontalCollectionView.dataSource = self
-        horizontalCollectionView.delegate = self
-        horizontalCollectionView.register(RecipeCell.self, forCellWithReuseIdentifier: "HorizontalCell")
     }
     
     private func setupConstraints() {
@@ -103,19 +99,18 @@ class MealCell: UICollectionViewCell {
         ])
     }
     
-    //MARK: - Selectors
+    // MARK: - Selectors
     
-    @objc func addButtonTaped() {
+    @objc private func addButtonTapped() {
         delegate?.addRecipe(cell: self)
     }
 }
 
-//MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
+// MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
 
 extension MealCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let count = recipes?.count else { return 1 }
-        return count
+        return recipes?.count ?? 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -123,9 +118,7 @@ extension MealCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
         cell.addIngredientsButton.isHidden = true
         cell.isFromPlans = true
         cell.saveButton.setImage(UIImage(systemName: "minus.circle"), for: .normal)
-        if let recipes = recipes {
-            cell.recipeViewModel = recipes[indexPath.row]
-        }
+        cell.recipeViewModel = recipes?[indexPath.row]
         return cell
     }
     
@@ -141,12 +134,11 @@ extension MealCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayo
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let inset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-        return inset
+        return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
     }
 }
 
-//MARK: - SavedVCProtocol
+// MARK: - SavedVCProtocol
 
 extension MealCell: SavedVCProtocol {
     func handleCancel() {}
@@ -154,10 +146,6 @@ extension MealCell: SavedVCProtocol {
     
     func addRecipe(recipe: RecipeViewModel, mealsViewModel: MealsViewModel?) {
         guard let mealsViewModel = mealsViewModel else { return }
-        RecipesRealmService().addRecipeRealm(recipe: recipe, day: day!.rawValue) { success in
-            NotificationCenter.default.post(name: .savedVCTriggered, object: nil, userInfo: ["isToAdd" : true])
-            print(success)
-        }
+        NotificationCenter.default.post(name: .addTriggered, object: nil, userInfo: ["recipe": recipe, "day": day?.rawValue ?? ""])
     }
-    
 }

@@ -20,6 +20,7 @@ class RecipesViewController: UICollectionViewController {
           return view
       }()
     
+    private let recipesRealmService: RecipesRealmServiceProtocol!
     private let userService: UserServiceProtocol
     private var userViewModel: UserViewModel!
     
@@ -42,10 +43,11 @@ class RecipesViewController: UICollectionViewController {
         collectionView.register(RecipeCell.self, forCellWithReuseIdentifier: collectionCellReuseId)
     }
     
-    init(recipes: [RecipeViewModel], userService: UserServiceProtocol, exploreVC: ExploreViewController) {
+    init(recipes: [RecipeViewModel], userService: UserServiceProtocol, exploreVC: ExploreViewController, recipesRealmService: RecipesRealmServiceProtocol) {
         self.recipes = recipes
         self.userService = userService
         self.exploreVC = exploreVC
+        self.recipesRealmService = recipesRealmService
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
         
     }
@@ -68,7 +70,7 @@ class RecipesViewController: UICollectionViewController {
     
     func goToRecipe(with recipe: RecipeViewModel) {
         userViewModel.fetchUser(with: recipe.recipe.ownerId!) { user in
-            let vc = RecipeViewController(user: user, recipe: recipe)
+            let vc = RecipeViewController(user: user, recipe: recipe, recipesRealmService: self.recipesRealmService)
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }

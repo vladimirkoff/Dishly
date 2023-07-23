@@ -11,53 +11,6 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     
     //MARK: - Properties
     
-//    override var preferredStatusBarStyle: UIStatusBarStyle {
-//         return .lightContent
-//     }
-    
-    private let instaButton: UIButton = {
-         let button = UIButton()
-         button.setImage(UIImage(named: "insta"), for: .normal)
-         button.translatesAutoresizingMaskIntoConstraints = false
-         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
-         button.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        button.addTarget(self, action: #selector(openInsta), for: .touchUpInside)
-         return button
-     }()
-     
-     private let facebookButton: UIButton = {
-         let button = UIButton()
-         button.setImage(UIImage(named: "facebook"), for: .normal)
-         button.translatesAutoresizingMaskIntoConstraints = false
-         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
-         button.widthAnchor.constraint(equalToConstant: 40).isActive = true
-         button.addTarget(self, action: #selector(openFacebook), for: .touchUpInside)
-
-         return button
-     }()
-     
-     private let twitterButton: UIButton = {
-         let button = UIButton()
-         button.setImage(UIImage(named: "twitter"), for: .normal)
-         button.translatesAutoresizingMaskIntoConstraints = false
-         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
-         button.widthAnchor.constraint(equalToConstant: 40).isActive = true
-         button.addTarget(self, action: #selector(openTwitter), for: .touchUpInside)
-
-         return button
-     }()
-     
-     private let pinterestButton: UIButton = {
-         let button = UIButton()
-         button.setImage(UIImage(named: "pinterest"), for: .normal)
-         button.translatesAutoresizingMaskIntoConstraints = false
-         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
-         button.widthAnchor.constraint(equalToConstant: 40).isActive = true
-         button.addTarget(self, action: #selector(openPinterest), for: .touchUpInside)
-
-         return button
-     }()
-    
     var userService: UserServiceProtocol!
     var collectionService: CollectionServiceProtocol!
     var googleService: GoogleAuthServiceProtocol!
@@ -224,7 +177,6 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         
         navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
         
-        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     func configureUI() {        
@@ -255,9 +207,10 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
             versionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -24)
         ])
         
-        let stackView = UIStackView(arrangedSubviews: [instaButton, facebookButton, twitterButton, pinterestButton])
+        let socialMediaButtons = createSocialButtons()
+        let stackView = UIStackView(arrangedSubviews: socialMediaButtons)
              stackView.translatesAutoresizingMaskIntoConstraints = false
-             stackView.spacing = 15 
+             stackView.spacing = 15
              stackView.alignment = .center
         
         
@@ -269,6 +222,25 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
    
     }
     
+    func createButton(imageName: String, target: Any?, action: Selector) -> UIButton {
+        let button = UIButton()
+        button.setImage(UIImage(named: imageName), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        button.addTarget(target, action: action, for: .touchUpInside)
+        return button
+    }
+    
+    private func createSocialButtons() -> [UIButton] {
+        let instaButton = createButton(imageName: "insta", target: self, action: #selector(openInsta))
+        let facebookButton = createButton(imageName: "facebook", target: self, action: #selector(openFacebook))
+        let twitterButton = createButton(imageName: "twitter", target: self, action: #selector(openTwitter))
+        let pinterestButton = createButton(imageName: "pinterest", target: self, action: #selector(openPinterest))
+        return [instaButton, facebookButton, twitterButton, pinterestButton]
+    }
+
+    
     func configureTableView() {
         tableView.register(ProfileOptionCell.self, forCellReuseIdentifier: reuseIdentifier)
         view.addSubview(tableView)
@@ -279,8 +251,6 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
             tableView.heightAnchor.constraint(equalToConstant: 200)
         ])
     }
-    
-    
     
     func handleLogOut() {
         authViewModel.logOut { [weak self] error, success in
@@ -314,12 +284,10 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     //MARK: - Selectors
     
     @objc func openInsta() {
-        if let url = URL(string: "https://www.instagram.com/vladimir__.12/") {
+        if let url = URL(string: "https://www.instagram.com/vladimir__.12") {
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
-                // Handle the case where the Instagram app is not installed on the device
-                // You can open the URL in Safari as a fallback
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         }
@@ -330,8 +298,6 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
-                // Handle the case where the Instagram app is not installed on the device
-                // You can open the URL in Safari as a fallback
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         }
@@ -342,8 +308,6 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
-                // Handle the case where the Instagram app is not installed on the device
-                // You can open the URL in Safari as a fallback
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         }
@@ -354,8 +318,6 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
-                // Handle the case where the Instagram app is not installed on the device
-                // You can open the URL in Safari as a fallback
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         }

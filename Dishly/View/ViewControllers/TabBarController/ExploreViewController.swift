@@ -1,23 +1,30 @@
 import UIKit
 
+protocol ExploreVCDelegate {
+    func returnFetchedCollection(collections: [Collection])
+    func appendCollection(collection: Collection)
+}
+
 class ExploreViewController: UIViewController {
     //MARK: - Properties
     
-    private let window = UIApplication.shared.windows.last!
+    var delegate: ExploreVCDelegate?
     
-    var user: UserViewModel
-    
-    var recipeService: RecipeServiceProtocol!
-    var userService: UserServiceProtocol!
-    
-    var collectionService: CollectionServiceProtocol!
-    
+    private var user: UserViewModel
+    private var collectionViewModel: CollectionViewModel!
+    private var recipeViewModel: RecipeViewModel!
     var userViewModel: UserViewModel!
-    var recipeViewModel: RecipeViewModel!
-    
+
+    private let window = UIApplication.shared.windows.last!
+    private var windowView: CollectionsPopupView?
+    private let customView = CustomUIViewBackground()
+
+    private let recipeService: RecipeServiceProtocol!
+    private let userService: UserServiceProtocol!
+    private let recipesRealmService: RecipesRealmServiceProtocol!
+    private let collectionService: CollectionServiceProtocol!
+
     private var refreshControl: UIRefreshControl!
-    
-    var collectionViewModel: CollectionViewModel!
     
     var recipes: [RecipeViewModel]
     
@@ -31,8 +38,6 @@ class ExploreViewController: UIViewController {
         
         return view
     }()
-    
-    private var windowView: CollectionsPopupView?
     
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
@@ -50,20 +55,19 @@ class ExploreViewController: UIViewController {
         return collectionView
     }()
     
-    private let customView = CustomUIViewBackground()
-    
     //MARK: - Lifecycle
     
     override func loadView() {
         view = customView
     }
     
-    init(user: UserViewModel, recipes: [RecipeViewModel], userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, collectionService: CollectionServiceProtocol) {
+    init(user: UserViewModel, recipes: [RecipeViewModel], userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, collectionService: CollectionServiceProtocol, recipesRealmService: RecipesRealmServiceProtocol) {
         self.user = user
         self.userService = userService
         self.recipeService = recipeService
         self.recipes = recipes
         self.collectionService = collectionService
+        self.recipesRealmService = recipesRealmService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -73,8 +77,11 @@ class ExploreViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "Explore"
-        
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
+        title = "Explore"
+        collectionViewModel = CollectionViewModel(collectionService: collectionService, collection: nil)
         userViewModel = UserViewModel(user: nil, userService: userService)
         recipeViewModel = RecipeViewModel(recipe: Recipe(category: Recipe.Category(rawValue: "Ukraine")!, ingredients: [], instructions: []), recipeService: recipeService)
     }
@@ -82,7 +89,6 @@ class ExploreViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         configureUI()
-
 
         refreshControl = UIRefreshControl()
            refreshControl.addTarget(self, action: #selector(refreshCollectionView), for: .valueChanged)
@@ -130,7 +136,6 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ParentCell
         cell.index = indexPath.row
         cell.delegate = self
-        cell.numOfRecipes = 0
         cell.configure(index: indexPath.row)
         cell.backgroundColor = .clear
         if indexPath.row == 0 {
@@ -156,6 +161,24 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath) as! SearchHeaderView
+            headerView.searchBar.delegate = self
+            return headerView
+        }
+        
+        return UICollectionReusableView()
+    }
+    
+ 
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let height: Double = 60
+        let width: Double = view.frame.width
+        return CGSize(width: width, height: height)
+    }
+    
 }
 
 //MARK: - ParentCellDelegate
@@ -167,7 +190,7 @@ extension ExploreViewController: ParentCellDelegate {
         userViewModel.fetchUser(with: uid) { [weak self] userOwner in
             guard let self = self else  {return }
             DispatchQueue.main.async {
-                let vc = RecipeViewController(user: userOwner, recipe: recipe)
+                let vc = RecipeViewController(user: userOwner, recipe: recipe, recipesRealmService: self.recipesRealmService)
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }
@@ -181,7 +204,7 @@ extension ExploreViewController: ParentCellDelegate {
                     let alert = createErrorAlert(error: error.localizedDescription)
                     return
                 } else {
-                    let vc = RecipesViewController(recipes: recipes!, userService: self.userService, exploreVC: self)
+                    let vc = RecipesViewController(recipes: recipes!, userService: self.userService, exploreVC: self, recipesRealmService: self.recipesRealmService)
                     vc.categoryName = category
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
@@ -192,9 +215,8 @@ extension ExploreViewController: ParentCellDelegate {
     func popUp(recipe: RecipeViewModel) {
         windowView  = {
             let view = CollectionsPopupView(frame: CGRect(x: view.frame.minX, y: view.frame.maxY, width: view.frame.width, height: 300))
-            
+            self.delegate = view
             collectionViewModel = CollectionViewModel(collectionService: collectionService, collection: nil)
-            view.collectionViewModel = collectionViewModel
             view.delegate = self
             view.backgroundColor = AppColors.customLightGrey.color
 
@@ -215,25 +237,7 @@ extension ExploreViewController: ParentCellDelegate {
         
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if kind == UICollectionView.elementKindSectionHeader {
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath) as! SearchHeaderView
-            headerView.searchBar.delegate = self
-//            headerView.backgroundColor = AppColors.customGrey.color
 
-            return headerView
-        }
-        
-        return UICollectionReusableView()
-    }
-    
- 
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let height: Double = 60
-        let width: Double = view.frame.width
-        return CGSize(width: width, height: height)
-    }
     
     func hidePopUp() {
         backgroundView.removeFromSuperview()
@@ -266,13 +270,38 @@ extension ExploreViewController: ParentCellDelegate {
 
 extension ExploreViewController: CollectionsPopupViewDelegate {
     
+    func addCollection(collection: Collection) {
+        collectionViewModel.addCollection(collection: collection) { error in
+            if let error = error as? CollectionErrors {
+                let alertController = createErrorAlert(error: error.errorMessage)
+                return
+            }
+            self.delegate?.appendCollection(collection: collection)
+        }
+    }
+    
+    func saveToCollection(collection: Collection, recipe: RecipeViewModel) {
+        collectionViewModel.saveToCollection(collection: collection, recipe: recipe) { [weak self] error in
+            guard let self = self else { return }
+            self.hidePopup()
+        }
+    }
+    
     func presentAlert(alert: UIAlertController) {
         present(alert, animated: true)
     }
     
-    
     func hidePopup() {
         hidePopUp()
+    }
+    
+    func fetchCollections() {
+        collectionViewModel?.fetchCollections(completion: { [weak self] collections in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.delegate?.returnFetchedCollection(collections: collections)
+            }
+        })
     }
     
 }
@@ -281,7 +310,7 @@ extension ExploreViewController: CollectionsPopupViewDelegate {
 
 extension ExploreViewController: UISearchBarDelegate {
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        let vc = RecipeSearchViewController(recipesService: recipeService)
+        let vc = RecipeSearchViewController(recipesService: recipeService, recipesRealmService: recipesRealmService)
         navigationController?.pushViewController(vc, animated: true)
         return false
     }
@@ -290,9 +319,7 @@ extension ExploreViewController: UISearchBarDelegate {
 //MARK: - RecipeCellDelegate
 
 extension ExploreViewController: RecipeCellDelegate {
-    func addGroceries(groceries: [Ingredient]) {
-        
-    }
+    func addGroceries(groceries: [Ingredient]) {}
     
     func saveRecipe(recipe: RecipeViewModel) {
         popUp(recipe: recipe)
@@ -308,6 +335,5 @@ extension ExploreViewController: RecipeCellDelegate {
             self.windowView?.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.maxY, width: self.view.frame.width, height: 300)
         }
     }
-    
-    
 }
+

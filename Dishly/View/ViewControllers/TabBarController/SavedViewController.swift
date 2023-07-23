@@ -17,29 +17,34 @@ class SavedViewController: UICollectionViewController {
     
     var isToChoseMeal = false
     
+    
     private lazy var noRecipesView: NoRecipesView = {
-          let view = NoRecipesView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
-          view.translatesAutoresizingMaskIntoConstraints = false
-          view.isHidden = true
-          return view
-      }()
+        let view = NoRecipesView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isHidden = true
+        return view
+    }()
     
     var collection: Collection?
     
+    private var recipesRealmViewModel: RecipesRealmViewModel!
+    
     private var refreshControl: UIRefreshControl!
+    
+    private let recipesRealmService: RecipesRealmServiceProtocol!
+    
+    private let collectionService: CollectionServiceProtocol!
+    private var collectionViewModel: CollectionViewModel!
     
     private let hud = JGProgressHUD(style: .dark)
     
-    private var user: UserViewModel?
+    private var user: UserViewModel!
     
     private var collections: [Collection]? {
         didSet {
             delegate?.reload(collections: collections!, afterDeletion: false)
         }
     }
-    
-    private let collectionService: CollectionServiceProtocol!
-    private var collectionViewModel: CollectionViewModel!
     
     
     private var recipes: [RecipeViewModel]? {
@@ -53,20 +58,30 @@ class SavedViewController: UICollectionViewController {
     
     //MARK: - Lifecycle
     
+    func fetchCollections(completion: @escaping([Collection]) -> ()) {
+        collectionViewModel.fetchCollections { collections in
+            completion(collections)
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.showLoader(true)
-        collectionService.fetchCollections { collections in
+        fetchCollections { collections in
             DispatchQueue.main.async { [weak self] in
                 self?.showLoader(false)
                 self?.collections = collections
             }
         }
+        
     }
     
-    init(collectionService: CollectionServiceProtocol, user: UserViewModel?) {
+    init(collectionService: CollectionServiceProtocol, user: UserViewModel?, recipesRealmService: RecipesRealmServiceProtocol) {
         self.collectionService = collectionService
         self.user = user
+        self.recipesRealmService = recipesRealmService
+        recipesRealmViewModel = RecipesRealmViewModel(recipesRealmService: recipesRealmService)
+        collectionViewModel = CollectionViewModel(collectionService: collectionService, collection: nil)
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
     }
     
@@ -77,21 +92,21 @@ class SavedViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         configureUI()
         configureCollectionView()
         fetchCollections()
         
         refreshControl = UIRefreshControl()
-            refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
-            collectionView.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        collectionView.addSubview(refreshControl)
         
         collectionViewModel = CollectionViewModel(collectionService: collectionService, collection: nil)
     }
     
     
     @objc private func handleRefresh() {
-        collectionService.fetchCollections { collections in
+        collectionViewModel.fetchCollections { collections in
             DispatchQueue.main.async { [weak self] in
                 self?.showLoader(false)
                 self?.collections = collections
@@ -99,7 +114,7 @@ class SavedViewController: UICollectionViewController {
             }
         }
     }
-
+    
     func showLoader(_ show: Bool) {
         view.endEditing(true )
         show ? hud.show(in: view) : hud.dismiss()
@@ -107,15 +122,13 @@ class SavedViewController: UICollectionViewController {
     
     func fetchCollections() {
         showLoader(true)
-        collectionService.fetchCollections { collections in
+        collectionViewModel.fetchCollections { collections in
             DispatchQueue.main.async { [weak self] in
                 self?.showLoader(false)
                 self?.collections = collections
             }
         }
     }
-    
-    
     
     //MARK: - Helpers
     
@@ -164,16 +177,16 @@ class SavedViewController: UICollectionViewController {
             self.dismiss(animated: true)
             cell.recipeViewModel?.recipe.imageData = cell.itemImageView.image?.pngData()
             mealDelegate?.addRecipe(recipe: cell.recipeViewModel!, mealsViewModel: MealsViewModel(mealsService: MealsService()))
-            }
+        }
         
         else {
             guard let cell = collectionView.cellForItem(at: indexPath) as? RecipeCell else { return }
             if let recipe = cell.recipeViewModel {
                 if let uid = recipe.recipe.ownerId {
-                    UserService().fetchUser(with: uid) { [weak self] userOwner in
+                    user.fetchUser(with: uid) { [weak self] userOwner in
                         guard let self = self else  {return }
                         DispatchQueue.main.async {
-                            let vc = RecipeViewController(user: userOwner, recipe: recipe)
+                            let vc = RecipeViewController(user: userOwner, recipe: recipe, recipesRealmService: self.recipesRealmService)
                             self.navigationController?.pushViewController(vc, animated: true)
                         }
                     }
@@ -197,7 +210,7 @@ class SavedViewController: UICollectionViewController {
         if let cell = header.collectionView!.cellForItem(at: IndexPath(item: 0, section: 0)) as? CollectionCell {
             cell.isSelected = true
         }
-
+        
         return header
     }
     
@@ -213,9 +226,27 @@ class SavedViewController: UICollectionViewController {
         }
         alertController.addAction(deleteAction)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
-            self?.delegate?.handleCancel()
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alertController.addAction(cancelAction)
+        
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func showDeleteAlert2(for id: String, collection: Collection) {
+        let alertController = UIAlertController(title: "Delete Recipe", message: "Are you sure you want to remove this recipe?", preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            self?.collectionViewModel.deleteRecipeFrom(collection: collection, id: id) { error in
+                self?.fetchCollections(completion: { collections in
+                    self?.collections = collections
+                })
+            }
         }
+        
+        alertController.addAction(deleteAction)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         alertController.addAction(cancelAction)
         
         
@@ -228,7 +259,7 @@ class SavedViewController: UICollectionViewController {
             self?.collectionView.reloadData()
         }
     }
- 
+    
 }
 
 //MARK: - UICollectionViewDelegateFlowLayout
@@ -252,7 +283,7 @@ extension SavedViewController: ItemsHeaderDelegate {
     func fecthRecipes(with collection: Collection) {
         showLoader(true)
         self.collection = collection
-        collectionService.fetchRecipesWith(collection: collection) { [weak self] recipes in
+        collectionViewModel.fetchRecipesWith(collection: collection) { [weak self] recipes in
             guard let self = self else { return }
             showLoader(false)
             if recipes.count == 0 {
@@ -265,12 +296,10 @@ extension SavedViewController: ItemsHeaderDelegate {
     }
     
     func createCollection(collection: Collection, completion: @escaping (Error?) -> ()) {
-        collectionViewModel.saveToCollection(collection: collection) { error in
+        collectionViewModel.addCollection(collection: collection) { error in
             completion(error)
         }
     }
-    
-    
 }
 
 //MARK: - RecipeCellDelegate
@@ -280,15 +309,8 @@ extension SavedViewController: RecipeCellDelegate {
     func saveRecipe(recipe: RecipeViewModel) {}
     
     func deleteRecipe(id: String) {
-        if isToChoseMeal {
-            RecipesRealmService().deleteRecipeRealm(id: id) { success in
-                print(success)
-            }
-        } else {
-            collectionService.deleteRecipeFrom(collection: collection! , id: id) { error in
-                print("DEBUG: recipe deleted")
-            }
-        }
+        guard let collection = collection else  { return }
+        showDeleteAlert2(for: id, collection: collection)
     }
 }
 

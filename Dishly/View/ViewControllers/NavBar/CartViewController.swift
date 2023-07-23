@@ -49,8 +49,6 @@ class CartViewController: UIViewController {
     
     private func setupNavigationBar() {
         navigationItem.title = "My Groceries"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.prefersLargeTitles = true
         let rightButton = UIBarButtonItem(title: "Clear cart", style: .plain, target: self, action: #selector(rightButtonTapped))
         navigationItem.rightBarButtonItem = rightButton
     }

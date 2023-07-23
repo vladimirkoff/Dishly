@@ -100,5 +100,53 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "786AF442-B984-4EB7-B0F9-2678030C5511"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Dishly/View/CustomViews/CollectionsPopupView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
+            landmarkName = "saveToCollection(collection:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "786AF442-B984-4EB7-B0F9-2678030C5511 - 45ef001a2a75420a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Dishly.CollectionsPopupView.saveToCollection(collection: Dishly.Collection) -&gt; ()"
+                  moduleName = "Dishly"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/View/CustomViews/CollectionsPopupView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "178"
+                  endingLineNumber = "178"
+                  offsetFromSymbolStart = "64">
+               </Location>
+               <Location
+                  uuid = "786AF442-B984-4EB7-B0F9-2678030C5511 - 45ef001a2a75420a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Dishly.CollectionsPopupView.saveToCollection(collection: Dishly.Collection) -&gt; ()"
+                  moduleName = "Dishly"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/View/CustomViews/CollectionsPopupView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "178"
+                  endingLineNumber = "178"
+                  offsetFromSymbolStart = "312">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

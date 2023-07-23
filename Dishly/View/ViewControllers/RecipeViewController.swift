@@ -23,9 +23,10 @@ class RecipeViewController: UIViewController {
         }
     }
     
-    
+    private let recipesRealmViewModel: RecipesRealmViewModel!
     
     private  var recipeService: RecipeServiceProtocol!
+    private let recipesRealmService: RecipesRealmServiceProtocol!
     
     private var user: UserViewModel!
     
@@ -253,14 +254,17 @@ class RecipeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        setupNavigationBar()
+        view.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
+        title = "Recipe"
         configureUI()
         configure()
     }
     
-    init(user: UserViewModel, recipe: RecipeViewModel) {
+    init(user: UserViewModel, recipe: RecipeViewModel, recipesRealmService: RecipesRealmServiceProtocol) {
         self.recipeViewModel = recipe
         self.user = user
+        self.recipesRealmService = recipesRealmService
+        recipesRealmViewModel = RecipesRealmViewModel(recipesRealmService: recipesRealmService)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -694,7 +698,7 @@ class RecipeViewController: UIViewController {
         
         recipeViewModel.recipe.rating = updatedRating
         
-        RecipesRealmService().updateRecipe(id: recipeViewModel.recipe.id!, rating: updatedRating, numOfRating: ratings.count) { success in
+        recipesRealmViewModel.updateRecipe(id: recipeViewModel.recipe.id!, rating: updatedRating, numOfRating: ratings.count) { success in
             
         }
         

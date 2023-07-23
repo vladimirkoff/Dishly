@@ -5,9 +5,10 @@ import FirebaseAuth
 protocol CollectionServiceProtocol {
     func fetchCollections(completion: @escaping ([Collection]) -> Void)
     func fetchRecipesWith(collection: Collection, completion: @escaping ([RecipeViewModel]) -> Void)
-    func saveRecipeToCollection(collection: Collection, recipe: RecipeViewModel?, completion: @escaping (Error?) -> Void)
+    func saveRecipeToCollection(collection: Collection, recipe: RecipeViewModel, completion: @escaping (Error?) -> Void)
     func deleteRecipeFrom(collection: Collection, id: String, completion: @escaping(Error?) -> ())
     func deleteCollection(id: String, completion: @escaping([Collection], Error?) -> ())
+    func addCollection(collection: Collection, completion: @escaping(Error?) -> ())
 }
 
 class CollectionService: CollectionServiceProtocol {
@@ -40,7 +41,7 @@ class CollectionService: CollectionServiceProtocol {
     }
 
     
-    func saveRecipeToCollection(collection: Collection, recipe: RecipeViewModel?, completion: @escaping (Error?) -> Void) {
+    func saveRecipeToCollection(collection: Collection, recipe: RecipeViewModel, completion: @escaping (Error?) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else {
             completion(nil)
             return
@@ -48,7 +49,6 @@ class CollectionService: CollectionServiceProtocol {
         
         COLLECTION_USERS.document(uid).collection("collections").getDocuments { snapshot, error in
             
-            if let recipe = recipe {
                 let instructions = recipe.recipe.instructions.compactMap { $0.text }
                 let ingredients = recipe.recipe.ingredients.compactMap { $0.name }
                 let imageUrl = recipe.recipe.recipeImageUrl
@@ -75,31 +75,38 @@ class CollectionService: CollectionServiceProtocol {
                             }
                         completion(error)
                     }
-            } else {  // create new collection
-                
-                if let collections = snapshot?.documents {
-                    let isCollectionExist = collections.contains { $0["name"] as? String == collection.name }
-
-                    guard !isCollectionExist else {
-                        let error = CollectionErrors(errorMessage: "Collection already exists" )
-                        completion(error)            // collection already exists
-                        return
-                    }
-                }
-                
-                let collectionData: [String: Any] = [
-                    "name": collection.name,
-                    "id": collection.id,
-                    "imageUrl": collection.imageUrl
-                ]
-                
-                COLLECTION_USERS.document(uid)
-                    .collection("collections")
-                    .document(collection.id)
-                    .setData(collectionData) { error in
-                        completion(error)
-                    }
             }
+        
+    }
+    
+    func addCollection(collection: Collection, completion: @escaping(Error?) -> ()) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            completion(nil)
+            return
+        }
+        COLLECTION_USERS.document(uid).collection("collections").getDocuments { snapshot, error in
+            if let collections = snapshot?.documents {
+                let isCollectionExist = collections.contains { $0["name"] as? String == collection.name }
+                
+                guard !isCollectionExist else {
+                    let error = CollectionErrors(errorMessage: "Collection already exists" )
+                    completion(error)            // collection already exists
+                    return
+                }
+            }
+            
+            let collectionData: [String: Any] = [
+                "name": collection.name,
+                "id": collection.id,
+                "imageUrl": collection.imageUrl
+            ]
+            
+            COLLECTION_USERS.document(uid)
+                .collection("collections")
+                .document(collection.id)
+                .setData(collectionData) { error in
+                    completion(error)
+                }
         }
     }
     

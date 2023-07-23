@@ -23,9 +23,26 @@ class CollectionViewModel {
         }
     }
     
+    func fetchRecipesWith(collection: Collection, completion: @escaping([RecipeViewModel]) -> ()) {
+        collectionService.fetchRecipesWith(collection: collection) { recipes in
+            completion(recipes)
+        }
+    }
     
-    func saveToCollection(collection: Collection, completion: @escaping(Error?) -> ()) {
-        collectionService.saveRecipeToCollection(collection: collection, recipe: collection.recipe) { error in
+    func addCollection(collection: Collection, completion: @escaping(Error?) -> ()) {
+        collectionService.addCollection(collection: collection) { error in
+            completion(error)
+        }
+    }
+    
+    func saveToCollection(collection: Collection, recipe: RecipeViewModel, completion: @escaping(Error?) -> ()) {
+        collectionService.saveRecipeToCollection(collection: collection, recipe: recipe) { error in
+            completion(error)
+        }
+    }
+    
+    func deleteRecipeFrom(collection: Collection, id: String, completion: @escaping(Error?) -> ()) {
+        collectionService.deleteRecipeFrom(collection: collection, id: id) { error in
             completion(error)
         }
     }

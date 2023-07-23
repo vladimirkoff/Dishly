@@ -5,6 +5,7 @@ class MealPlanVC: UIViewController {
     
     private var mealsViewModel: MealsViewModel!
     private let recipesRealmViewModel: RecipesRealmViewModel!
+    private let recipesRealmService: RecipesRealmServiceProtocol!
     
     var recipes: [String : [RecipeViewModel]]? {
         didSet {
@@ -29,6 +30,7 @@ class MealPlanVC: UIViewController {
     //MARK: - Lifecycle
     
     init(mealsService: MealsServiceProtocol, recipesRealmService: RecipesRealmServiceProtocol) {
+        self.recipesRealmService = recipesRealmService
         mealsViewModel = MealsViewModel(mealsService: mealsService)
         recipesRealmViewModel = RecipesRealmViewModel(recipesRealmService: recipesRealmService)
         super.init(nibName: nil, bundle: nil)
@@ -40,7 +42,10 @@ class MealPlanVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(deleteOrAddRecipe(_:)), name: .savedVCTriggered, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(addRecipe(_:)), name: .addTriggered, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(deleteRecipe(_:)), name: .deleteTriggered, object: nil)
+        
         setupCollectionView()
         fecthRecipesForPlans()
     }
@@ -89,18 +94,7 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         return CGSize(width: width, height: 300)
     }
     
-    @objc func deleteOrAddRecipe(_ notification: Notification) {
-        var id = ""
-        if let userInfo = notification.userInfo {
-            id = userInfo["id"] as? String ?? ""
-            
-            if let _ = userInfo["isToAdd"]  {
-                self.fecthRecipesForPlans()
-                return
-            }
-        }
-        showDeleteAlert(for: id)
-    }
+
     
     func showDeleteAlert(for  id: String) {
         let alert = UIAlertController(title: "Delete recipe", message: "Are you sure you want to delete this recipe?", preferredStyle: .alert)
@@ -116,7 +110,7 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     }
     
     func deleteRecipe(id: String) {
-        RecipesRealmService().deleteRecipeRealm(id: id) { [weak self] success in
+        recipesRealmViewModel.deleteRecipeRealm(id: id) { [weak self] success in
             guard let self = self else { return }
             if success {
                 self.fecthRecipesForPlans()
@@ -141,18 +135,40 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         }
         self.recipes = recipesForMealPlan
     }
+    
+    //MARK: - Selectors
+    
+    @objc func addRecipe(_ notification: Notification) {
+        if let userInfo = notification.userInfo {
+            if let day = userInfo["day"] as? String, let recipe = userInfo["recipe"] as? RecipeViewModel {
+                recipesRealmViewModel.addRecipeRealm(recipe: recipe, day: day) { success in
+                    self.fecthRecipesForPlans()
+                    return
+                }
+            }
+        }
+        
+    }
+    
+    @objc func deleteRecipe(_ notification: Notification) {
+        var id = ""
+        if let userInfo = notification.userInfo {
+            id = userInfo["id"] as? String ?? ""
+            showDeleteAlert(for: id)
+        }
+    }
 }
 
 //MARK: - MealCellDelegate
 
 extension MealPlanVC: MealCellDelegate {
     func goToRecipe(recipe: RecipeViewModel) {
-        let vc = RecipeViewController(user: UserViewModel(user: nil, userService: UserService()), recipe: recipe)
+        let vc = RecipeViewController(user: UserViewModel(user: nil, userService: UserService()), recipe: recipe, recipesRealmService: recipesRealmService)
         navigationController?.pushViewController(vc, animated: true)
     }
     
     func addRecipe(cell: MealCell) {
-        let vc = SavedViewController(collectionService: CollectionService(), user: nil)
+        let vc = SavedViewController(collectionService: CollectionService(), user: nil, recipesRealmService: recipesRealmService)
         vc.mealDelegate = cell
         vc.isToChoseMeal = true
         present(vc, animated: true)
@@ -162,5 +178,6 @@ extension MealPlanVC: MealCellDelegate {
 //MARK: - NotificationCenter
 
 extension Notification.Name {
-    static let savedVCTriggered = Notification.Name("SavedVCTriggeredNotification")
+    static let addTriggered = Notification.Name("AddNotificationTriggered")
+    static let deleteTriggered = Notification.Name("DeleteNotificationTriggered")
 }

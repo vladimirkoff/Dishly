@@ -14,6 +14,7 @@ class RecipeSearchViewController: UIViewController, UITextFieldDelegate {
     
     private let recipesService: RecipeServiceProtocol!
     private var recipesViewModel: RecipesViewModel!
+    private let recipesRealmService: RecipesRealmServiceProtocol!
     
     private var recipes: [RecipeViewModel]? {
         didSet {
@@ -40,9 +41,10 @@ class RecipeSearchViewController: UIViewController, UITextFieldDelegate {
         view = customView
     }
     
-    init(recipesService: RecipeServiceProtocol) {
+    init(recipesService: RecipeServiceProtocol, recipesRealmService: RecipesRealmServiceProtocol) {
         self.recipesService = recipesService
         recipesViewModel = RecipesViewModel(recipeService: recipesService)
+        self.recipesRealmService = recipesRealmService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -121,7 +123,7 @@ extension RecipeSearchViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? SearchTableCell {
-            let vc = RecipeViewController(user: UserViewModel(user: User(dictionary: [:]), userService: nil)  , recipe: cell.recipe! )
+            let vc = RecipeViewController(user: UserViewModel(user: User(dictionary: [:]), userService: nil)  , recipe: cell.recipe!, recipesRealmService: recipesRealmService )
             navigationController?.pushViewController(vc, animated: true)
         }
     }

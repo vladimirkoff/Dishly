@@ -243,13 +243,14 @@ class RecipeCell: UICollectionViewCell {
     
     @objc func saveOrDelete() {
         if let _ = isFromSaved {
-            savedDelegate?.deleteRecipe(id: recipeViewModel!.recipe.id!)
+            guard let id = recipeViewModel?.recipe.id else { return }
+            savedDelegate?.deleteRecipe(id: id)
         } else if let _ = isFromPlans {
             guard let id = recipeViewModel?.recipe.realmId else { return }
-            NotificationCenter.default.post(name: .savedVCTriggered, object: nil, userInfo: ["id" : id])
+            NotificationCenter.default.post(name: .deleteTriggered, object: nil, userInfo: ["id" : id])
         } else {
-            delegate?.saveRecipe(recipe: recipeViewModel!)
+            guard let recipe = recipeViewModel else { return }
+            delegate?.saveRecipe(recipe: recipe)
         }
     }
-    
 }

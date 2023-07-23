@@ -4,6 +4,9 @@ import JGProgressHUD
 protocol CollectionsPopupViewDelegate {
     func hidePopup()
     func presentAlert(alert : UIAlertController)
+    func fetchCollections()
+    func saveToCollection(collection: Collection, recipe: RecipeViewModel)
+    func addCollection(collection: Collection)
 }
 
 class CollectionsPopupView: UIView {
@@ -14,10 +17,8 @@ class CollectionsPopupView: UIView {
     private var collectionView: UICollectionView!
     
     var recipe: RecipeViewModel?
-    
+        
     var delegate: CollectionsPopupViewDelegate?
-    
-    var collectionViewModel: CollectionViewModel?
     
     private var collections: [Collection]? {
         didSet { collectionView.reloadData() }
@@ -142,15 +143,7 @@ extension CollectionsPopupView: UICollectionViewDataSource {
             if let collectionName = alertController.textFields?.first?.text {
                 print("Entered collection name: \(collectionName)")
                 let collection = Collection(name: collectionName, imageUrl: "", id: UUID().uuidString)
-                self?.collectionViewModel?.saveToCollection(collection: collection) { [weak self] error in
-                    if let error = error as? CollectionErrors {
-                        let alertController = createErrorAlert(error: error.errorMessage)
-                        self?.delegate?.presentAlert(alert: alertController)
-                        return
-                    }
-                    self?.collections?.append(collection)
-                    self?.collectionView?.reloadData()
-                }
+                self?.delegate?.addCollection(collection: collection)
             }
         }
         
@@ -178,20 +171,12 @@ extension CollectionsPopupView: UICollectionViewDataSource {
     // API calls
 
     func fetchCollections() {
-        collectionViewModel?.fetchCollections(completion: { [weak self] collections in
-            DispatchQueue.main.async {
-                self?.collections = collections
-            }
-        })
+        delegate?.fetchCollections()
     }
 
     func saveToCollection(collection: Collection) {
-        showLoader(true)
-        CollectionService().saveRecipeToCollection(collection: collection, recipe: recipe) { [weak self] error in
-            guard let self = self else { return }
-            self.showLoader(false)
-            delegate?.hidePopup()
-        }
+        guard let recipe = recipe else { return }
+        delegate?.saveToCollection(collection: collection, recipe: recipe)
     }
 
 }
@@ -210,4 +195,19 @@ extension CollectionsPopupView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
     }
+}
+
+//MARK: - ExploreVCDelegate
+
+extension CollectionsPopupView: ExploreVCDelegate {
+    func appendCollection(collection: Collection) {
+        collections?.append(collection)
+        collectionView?.reloadData()
+    }
+    
+    
+    func returnFetchedCollection(collections: [Collection]) {
+        self.collections = collections
+    }
+    
 }

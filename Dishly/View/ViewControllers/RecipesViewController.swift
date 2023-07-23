@@ -27,6 +27,12 @@ class RecipesViewController: UICollectionViewController {
         didSet { collectionView.reloadData() }
     }
     
+    var categoryName: String? {
+        didSet {
+            title = categoryName 
+        }
+    }
+    
     private var exploreVC: ExploreViewController?
     
     //MARK: - Lifecycle

@@ -182,6 +182,7 @@ extension ExploreViewController: ParentCellDelegate {
                     return
                 } else {
                     let vc = RecipesViewController(recipes: recipes!, userService: self.userService, exploreVC: self)
+                    vc.categoryName = category
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
             }

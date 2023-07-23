@@ -15,6 +15,49 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
 //         return .lightContent
 //     }
     
+    private let instaButton: UIButton = {
+         let button = UIButton()
+         button.setImage(UIImage(named: "insta"), for: .normal)
+         button.translatesAutoresizingMaskIntoConstraints = false
+         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+         button.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        button.addTarget(self, action: #selector(openInsta), for: .touchUpInside)
+         return button
+     }()
+     
+     private let facebookButton: UIButton = {
+         let button = UIButton()
+         button.setImage(UIImage(named: "facebook"), for: .normal)
+         button.translatesAutoresizingMaskIntoConstraints = false
+         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+         button.widthAnchor.constraint(equalToConstant: 40).isActive = true
+         button.addTarget(self, action: #selector(openFacebook), for: .touchUpInside)
+
+         return button
+     }()
+     
+     private let twitterButton: UIButton = {
+         let button = UIButton()
+         button.setImage(UIImage(named: "twitter"), for: .normal)
+         button.translatesAutoresizingMaskIntoConstraints = false
+         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+         button.widthAnchor.constraint(equalToConstant: 40).isActive = true
+         button.addTarget(self, action: #selector(openTwitter), for: .touchUpInside)
+
+         return button
+     }()
+     
+     private let pinterestButton: UIButton = {
+         let button = UIButton()
+         button.setImage(UIImage(named: "pinterest"), for: .normal)
+         button.translatesAutoresizingMaskIntoConstraints = false
+         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+         button.widthAnchor.constraint(equalToConstant: 40).isActive = true
+         button.addTarget(self, action: #selector(openPinterest), for: .touchUpInside)
+
+         return button
+     }()
+    
     var userService: UserServiceProtocol!
     var collectionService: CollectionServiceProtocol!
     var googleService: GoogleAuthServiceProtocol!
@@ -79,16 +122,12 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         return tableView
     }()
     
-    private let customView = CustomUIViewBackground()
     
     //MARK: - Lifecycle
     
-    override func loadView() {
-          view = customView
-      }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        view.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
         versionLabel.textColor = isDark ? .white : .black
         userViewModel.fetchUser { user in
             self.navigationItem.title = user.user!.fullName
@@ -149,7 +188,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     
     func configureProfileImage() {
         guard let navController = navigationController else { return }
-        customView.addSubview(profileImageView)
+        view.addSubview(profileImageView)
         profileImageView.image = profileImage.image
         NSLayoutConstraint.activate([
             profileImageView.heightAnchor.constraint(equalToConstant: 80),
@@ -161,7 +200,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     
     @objc func switcherValueChanged(_ sender: UISwitch) {
         changeAppearance(isDarkMode: sender.isOn, navigationController: navigationController!)
-        customView.backgroundColor = sender.isOn ? AppColors.customGrey.color : AppColors.customLight.color
+        view.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
         changeEditProfileButton()
         
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
@@ -189,7 +228,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     }
     
     func configureUI() {        
-        customView.addSubview(switcher)
+        view.addSubview(switcher)
         
         switcher.isOn = isDark
 
@@ -202,7 +241,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         
 
         configureNavBar()
-        customView.addSubview(editProfileButton)
+        view.addSubview(editProfileButton)
         NSLayoutConstraint.activate([
             editProfileButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
             editProfileButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16)
@@ -210,17 +249,29 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         
         
         
-        customView.addSubview(versionLabel)
+        view.addSubview(versionLabel)
         NSLayoutConstraint.activate([
             versionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             versionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -24)
+        ])
+        
+        let stackView = UIStackView(arrangedSubviews: [instaButton, facebookButton, twitterButton, pinterestButton])
+             stackView.translatesAutoresizingMaskIntoConstraints = false
+             stackView.spacing = 15 
+             stackView.alignment = .center
+        
+        
+        view.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stackView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 12)
         ])
    
     }
     
     func configureTableView() {
         tableView.register(ProfileOptionCell.self, forCellReuseIdentifier: reuseIdentifier)
-        customView.addSubview(tableView)
+        view.addSubview(tableView)
         NSLayoutConstraint.activate([
             tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tableView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -261,6 +312,54 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     }
     
     //MARK: - Selectors
+    
+    @objc func openInsta() {
+        if let url = URL(string: "https://www.instagram.com/vladimir__.12/") {
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                // Handle the case where the Instagram app is not installed on the device
+                // You can open the URL in Safari as a fallback
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }
+    }
+    
+    @objc func openFacebook() {
+        if let url = URL(string: "http://www.facebook.com") {
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                // Handle the case where the Instagram app is not installed on the device
+                // You can open the URL in Safari as a fallback
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }
+    }
+    
+    @objc func openPinterest() {
+        if let url = URL(string: "https://www.pinterest.com/kovalov280305/") {
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                // Handle the case where the Instagram app is not installed on the device
+                // You can open the URL in Safari as a fallback
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }
+    }
+    
+    @objc func openTwitter() {
+        if let url = URL(string: "https://twitter.com/vladkoFFit") {
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                // Handle the case where the Instagram app is not installed on the device
+                // You can open the URL in Safari as a fallback
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }
+    }
     
     @objc func goToProfile() {
         let vc = EditProfileViewController(user: user, userService: userService, authService: authService, userRealmService: userRealmService, profileImage: profileImageView)

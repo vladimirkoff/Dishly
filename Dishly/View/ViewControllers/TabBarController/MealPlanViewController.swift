@@ -14,7 +14,7 @@ class MealPlanVC: UIViewController {
     
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-
+        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
@@ -61,13 +61,13 @@ class MealPlanVC: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-        
+    
 }
 
 //MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
 
 extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 7
     }
@@ -102,7 +102,7 @@ extension MealPlanVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         showDeleteAlert(for: id)
     }
     
-    @objc func showDeleteAlert(for id: String) {
+    func showDeleteAlert(for  id: String) {
         let alert = UIAlertController(title: "Delete recipe", message: "Are you sure you want to delete this recipe?", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)

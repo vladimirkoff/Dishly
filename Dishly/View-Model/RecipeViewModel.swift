@@ -26,6 +26,13 @@ struct RecipeViewModel {
     
     //MARK: - Methods
     
+    func getOwnRate(recipeId: String, completion: @escaping (Int) -> ()) {
+        guard let recipeService = recipeService else { return }
+        recipeService.getOwnRate(recipeId: recipeId) { rate in
+            completion(rate)
+        }
+    }
+    
     func createRecipe(image: UIImage, completion: @escaping(Error?) -> ()) {
         guard let recipeService = recipeService else { return }
         recipeService.createRecipe(recipe: self, image: image) { error in

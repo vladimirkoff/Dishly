@@ -1,4 +1,5 @@
 import UIKit
+import JGProgressHUD
 
 protocol ExploreVCDelegate {
     func returnFetchedCollection(collections: [Collection])
@@ -11,6 +12,7 @@ class ExploreViewController: UIViewController {
     var delegate: ExploreVCDelegate?
     
     private var user: UserViewModel
+    
     private var collectionViewModel: CollectionViewModel!
     private var recipeViewModel: RecipeViewModel!
     var userViewModel: UserViewModel!
@@ -23,6 +25,9 @@ class ExploreViewController: UIViewController {
     private let userService: UserServiceProtocol!
     private let recipesRealmService: RecipesRealmServiceProtocol!
     private let collectionService: CollectionServiceProtocol!
+    
+    private let hud = JGProgressHUD(style: .dark)
+
 
     private var refreshControl: UIRefreshControl!
     
@@ -125,6 +130,11 @@ class ExploreViewController: UIViewController {
     
     @objc func dismissView() {
         hidePopUp()
+    }
+    
+    func showLoader(_ show: Bool) {
+        self.view.endEditing(true)
+        show ? hud.show(in: self.view) : hud.dismiss()
     }
     
 }
@@ -272,6 +282,15 @@ extension ExploreViewController: ParentCellDelegate {
 
 extension ExploreViewController: CollectionsPopupViewDelegate {
     
+    func saveToCollection(collection: Collection, recipe: RecipeViewModel, completion: @escaping (Error?) -> ()) {
+        collectionViewModel.saveToCollection(collection: collection, recipe: recipe) { [weak self] error in
+            guard let self = self else { return }
+            self.hidePopup()
+            completion(error)
+        }
+    }
+    
+    
     func addCollection(collection: Collection) {
         collectionViewModel.addCollection(collection: collection) { error in
             if let error = error as? CollectionErrors {
@@ -279,13 +298,6 @@ extension ExploreViewController: CollectionsPopupViewDelegate {
                 return
             }
             self.delegate?.appendCollection(collection: collection)
-        }
-    }
-    
-    func saveToCollection(collection: Collection, recipe: RecipeViewModel) {
-        collectionViewModel.saveToCollection(collection: collection, recipe: recipe) { [weak self] error in
-            guard let self = self else { return }
-            self.hidePopup()
         }
     }
     

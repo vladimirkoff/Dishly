@@ -24,7 +24,7 @@ enum AuthErros: Error {
     var localizedDescription: String {
         switch self {
         case .failedChangeEmail:
-            return "Error changin email"
+            return "Error changin email. Operation requires recent login."
         case .failedToLogout:
             return "Error logging out"
         case .userExists:

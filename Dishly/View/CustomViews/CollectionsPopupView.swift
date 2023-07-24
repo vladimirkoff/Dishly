@@ -5,7 +5,7 @@ protocol CollectionsPopupViewDelegate {
     func hidePopup()
     func presentAlert(alert : UIAlertController)
     func fetchCollections()
-    func saveToCollection(collection: Collection, recipe: RecipeViewModel)
+    func saveToCollection(collection: Collection, recipe: RecipeViewModel, completion: @escaping(Error?) -> ())
     func addCollection(collection: Collection)
 }
 
@@ -121,7 +121,7 @@ extension CollectionsPopupView: UICollectionViewDataSource {
 
                 cell.collectionImageView.backgroundColor = AppColors.customGrey.color
                 cell.collectionImageView.tintColor = .white
-                cell.collectionImageView.contentMode = .center // Adjust this to your desired content mode
+                cell.collectionImageView.contentMode = .center 
             } else {
                 cell.collection = collections[indexPath.row]
             }
@@ -143,6 +143,7 @@ extension CollectionsPopupView: UICollectionViewDataSource {
             if let collectionName = alertController.textFields?.first?.text {
                 print("Entered collection name: \(collectionName)")
                 let collection = Collection(name: collectionName, imageUrl: "", id: UUID().uuidString)
+                self?.showLoader(true)
                 self?.delegate?.addCollection(collection: collection)
             }
         }
@@ -175,8 +176,11 @@ extension CollectionsPopupView: UICollectionViewDataSource {
     }
 
     func saveToCollection(collection: Collection) {
+        showLoader(true)
         guard let recipe = recipe else { return }
-        delegate?.saveToCollection(collection: collection, recipe: recipe)
+        delegate?.saveToCollection(collection: collection, recipe: recipe, completion: { error in
+            self.showLoader(false)
+        })
     }
 
 }
@@ -201,12 +205,14 @@ extension CollectionsPopupView: UICollectionViewDelegateFlowLayout {
 
 extension CollectionsPopupView: ExploreVCDelegate {
     func appendCollection(collection: Collection) {
+        showLoader(false)
         collections?.append(collection)
         collectionView?.reloadData()
     }
     
     
     func returnFetchedCollection(collections: [Collection]) {
+        showLoader(false)
         self.collections = collections
     }
     

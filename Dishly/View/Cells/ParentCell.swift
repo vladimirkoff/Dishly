@@ -1,6 +1,9 @@
 import UIKit
 import SDWebImage
 
+private let horizontalCellId = "HorizontalCell"
+private let categoryCellId = "CategoryCell"
+
 protocol ParentCellDelegate {
     func goToRecipe(with recipe: RecipeViewModel)
     func goToCategory(category: String)
@@ -107,7 +110,7 @@ class ParentCell: UICollectionViewCell {
             horizontalCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
 
-        horizontalCollectionView.register(RecipeCell.self, forCellWithReuseIdentifier: "HorizontalCell")
+        horizontalCollectionView.register(RecipeCell.self, forCellWithReuseIdentifier: horizontalCellId)
     }
 
     func configureCellForCategories() {
@@ -124,7 +127,7 @@ class ParentCell: UICollectionViewCell {
             categoryCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
 
-        categoryCollectionView.register(CategoryCell.self, forCellWithReuseIdentifier: "CategoryCell")
+        categoryCollectionView.register(CategoryCell.self, forCellWithReuseIdentifier: categoryCellId)
     }
 
     
@@ -169,14 +172,14 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == horizontalCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalCell", for: indexPath) as! RecipeCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: horizontalCellId, for: indexPath) as! RecipeCell
             cell.delegate = self
             if let recipes = recipes {
                 cell.recipeViewModel = recipes[indexPath.row]
             }
             return cell
         } else if collectionView == categoryCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCell            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: categoryCellId, for: indexPath) as! CategoryCell
             if index == 1 {
                 cell.configure(categories: mealCategories, index: indexPath.row)
             } else if index == 2 {

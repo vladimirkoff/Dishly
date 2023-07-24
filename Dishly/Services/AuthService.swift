@@ -67,15 +67,20 @@ class AuthService: AuthServiceProtocol {
         }
     }
     
-    func changeEmail(to newEmail: String, completion: @escaping(Error?) -> ()) {
+    func changeEmail(to newEmail: String, completion: @escaping (Error?) -> ()) {
         if let user = Auth.auth().currentUser {
             user.updateEmail(to: newEmail) { error in
                 if let error = error {
                     print("Error updating email: \(error.localizedDescription)")
                     completion(AuthErros.failedChangeEmail)
-                    return
+                } else {
+                    // Email update succeeded, so call completion with nil error
+                    completion(nil)
                 }
             }
+        } else {
+            // Handle the case when there's no authenticated user
+            completion(AuthErros.failedChangeEmail)
         }
     }
 }

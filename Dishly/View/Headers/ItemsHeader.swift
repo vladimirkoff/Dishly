@@ -36,9 +36,7 @@ class ItemsHeader: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureCollectionView()
-//        backgroundColor = AppColors.customGrey.color
-        
-
+        NotificationCenter.default.addObserver(self, selector: #selector(selectCollection), name: .selectCollection, object: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -46,6 +44,10 @@ class ItemsHeader: UICollectionReusableView {
     }
     
     //MARK: - Helpers
+    
+    @objc func selectCollection() {
+        
+    }
     
     func configureCollectionView() {
         
@@ -60,12 +62,10 @@ class ItemsHeader: UICollectionReusableView {
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
         collectionView!.addGestureRecognizer(longPressGesture)
         
-//        collectionView!.backgroundColor = AppColors.customGrey.color
-
         collectionView!.register(CollectionCell.self, forCellWithReuseIdentifier: "TopCategoryCell"
         )
         collectionView!.allowsSelection = true
-           collectionView!.allowsMultipleSelection = false
+        collectionView!.allowsMultipleSelection = false
         self.addSubview(collectionView!)
         
     }
@@ -86,7 +86,7 @@ class ItemsHeader: UICollectionReusableView {
             }
         }
     }
-
+    
     
 }
 
@@ -123,25 +123,26 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
             if indexPath.row == collections.count  {
                 let originalImage = UIImage(systemName: "plus")
                 let scaleFactor: CGFloat = 2.0
-                  let scaledImageSize = CGSize(width: (originalImage?.size.width ?? 0.0) * scaleFactor,
-                                               height: (originalImage?.size.height ?? 0.0) * scaleFactor)
-
-                  UIGraphicsBeginImageContextWithOptions(scaledImageSize, false, 0.0)
-                  originalImage?.draw(in: CGRect(origin: .zero, size: scaledImageSize))
-                  let smallerImage = UIGraphicsGetImageFromCurrentImageContext()
-                  UIGraphicsEndImageContext()
+                let scaledImageSize = CGSize(width: (originalImage?.size.width ?? 0.0) * scaleFactor,
+                                             height: (originalImage?.size.height ?? 0.0) * scaleFactor)
+                
+                UIGraphicsBeginImageContextWithOptions(scaledImageSize, false, 0.0)
+                originalImage?.draw(in: CGRect(origin: .zero, size: scaledImageSize))
+                let smallerImage = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
                 cell.collectionImageView.image = smallerImage?.withRenderingMode(.alwaysTemplate)
                 cell.collectionImageView.image = originalImage
-
+                
                 cell.collectionImageView.backgroundColor = AppColors.customLightGrey.color
                 cell.collectionImageView.tintColor = .white
-                cell.collectionImageView.contentMode = .center // Adjust this to your desired content mode
-
+                cell.collectionImageView.contentMode = .center
+                
             }
             else {
                 if indexPath.row == 0 {
                     cell.collectionImageView.layer.borderWidth = 3
                     cell.collectionImageView.layer.borderColor = isDark ? UIColor.white.cgColor : AppColors.customBrown.color.cgColor
+                    previousCell = cell
                     self.collectionView(collectionView, didSelectItemAt: indexPath)
                 }
                 cell.collection = collections[indexPath.row]
@@ -154,13 +155,13 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
     func showCollectionNameAlert() {
         guard let collections = collections else { return }
         let alertController = UIAlertController(title: "Enter collection name", message: nil, preferredStyle: .alert)
-
+        
         alertController.addTextField { textField in
             textField.placeholder = "Collection Name"
         }
-
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-
+        
         let okAction = UIAlertAction(title: "OK", style: .default) { _ in
             if let collectionName = alertController.textFields?.first?.text {
                 
@@ -179,21 +180,23 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
                 
             }
         }
-
+        
         alertController.addAction(cancelAction)
         alertController.addAction(okAction)
-
+        
         if let topViewController = UIApplication.shared.keyWindow?.rootViewController {
             topViewController.present(alertController, animated: true, completion: nil)
         }
     }
-
+    
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let collections = collections else { return }
         if let previousCell = previousCell as? CollectionCell {
-            previousCell.collectionImageView.layer.borderWidth = 0
+            if indexPath.row != 0 {
+                previousCell.collectionImageView.layer.borderWidth = 0
+            }
         }
         if let cell = collectionView.cellForItem(at: indexPath) as? CollectionCell {
             previousCell = cell
@@ -203,9 +206,9 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
                 cell.collectionImageView.layer.borderWidth = 3
                 cell.collectionImageView.layer.borderColor = isDark ? UIColor.white.cgColor : AppColors.customBrown.color.cgColor
             }
-       
+            
         }
-    
+        
         indexPath.row == collections.count ? showCollectionNameAlert() : delegate?.fecthRecipes(with: collections[indexPath.row])
     }
     
@@ -230,7 +233,7 @@ extension ItemsHeader: UICollectionViewDelegateFlowLayout {
 
 extension ItemsHeader: SavedVCProtocol {
     func handleCancel() {
-        selectedIndexPath = nil // Reset the selectedIndexPath to nil
+        selectedIndexPath = nil 
         collectionView!.reloadData()
         collectionView!.performBatchUpdates(nil, completion: nil)
     }
@@ -244,4 +247,8 @@ extension ItemsHeader: SavedVCProtocol {
         }
         collectionView?.reloadData()
     }
+}
+
+extension Notification.Name {
+    static let selectCollection = Notification.Name("SelectCollectionTriggered")
 }

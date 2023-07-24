@@ -9,14 +9,10 @@ class SearchHeaderView: UICollectionReusableView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        
         addSubview(searchBar)
-
+        
         searchBar.tintColor = .lightGray
         searchBar.searchTextField.backgroundColor = .lightGray
-        
-        
         
         NSLayoutConstraint.activate([
             searchBar.centerXAnchor.constraint(equalTo: centerXAnchor),

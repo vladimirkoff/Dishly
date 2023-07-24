@@ -90,7 +90,7 @@ class SavedViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+//        NotificationCenter.default.post(name: .selectCollection, object: nil)
         configureUI()
         configureCollectionView()
         fetchCollections()
@@ -294,7 +294,10 @@ extension SavedViewController: ItemsHeaderDelegate {
     }
     
     func createCollection(collection: Collection, completion: @escaping (Error?) -> ()) {
-        collectionViewModel.addCollection(collection: collection) { error in
+        showLoader(true)
+        collectionViewModel.addCollection(collection: collection) { [weak self] error in
+            guard let self = self else { return }
+            self.showLoader(false)
             completion(error)
         }
     }

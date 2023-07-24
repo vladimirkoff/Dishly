@@ -25,7 +25,7 @@ class EditProfileViewController: UIViewController {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = AppColors.customGrey.color
-
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(ProfileInfoCell.self, forCellReuseIdentifier: "Cell")
@@ -66,6 +66,7 @@ class EditProfileViewController: UIViewController {
         userRealmViewModel = UserRealmViewModel(userRealmService: userRealmService)
     }
     
+    
     init(user: UserViewModel, userService: UserServiceProtocol, authService: AuthServiceProtocol!, userRealmService: UserRealmServiceProtocol, profileImage: UIImageView) {
         self.user = user
         self.userService = userService
@@ -81,6 +82,7 @@ class EditProfileViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        tableView.reloadData()
         tableView.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
     }
     
@@ -93,7 +95,7 @@ class EditProfileViewController: UIViewController {
     
     func configureUI() {
         view.backgroundColor = AppColors.customGrey.color
-
+        
         view.addSubview(tableView)
         let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonTapped))
         doneButton.isEnabled = false
@@ -130,7 +132,7 @@ class EditProfileViewController: UIViewController {
             cell.configureFields(email: nil, password: user.user!.username, name: nil)
         }
     }
-
+    
     func addSeparator(to cell: UITableViewCell) {
         let separator = UIView(frame: CGRect(x: 16, y: cell.frame.height - 1, width: cell.frame.width - 32, height: 1))
         separator.backgroundColor = .white
@@ -145,6 +147,17 @@ class EditProfileViewController: UIViewController {
         picker.delegate = self
         picker.allowsEditing = true
         present(picker, animated: true)
+    }
+    
+    func updateUser(updatedUserViewModel: UserViewModel, updatedUser: User) {
+        self.userViewModel.updateUser(with: updatedUserViewModel) {  error in
+            self.userRealmViewModel.updateUser(user: updatedUser) {  success in
+                DispatchQueue.main.async {
+                    self.showLoader(false)
+                    self.navigationController?.navigationBar.topItem?.hidesBackButton = false
+                }
+            }
+        }
     }
     
     @objc func doneButtonTapped() {
@@ -166,28 +179,24 @@ class EditProfileViewController: UIViewController {
             let updatedUser = User(dictionary: dict)
             let updatedUserViewModel = UserViewModel(user: updatedUser, userService: nil)
             
-            self.userViewModel.updateUser(with: updatedUserViewModel) { [weak self] error in
-                guard let self = self else { return }
-                
+            if user.user!.email != self.changedUser.user!.username {
                 self.authViewModel.changeEmail(to: self.changedUser.user!.email) { error in
                     if let error = error as? AuthErros {
-                        let alertController = createErrorAlert(error: error.localizedDescription)
-                        self.present(alertController, animated: true)
-                    }
-                   
-                }
-                self.userRealmViewModel.updateUser(user: updatedUser) { [weak self] success in
-                    guard let self = self else { return }
-                    
-                    DispatchQueue.main.async {
-                        self.showLoader(false)
-                        self.navigationController?.navigationBar.topItem?.hidesBackButton = false
+                        DispatchQueue.main.async {
+                            let alertController = createErrorAlert(error: error.localizedDescription)
+                            self.present(alertController, animated: true)
+                            self.showLoader(false)
+                            self.navigationController?.navigationBar.topItem?.hidesBackButton = false
+                        }
+                    } else {
+                        self.updateUser(updatedUserViewModel: updatedUserViewModel, updatedUser: updatedUser)
                     }
                 }
+            } else {
+                self.updateUser(updatedUserViewModel: updatedUserViewModel, updatedUser: updatedUser)
             }
         }
     }
-
 }
 
 //MARK: - UITableViewDelegate & UITableViewDataSource

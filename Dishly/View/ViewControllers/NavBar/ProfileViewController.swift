@@ -83,6 +83,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         view.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
         versionLabel.textColor = isDark ? .white : .black
         userViewModel.fetchUser { user in
+            self.user = user
             self.navigationItem.title = user.user!.fullName
         }
         changeEditProfileButton()
@@ -92,6 +93,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         tabBarController?.tabBar.isHidden = false
+        
     }
     
     init(tabBar: UITabBar?, user: UserViewModel, userService: UserServiceProtocol, profileImage: UIImageView, authService: AuthServiceProtocol, userRealmService: UserRealmServiceProtocol, googleService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol, mealsService: MealsServiceProtocol, recipesRealmService: RecipesRealmServiceProtocol) {

@@ -8,6 +8,7 @@ protocol RecipeServiceProtocol {
     func updateRating(with data: [String: Any],recipe: String, completion: @escaping (Error?) -> ())
     func fetchRecipesFor(category: String, completion: @escaping([RecipeViewModel]?, Error?) -> ())
     func searchForRecipes(text: String, completion: @escaping([RecipeViewModel]?, Error?) -> ())
+    func getOwnRate(recipeId: String, completion: @escaping(Int) -> ())
 }
 class RecipeService: RecipeServiceProtocol {
     
@@ -132,6 +133,41 @@ class RecipeService: RecipeServiceProtocol {
             }
         }
     }
+    
+    func getOwnRate(recipeId: String, completion: @escaping (Int) -> ()) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            completion(0)
+            return
+        }
+
+        COLLECTION_RECIPES.getDocuments { snapshot, error in
+            if let error = error {
+                print(error.localizedDescription)
+                completion(0)
+                return
+            }
+
+            if let documents = snapshot?.documents {
+                for document in documents {
+                    if let documentId = document.data()["id"] as? String, documentId == recipeId {
+                        if let rates = document.data()["numOfRatings"] as? [[String: Any]] {
+                            for rate in rates {
+                                if let rateUid = rate["uid"] as? String, rateUid == uid {
+                                    if let rating = rate["rating"] as? Int {
+                                        completion(rating)
+                                        return
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            completion(0)
+        }
+    }
+
     
     func fetchRecipes(completion: @escaping ([RecipeViewModel]?, Error?) -> ()) {
         COLLECTION_RECIPES.getDocuments { snapshot, error in

@@ -25,4 +25,6 @@ class RecipesViewModel {
             completion(recipes, error)
         }
     }
+    
+
 }

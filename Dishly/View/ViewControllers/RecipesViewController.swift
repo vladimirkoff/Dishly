@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 private let collectionCellReuseId = "RecipeCell"
 
 class RecipesViewController: UICollectionViewController {

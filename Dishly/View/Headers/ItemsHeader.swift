@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 protocol ItemsHeaderDelegate {
     func fecthRecipes(with collection: Collection)
     func createCollection(collection: Collection, completion: @escaping(Error?) -> ())
@@ -36,7 +35,6 @@ class ItemsHeader: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureCollectionView()
-        NotificationCenter.default.addObserver(self, selector: #selector(selectCollection), name: .selectCollection, object: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -44,10 +42,6 @@ class ItemsHeader: UICollectionReusableView {
     }
     
     //MARK: - Helpers
-    
-    @objc func selectCollection() {
-        
-    }
     
     func configureCollectionView() {
         
@@ -70,7 +64,16 @@ class ItemsHeader: UICollectionReusableView {
         
     }
     
+
     
+    private func resetSelectedCellState() {
+        if let indexPath = selectedIndexPath {
+            if let cell = collectionView?.cellForItem(at: indexPath) as? CollectionCell {
+                cell.transform = CGAffineTransform.identity
+                cell.contentView.alpha = 1.0
+            }
+        }
+    }
     
     @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
         if gestureRecognizer.state == .began {
@@ -232,13 +235,14 @@ extension ItemsHeader: UICollectionViewDelegateFlowLayout {
 //MARK: - SavedVCProtocol
 
 extension ItemsHeader: SavedVCProtocol {
-    func handleCancel() {
-        selectedIndexPath = nil 
-        collectionView!.reloadData()
-        collectionView!.performBatchUpdates(nil, completion: nil)
-    }
-    
     func addRecipe(recipe: RecipeViewModel, mealsViewModel: MealsViewModel?) {}
+
+    func handleCancel() {
+        selectedIndexPath = nil
+        collectionView?.reloadData()
+        collectionView?.performBatchUpdates(nil, completion: nil)
+        resetSelectedCellState()
+    }
     
     func reload(collections: [Collection], afterDeletion: Bool) {
         self.collections = collections
@@ -249,6 +253,3 @@ extension ItemsHeader: SavedVCProtocol {
     }
 }
 
-extension Notification.Name {
-    static let selectCollection = Notification.Name("SelectCollectionTriggered")
-}

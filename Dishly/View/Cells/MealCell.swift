@@ -20,7 +20,7 @@ class MealCell: UICollectionViewCell {
     
     let dayLabel: TableLabel = {
         let label = TableLabel()
-        label.font = UIFont(name: "GillSans-SemiBold", size: 24)
+        label.setFont(name: "GillSans-SemiBold", size: 28)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

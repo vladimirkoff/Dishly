@@ -39,9 +39,7 @@ class ParentCell: UICollectionViewCell {
     private lazy var titleLabel: TableLabel = {
         let label = TableLabel(frame: CGRect(x: 10, y: 10, width: bounds.width - 20, height: 30))
         label.text = "Daily inspiration"
-        if let font = UIFont(name: "GillSans-SemiBold", size: 24) {
-            label.font = font
-        }
+        label.setFont(name: "GillSans-SemiBold", size: 24)
         return label
     }()
     

@@ -7,7 +7,11 @@
 
 import UIKit
 
+// Default recipe/collection image data
+
 let defaultRecipeImageData = UIImage(named: "foodPlaceholder")?.pngData()
+
+// App colors
 
 enum AppColors {
     

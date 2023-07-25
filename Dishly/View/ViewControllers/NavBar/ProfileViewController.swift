@@ -13,6 +13,9 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
         navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
         versionLabel.textColor = isDark ? .white : .black
+        
+        profileImageView.layer.borderColor = isDark ? UIColor.white.cgColor : AppColors.customBrown.color.cgColor
+
     }
     
     //MARK: - Properties
@@ -37,7 +40,9 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.backgroundColor = .lightGray
-        iv.layer.cornerRadius = 40
+        iv.layer.cornerRadius = 60
+        iv.layer.borderWidth = 3
+        iv.layer.borderColor = isDark ? UIColor.white.cgColor : AppColors.customBrown.color.cgColor
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
         return iv
@@ -116,9 +121,9 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureProfileImage()
         configureTableView()
         configureUI()
-        
         userViewModel = UserViewModel(user: nil, userService: userService)
         authViewModel = AuthViewModel(authService: authService)
     }
@@ -131,40 +136,23 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         tabBar?.scrollEdgeAppearance = appearance
         tabBar?.tintColor = isDark ? .white : AppColors.customBrown.color
     }
-
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        configureProfileImage()
-    }
     
     //MARK: - Helpers
     
     func configureProfileImage() {
         guard let navController = navigationController else { return }
         view.addSubview(profileImageView)
+        
         profileImageView.image = profileImage.image
         NSLayoutConstraint.activate([
-            profileImageView.heightAnchor.constraint(equalToConstant: 80),
-            profileImageView.widthAnchor.constraint(equalToConstant: 80),
-            profileImageView.bottomAnchor.constraint(equalTo: navController.navigationBar.bottomAnchor),
-            profileImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -12)
+            profileImageView.heightAnchor.constraint(equalToConstant: 120),
+            profileImageView.widthAnchor.constraint(equalToConstant: 120),
+            profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            profileImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -32)
         ])
     }
     
-    @objc func switcherValueChanged(_ sender: UISwitch) {
-        changeAppearance(isDarkMode: sender.isOn, navigationController: navigationController!)
-        view.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
-        changeEditProfileButton()
-        
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
-        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
-        versionLabel.textColor = isDark ? .white : .black
-//
-//        UIApplication.shared.statusBarStyle = isDark ? .lightContent : .default
-//        // Принудительно обновляем стиль статус-бара
-//        setNeedsStatusBarAppearanceUpdate()
-    }
+
     
     func changeEditProfileButton() {
         let attributedString = NSMutableAttributedString(string: "EDIT YOUR PROFILE")

@@ -172,7 +172,7 @@ class RecipeViewController: UIViewController {
     let ratingLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.setFont(name: "GillSans-SemiBold", size: 16)
+        label.setFont(name: "GillSans-SemiBold", size: 18)
         label.text = "4.5"
         return label
     }()
@@ -181,7 +181,7 @@ class RecipeViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "25 ratings"
-        label.setFont(name: "GillSans-SemiBold", size: 16)
+        label.setFont(name: "GillSans-SemiBold", size: 18)
         label.textAlignment = .center
         return label
     }()
@@ -223,7 +223,7 @@ class RecipeViewController: UIViewController {
     private let categoryLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.setFont(name: "GillSans-SemiBold", size: 12)
+        label.setFont(name: "GillSans-SemiBold", size: 18)
         label.text = "Dinners"
         return label
     }()
@@ -231,7 +231,7 @@ class RecipeViewController: UIViewController {
     private let serveLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.setFont(name: "GillSans-SemiBold", size: 12)
+        label.setFont(name: "GillSans-SemiBold", size: 18)
         label.text = "4 serve"
         return label
     }()
@@ -671,7 +671,7 @@ class RecipeViewController: UIViewController {
         }
         
         
-        let updatedRating = rateSum / Float(ratings.count - 2)
+        let updatedRating = rateSum / Float(ratings.count)
         
         
         recipeViewModel.recipe.ratingList = ratings

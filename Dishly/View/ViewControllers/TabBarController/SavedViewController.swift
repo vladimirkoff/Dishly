@@ -88,6 +88,7 @@ class SavedViewController: UICollectionViewController {
         
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 //        NotificationCenter.default.post(name: .selectCollection, object: nil)
@@ -151,6 +152,9 @@ class SavedViewController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! RecipeCell
+        cell.saveButton.isHidden = isToChoseMeal ? true : false
+        cell.saveView.isHidden = isToChoseMeal ? true : false
+
         if let recipes = recipes {
             cell.recipeViewModel = recipes[indexPath.row]
         }
@@ -224,7 +228,9 @@ class SavedViewController: UICollectionViewController {
         }
         alertController.addAction(deleteAction)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
+            self?.delegate?.handleCancel()
+        }
         alertController.addAction(cancelAction)
         
         

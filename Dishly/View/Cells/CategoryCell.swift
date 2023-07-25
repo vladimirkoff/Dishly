@@ -14,18 +14,16 @@ class CategoryCell: UICollectionViewCell {
         iv.contentMode = .scaleAspectFill
         return iv
     }()
-
-     let title: UILabel = {
+    
+    let title: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-         if let font = UIFont(name: "GillSans-SemiBold", size: 19) {
-             label.font = font
-         }
-         label.textColor = .white
+        label.setFont(name: "GillSans-SemiBold", size: 20)
+        label.textColor = .white
         label.text = "Breakfast"
         return label
     }()
-
+    
     //MARK: - Lifecycle
     
     override func prepareForReuse() {

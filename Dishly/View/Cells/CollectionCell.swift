@@ -30,9 +30,7 @@ class CollectionCell: UICollectionViewCell {
     let collectionNameLabel: CollectionLabel = {
         let label = CollectionLabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        if let font = UIFont(name: "GillSans-SemiBold", size: 16) {
-            label.font = font
-        }
+        label.setFont(name: "GillSans-SemiBold", size: 16)
         return label
     }()
     

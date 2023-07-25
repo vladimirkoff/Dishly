@@ -25,7 +25,7 @@ class RecipeCell: UICollectionViewCell {
         didSet { configure() }
     }
     
-    private let saveView: CustomUICollectionViewCellBackground = {
+    let saveView: CustomUICollectionViewCellBackground = {
         let view = CustomUICollectionViewCellBackground()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 15
@@ -86,9 +86,7 @@ class RecipeCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        if let font = UIFont(name: "GillSans-SemiBold", size: 20) {
-            label.font = font
-        }
+        label.setFont(name: "GillSans-SemiBold", size: 18)
         label.text = "Home made Italian carboanra"
         return label
     }()

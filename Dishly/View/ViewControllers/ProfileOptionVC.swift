@@ -30,20 +30,12 @@ class ProfileOptionVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navBarAppearance.backgroundColor = .white
-        navigationController?.navigationBar.tintColor = .black
-        navigationController?.navigationBar.standardAppearance = navBarAppearance
-        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+        configureNavBar(appear: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navBarAppearance.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
-        navBarAppearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
-        navigationController?.navigationBar.tintColor = isDark ? .white : AppColors.customBrown.color
-        
-        navigationController?.navigationBar.standardAppearance = navBarAppearance
-        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+        configureNavBar(appear: false)
     }
     
     override func viewDidLoad() {
@@ -54,8 +46,19 @@ class ProfileOptionVC: UIViewController {
     
     // MARK: - Helpers
     
-    func configureNavBar(title: String) {
-       navigationItem.title = title
+    func configureNavBar(appear: Bool) {
+        if appear {
+            navBarAppearance.backgroundColor = .white
+            navigationController?.navigationBar.tintColor = .black
+            navigationController?.navigationBar.standardAppearance = navBarAppearance
+            navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+        } else {
+            navBarAppearance.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
+            navBarAppearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
+            navigationController?.navigationBar.tintColor = isDark ? .white : AppColors.customBrown.color
+            navigationController?.navigationBar.standardAppearance = navBarAppearance
+            navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+        }
     }
     
     private func configureUI() {

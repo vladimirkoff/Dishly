@@ -79,7 +79,7 @@ class ProfileInfoCell: UITableViewCell {
         clearButton.layer.masksToBounds = true
         clearButton.backgroundColor = .systemGray
         clearButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-        clearButton.tintColor = .white
+        clearButton.tintColor = .black
         
         clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
     }

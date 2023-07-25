@@ -12,7 +12,7 @@ protocol CollectionsPopupViewDelegate {
 class CollectionsPopupView: UIView {
     //MARK: - Properties
     private let hud = JGProgressHUD(style: .dark)
-
+    private var maxText = ""
     
     private var collectionView: UICollectionView!
     
@@ -134,6 +134,7 @@ extension CollectionsPopupView: UICollectionViewDataSource {
         let alertController = UIAlertController(title: "Enter collection name", message: nil, preferredStyle: .alert)
         
         alertController.addTextField { textField in
+            textField.delegate = self
             textField.placeholder = "Collection Name"
         }
         
@@ -216,4 +217,21 @@ extension CollectionsPopupView: ExploreVCDelegate {
         self.collections = collections
     }
     
+}
+
+//MARK: - UITextFieldDelegate
+
+extension CollectionsPopupView: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let newText = (textField.text as NSString?)?.replacingCharacters(in: range, with: string) ?? ""
+        
+        if newText.count == 15 {
+            maxText = newText
+        } else if newText.count > 15 {
+            textField.text = maxText
+        }
+        
+        return true
+    }
 }

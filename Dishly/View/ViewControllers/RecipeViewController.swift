@@ -299,7 +299,7 @@ class RecipeViewController: UIViewController {
             }
         }
         
-        nameAndAuthorLabel.attributedText = configureNameAndAuthorLabel(name: recipeViewModel.recipe.name!, author: "Vladimir")
+        nameAndAuthorLabel.attributedText = configureNameAndAuthorLabel(name: recipeViewModel.recipe.name!, author: user.user?.fullName ?? "No value")
         timeLabel.text = "\(recipeViewModel.recipe.cookTime ?? "") min"
         ratingLabel.text = "\(recipeViewModel.recipe.rating ?? 0.0)"
         ratingsCount.text = "\(recipeViewModel.recipe.ratingList?.count ?? recipeViewModel.recipe.ratingNum ?? 0) ratings"

@@ -17,7 +17,10 @@ protocol ItemsHeaderDelegate {
 class ItemsHeader: UICollectionReusableView {
     //MARK: - Properties
     
+    var isFirsAppear = false
+    
     private var previousCell: UICollectionViewCell!
+    private var maxText = ""
     
     var selectedIndexPath: IndexPath?
     let initialCellScale: CGFloat = 1.0
@@ -142,24 +145,28 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
                 
             }
             else {
-                if indexPath.row == 0 {
-                    cell.collectionImageView.layer.borderWidth = 3
-                    cell.collectionImageView.layer.borderColor = isDark ? UIColor.white.cgColor : AppColors.customBrown.color.cgColor
-                    previousCell = cell
-                    self.collectionView(collectionView, didSelectItemAt: indexPath)
+                if isFirsAppear {
+                    if indexPath.row == 0 {
+                        cell.collectionImageView.layer.borderWidth = 3
+                        cell.collectionImageView.layer.borderColor = isDark ? UIColor.white.cgColor : AppColors.customBrown.color.cgColor
+                        previousCell = cell
+                        self.collectionView(collectionView, didSelectItemAt: indexPath)
+                    }
                 }
                 cell.collection = collections[indexPath.row]
             }
         }
-        
+        isFirsAppear = false
         return cell
     }
     
     func showCollectionNameAlert() {
         guard let collections = collections else { return }
+        
         let alertController = UIAlertController(title: "Enter collection name", message: nil, preferredStyle: .alert)
         
         alertController.addTextField { textField in
+            textField.delegate = self
             textField.placeholder = "Collection Name"
         }
         
@@ -252,4 +259,22 @@ extension ItemsHeader: SavedVCProtocol {
         collectionView?.reloadData()
     }
 }
+
+//MARK: - UITextFieldDelegate
+
+extension ItemsHeader: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let newText = (textField.text as NSString?)?.replacingCharacters(in: range, with: string) ?? ""
+        
+        if newText.count == 15 {
+            maxText = newText
+        } else if newText.count > 15 {
+            textField.text = maxText
+        }
+        
+        return true
+    }
+}
+
 

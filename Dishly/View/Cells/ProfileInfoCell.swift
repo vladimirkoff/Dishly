@@ -21,6 +21,7 @@ class ProfileInfoCell: UITableViewCell {
     
     private let clearButton: UIButton = {
         let button = UIButton(type: .system)
+        button.tintColor = .white
         return button
     }()
     
@@ -79,7 +80,7 @@ class ProfileInfoCell: UITableViewCell {
         clearButton.layer.masksToBounds = true
         clearButton.backgroundColor = .systemGray
         clearButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-        clearButton.tintColor = .black
+        clearButton.tintColor = .white
         
         clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
     }

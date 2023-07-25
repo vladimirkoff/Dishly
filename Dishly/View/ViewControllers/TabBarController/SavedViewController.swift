@@ -91,7 +91,6 @@ class SavedViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        NotificationCenter.default.post(name: .selectCollection, object: nil)
         configureUI()
         configureCollectionView()
         fetchCollections()
@@ -208,6 +207,7 @@ class SavedViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerReuseIdentifier, for: indexPath) as! ItemsHeader
         self.delegate = header
+        header.isFirsAppear = true
         header.delegate = self
         if let cell = header.collectionView!.cellForItem(at: IndexPath(item: 0, section: 0)) as? CollectionCell {
             cell.isSelected = true
@@ -320,5 +320,7 @@ extension SavedViewController: RecipeCellDelegate {
         showDeleteAlert2(for: id, collection: collection)
     }
 }
+
+
 
 

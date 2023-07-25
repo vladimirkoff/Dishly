@@ -6,7 +6,13 @@ private let reuseIdentifier = "ProfileOptionCell"
 class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     
     func switchToggled(sender: UISwitch) {
-        print("Toggled")
+        changeAppearance(isDarkMode: sender.isOn, navigationController: navigationController!)
+        view.backgroundColor = isDark ? AppColors.customGrey.color : AppColors.customLight.color
+        changeEditProfileButton()
+        
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: isDark ? UIColor.white : UIColor.black]
+        versionLabel.textColor = isDark ? .white : .black
     }
     
     //MARK: - Properties
@@ -26,12 +32,6 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     var profileImage: UIImageView!
     
     private let tabBar: UITabBar?
-    
-    private let switcher: UISwitch = {
-        let switcher = UISwitch()
-        switcher.translatesAutoresizingMaskIntoConstraints = false
-        return switcher
-    }()
     
     private var profileImageView: UIImageView = {
         let iv = UIImageView()
@@ -116,7 +116,6 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        switcher.addTarget(self, action: #selector(switcherValueChanged(_:)), for: .valueChanged)
         configureTableView()
         configureUI()
         
@@ -181,16 +180,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         
     }
     
-    func configureUI() {        
-        view.addSubview(switcher)
-        
-        switcher.isOn = isDark
-
-        NSLayoutConstraint.activate([
-            switcher.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            switcher.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16)
-        ])
-        
+    func configureUI() {
         tabBarController?.tabBar.isHidden = true
         
 
@@ -368,7 +358,8 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             cell.accessoryImage.isHidden = true
             cell.accessoryImage.isUserInteractionEnabled = false
             cell.mySwitch.isHidden = false
-            cell.isUserInteractionEnabled = false
+            cell.mySwitch.isOn = isDark ? true : false
+            cell.isUserInteractionEnabled = true
             cell.cellSymbol.image = appearanceImage
             cell.optionLabel.text = "Change appearance"
         case 1:

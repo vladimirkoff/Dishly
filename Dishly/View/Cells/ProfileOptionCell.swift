@@ -68,8 +68,7 @@ class ProfileOptionCell: UITableViewCell {
         
         mySwitch.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
 
-        
-        addSubview(optionImage)
+        contentView.addSubview(optionImage)
         NSLayoutConstraint.activate([
             optionImage.leftAnchor.constraint(equalTo: leftAnchor, constant: 4),
             optionImage.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -77,13 +76,13 @@ class ProfileOptionCell: UITableViewCell {
             optionImage.heightAnchor.constraint(equalToConstant: 25)
         ])
         
-        addSubview(optionLabel)
+        contentView.addSubview(optionLabel)
         NSLayoutConstraint.activate([
             optionLabel.leftAnchor.constraint(equalTo: optionImage.rightAnchor, constant: 8),
             optionLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
         
-        addSubview(accessoryImage)
+        contentView.addSubview(accessoryImage)
         NSLayoutConstraint.activate([
             accessoryImage.centerYAnchor.constraint(equalTo: centerYAnchor),
             accessoryImage.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
@@ -91,7 +90,7 @@ class ProfileOptionCell: UITableViewCell {
             accessoryImage.heightAnchor.constraint(equalToConstant: 16)
         ])
         
-        addSubview(cellSymbol)
+        contentView.addSubview(cellSymbol)
         NSLayoutConstraint.activate([
             cellSymbol.centerYAnchor.constraint(equalTo: centerYAnchor),
             cellSymbol.widthAnchor.constraint(equalToConstant: 30),
@@ -99,7 +98,7 @@ class ProfileOptionCell: UITableViewCell {
             cellSymbol.rightAnchor.constraint(equalTo: optionLabel.leftAnchor, constant: -4)
         ])
         
-        addSubview(mySwitch)
+        contentView.addSubview(mySwitch)
         NSLayoutConstraint.activate([
             mySwitch.centerYAnchor.constraint(equalTo: centerYAnchor),
             mySwitch.rightAnchor.constraint(equalTo: rightAnchor, constant: -12)

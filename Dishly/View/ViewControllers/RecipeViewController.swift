@@ -578,8 +578,7 @@ class RecipeViewController: UIViewController {
             starButtons.append(starButton)
         }
         
-        configureRatingStars(rating: Float(recipeViewModel.recipe.rating ?? 0), starButtons: starButtons)
-        
+        configureRatingStars()
         
         
         let height = 250 * recipeViewModel.recipe.instructions.count
@@ -604,21 +603,16 @@ class RecipeViewController: UIViewController {
         
     }
     
-    func configureRatingStars(rating: Float, starButtons: [UIButton]) {
-        let filledStarImage = UIImage(systemName: "star.fill")
-        let halfFilledStarImage = UIImage(systemName: "star.lefthalf.fill")
-        let emptyStarImage = UIImage(systemName: "star")
-        
-        let filledCount = Int(rating)
-        let hasHalfStar = rating - Float(filledCount) >= 0.5
-        
-        for (index, button) in starButtons.enumerated() {
-            if index < filledCount {
-                button.setImage(filledStarImage, for: .normal)
-            } else if index == filledCount && hasHalfStar {
-                button.setImage(halfFilledStarImage, for: .normal)
-            } else {
-                button.setImage(emptyStarImage, for: .normal)
+    func configureRatingStars() {
+        recipeViewModel.getOwnRate(recipeId: recipeViewModel.recipe.id!) { rating in
+            for i in 1...5 {
+                if let starButton = self.view.viewWithTag(i) as? UIButton {
+                    if rating < i {
+                        starButton.isSelected = false
+                    } else {
+                        starButton.isSelected = true
+                    }
+                }
             }
         }
     }
@@ -626,8 +620,12 @@ class RecipeViewController: UIViewController {
     private func updateStarColors() {
         for i in 1...5 {
             if let starButton = view.viewWithTag(i) as? UIButton {
-                starButton.isSelected = false
-                starButton.isSelected = i <= rating
+                
+                if rating < i {
+                    starButton.isSelected = false
+                } else {
+                    starButton.isSelected = true
+                }
             }
         }
     }
@@ -656,24 +654,24 @@ class RecipeViewController: UIViewController {
     
     @objc private func starButtonTapped(_ sender: UIButton) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        guard let currentRating = recipeViewModel.recipe.sumOfRatings else { return }
         guard var ratings = recipeViewModel.recipe.ratingList else { return }
-        
         self.rating = sender.tag
-        
-        var currentRatingNum = Float(recipeViewModel.recipe.ratingList!.count)
-        
-        currentRatingNum += 1
-        
-        var updatedRating = (currentRating + Float(rating)) / currentRatingNum
         
         
         if let index = ratings.firstIndex(where: { $0.uid == uid }) {
             ratings[index].rating = Float(rating)
-            updatedRating = Float(rating)
         } else {
             ratings.append(Rating(uid: uid, rating: Float(rating)))
         }
+        
+        var rateSum: Float = 0.0
+        
+        for rate in ratings {
+            rateSum += rate.rating
+        }
+        
+        
+        let updatedRating = rateSum / Float(ratings.count - 2)
         
         
         recipeViewModel.recipe.ratingList = ratings
@@ -692,11 +690,11 @@ class RecipeViewController: UIViewController {
         }
         
         recipeViewModel.recipe.rating = updatedRating
-        
+
         recipesRealmViewModel.updateRecipe(id: recipeViewModel.recipe.id!, rating: updatedRating, numOfRating: ratings.count) { success in
-            
+
         }
-        
+
         let updatedData: [String : Any] = ["rating" : updatedRating,
                                            "numOfRatings" : ratingDict
         ]

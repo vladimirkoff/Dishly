@@ -74,12 +74,10 @@ class AuthService: AuthServiceProtocol {
                     print("Error updating email: \(error.localizedDescription)")
                     completion(AuthErros.failedChangeEmail)
                 } else {
-                    // Email update succeeded, so call completion with nil error
                     completion(nil)
                 }
             }
         } else {
-            // Handle the case when there's no authenticated user
             completion(AuthErros.failedChangeEmail)
         }
     }

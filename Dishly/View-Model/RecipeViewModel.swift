@@ -7,8 +7,6 @@
 
 import UIKit
 
-import UIKit
-
 struct RecipeViewModel {
     //MARK: - Properties
     private let recipeService: RecipeServiceProtocol?
@@ -24,41 +22,71 @@ struct RecipeViewModel {
         self.recipeService = recipeService
     }
     
-    //MARK: - Methods
+    //MARK: - Computed Properties
     
-    func getOwnRate(recipeId: String, completion: @escaping (Int) -> ()) {
-        guard let recipeService = recipeService else { return }
-        recipeService.getOwnRate(recipeId: recipeId) { rate in
-            completion(rate)
-        }
+    var name: String {
+        return recipe.name ?? ""
     }
     
-    func createRecipe(image: UIImage, completion: @escaping(Error?) -> ()) {
-        guard let recipeService = recipeService else { return }
-        recipeService.createRecipe(recipe: self, image: image) { error in
-            completion(error)
-        }
+    var serve: String {
+        return recipe.serve ?? ""
     }
     
-    func fetchRecipes(completion: @escaping ([RecipeViewModel]?, Error?) -> Void) {
-        guard let recipeService = recipeService else { return }
-        recipeService.fetchRecipes { recipes, error in
-            completion(recipes, error)
-        }
+    var cookTime: String {
+        return recipe.cookTime ?? ""
     }
     
-    func updateRecipe(with data: [String : Any], recipe: String, completion: @escaping(Error?) -> ()) {
-        guard let recipeService = recipeService else { return }
-        recipeService.updateRating(with: data, recipe: recipe, completion: { error in
-            completion(error)
-        })
+    var category: Recipe.Category {
+        return recipe.category
     }
     
-    func fetchRecipesFor(category: String, completion: @escaping([RecipeViewModel]?, Error?) -> ()) {
-        guard let recipeService = recipeService else { return }
-        recipeService.fetchRecipesFor(category: category, completion: { recipes, error in
-            completion(recipes, error)
-        })
+    var sumOfRatings: Float {
+        return recipe.sumOfRatings ?? 0.0
+    }
+    
+    var user: User? {
+        return recipe.user
+    }
+    
+    var ratingNum: Int {
+        return recipe.ratingNum ?? 0
+    }
+    
+    var realmId: String? {
+        return recipe.realmId
+    }
+    
+    var ingredients: [Ingredient] {
+        return recipe.ingredients
+    }
+    
+    var instructions: [Instruction] {
+        return recipe.instructions
+    }
+    
+    var recipeImageUrl: String {
+        return recipe.recipeImageUrl ?? ""
+    }
+    
+    var ratingList: [Rating]? {
+        return recipe.ratingList
+    }
+    
+    var rating: Float {
+        return recipe.rating ?? 0.0
+    }
+    
+    var imageData: Data? {
+        return recipe.imageData
+    }
+    
+    var day: String? {
+        return recipe.day
+    }
+    
+    var isRated: Bool? {
+        return recipe.isRated
     }
 }
+
 

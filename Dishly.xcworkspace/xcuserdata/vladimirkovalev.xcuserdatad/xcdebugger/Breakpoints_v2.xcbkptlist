@@ -52,5 +52,195 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D1F7D557-876C-480F-A6E2-753904F0C329"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Dishly/Services/UserRealmService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "getUser(with:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D1F7D557-876C-480F-A6E2-753904F0C329 - b5e672c347f66594"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Dishly.UserRealmService.getUser(with: Swift.String, completion: (Dishly.User) -&gt; ()) -&gt; ()"
+                  moduleName = "Dishly"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/Services/UserRealmService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "48"
+                  endingLineNumber = "48"
+                  offsetFromSymbolStart = "708">
+               </Location>
+               <Location
+                  uuid = "D1F7D557-876C-480F-A6E2-753904F0C329 - b5e672c347f66594"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Dishly.UserRealmService.getUser(with: Swift.String, completion: (Dishly.User) -&gt; ()) -&gt; ()"
+                  moduleName = "Dishly"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/Services/UserRealmService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "48"
+                  endingLineNumber = "48"
+                  offsetFromSymbolStart = "804">
+               </Location>
+               <Location
+                  uuid = "D1F7D557-876C-480F-A6E2-753904F0C329 - b5e672c347f66575"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Dishly.UserRealmService.getUser(with: Swift.String, completion: (Dishly.User) -&gt; ()) -&gt; ()"
+                  moduleName = "Dishly"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/Services/UserRealmService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "49"
+                  endingLineNumber = "49"
+                  offsetFromSymbolStart = "708">
+               </Location>
+               <Location
+                  uuid = "D1F7D557-876C-480F-A6E2-753904F0C329 - b5e672c347f66575"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Dishly.UserRealmService.getUser(with: Swift.String, completion: (Dishly.User) -&gt; ()) -&gt; ()"
+                  moduleName = "Dishly"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/Services/UserRealmService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "49"
+                  endingLineNumber = "49"
+                  offsetFromSymbolStart = "804">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6B8C7DCF-F0BB-4039-BC62-8F3DE4A4AC7E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Dishly/Services/UserRealmService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "getUser(with:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F40DEBBA-3314-4AFF-B1B3-EEA1810B54B8"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Dishly/View-Model/UserRealmViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "getUser(with:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "F40DEBBA-3314-4AFF-B1B3-EEA1810B54B8 - a8df960bdb39ea21"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Dishly.UserRealmViewModel.getUser(with: Swift.String, completion: (Dishly.User) -&gt; ()) -&gt; ()"
+                  moduleName = "Dishly"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/View-Model/UserRealmViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "26"
+                  endingLineNumber = "26"
+                  offsetFromSymbolStart = "92">
+               </Location>
+               <Location
+                  uuid = "F40DEBBA-3314-4AFF-B1B3-EEA1810B54B8 - d113d24de4fd6e61"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Dishly.User) -&gt; () in Dishly.UserRealmViewModel.getUser(with: Swift.String, completion: (Dishly.User) -&gt; ()) -&gt; ()"
+                  moduleName = "Dishly"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladimirkovalev/Desktop/Internship/Dishly/Dishly/View-Model/UserRealmViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "27"
+                  endingLineNumber = "27"
+                  offsetFromSymbolStart = "60">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F4B4895C-41BB-4E00-B585-1EF8D7D46915"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Dishly/Services/UserRealmService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "79"
+            endingLineNumber = "79"
+            landmarkName = "deleteUser(id:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9C343917-8321-4FC9-B497-3015E67C1A76"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Dishly/Factories/Router.swift"
+            startingColumnNumber = "37"
+            endingColumnNumber = "37"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
+            landmarkName = "Router"
+            landmarkType = "21">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1CB3A866-39FC-4F4B-B2C0-F74C4FE9B721"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Dishly/ViewControllers/SearchScreen/SearchViewControler.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
+            landmarkName = "tableView(_:didSelectRowAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

@@ -242,7 +242,7 @@ extension ItemsHeader: UICollectionViewDelegateFlowLayout {
 //MARK: - SavedVCProtocol
 
 extension ItemsHeader: SavedVCProtocol {
-    func addRecipe(recipe: RecipeViewModel, mealsViewModel: MealsViewModel?) {}
+    func addRecipe(recipe: RecipeViewModel) {}
 
     func handleCancel() {
         selectedIndexPath = nil

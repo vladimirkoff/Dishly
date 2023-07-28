@@ -8,34 +8,34 @@
 import UIKit
 
 struct UserViewModel {
-    
-    private let userService: UserServiceProtocol?
-    
     var user: User?
     
-    init(user: User?, userService: UserServiceProtocol?) {
-        self.userService = userService
+    init(user: User?) {
         self.user = user
     }
     
-    func fetchUser(completion: @escaping(UserViewModel) -> ()) {
-        guard let userService = userService else { return }
-        userService.fetchUser { user in
-            completion(user)
-        }
+    var email: String {
+        return user?.email ?? ""
     }
     
-    func fetchUser(with id: String, completion: @escaping(UserViewModel) -> ()) {
-        guard let userService = userService else { return }
-        userService.fetchUser(with: id) { user in
-            completion(user)
-        }
+    var fullName: String {
+        return user?.fullName ?? ""
     }
     
-    func updateUser(with user: UserViewModel, completion: @escaping(Error?) -> ()) {
-        guard let userService = userService else { return }
-        userService.updateUser(changedUser: user) { error in
-            completion(error)
-        }
+    var profileImage: String {
+        return user?.profileImage ?? ""
     }
+    
+    var uid: String {
+        return user?.uid ?? ""
+    }
+    
+    var username: String {
+        return user?.username ?? ""
+    }
+    
+    var imageData: Data? {
+        return user?.imageData
+    }
+    
 }

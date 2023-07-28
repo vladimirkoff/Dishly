@@ -47,9 +47,10 @@ class IngredientTableCell: UITableViewCell {
     }
     
     func configureCell() {
-        item.font = UIFont(name: "GillSans-SemiBold", size: 18)!
+        
         deleteButton.tintColor = .black
         item.textColor = .black
+        
         addSubview(protionLabel)
         NSLayoutConstraint.activate([
             protionLabel.centerYAnchor.constraint(equalTo: centerYAnchor),

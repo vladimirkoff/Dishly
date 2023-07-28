@@ -10,6 +10,8 @@ struct Recipe {
     var category: Category
     var sumOfRatings: Float?
     
+    var user: User?
+    
     var ratingNum: Int?
     
     var realmId: String?

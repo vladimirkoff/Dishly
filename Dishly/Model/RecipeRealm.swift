@@ -15,6 +15,7 @@ class RecipeRealm: Object {
     @Persisted var ratingsNum = 0
     @Persisted var ingredients = List<IngredientRealm>()
     @Persisted var instructions = List<InstructionRealm>()
+    @Persisted var ownerUser: UserRealm?
 
     override static func primaryKey() -> String? {
         return "primaryKey"

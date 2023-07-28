@@ -55,11 +55,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         let config = Realm.Configuration(
-            schemaVersion: 6,
+            schemaVersion: 8,
             migrationBlock: { migration, oldSchemaVersion in
-                if oldSchemaVersion < 6 {
-                    migration.enumerateObjects(ofType: RecipeRealm.className()) { _, newObject in
-                        newObject?["primaryKey"] = ""
+                if oldSchemaVersion < 8 {
+                    migration.enumerateObjects(ofType: UserRealm.className()) { _, newObject in
+                        newObject?["isCurrentUser"] = nil
                     }
                 }
             }

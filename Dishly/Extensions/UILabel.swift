@@ -7,8 +7,7 @@
 
 import UIKit
 
-class CollectionLabel: UILabel {}
-class TableLabel: UILabel {}
+
 
 extension UILabel {
     func setFont(name: String, size: Int) {

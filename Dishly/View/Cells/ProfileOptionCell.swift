@@ -111,7 +111,6 @@ class ProfileOptionCell: UITableViewCell {
         delegate?.switchToggled(sender: sender)
       }
     
-
 }
 
 

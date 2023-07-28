@@ -34,4 +34,15 @@ enum AuthErros: Error {
     
 }
 
+enum RealmErrors: Error {
+    case userNotFound
+    
+    var localizedDescription: String {
+        switch self {
+        case .userNotFound:
+            return "User has not been found"
+        }
+    }
+}
+
 

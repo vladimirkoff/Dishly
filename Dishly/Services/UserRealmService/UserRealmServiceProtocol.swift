@@ -13,4 +13,5 @@ protocol UserRealmServiceProtocol {
     func updateUser(user: User, completion: @escaping (Bool) -> Void)
     func deleteUser(id: String)
     func deleteCurrentUser(completion: @escaping(Error?) -> ())
+    func checkIfLoggedIn(completion: @escaping(UserViewModel?) -> ())
 }

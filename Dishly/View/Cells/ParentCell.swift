@@ -190,7 +190,9 @@ extension ParentCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == horizontalCollectionView {
-            delegate?.goToRecipe(with: recipes![indexPath.row])
+            if let recipes = recipes {
+                delegate?.goToRecipe(with: recipes[indexPath.row])
+            }
         } else {
             if let cell = collectionView.cellForItem(at: indexPath) as? CategoryCell {
                 delegate?.goToCategory(category: cell.title.text!)

@@ -11,7 +11,7 @@ import FirebaseAuth
 import SDWebImage
 
 
-class RecipesRealmService: RecipesRealmServiceProtocol {
+final class RecipesRealmService: RecipesRealmServiceProtocol {
     func addRecipeRealm(recipe: RecipeViewModel, day: String, completion: @escaping(Bool) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let realm = try! Realm()

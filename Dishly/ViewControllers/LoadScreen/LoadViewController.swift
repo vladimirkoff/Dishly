@@ -6,18 +6,6 @@ final class LoadViewController: UIViewController {
     
     private var user: UserViewModel!
     
-    private let authService: AuthServiceProtocol!
-    private let userService: UserServiceProtocol!
-    private let recipeService: RecipeServiceProtocol!
-    private let collectionService: CollectionServiceProtocol!
-    private let userRealmService: UserRealmServiceProtocol!
-    private let googleAuthService: GoogleAuthServiceProtocol!
-    private let mealsService: MealsServiceProtocol!
-    private let recipesRealmService: RecipesRealmServiceProtocol!
-    
-    private var userViewModel: UserViewModel!
-
-    
     private let ingredientsImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -61,17 +49,12 @@ final class LoadViewController: UIViewController {
     
     private var verticalStack = UIStackView()
     
+    private let viewModel: LoadVMProtocol
+    
     //MARK: - Lifecycle
     
-    init(authService: AuthServiceProtocol, userService: UserServiceProtocol, recipeService: RecipeServiceProtocol, userRealmService: UserRealmServiceProtocol, googleAuthService: GoogleAuthServiceProtocol, collectionService: CollectionServiceProtocol, mealsService: MealsServiceProtocol, recipesRealmService: RecipesRealmServiceProtocol) {
-        self.authService = authService
-        self.userService = userService
-        self.recipeService = recipeService
-        self.userRealmService = userRealmService
-        self.googleAuthService = googleAuthService
-        self.collectionService = collectionService
-        self.mealsService = mealsService
-        self.recipesRealmService = recipesRealmService
+    init(viewModel: LoadVMProtocol) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -83,7 +66,9 @@ final class LoadViewController: UIViewController {
         super.viewDidDisappear(animated)
         let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
         isDark = isDarkMode
-        ThemeManager.changeAppearance(isDarkMode: isDarkMode, navigationController: navigationController!)
+        navigationController?.navigationBar.tintColor = isDark ? .white : AppColors.customBrown.color
+        ThemeManager.applyCurrentTheme()
+        navigationController?.navigationBar.isHidden = false
     }
 
     override func viewDidLoad() {
@@ -91,37 +76,36 @@ final class LoadViewController: UIViewController {
         configureUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
+
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         animateImageView()
+
     }
     
     //MARK: - Helpers
     
     func checkIfLoggedInWithRealm(completion: @escaping(Bool) -> ())  {
-        let realm = try! Realm()
-        
-        if let user = realm.objects(UserRealm.self).filter("isCurrentUser == %@", true).first {
-            let dict: [String : Any] = ["fullName" : user.name,
-                                        "uid" : user.id,
-                                        "imageData" : user.imageData,
-                                        "email" : user.email,
-                                        "username" : user.username
-            ]
-            self.user = UserViewModel(user: User(dictionary: dict))
-            completion(true)
-        } else {
-            completion(false)
+        viewModel.checkIfLoggedIn { user in
+            if let user = user {
+                self.user = user
+                completion(true)
+            } else {
+                completion(false)
+            }
         }
     }
     
     func checkIfLoggedIn() {
         checkIfLoggedInWithRealm { isLoggedIn in
-            if isLoggedIn {
-                Router.showMainTabBar(from: self, with: self.user)
-            } else {
-                Router.showGreet(from: self)
-            }
+            isLoggedIn ?
+            Router.showMainTabBar(from: self, with: self.user) :
+            Router.showGreet(from: self)
         }
     }
     

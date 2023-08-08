@@ -119,7 +119,7 @@ final class LoginViewController: UIViewController {
             guard let self = self else { return }
             
             if let error = error {
-                let alert = createErrorAlert(error: error.localizedDescription)
+                let alert = Alerts.createErrorAlert(error: error.localizedDescription)
                 self.present(alert, animated: true)
                 print("DEBUG: Error signing in - \(error)")
                 return

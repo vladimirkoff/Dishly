@@ -208,10 +208,10 @@ extension ExploreViewController: ParentCellDelegate {
             guard let self = self else { return }
             DispatchQueue.main.async {
                 if let error = error {
-                    let alert = createErrorAlert(error: error.localizedDescription)
+                    let alert = Alerts.createErrorAlert(error: error.localizedDescription)
                     return
                 } else {
-                    Router.showRecipes(from: self, recipes: recipes!)
+                    Router.showRecipes(from: self, recipes: recipes!, category: category)
                 }
             }
         }
@@ -255,7 +255,7 @@ extension ExploreViewController: ParentCellDelegate {
         fetchRecipes { recipes, error in
             DispatchQueue.main.async {
                 if let error = error {
-                    let alert = createErrorAlert(error: error.localizedDescription)
+                    let alert = Alerts.createErrorAlert(error: error.localizedDescription)
                     self.refreshControl.endRefreshing()
                     return
                 } else {
@@ -283,7 +283,7 @@ extension ExploreViewController: CollectionsPopupViewDelegate {
     func addCollection(collection: Collection) {
         viewModel.addCollection(collection: collection) { error in
             if let error = error as? CollectionErrors {
-                let alertController = createErrorAlert(error: error.errorMessage)
+                let alertController = Alerts.createErrorAlert(error: error.errorMessage)
                 return
             }
             self.delegate?.appendCollection(collection: collection)

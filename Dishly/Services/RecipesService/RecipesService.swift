@@ -3,7 +3,7 @@ import FirebaseAuth
 import FirebaseFirestore
 
 
-class RecipeService: RecipeServiceProtocol {
+final class RecipeService: RecipeServiceProtocol {
     
     func searchForRecipes(text: String, completion: @escaping([RecipeViewModel]?, Error?) -> ()) {
         COLLECTION_RECIPES.getDocuments { snapshot, error in

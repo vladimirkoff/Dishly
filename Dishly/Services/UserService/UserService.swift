@@ -2,7 +2,7 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 
-class UserService: UserServiceProtocol {
+final class UserService: UserServiceProtocol {
     
     func checkIfUserExists(email: String, completion: @escaping (Bool) -> Void) {
         COLLECTION_USERS.whereField("email", isEqualTo: email).getDocuments { snapshot, error in

@@ -62,6 +62,34 @@ class ProfileOptionCell: UITableViewCell {
     
     //MARK: - Helpers
     
+    func configure(index: Int) {
+        switch index {
+        case 0:
+            let appearanceImage = UIImage(systemName: "paintbrush.fill")
+            accessoryImage.isHidden = true
+            accessoryImage.isUserInteractionEnabled = false
+            mySwitch.isHidden = false
+            mySwitch.isOn = isDark ? true : false
+            isUserInteractionEnabled = true
+            cellSymbol.image = appearanceImage
+            optionLabel.text = "Change appearance"
+        case 1:
+            let lockImage = UIImage(systemName: "lock.fill")
+            cellSymbol.image = lockImage
+            optionLabel.text = "Privacy Policy"
+        case 2:
+            let infoImage = UIImage(systemName: "info.bubble.fill")
+            cellSymbol.image = infoImage
+            optionLabel.text = "About Us"
+        case 3:
+            let logOutImage = UIImage(systemName: "rectangle.portrait.and.arrow.right")
+            cellSymbol.image = logOutImage
+            optionLabel.text = "Log Out"
+        default:
+            print("Default")
+        }
+    }
+    
     func configureCell() {
         backgroundColor = .lightGray
         selectionStyle = .none

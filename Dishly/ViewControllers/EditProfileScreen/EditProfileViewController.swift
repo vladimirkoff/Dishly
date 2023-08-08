@@ -175,8 +175,8 @@ final class EditProfileViewController: UIViewController {
                 self.viewModel.changeEmail(to: self.changedUser.email) { error in
                     if let error = error as? AuthErros {
                         DispatchQueue.main.async {
-                            let alertController = createErrorAlert(error: error.localizedDescription)
-                            self.present(alertController, animated: true)
+                            let alert = Alerts.createErrorAlert(error: error.localizedDescription)
+                            self.present(alert, animated: true)
                             self.showLoader(false)
                             self.navigationController?.navigationBar.topItem?.hidesBackButton = false
                         }

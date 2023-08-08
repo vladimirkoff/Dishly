@@ -1,5 +1,4 @@
 
-
 import UIKit
 import JGProgressHUD
 
@@ -213,40 +212,26 @@ final class SavedViewController: UICollectionViewController {
     }
     
     func showDeleteAlert(for id: String) {
-        let alertController = UIAlertController(title: "Delete Cell", message: "Are you sure you want to delete this cell?", preferredStyle: .alert)
-        
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
-            self?.deleteCell(for: id)
-        }
-        alertController.addAction(deleteAction)
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
-            self?.delegate?.handleCancel()
-        }
-        alertController.addAction(cancelAction)
-        
-        
-        present(alertController, animated: true, completion: nil)
+        Alerts.showDeleteAlertTest(for: id, in: self, onDelete: {
+            self.deleteCell(for: id)
+        }, onCancel: {
+            self.delegate?.handleCancel()
+        }, message: "Are you sure you want to delete collection?", title: "Delete Collection")
     }
     
+    
     func showDeleteAlert2(for id: String, collection: Collection) {
-        let alertController = UIAlertController(title: "Delete Recipe", message: "Are you sure you want to remove this recipe?", preferredStyle: .alert)
         
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
-            self?.viewModel.deleteRecipeFrom(collection: collection, id: id) { error in
-                self?.fetchCollections(completion: { collections in
-                    self?.collections = collections
+        Alerts.showDeleteAlertTest(for: id, in: self, onDelete: {
+            self.viewModel.deleteRecipeFrom(collection: collection, id: id) { error in
+                self.fetchCollections(completion: { collections in
+                    self.collections = collections
                 })
             }
-        }
-        
-        alertController.addAction(deleteAction)
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        alertController.addAction(cancelAction)
-        
-        
-        present(alertController, animated: true, completion: nil)
+        }, onCancel: {
+            
+        }, message: "Are you sure you want to remove this recipe", title: "Delete Recipe")
+    
     }
     
     func deleteCell(for id: String) {

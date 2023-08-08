@@ -3,7 +3,6 @@
 //  Dishly
 //
 //  Created by Vladimir Kovalev on 27.07.2023.
-//
 
 import Foundation
 import UIKit
@@ -32,7 +31,7 @@ final class SignUpVM: SignUpVMProtocol {
     
     func createUser(name: String, email: String, profileImage: Data, id: String, username: String, isCurrentUser: Bool) {
         userRealmService.createUser(name: name, email: email, profileImage: profileImage, id: id, username: username, isCurrentUser: isCurrentUser) { success in
-            print(success)
+            
         }
     }
     

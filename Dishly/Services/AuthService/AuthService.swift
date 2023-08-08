@@ -5,7 +5,7 @@ import FirebaseCore
 import GoogleSignIn
 
 
-class AuthService: AuthServiceProtocol {
+final class AuthService: AuthServiceProtocol {
     private let userService: UserServiceProtocol
     
     init(userService: UserServiceProtocol) {

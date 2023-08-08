@@ -8,5 +8,5 @@
 import Foundation
 
 protocol LoadVMProtocol {
-    
+    func checkIfLoggedIn(completion: @escaping(UserViewModel?) -> ())
 }

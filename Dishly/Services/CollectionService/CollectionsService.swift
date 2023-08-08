@@ -3,7 +3,7 @@ import FirebaseFirestore
 import FirebaseAuth
 
 
-class CollectionService: CollectionServiceProtocol {
+final class CollectionService: CollectionServiceProtocol {
     
     func deleteCollection(id: String, completion: @escaping([Collection], Error?) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }

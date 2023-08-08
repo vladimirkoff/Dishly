@@ -241,6 +241,13 @@ final class RecipeViewController: UIViewController {
         return tableView
     }()
     
+    private let chefHatImage: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.image = UIImage(named: "chef")
+        return iv
+    }()
+    
     private let viewModel: RecipeVMProtocol
     
     //MARK: - Lifecycle
@@ -296,22 +303,22 @@ final class RecipeViewController: UIViewController {
             }
         }
         
-        let authror = user.fullName.isEmpty ? recipeViewModel.recipe.user?.fullName ?? "" : user.fullName
+        let authror = user.fullName.isEmpty ? recipeViewModel.user?.fullName ?? "" : user.fullName
         
-        nameAndAuthorLabel.attributedText = configureNameAndAuthorLabel(name: recipeViewModel.recipe.name!,
+        nameAndAuthorLabel.attributedText = configureNameAndAuthorLabel(name: recipeViewModel.name,
             author: authror)
         timeLabel.text = "\(recipeViewModel.cookTime) min"
         ratingLabel.text = "\(recipeViewModel.rating)"
         ratingsCount.text = "\(recipeViewModel.ratingList?.count ?? recipeViewModel.ratingNum) ratings"
         configureRatingImages(rating: Float(recipeViewModel.rating), imageViews: starsImages)
         categoryLabel.text = recipeViewModel.category.rawValue
-        serveLabel.text = recipeViewModel.recipe.serve
-        usernameLabel.text = user.username.isEmpty ? recipeViewModel.recipe.user?.username ?? "" : user.username
+        serveLabel.text = recipeViewModel.serve
+        usernameLabel.text = user.username.isEmpty ? recipeViewModel.user?.username ?? "" : user.username
         
         if let url = URL(string: user.profileImage) {
             profileImage.sd_setImage(with: url)
         } else {
-            if let data = recipeViewModel.recipe.user?.imageData {
+            if let data = recipeViewModel.user?.imageData {
                 profileImage.image = UIImage(data: data)
             }
         }
@@ -423,7 +430,7 @@ final class RecipeViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: ingridientsLabel.bottomAnchor),
             tableView.widthAnchor.constraint(equalToConstant: view.frame.width),
             tableView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            tableView.heightAnchor.constraint(equalToConstant: CGFloat(70 * recipeViewModel.recipe.ingredients.count))
+            tableView.heightAnchor.constraint(equalToConstant: CGFloat(70 * recipeViewModel.ingredients.count))
         ])
         
         contentView.addSubview(footerView)
@@ -476,14 +483,7 @@ final class RecipeViewController: UIViewController {
         ])
         
         profileView.addSubview(profileImage)
-        
-        let chefHatImage: UIImageView = {
-            let iv = UIImageView()
-            iv.translatesAutoresizingMaskIntoConstraints = false
-            iv.image = UIImage(named: "chef")
-            return iv
-        }()
-        
+    
         let heightAnchor = profileView.heightAnchor
         
         if let heightConstant = heightAnchor.retrieveCGFloat(from: profileView) {
@@ -583,8 +583,7 @@ final class RecipeViewController: UIViewController {
         
         configureRatingStars()
         
-        
-        let height = 250 * recipeViewModel.recipe.instructions.count
+        let height = 250 * recipeViewModel.instructions.count
         
         contentView.addSubview(instructionsTableView)
         NSLayoutConstraint.activate([
@@ -607,7 +606,7 @@ final class RecipeViewController: UIViewController {
     }
     
     func configureRatingStars() {
-        viewModel.getOwnRate(recipeId: recipeViewModel.recipe.id!) { rating in
+        viewModel.getOwnRate(recipeId: recipeViewModel.id) { rating in
             for i in 1...5 {
                 if let starButton = self.view.viewWithTag(i) as? UIButton {
                     if rating < i {
@@ -623,7 +622,6 @@ final class RecipeViewController: UIViewController {
     private func updateStarColors() {
         for i in 1...5 {
             if let starButton = view.viewWithTag(i) as? UIButton {
-                
                 if rating < i {
                     starButton.isSelected = false
                 } else {
@@ -636,7 +634,7 @@ final class RecipeViewController: UIViewController {
     //MARK: - Selectors
     
     @objc func addToCartButtonTapped() {
-        myGroceries += recipeViewModel.recipe.ingredients
+        myGroceries += recipeViewModel.ingredients
         
         let encoder = JSONEncoder()
         if let encodedData = try? encoder.encode(myGroceries) {
@@ -645,19 +643,9 @@ final class RecipeViewController: UIViewController {
         
     }
     
-    
-    @objc private func rightButton1Tapped() {
-        
-    }
-    
-    
-    @objc private func stepByStepButtonTapped() {
-        
-    }
-    
     @objc private func starButtonTapped(_ sender: UIButton) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        guard var ratings = recipeViewModel.recipe.ratingList else { return }
+        guard var ratings = recipeViewModel.ratingList else { return }
         self.rating = sender.tag
         
         
@@ -677,7 +665,7 @@ final class RecipeViewController: UIViewController {
         let updatedRating = rateSum / Float(ratings.count)
         
         
-        recipeViewModel.recipe.ratingList = ratings
+        recipeViewModel.ratingList = ratings
         
         var ratingDict: [[String : Any]] = []
         
@@ -692,9 +680,9 @@ final class RecipeViewController: UIViewController {
             ratingDict.append(testt)
         }
         
-        recipeViewModel.recipe.rating = updatedRating
+        recipeViewModel.rating = updatedRating
 
-        viewModel.updateRecipe(id: recipeViewModel.recipe.id!, rating: updatedRating, numOfRating: ratings.count) { success in
+        viewModel.updateRecipe(id: recipeViewModel.id, rating: updatedRating, numOfRating: ratings.count) { success in
 
         }
 
@@ -702,7 +690,7 @@ final class RecipeViewController: UIViewController {
                                            "numOfRatings" : ratingDict
         ]
         
-        viewModel.updateRecipe(with: updatedData, recipe: recipeViewModel.recipe.id!) { error in
+        viewModel.updateRecipe(with: updatedData, recipe: recipeViewModel.id) { error in
             print("DEBUG: rating updated")
         }
     }
@@ -713,9 +701,9 @@ final class RecipeViewController: UIViewController {
 extension RecipeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == self.tableView {
-            return recipeViewModel.recipe.ingredients.count
+            return recipeViewModel.ingredients.count
         } else {
-            return recipeViewModel.recipe.instructions.count
+            return recipeViewModel.instructions.count
         }
     }
     
@@ -732,7 +720,7 @@ extension RecipeViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: instrTableCellId, for: indexPath) as! PrepareTableCell
             cell.textView.isUserInteractionEnabled = false
             cell.textView.backgroundColor = .white
-            cell.instruction = recipeViewModel.recipe.instructions[indexPath.row]
+            cell.instruction = recipeViewModel.instructions[indexPath.row]
             return cell
         }
         

@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
         let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
         isDark = isDarkMode
         
@@ -73,18 +74,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Failed to initialize Realm: \(error)")
         }
         
-        if let savedData = UserDefaults.standard.data(forKey: "customIngredients") {
-            let decoder = JSONDecoder()
-            if let loadedIngredients = try? decoder.decode([Ingredient].self, from: savedData) {
-                myGroceries = loadedIngredients
-            }
-        }
-        
 //        if let realmURL = Realm.Configuration.defaultConfiguration.fileURL {
 //            print("Realm file path: \(realmURL.path)")
 //
 //        }
-        
         return true
     }
 

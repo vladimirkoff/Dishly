@@ -3,7 +3,7 @@ import JGProgressHUD
 
 protocol CollectionsPopupViewDelegate {
     func hidePopup()
-    func presentAlert(alert : UIAlertController)
+        func presentAlert(alert : UIAlertController)
     func fetchCollections()
     func saveToCollection(collection: Collection, recipe: RecipeViewModel, completion: @escaping(Error?) -> ())
     func addCollection(collection: Collection)

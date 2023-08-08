@@ -66,7 +66,7 @@ final class PrepareViewController: UIViewController, Storyboardable {
                 if let error = error {
                     self.showLoader(false)
                     print("DEBUG: Error creating recipe - \(error.localizedDescription)")
-                    let alert = createErrorAlert(error: error.localizedDescription)
+                    let alert = Alerts.createErrorAlert(error: error.localizedDescription)
                     self.present(alert, animated: true)
                     return
                 } else {
@@ -74,6 +74,7 @@ final class PrepareViewController: UIViewController, Storyboardable {
                     self.showLoader(false)
                     self.dismiss(animated: true)
                     print("DEBUG: Recipe created successfully")
+                    return
                 }
             }
             

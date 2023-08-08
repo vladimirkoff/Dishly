@@ -3,13 +3,24 @@ import UIKit
 
 final class Router {
     
+    static func showLoad(window: UIWindow?) {
+        let vc = Self.createLoadScreen()
+        window?.rootViewController = UINavigationController(rootViewController: vc)
+        window?.makeKeyAndVisible()
+    }
+    
     static func showSignIn(from sourceVC: UIViewController) {
-        let vc = createSignIn()
+        let vc = Self.createSignIn()
+        sourceVC.navigationController?.pushViewController(vc, animated: true)
+    }
+
+    static func showSignUp(from sourceVC: UIViewController) {
+        let vc = Self.createSignUp()
         sourceVC.navigationController?.pushViewController(vc, animated: true)
     }
     
-    static func showSignUp(from sourceVC: UIViewController) {
-        let vc = Self.createSignUp()
+    static func showProfileOption(from sourceVC: UIViewController, title: String, text: String) {
+        let vc = Self.createProfileOptionScreen(title: title, text: text)
         sourceVC.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -39,7 +50,7 @@ final class Router {
     }
     
     static func showAddRecipe(from sourceVC: UIViewController, for user: UserViewModel) {
-        let vc = createAddRecipeScreen(user: user)
+        let vc = Self.createAddRecipeScreen(user: user)
         vc.modalPresentationStyle = .formSheet
         sourceVC.navigationController?.present(vc, animated: true)
     }
@@ -48,10 +59,7 @@ final class Router {
         let vc = Self.createPrepareScreen()
         vc.recipeImage = image
         vc.recipeViewModel = recipe
-        if let nav = sourceVC.navigationController {
-            nav.pushViewController(vc, animated: true)
-
-        }
+        sourceVC.navigationController?.pushViewController(vc, animated: true)
     }
     
     static func showMainTabBar(from sourceVC: UIViewController, with user: UserViewModel) {
@@ -64,8 +72,9 @@ final class Router {
         sourceVC.navigationController?.pushViewController(vc, animated: true)
     }
     
-    static func showRecipes(from sourceVC: UIViewController, recipes: [RecipeViewModel]) {
+    static func showRecipes(from sourceVC: UIViewController, recipes: [RecipeViewModel], category: String) {
         let vc = createRecipesScreen(exploreVC: sourceVC as! ExploreViewController, recipes: recipes)
+        vc.categoryName = category
         sourceVC.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -77,6 +86,20 @@ final class Router {
 }
 
  private extension Router {
+     
+     static func createLoadScreen() -> LoadViewController {
+         
+         let userRealmService = DependencyContainer.shared.getUserRealmService()
+         
+         let viewModel = LoadVM(userRealmService: userRealmService)
+         let vc = LoadViewController(viewModel: viewModel)
+         return vc
+     }
+     
+     static func createProfileOptionScreen(title: String, text: String) -> ProfileOptionVC {
+         let vc = ProfileOptionVC(docTitle: title, text: text)
+         return vc
+     }
      
      static func createSearch() -> RecipeSearchViewController {
          
@@ -163,7 +186,11 @@ final class Router {
      }
      
      static func createCartScreen() -> CartViewController {
-         let vc = CartViewController()
+         
+         let userDefaultsService = DependencyContainer.shared.getUserDefaultsService()
+         let viewModel = CartViewModel(userDefaultsService: userDefaultsService)
+         
+         let vc = CartViewController(viewModel: viewModel)
          return vc
      }
      

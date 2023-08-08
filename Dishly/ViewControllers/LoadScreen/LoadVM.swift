@@ -6,12 +6,20 @@
 //
 
 import Foundation
+import RealmSwift
 
 final class LoadVM: LoadVMProtocol {
     
+    private let userRealmService: UserRealmServiceProtocol
     
-    init(
+    init(userRealmService: UserRealmServiceProtocol
     ) {
-        
+        self.userRealmService = userRealmService
+    }
+    
+    func checkIfLoggedIn(completion: @escaping(UserViewModel?) -> ()) {
+        userRealmService.checkIfLoggedIn { user in
+            completion(user)
+        }
     }
 }

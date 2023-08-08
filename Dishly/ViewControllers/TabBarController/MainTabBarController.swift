@@ -2,7 +2,7 @@
 import UIKit
 import SDWebImage
 
-class MainTabBarController: UITabBarController {
+final class MainTabBarController: UITabBarController {
     
     //MARK: - Properties
     
@@ -39,7 +39,6 @@ class MainTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tabBar.barTintColor = AppColors.customGrey.color
 
         configureNavBar()
         fecthRecipes()
@@ -61,7 +60,7 @@ class MainTabBarController: UITabBarController {
         viewModel.fetchRecipes { recipes, error in
             DispatchQueue.main.async { [weak self] in
                 if let error = error {
-                    let alert = createErrorAlert(error: error.localizedDescription)
+                    let alert = Alerts.createErrorAlert(error: error.localizedDescription)
                     return
                 }
                 self?.recipes = recipes

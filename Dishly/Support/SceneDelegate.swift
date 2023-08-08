@@ -10,48 +10,13 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    var authService: AuthServiceProtocol!
-    var userService: UserServiceProtocol!
-    var recipeService: RecipeServiceProtocol!
-    var userRealmService: UserRealmServiceProtocol!
-    var googleAuthService: GoogleAuthServiceProtocol!
-    var collectionService: CollectionServiceProtocol!
-    var mealsService: MealsServiceProtocol!
-    var recipesRealmService: RecipesRealmServiceProtocol!
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
-
-        let container = DependencyContainer.shared
-        
-        userService = container.getUserService()
-        authService = container.getAuthService(userService: userService)
-        recipeService = container.getRecipeService()
-        userRealmService = container.getUserRealmService()
-        googleAuthService = container.getGoogleAuthService(userService: userService)
-        collectionService = container.getCollectionService()
-        mealsService = container.getMealsService()
-        recipesRealmService = container.getRecipesRealmService()
-        
-
-        let loadVC = LoadViewController(authService: authService,
-                                          userService: userService,
-                                          recipeService: recipeService,
-                                          userRealmService: userRealmService,
-                                          googleAuthService: googleAuthService,
-                                          collectionService: collectionService,
-                                          mealsService: mealsService,
-                                          recipesRealmService: recipesRealmService
-        )
-        
-        
-        
-        
+            
         window = UIWindow(windowScene: scene)
-        window?.rootViewController = UINavigationController(rootViewController: loadVC)
-        window?.makeKeyAndVisible()
-  
 
+        Router.showLoad(window: window)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

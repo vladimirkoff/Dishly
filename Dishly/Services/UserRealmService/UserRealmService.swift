@@ -2,11 +2,27 @@ import Foundation
 import RealmSwift
 
 
-class UserRealmService: UserRealmServiceProtocol {
+final class UserRealmService: UserRealmServiceProtocol {
     private let realm: Realm
     
     init(realm: Realm = try! Realm()) {
         self.realm = realm
+    }
+    
+    func checkIfLoggedIn(completion: @escaping(UserViewModel?) -> ()) {
+        let realm = try! Realm()
+        
+        if let user = realm.objects(UserRealm.self).filter("isCurrentUser == %@", true).first {
+            let dict: [String : Any] = ["fullName" : user.name,
+                                        "uid" : user.id,
+                                        "imageData" : user.imageData,
+                                        "email" : user.email,
+                                        "username" : user.username
+            ]
+            completion(UserViewModel(user: User(dictionary: dict)))
+        } else {
+            completion(nil)
+        }
     }
     
     func createUser(name: String, email: String, profileImage: Data, id: String, username: String, isCurrentUser: Bool, completion: @escaping (Bool) -> Void) {

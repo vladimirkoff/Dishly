@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ItemsHeaderDelegate {
+protocol ItemsHeaderDelegate: AnyObject {
     func fecthRecipes(with collection: Collection)
     func createCollection(collection: Collection, completion: @escaping(Error?) -> ())
     func presentAlert(alert: UIAlertController)
@@ -20,9 +20,13 @@ class ItemsHeader: UICollectionReusableView {
     var isFirsAppear = false
     
     private var previousCell: UICollectionViewCell!
-    private var maxText = ""
     
-    var selectedIndexPath: IndexPath?
+    var selectedIndexPath: IndexPath? {
+        didSet {
+            collectionView?.reloadData()
+        }
+    }
+    
     let initialCellScale: CGFloat = 1.0
     let selectedCellScale: CGFloat = 0.9
     
@@ -30,7 +34,7 @@ class ItemsHeader: UICollectionReusableView {
     
     var collectionView: UICollectionView?
     
-    var delegate: ItemsHeaderDelegate?
+    weak var delegate: ItemsHeaderDelegate?
     
     private let customBackground = CustomUIViewBackground()
     
@@ -79,14 +83,14 @@ class ItemsHeader: UICollectionReusableView {
     }
     
     @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        guard let collectionView = collectionView else { return }
         if gestureRecognizer.state == .began {
             let point = gestureRecognizer.location(in: collectionView)
             
-            if let indexPath = collectionView!.indexPathForItem(at: point) {
+            if let indexPath = collectionView.indexPathForItem(at: point) {
                 selectedIndexPath = indexPath
-                collectionView!.reloadData()
-                collectionView!.performBatchUpdates(nil, completion: nil)
-                if let cell = collectionView!.cellForItem(at: indexPath) as? CollectionCell {
+                collectionView.performBatchUpdates(nil, completion: nil)
+                if let cell = collectionView.cellForItem(at: indexPath) as? CollectionCell {
                     delegate?.showDeleteAlert(for: cell.collection!.id)
                 }
             }
@@ -113,9 +117,7 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TopCategoryCell", for: indexPath) as! CollectionCell
-        if indexPath.row == collections!.count {
-            cell.collectionNameLabel.text = "Create"
-        }
+        
         if indexPath == selectedIndexPath {
             cell.transform = CGAffineTransform(scaleX: selectedCellScale, y: selectedCellScale)
             cell.contentView.alpha = 0.7
@@ -123,10 +125,10 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
             cell.transform = CGAffineTransform.identity
             cell.contentView.alpha = 1.0
         }
-        cell.backgroundColor = .clear
         
         if let collections = collections {
             if indexPath.row == collections.count  {
+                cell.collectionNameLabel.text = "Create"
                 let originalImage = UIImage(systemName: "plus")
                 let scaleFactor: CGFloat = 2.0
                 let scaledImageSize = CGSize(width: (originalImage?.size.width ?? 0.0) * scaleFactor,
@@ -216,8 +218,7 @@ extension ItemsHeader: UICollectionViewDelegate, UICollectionViewDataSource {
                 cell.collectionImageView.layer.borderWidth = 3
                 cell.collectionImageView.layer.borderColor = isDark ? UIColor.white.cgColor : AppColors.customBrown.color.cgColor
             }
-            
-        }
+         }
         
         indexPath.row == collections.count ? showCollectionNameAlert() : delegate?.fecthRecipes(with: collections[indexPath.row])
     }
@@ -252,11 +253,12 @@ extension ItemsHeader: SavedVCProtocol {
     }
     
     func reload(collections: [Collection], afterDeletion: Bool) {
+        guard let collectionView = collectionView else { return }
         self.collections = collections
         if afterDeletion {
-            collectionView!.performBatchUpdates(nil, completion: nil)
+            collectionView.performBatchUpdates(nil, completion: nil)
         }
-        collectionView?.reloadData()
+        collectionView.reloadData()
     }
 }
 
@@ -267,13 +269,7 @@ extension ItemsHeader: UITextFieldDelegate {
         
         let newText = (textField.text as NSString?)?.replacingCharacters(in: range, with: string) ?? ""
         
-        if newText.count == 15 {
-            maxText = newText
-        } else if newText.count > 15 {
-            textField.text = maxText
-        }
-        
-        return true
+        return newText.count > 15 ? false : true
     }
 }
 

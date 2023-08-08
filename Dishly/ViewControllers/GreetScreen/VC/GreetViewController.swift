@@ -247,7 +247,7 @@ final class GreetViewController: UIViewController {
     @objc func googleAuthButtonPressed() {
         viewModel.signInWithGoogle(with: self) { error, user in
             if let error = error {
-                let alert = createErrorAlert(error: error.localizedDescription)
+                let alert = Alerts.createErrorAlert(error: error.localizedDescription)
                 return
             }
             DispatchQueue.main.async { [weak self] in

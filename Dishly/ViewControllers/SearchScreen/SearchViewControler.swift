@@ -89,7 +89,8 @@ extension RecipeSearchViewController: UISearchResultsUpdating {
             guard let self = self else { return }
             DispatchQueue.main.async {
                 if let error = error {
-                    let alert = createErrorAlert(error: error.localizedDescription)
+                    let alert = Alerts.createErrorAlert(error: error.localizedDescription)
+                    self.present(alert, animated: true)
                     return
                 } else {
                     self.recipes = recipes!

@@ -4,7 +4,7 @@ class NoRecipesView: UIView {
     //MARK: - Properties
     
     private let imageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "recipe.image")) // Make sure to replace "no_recipes_image" with the name of your image asset
+        let imageView = UIImageView(image: UIImage(named: "recipe.image")) 
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.alpha = 0.5

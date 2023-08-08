@@ -7,10 +7,14 @@
 
 import Foundation
 
-class DependencyContainer {
+final class DependencyContainer {
     static let shared = DependencyContainer()
     
     private init() {}
+    
+    func getUserDefaultsService() -> UserDefaultsProtocol {
+        return UserDefaultsService()
+    }
     
     func getAuthService(userService: UserServiceProtocol) -> AuthServiceProtocol {
         return AuthService(userService: userService)

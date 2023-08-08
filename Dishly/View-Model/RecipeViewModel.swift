@@ -24,6 +24,10 @@ struct RecipeViewModel {
     
     //MARK: - Computed Properties
     
+    var id: String {
+        return recipe.id ?? ""
+    }
+    
     var name: String {
         return recipe.name ?? ""
     }
@@ -69,11 +73,21 @@ struct RecipeViewModel {
     }
     
     var ratingList: [Rating]? {
-        return recipe.ratingList
+        get {
+            return recipe.ratingList
+        }
+        set {
+            ratingList = newValue
+        }
     }
     
     var rating: Float {
-        return recipe.rating ?? 0.0
+        get {
+            return recipe.rating ?? 0.0
+        }
+        set {
+            rating = newValue
+        }
     }
     
     var imageData: Data? {

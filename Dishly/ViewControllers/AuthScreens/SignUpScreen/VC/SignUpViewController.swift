@@ -119,7 +119,7 @@ final class SignupController: UIViewController {
         fullnameField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
     }
     
-    func createTestUser(email: String, name: String, uid: String, profileImage: Data, username: String, isCurrentUser: Bool) {
+    func createRealmUser(email: String, name: String, uid: String, profileImage: Data, username: String, isCurrentUser: Bool) {
         viewModel.createUser(name: name, email: email, profileImage: profileImage, id: uid, username: username, isCurrentUser: isCurrentUser)
     }
     
@@ -136,7 +136,7 @@ final class SignupController: UIViewController {
             guard let self = self else { return }
             
             if let error = error {
-                let alert = createErrorAlert(error: error.localizedDescription)
+                let alert = Alerts.createErrorAlert(error: error.localizedDescription)
                 self.present(alert, animated: true)
                 print("DEBUG: Error registering user - \(error.localizedDescription)")
                 return
@@ -145,7 +145,7 @@ final class SignupController: UIViewController {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 let profileImage = self.profilePicButton.imageView?.image?.pngData()
-                self.createTestUser(email: email, name: fullname, uid: user!.user!.uid, profileImage: profileImage!, username: username, isCurrentUser: true)
+                self.createRealmUser(email: email, name: fullname, uid: user!.user!.uid, profileImage: profileImage!, username: username, isCurrentUser: true)
                 if let user = user {
                     Router.showMainTabBar(from: self, with: user)
                 }

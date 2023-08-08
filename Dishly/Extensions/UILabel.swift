@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 extension UILabel {
     func setFont(name: String, size: Int) {
         if let font = UIFont(name: name, size: CGFloat(size)) {

@@ -67,6 +67,7 @@ class CollectionCell: UICollectionViewCell {
     //MARK: - Helpers
     
     func configureCell() {
+        backgroundColor = .clear
         addSubview(collectionImageView)
         NSLayoutConstraint.activate([
             collectionImageView.topAnchor.constraint(equalTo: topAnchor, constant: 4),

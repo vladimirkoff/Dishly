@@ -137,6 +137,10 @@
 		85F5BE4B2A72847B0075A899 /* LoadVMProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F5BE4A2A72847B0075A899 /* LoadVMProtocol.swift */; };
 		85F5BE4E2A7284E20075A899 /* ProfileVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F5BE4D2A7284E20075A899 /* ProfileVM.swift */; };
 		85F5BE502A7284F40075A899 /* ProfileVMProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F5BE4F2A7284F40075A899 /* ProfileVMProtocol.swift */; };
+		85FE006E2A76463500F2D7E9 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FE006D2A76463500F2D7E9 /* UserDefaults.swift */; };
+		85FE00712A7646BB00F2D7E9 /* UserDefaultsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FE00702A7646BB00F2D7E9 /* UserDefaultsProtocol.swift */; };
+		85FE00742A76482A00F2D7E9 /* CartVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FE00732A76482A00F2D7E9 /* CartVM.swift */; };
+		85FE00762A76483600F2D7E9 /* CartVMProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FE00752A76483600F2D7E9 /* CartVMProtocol.swift */; };
 		85FE6B8F2A566C4600E6417D /* Storyboardable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FE6B8E2A566C4600E6417D /* Storyboardable.swift */; };
 		85FE6B912A56715400E6417D /* CreateNewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FE6B902A56715400E6417D /* CreateNewVC.swift */; };
 		85FE6B952A56719800E6417D /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FE6B942A56719800E6417D /* UIViewController.swift */; };
@@ -274,6 +278,10 @@
 		85F5BE4A2A72847B0075A899 /* LoadVMProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadVMProtocol.swift; sourceTree = "<group>"; };
 		85F5BE4D2A7284E20075A899 /* ProfileVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVM.swift; sourceTree = "<group>"; };
 		85F5BE4F2A7284F40075A899 /* ProfileVMProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVMProtocol.swift; sourceTree = "<group>"; };
+		85FE006D2A76463500F2D7E9 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
+		85FE00702A7646BB00F2D7E9 /* UserDefaultsProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsProtocol.swift; sourceTree = "<group>"; };
+		85FE00732A76482A00F2D7E9 /* CartVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartVM.swift; sourceTree = "<group>"; };
+		85FE00752A76483600F2D7E9 /* CartVMProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartVMProtocol.swift; sourceTree = "<group>"; };
 		85FE6B8E2A566C4600E6417D /* Storyboardable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storyboardable.swift; sourceTree = "<group>"; };
 		85FE6B902A56715400E6417D /* CreateNewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewVC.swift; sourceTree = "<group>"; };
 		85FE6B942A56719800E6417D /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
@@ -328,6 +336,11 @@
 		853F3B232A5678BA00D53EB8 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				85F5BDDD2A71A09C0075A899 /* CustomLabel.swift */,
+				85BB924B2A67B78300E9E4A3 /* UIView.swift */,
+				85BB924F2A67F0B600E9E4A3 /* UIImage.swift */,
+				85BB92512A69401B00E9E4A3 /* NoRecipesImage.swift */,
+				85C1B7222A49BA3B00BEAF2F /* CustomTextField.swift */,
 				853EEB332A55798400DDB93F /* CollectionsPopupView.swift */,
 				853F3B1E2A5676FA00D53EB8 /* CustomButton.swift */,
 				8509D0732A5F01D9006E525B /* CustomTableView.swift */,
@@ -364,7 +377,6 @@
 				85C1B6F62A44858700BEAF2F /* Services */,
 				85C1B6E52A447C9A00BEAF2F /* View-Model */,
 				85C1B6E42A447C9500BEAF2F /* View */,
-				85F5BDDC2A71A0490075A899 /* CustomViews */,
 				85C1B6E32A447C8C00BEAF2F /* Model */,
 				85C1B6E62A447CA100BEAF2F /* ViewControllers */,
 				85C1B6FA2A4485C700BEAF2F /* Extensions */,
@@ -402,7 +414,6 @@
 		85C1B6E52A447C9A00BEAF2F /* View-Model */ = {
 			isa = PBXGroup;
 			children = (
-				85C1B7222A49BA3B00BEAF2F /* CustomTextField.swift */,
 				85C1B6F42A4483D400BEAF2F /* RecipeViewModel.swift */,
 				85C1B71A2A49893B00BEAF2F /* UserViewModel.swift */,
 			);
@@ -412,6 +423,7 @@
 		85C1B6E62A447CA100BEAF2F /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				85FE00722A76482100F2D7E9 /* CartViewController */,
 				85F5BE4C2A7284D10075A899 /* ProfileScreen */,
 				85F5BE472A72846C0075A899 /* LoadScreen */,
 				85F5BE422A7283C40075A899 /* PrepareScreen */,
@@ -427,7 +439,6 @@
 				852666F22A596CF1005BFCFC /* TabBarController */,
 				852666F42A596D31005BFCFC /* CreateRecipeScreen */,
 				852666F82A5AEA92005BFCFC /* ProfileOptionVC.swift */,
-				85C1B7102A485B2300BEAF2F /* CartViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -444,6 +455,7 @@
 		85C1B6F62A44858700BEAF2F /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				85FE006F2A76468700F2D7E9 /* UserDefaultsService */,
 				85F5BDFC2A71AABC0075A899 /* RecipesRealmService */,
 				85F5BDFB2A71AAAB0075A899 /* AuthService */,
 				85F5BDF92A71AA790075A899 /* UserRealmService */,
@@ -552,17 +564,6 @@
 				85C1B70E2A485A6900BEAF2F /* MealPlanViewController.swift */,
 			);
 			path = VC;
-			sourceTree = "<group>";
-		};
-		85F5BDDC2A71A0490075A899 /* CustomViews */ = {
-			isa = PBXGroup;
-			children = (
-				85BB92512A69401B00E9E4A3 /* NoRecipesImage.swift */,
-				85BB924F2A67F0B600E9E4A3 /* UIImage.swift */,
-				85BB924B2A67B78300E9E4A3 /* UIView.swift */,
-				85F5BDDD2A71A09C0075A899 /* CustomLabel.swift */,
-			);
-			path = CustomViews;
 			sourceTree = "<group>";
 		};
 		85F5BDE22A71A16A0075A899 /* DependencyInjection */ = {
@@ -821,6 +822,25 @@
 			path = Navigation;
 			sourceTree = "<group>";
 		};
+		85FE006F2A76468700F2D7E9 /* UserDefaultsService */ = {
+			isa = PBXGroup;
+			children = (
+				85FE006D2A76463500F2D7E9 /* UserDefaults.swift */,
+				85FE00702A7646BB00F2D7E9 /* UserDefaultsProtocol.swift */,
+			);
+			path = UserDefaultsService;
+			sourceTree = "<group>";
+		};
+		85FE00722A76482100F2D7E9 /* CartViewController */ = {
+			isa = PBXGroup;
+			children = (
+				85C1B7102A485B2300BEAF2F /* CartViewController.swift */,
+				85FE00732A76482A00F2D7E9 /* CartVM.swift */,
+				85FE00752A76483600F2D7E9 /* CartVMProtocol.swift */,
+			);
+			path = CartViewController;
+			sourceTree = "<group>";
+		};
 		85FE6B8B2A566A1500E6417D /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
@@ -986,10 +1006,12 @@
 				85F5BDE52A71A2C20075A899 /* ThemeManager.swift in Sources */,
 				85C1B71B2A49893B00BEAF2F /* UserViewModel.swift in Sources */,
 				85F5BE132A72717A0075A899 /* ExploreVMProtocol.swift in Sources */,
+				85FE00712A7646BB00F2D7E9 /* UserDefaultsProtocol.swift in Sources */,
 				85C1B74C2A51A1C100BEAF2F /* UserRealm.swift in Sources */,
 				85F5BE172A7273DB0075A899 /* SignInVMProtocol.swift in Sources */,
 				85D4C95A2A5EFDFE009D20D5 /* CollectionCell.swift in Sources */,
 				85F5BE2E2A727E4B0075A899 /* Router.swift in Sources */,
+				85FE00742A76482A00F2D7E9 /* CartVM.swift in Sources */,
 				85F5BE382A72802F0075A899 /* RecipesVMProtocol.swift in Sources */,
 				85F5BE192A7278430075A899 /* SignUpVM.swift in Sources */,
 				852667172A5D3851005BFCFC /* RecipeRealm.swift in Sources */,
@@ -1019,6 +1041,7 @@
 				85C1B7522A52D51E00BEAF2F /* UIImageView.swift in Sources */,
 				85FE6B8F2A566C4600E6417D /* Storyboardable.swift in Sources */,
 				85F5BE3F2A72836F0075A899 /* CreateNewVM.swift in Sources */,
+				85FE00762A76483600F2D7E9 /* CartVMProtocol.swift in Sources */,
 				85D4C9602A5EFDFE009D20D5 /* RecipeCell.swift in Sources */,
 				85C1B72B2A4D8F4C00BEAF2F /* GreetViewController.swift in Sources */,
 				85F5BE062A71AB570075A899 /* CollectionServiceProtocol.swift in Sources */,
@@ -1039,6 +1062,7 @@
 				853EEB342A55798400DDB93F /* CollectionsPopupView.swift in Sources */,
 				85C1B7112A485B2300BEAF2F /* CartViewController.swift in Sources */,
 				853F3B3B2A58569F00D53EB8 /* SearchViewControler.swift in Sources */,
+				85FE006E2A76463500F2D7E9 /* UserDefaults.swift in Sources */,
 				85F5BE312A727FA70075A899 /* SearchVM.swift in Sources */,
 				85C1B7072A45B71C00BEAF2F /* ParentCell.swift in Sources */,
 				85BB924C2A67B78300E9E4A3 /* UIView.swift in Sources */,

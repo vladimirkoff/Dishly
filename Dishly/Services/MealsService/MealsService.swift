@@ -11,7 +11,7 @@ import FirebaseFirestore
 
 
 
-class MealsService: MealsServiceProtocol {
+final class MealsService: MealsServiceProtocol {
     func fetchRecipesForPlans(completion: @escaping ([String: [RecipeViewModel]]) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         

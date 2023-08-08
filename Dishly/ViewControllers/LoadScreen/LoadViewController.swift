@@ -64,8 +64,6 @@ final class LoadViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
-        isDark = isDarkMode
         navigationController?.navigationBar.tintColor = isDark ? .white : AppColors.customBrown.color
         ThemeManager.applyCurrentTheme()
         navigationController?.navigationBar.isHidden = false

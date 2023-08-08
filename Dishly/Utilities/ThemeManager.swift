@@ -44,7 +44,6 @@ struct ThemeManager {
     private static func setLightModeAppearance() {
         UIApplication.shared.statusBarStyle = .default
         
-        // Customize the light mode appearance using UIAppearance proxy
         UINavigationBar.appearance().barStyle = .default
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         UINavigationBar.appearance().largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]

@@ -44,8 +44,8 @@ final class DependencyContainer {
         return MealsService()
     }
     
-    func getRecipesRealmService() -> RecipesRealmServiceProtocol {
-        return RecipesRealmService()
+    func getRecipesRealmService(userService: UserServiceProtocol) -> RecipesRealmServiceProtocol {
+        return RecipesRealmService(userService: userService)
     }
     
 }

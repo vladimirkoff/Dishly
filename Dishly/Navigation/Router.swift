@@ -155,7 +155,8 @@ final class Router {
      static func createRecipeScreen(with user: UserViewModel, recipe: RecipeViewModel) -> RecipeViewController {
          
          let recipeService = DependencyContainer.shared.getRecipeService()
-         let recipesRealmService = DependencyContainer.shared.getRecipesRealmService()
+         let userService = DependencyContainer.shared.getUserService()
+         let recipesRealmService = DependencyContainer.shared.getRecipesRealmService(userService: userService)
          
          let viewModel = RecipeVMP(recipeService: recipeService, recipesRealmService: recipesRealmService)
          let vc = RecipeViewController(user: user, recipe: recipe, viewModel: viewModel)
@@ -250,7 +251,8 @@ extension Router {
     static func createMealPlanVC() -> MealPlanVC {
         
         let mealsService = DependencyContainer.shared.getMealsService()
-        let recipesRealmService = DependencyContainer.shared.getRecipesRealmService()
+        let userService = DependencyContainer.shared.getUserService()
+        let recipesRealmService = DependencyContainer.shared.getRecipesRealmService(userService: userService)
         
         let viewModel = MealPlanVM(recipesRealmService: recipesRealmService, mealsService: mealsService)
         let vc = MealPlanVC(viewModel: viewModel)

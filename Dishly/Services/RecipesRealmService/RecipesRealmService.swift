@@ -12,13 +12,20 @@ import SDWebImage
 
 
 final class RecipesRealmService: RecipesRealmServiceProtocol {
+    
+    private let userService: UserServiceProtocol
+    
+    init(userService: UserServiceProtocol) {
+        self.userService = userService
+    }
+    
     func addRecipeRealm(recipe: RecipeViewModel, day: String, completion: @escaping(Bool) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let realm = try! Realm()
         
         let recipeRealm = RecipeRealm()
         
-        UserService().fetchUser(with: recipe.recipe.ownerId!) { user in
+        userService.fetchUser(with: recipe.recipe.ownerId!) { user in
             var ingredientsRealm: List<IngredientRealm> = List<IngredientRealm>()
             var instructionsRealm: List<InstructionRealm> = List<InstructionRealm>()
             
